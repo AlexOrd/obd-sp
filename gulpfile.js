@@ -339,6 +339,7 @@ export const build = gulp.series(
     done();
   },
   clean,
+  format, // Auto-format before validation
   validate, // Add validation before build
   gulp.parallel(templates, lectureTemplates, lectures, css, js, images),
   htmlMinify,

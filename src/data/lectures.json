@@ -2,17 +2,21 @@
   "siteTitle": "OBD-SP",
   "siteSubtitle": "ОСНОВИ БАЗ ДАНИХ ТА СПЕЦІАЛІЗОВАНІ МОВИ ПРОГРАМУВАННЯ",
   "systemInfo": "VTFK EDUCATION v2.0",
-  "footer": "© 2025 VTFK | Викладач: [Ваше ім'я]",
+  "teacherName": "Ординський Олександр",
+  "teacherTitle": "викладач",
+  "teacherNameEn": "Alex Ordynski",
+  "teacherTitleEn": "Software Developer & Educator",
+  "college": "ВТФК • Вінниця, Україна",
+  "collegeEn": "VTFK • Vinnytsia, Ukraine",
+  "footer": "© 2025 VTFK | Викладач: Ординський Олександр",
+  "socialLinks": {
+    "github": "https://github.com/AlexOrd",
+    "linkedin": "https://www.linkedin.com/in/alex-ordynski/",
+    "facebook": "https://www.facebook.com/alexandr.ordynski"
+  },
+  "seoDescription": "Курс лекцій з основ баз даних та спеціалізованих мов програмування. ВТФК, Вінниця. Викладач: Ординський Олександр",
+  "seoKeywords": "бази даних, SQL, NoSQL, програмування, курс, лекції, ВТФК, Вінниця",
   "lectures": [
-    {
-      "id": "lecture0",
-      "number": "00",
-      "title": "Демонстрація всіх типів слайдів",
-      "description": "Довідник для викладачів — приклади всіх 13 типів слайдів",
-      "available": true,
-      "statusText": "DEMO",
-      "file": "lecture0.html"
-    },
     {
       "id": "lecture1",
       "number": "01",

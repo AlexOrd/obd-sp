@@ -3,7 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Лекція {{lecture.lectureNumber}}: {{lecture.lectureTitle}}</title>
+    <title>
+      Лекція {{lecture.lectureNumber}}: {{lecture.lectureTitle}} | {{lecture.courseTitle}}
+    </title>
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="Лекція {{lecture.lectureNumber}}: {{lecture.lectureTitle}}. Курс: {{lecture.courseTitle}}. Викладач: Ординський Олександр, ВТФК Вінниця"
+    />
+    <meta
+      name="keywords"
+      content="{{lecture.lectureTitle}}, {{lecture.courseTitle}}, бази даних, SQL, програмування, лекція, ВТФК"
+    />
+    <meta name="author" content="Alex Ordynski" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta
+      property="og:title"
+      content="Лекція {{lecture.lectureNumber}}: {{lecture.lectureTitle}}"
+    />
+    <meta
+      property="og:description"
+      content="{{lecture.courseTitle}}. Викладач: Ординський Олександр, ВТФК Вінниця"
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="uk_UA" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="Лекція {{lecture.lectureNumber}}: {{lecture.lectureTitle}}"
+    />
+    <meta name="twitter:description" content="{{lecture.courseTitle}}" />
 
     <!-- Reveal.js CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.css" />

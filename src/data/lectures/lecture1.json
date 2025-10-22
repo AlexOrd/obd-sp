@@ -10,7 +10,8 @@
       "subtitle": "Вступ до баз даних",
       "meta": {
         "course": "Основи баз даних та спеціалізовані мови програмування",
-        "institution": "VTFK • 2025"
+        "instructor": "Ординський Олександр • викладач",
+        "institution": "ВТФК • Вінниця • 2025"
       }
     },
     {
@@ -37,26 +38,15 @@
       "items": [
         {
           "text": "<strong>Реляційні БД (SQL)</strong>",
-          "subitems": [
-            "MySQL, PostgreSQL, Oracle",
-            "Використовують таблиці та зв'язки",
-            "Підтримують ACID властивості"
-          ]
+          "subitems": ["MySQL, PostgreSQL, Oracle", "Використовують таблиці та зв'язки", "Підтримують ACID властивості"]
         },
         {
           "text": "<strong>NoSQL БД</strong>",
-          "subitems": [
-            "MongoDB (документо-орієнтована)",
-            "Redis (ключ-значення)",
-            "Neo4j (графова)"
-          ]
+          "subitems": ["MongoDB (документо-орієнтована)", "Redis (ключ-значення)", "Neo4j (графова)"]
         },
         {
           "text": "<strong>NewSQL БД</strong>",
-          "subitems": [
-            "Поєднання переваг SQL та NoSQL",
-            "Google Spanner, CockroachDB"
-          ]
+          "subitems": ["Поєднання переваг SQL та NoSQL", "Google Spanner, CockroachDB"]
         }
       ]
     },
