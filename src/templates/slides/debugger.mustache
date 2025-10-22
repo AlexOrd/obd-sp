@@ -1,0 +1,21 @@
+<!-- 10. Робота з відладчиком (GDB) -->
+<section style="font-size: 0.9em;">
+	<h2>{{title}}</h2>
+	<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px;">
+		<div>
+			<h3 style="color: var(--cyber-yellow); font-size: 1em;">Код для налагодження:</h3>
+			<pre style="font-size: 1.15em;"><code class="language-{{language}}">{{{code}}}</code></pre>
+		</div>
+		<div>
+			<h3 style="color: var(--cyber-cyan); font-size: 1em;">Команди GDB:</h3>
+			<pre style="background: rgba(0, 0, 0, 0.6); border: 1px solid var(--cyber-cyan); padding: 15px; font-size: 0.805em;"><code class="language-bash">{{#commands}}
+{{{.}}}
+{{/commands}}</code></pre>
+		</div>
+	</div>
+	{{#note}}
+	<p style="margin-top: 20px; font-size: 0.9em; color: var(--cyber-yellow);">
+		<strong>💡 Порада:</strong> {{{note}}}
+	</p>
+	{{/note}}
+</section>

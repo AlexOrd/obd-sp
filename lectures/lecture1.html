@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Лекція 1: Вступ до баз даних</title>
+
+	<!-- Reveal.js CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.css">
+
+	<!-- Highlight.js Theme (Monokai) -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
+
+	<!-- ШРИФТИ (CYBERPUNK + КИРИЛИЦЯ) -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+
+	<!-- Custom Cyberpunk Theme -->
+	<link rel="stylesheet" href="../css/cyberpunk-theme.css">
+</head>
+<body>
+	<div class="reveal">
+		<div class="slides">
+
+			<!-- Slide 1: Title Slide with Glitch Effect -->
+			<section>
+				<h1 class="glitch" data-text="ЛЕКЦІЯ 1">ЛЕКЦІЯ 1</h1>
+				<h2>Вступ до баз даних</h2>
+				<p style="margin-top: 50px; color: var(--cyber-yellow);">
+					<strong>Курс:</strong> Основи баз даних та спеціалізовані мови програмування
+				</p>
+				<p style="color: var(--cyber-cyan);">
+					<em>VTFK • 2025</em>
+				</p>
+			</section>
+
+			<!-- Slide 2: Text Content Slide -->
+			<section>
+				<h2>Що таке База Даних?</h2>
+				<p>
+					<strong>База даних (БД)</strong> — це організована колекція структурованої інформації
+					або даних, які зберігаються в електронному вигляді в комп'ютерній системі.
+				</p>
+				<p style="margin-top: 30px;">
+					Основні характеристики БД:
+				</p>
+				<p>
+					<em>Структурованість</em> — дані організовані за певними правилами<br>
+					<em>Незалежність</em> — дані незалежні від програм, що їх використовують<br>
+					<em>Мінімальна надлишковість</em> — уникнення дублювання даних<br>
+					<em>Багатокористувацький доступ</em> — можливість одночасної роботи кількох користувачів
+				</p>
+			</section>
+
+			<!-- Slide 3: List Slide -->
+			<section>
+				<h2>Типи баз даних</h2>
+				<ul>
+					<li><strong>Реляційні БД (SQL)</strong>
+						<ul>
+							<li>MySQL, PostgreSQL, Oracle</li>
+							<li>Використовують таблиці та зв'язки</li>
+							<li>Підтримують ACID властивості</li>
+						</ul>
+					</li>
+					<li><strong>NoSQL БД</strong>
+						<ul>
+							<li>MongoDB (документо-орієнтована)</li>
+							<li>Redis (ключ-значення)</li>
+							<li>Neo4j (графова)</li>
+						</ul>
+					</li>
+					<li><strong>NewSQL БД</strong>
+						<ul>
+							<li>Поєднання переваг SQL та NoSQL</li>
+							<li>Google Spanner, CockroachDB</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+
+			<!-- Slide 4: Table Slide -->
+			<section>
+				<h2>Порівняння СУБД</h2>
+				<table>
+					<thead>
+						<tr>
+							<th>СУБД</th>
+							<th>Тип</th>
+							<th>Мова</th>
+							<th>Ліцензія</th>
+							<th>Переваги</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>MySQL</td>
+							<td>Реляційна</td>
+							<td>SQL</td>
+							<td>GPL/Комерційна</td>
+							<td>Швидкість, популярність</td>
+						</tr>
+						<tr>
+							<td>PostgreSQL</td>
+							<td>Об'єктно-реляційна</td>
+							<td>SQL</td>
+							<td>PostgreSQL</td>
+							<td>Розширюваність, JSON</td>
+						</tr>
+						<tr>
+							<td>MongoDB</td>
+							<td>Документна</td>
+							<td>NoSQL</td>
+							<td>SSPL</td>
+							<td>Гнучкість схеми</td>
+						</tr>
+						<tr>
+							<td>Redis</td>
+							<td>Ключ-значення</td>
+							<td>NoSQL</td>
+							<td>BSD</td>
+							<td>Швидкість, кешування</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+
+			<!-- Slide 5: Code Example Slide -->
+			<section>
+				<h2>Приклад SQL запиту</h2>
+				<p>Створення таблиці та вибірка даних:</p>
+				<pre><code class="language-sql">-- Створення таблиці студентів
+CREATE TABLE students (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    enrollment_date DATE,
+    grade DECIMAL(3,2)
+);
+
+-- Додавання даних
+INSERT INTO students (name, email, enrollment_date, grade)
+VALUES
+    ('Іван Петренко', 'ivan@example.com', '2024-09-01', 4.5),
+    ('Марія Коваленко', 'maria@example.com', '2024-09-01', 4.8);
+
+-- Вибірка відмінників
+SELECT name, grade
+FROM students
+WHERE grade >= 4.5
+ORDER BY grade DESC;
+</code></pre>
+			</section>
+
+			<!-- Bonus Slide: Summary -->
+			<section>
+				<h2 class="glitch" data-text="ПІДСУМОК">ПІДСУМОК</h2>
+				<ul>
+					<li>База даних — організована колекція даних</li>
+					<li>Існують різні типи БД: SQL, NoSQL, NewSQL</li>
+					<li>Вибір СУБД залежить від завдання</li>
+					<li>SQL — основна мова для реляційних БД</li>
+				</ul>
+				<p style="margin-top: 50px; text-align: center; color: var(--cyber-yellow);">
+					<strong>Дякую за увагу! 💾</strong>
+				</p>
+				<p style="text-align: center; color: var(--cyber-cyan);">
+					<a href="../index.html">← Повернутися до списку лекцій</a>
+				</p>
+			</section>
+
+		</div>
+	</div>
+
+	<!-- Reveal.js -->
+	<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.js"></script>
+
+	<!-- Reveal.js Plugins -->
+	<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/notes/notes.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/markdown/markdown.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/highlight/highlight.js"></script>
+
+	<!-- Initialize Reveal.js -->
+	<script>
+		Reveal.initialize({
+			hash: true,
+			slideNumber: true,
+			controls: true,
+			progress: true,
+			center: true,
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// Plugins
+			plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+		});
+	</script>
+</body>
+</html>

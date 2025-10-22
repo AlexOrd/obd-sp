@@ -1,0 +1,22 @@
+<!-- 9. Порівняння (у дві колонки) -->
+<section style="font-size: 0.9em;">
+	<h2>{{title}}</h2>
+	<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 30px;">
+		<div style="border: 2px solid var(--cyber-cyan); padding: 20px; background: rgba(0, 240, 255, 0.05);">
+			<h3 style="color: var(--cyber-cyan); margin-top: 0; text-align: center; font-size: 1.1em;">{{leftTitle}}</h3>
+			<ul style="font-size: 0.95em; line-height: 1.7;">
+				{{#leftItems}}
+				<li>{{{.}}}</li>
+				{{/leftItems}}
+			</ul>
+		</div>
+		<div style="border: 2px solid var(--cyber-magenta); padding: 20px; background: rgba(255, 0, 255, 0.05);">
+			<h3 style="color: var(--cyber-magenta); margin-top: 0; text-align: center; font-size: 1.1em;">{{rightTitle}}</h3>
+			<ul style="font-size: 0.95em; line-height: 1.7;">
+				{{#rightItems}}
+				<li>{{{.}}}</li>
+				{{/rightItems}}
+			</ul>
+		</div>
+	</div>
+</section>

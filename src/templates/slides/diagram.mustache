@@ -1,0 +1,26 @@
+<!-- 8. Діаграма / Візуалізація -->
+<section style="font-size: 0.9em;">
+	<h2>{{title}}</h2>
+	{{#description}}
+	<p style="margin-bottom: 25px; color: var(--cyber-cyan);">
+		{{{description}}}
+	</p>
+	{{/description}}
+	{{#imageUrl}}
+	<div style="text-align: center; margin: 25px 0;">
+		<img src="{{imageUrl}}" alt="{{title}}" style="max-width: 80%; border: 2px solid var(--cyber-cyan); box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);">
+	</div>
+	{{/imageUrl}}
+	{{#asciiArt}}
+	<pre style="color: var(--cyber-yellow); font-size: 0.75em; line-height: 1.3; text-align: center;"><code>{{{asciiArt}}}</code></pre>
+	{{/asciiArt}}
+	{{#labels}}
+	<div style="margin-top: 25px; font-size: 0.85em;">
+		{{#labels}}
+		<p style="margin: 8px 0;">
+			<span style="color: {{color}};">■</span> {{{text}}}
+		</p>
+		{{/labels}}
+	</div>
+	{{/labels}}
+</section>

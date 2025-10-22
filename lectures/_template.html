@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Лекція [НОМЕР]: [НАЗВА]</title>
+
+	<!-- Reveal.js CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.css">
+
+	<!-- Highlight.js Theme (Monokai) -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
+
+	<!-- ШРИФТИ (CYBERPUNK + КИРИЛИЦЯ) -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+
+	<!-- Custom Cyberpunk Theme -->
+	<link rel="stylesheet" href="../css/cyberpunk-theme.css">
+</head>
+<body>
+	<div class="reveal">
+		<div class="slides">
+
+			<!-- Title Slide -->
+			<section>
+				<h1 class="glitch" data-text="ЛЕКЦІЯ [№]">ЛЕКЦІЯ [№]</h1>
+				<h2>[Назва лекції]</h2>
+				<p style="margin-top: 50px; color: var(--cyber-yellow);">
+					<strong>Курс:</strong> Основи баз даних та спеціалізовані мови програмування
+				</p>
+				<p style="color: var(--cyber-cyan);">
+					<em>VTFK • 2025</em>
+				</p>
+			</section>
+
+			<!-- Add your slides here -->
+			<section>
+				<h2>Ваш заголовок</h2>
+				<p>Ваш контент...</p>
+			</section>
+
+			<!-- Summary Slide -->
+			<section>
+				<h2 class="glitch" data-text="ПІДСУМОК">ПІДСУМОК</h2>
+				<ul>
+					<li>Пункт 1</li>
+					<li>Пункт 2</li>
+					<li>Пункт 3</li>
+				</ul>
+				<p style="margin-top: 50px; text-align: center; color: var(--cyber-yellow);">
+					<strong>Дякую за увагу! 💾</strong>
+				</p>
+				<p style="text-align: center; color: var(--cyber-cyan);">
+					<a href="../index.html">← Повернутися до списку лекцій</a>
+				</p>
+			</section>
+
+		</div>
+	</div>
+
+	<!-- Reveal.js -->
+	<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.js"></script>
+
+	<!-- Reveal.js Plugins -->
+	<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/notes/notes.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/markdown/markdown.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/highlight/highlight.js"></script>
+
+	<!-- Initialize Reveal.js -->
+	<script>
+		Reveal.initialize({
+			hash: true,
+			slideNumber: true,
+			controls: true,
+			progress: true,
+			center: true,
+			transition: 'slide',
+
+			plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build output
+dist/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+*.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-*
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Temporary files
+*.tmp
+.cache/
+.temp/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Source maps (optional - uncomment if needed)
+# *.map

@@ -1,0 +1,31 @@
+<!-- 11. Часта помилка / Застереження -->
+<section style="font-size: 0.9em;">
+	<h2>{{title}}</h2>
+	<div style="background: rgba(255, 0, 60, 0.1); border: 3px solid var(--cyber-red); padding: 25px; margin: 25px 0;">
+		<h3 style="color: var(--cyber-red); margin-top: 0;">⚠️ ЗАСТЕРЕЖЕННЯ</h3>
+		<p style="font-size: 1em; line-height: 1.5;">
+			{{{warning}}}
+		</p>
+	</div>
+
+	<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px;">
+		<div>
+			<h3 style="color: var(--cyber-red); text-align: center; font-size: 1em;">❌ Неправильно</h3>
+			<pre style="font-size: 1.15em;"><code class="language-{{language}}">{{{wrongCode}}}</code></pre>
+			{{#wrongExplanation}}
+			<p style="color: var(--cyber-red); font-size: 0.85em; margin-top: 12px;">
+				{{{wrongExplanation}}}
+			</p>
+			{{/wrongExplanation}}
+		</div>
+		<div>
+			<h3 style="color: #00ff00; text-align: center; font-size: 1em;">✓ Правильно</h3>
+			<pre style="font-size: 1.15em;"><code class="language-{{language}}">{{{correctCode}}}</code></pre>
+			{{#correctExplanation}}
+			<p style="color: #00ff00; font-size: 0.85em; margin-top: 12px;">
+				{{{correctExplanation}}}
+			</p>
+			{{/correctExplanation}}
+		</div>
+	</div>
+</section>

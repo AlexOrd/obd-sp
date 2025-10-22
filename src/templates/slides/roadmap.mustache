@@ -1,0 +1,33 @@
+<!-- 2. Дорожня карта (План лекції) -->
+<section>
+	<h2>
+		<svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 12px;">
+			<path d="M3,6 L3,10 L7,10 L7,6 Z M10,4 L10,12 L14,12 L14,4 Z M17,8 L17,14 L21,14 L21,8 Z" fill="#fcee0a"/>
+			<rect x="3" y="18" width="18" height="2" fill="#00f0ff"/>
+		</svg>
+		{{title}}
+	</h2>
+	<div style="margin-top: 40px;">
+		<ul style="list-style: none; font-size: 1.2em; line-height: 2; padding-left: 0;">
+			{{#items}}
+			<li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
+				<svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0;">
+					<rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2"/>
+					<polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2"/>
+				</svg>
+				<span>{{{.}}}</span>
+			</li>
+			{{/items}}
+		</ul>
+	</div>
+	{{#note}}
+	<p style="margin-top: 40px; color: var(--cyber-cyan); font-size: 0.9em; opacity: 0.8;">
+		<svg width="20" height="20" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 8px;">
+			<circle cx="12" cy="12" r="9" fill="none" stroke="#00f0ff" stroke-width="2"/>
+			<rect x="11" y="6" width="2" height="7" fill="#00f0ff"/>
+			<rect x="11" y="15" width="2" height="2" fill="#00f0ff"/>
+		</svg>
+		<em>{{note}}</em>
+	</p>
+	{{/note}}
+</section>
