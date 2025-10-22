@@ -27,7 +27,7 @@
       }
     },
     {
-      "files": "*.mustache",
+      "files": ["*.mustache", "src/templates/**/*.html"],
       "options": {
         "parser": "html",
         "htmlWhitespaceSensitivity": "ignore"

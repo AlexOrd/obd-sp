@@ -32,8 +32,8 @@ const colors = {
 // Paths
 const paths = {
   src: {
-    templates: 'src/templates/**/*.mustache',
-    slides: 'src/templates/slides/**/*.mustache',
+    templates: 'src/templates/**/*.html',
+    slides: 'src/templates/slides/**/*.html',
     html: 'src/*.html',
     css: 'src/css/**/*.css',
     js: 'src/js/**/*.js',
@@ -77,7 +77,7 @@ export const templates = () => {
   const lecturesData = JSON.parse(fs.readFileSync('src/data/lectures.json', 'utf8'));
 
   return gulp
-    .src('src/templates/index.mustache')
+    .src('src/templates/index.html')
     .pipe(errorHandler('Templates'))
     .pipe(mustache(lecturesData))
     .pipe(rename('index.html'))
@@ -103,7 +103,7 @@ export const lectures = (done) => {
   const partialsDir = 'src/templates/slides/';
   const partials = {};
   fs.readdirSync(partialsDir).forEach((file) => {
-    const partialName = `slides/${file.replace('.mustache', '')}`;
+    const partialName = `slides/${file.replace('.html', '')}`;
     partials[partialName] = fs.readFileSync(`${partialsDir}${file}`, 'utf8');
   });
 
@@ -137,7 +137,7 @@ export const lectures = (done) => {
     }
 
     gulp
-      .src('src/templates/lecture-slide.mustache')
+      .src('src/templates/lecture-slide.html')
       .pipe(errorHandler('Lectures'))
       .pipe(mustache({ ...layoutData, lecture: lectureData }, {}, partials))
       .pipe(rename(file.replace('.json', '.html')))

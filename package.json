@@ -62,7 +62,10 @@
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{json,css,mustache,md}": [
+    "*.{json,css,md}": [
+      "prettier --write"
+    ],
+    "src/templates/**/*.html": [
       "prettier --write"
     ]
   }

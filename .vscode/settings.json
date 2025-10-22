@@ -19,6 +19,12 @@
   "[mustache]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "files.associations": {
+    "src/templates/**/*.html": "html"
+  },
+  "emmet.includeLanguages": {
+    "html": "html"
+  },
   "prettier.requireConfig": true,
   "eslint.validate": [
     "javascript",
