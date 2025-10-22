@@ -1,91 +1,96 @@
 <!DOCTYPE html>
 <html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <title>{{siteTitle}} - Основи Баз Даних</title>
 
     <!-- Cyberpunk Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;700&family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;700&family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/main.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
     <div class="cyber-grid"></div>
     <div class="scanlines"></div>
 
     <div class="container">
-        <!-- Header -->
-        <header class="cyber-header">
-            <div class="glitch-wrapper">
-                <h1 class="cyber-title glitch" data-text="{{siteTitle}}">{{siteTitle}}</h1>
-            </div>
-            <div class="cyber-subtitle">
-                <span class="bracket">[</span>
-                <span class="text">{{siteSubtitle}}</span>
-                <span class="bracket">]</span>
-            </div>
-            <div class="system-info">
-                <span class="status-online">● ONLINE</span> |
-                <span>{{systemInfo}}</span> |
-                <span class="blink">█</span>
-            </div>
-        </header>
+      <!-- Header -->
+      <header class="cyber-header">
+        <div class="glitch-wrapper">
+          <h1 class="cyber-title glitch" data-text="{{siteTitle}}">{{siteTitle}}</h1>
+        </div>
+        <div class="cyber-subtitle">
+          <span class="bracket">[</span>
+          <span class="text">{{siteSubtitle}}</span>
+          <span class="bracket">]</span>
+        </div>
+        <div class="system-info">
+          <span class="status-online">● ONLINE</span>
+          |
+          <span>{{systemInfo}}</span>
+          |
+          <span class="blink">█</span>
+        </div>
+      </header>
 
-        <!-- Main Content -->
-        <main class="lectures-section">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <span class="cyber-bracket">{'</span>
-                    СПИСОК ЛЕКЦІЙ
-                    <span class="cyber-bracket">'}</span>
-                </h2>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 20%"></div>
-                </div>
-            </div>
+      <!-- Main Content -->
+      <main class="lectures-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <span class="cyber-bracket">{'</span>
+            СПИСОК ЛЕКЦІЙ
+            <span class="cyber-bracket">'}</span>
+          </h2>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 20%"></div>
+          </div>
+        </div>
 
-            <!-- Lecture Cards -->
-            <div class="lecture-grid">
-                {{#lectures}}
-                {{#available}}
-                <a href="lectures/{{file}}" class="lecture-card active">
-                    <div class="card-number">{{number}}</div>
-                    <div class="card-content">
-                        <h3 class="card-title">{{title}}</h3>
-                        <p class="card-description">{{description}}</p>
-                        <div class="card-status">
-                            <span class="status-badge available">{{statusText}}</span>
-                            <span class="card-arrow">→</span>
-                        </div>
-                    </div>
-                    <div class="card-glitch"></div>
-                </a>
-                {{/available}}
-                {{#locked}}
-                <div class="lecture-card locked">
-                    <div class="card-number">{{number}}</div>
-                    <div class="card-content">
-                        <h3 class="card-title">{{title}}</h3>
-                        <p class="card-description">{{description}}</p>
-                        <div class="card-status">
-                            <span class="status-badge locked-badge">{{statusText}}</span>
-                        </div>
-                    </div>
-                </div>
-                {{/locked}}
-                {{/lectures}}
+        <!-- Lecture Cards -->
+        <div class="lecture-grid">
+          {{#lectures}} {{#available}}
+          <a href="lectures/{{file}}" class="lecture-card active">
+            <div class="card-number">{{number}}</div>
+            <div class="card-content">
+              <h3 class="card-title">{{title}}</h3>
+              <p class="card-description">{{description}}</p>
+              <div class="card-status">
+                <span class="status-badge available">{{statusText}}</span>
+                <span class="card-arrow">→</span>
+              </div>
             </div>
-        </main>
+            <div class="card-glitch"></div>
+          </a>
+          {{/available}} {{#locked}}
+          <div class="lecture-card locked">
+            <div class="card-number">{{number}}</div>
+            <div class="card-content">
+              <h3 class="card-title">{{title}}</h3>
+              <p class="card-description">{{description}}</p>
+              <div class="card-status">
+                <span class="status-badge locked-badge">{{statusText}}</span>
+              </div>
+            </div>
+          </div>
+          {{/locked}} {{/lectures}}
+        </div>
+      </main>
 
-        <!-- Footer -->
-        <footer class="cyber-footer">
-            <div class="footer-line"></div>
-            <p>{{footer}} | <span class="text-cyan">СИСТЕМА АКТИВНА</span></p>
-        </footer>
+      <!-- Footer -->
+      <footer class="cyber-footer">
+        <div class="footer-line"></div>
+        <p>
+          {{footer}} |
+          <span class="text-cyan">СИСТЕМА АКТИВНА</span>
+        </p>
+      </footer>
     </div>
-</body>
+  </body>
 </html>

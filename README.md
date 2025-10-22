@@ -1,270 +1,506 @@
-# OBD-SP - Основи Баз Даних та Спеціалізовані мови програмування
+# 🎓 OBD-SP | Cyberpunk Education Platform
 
-Курс лекцій з використанням Mustache templates, Gulp build system та cyberpunk-тематики.
+> **Основи Баз Даних та Спеціалізовані мови програмування**
+> Modern educational presentation system with Reveal.js and Cyberpunk 2077 aesthetics
 
-## ✨ Нові можливості (v2.0)
-
-- ✅ **13 типів слайдів** для структурованого навчання
-- ✅ **Модульна архітектура** — окремі Mustache шаблони для кожного типу слайду
-- ✅ **Демонстраційна лекція** (Lecture 0) з прикладами всіх типів
-- ✅ **Детальний довідник** — [SLIDE_TYPES_GUIDE.md](./SLIDE_TYPES_GUIDE.md)
-
-## 🎨 Дизайн
-
-### Головна сторінка (index.html)
-- **Стиль**: Cyberpunk 2077 aesthetic
-- **Ефекти**: Glitch animations, neon glow, animated grid, scanlines
-- **Підтримка**: Кирилиця
-
-### Лекції (Reveal.js)
-- **Фреймворк**: Reveal.js 5.0.4
-- **Тема**: Cyberpunk 2077 (кастомна)
-- **Палітра**:
-  - Жовтий (#fcee0a)
-  - Cyan (#00f0ff)
-  - Magenta (#ff00ff)
-  - Червоний (#ff003c)
-- **Ефекти**: Glitch анімація для заголовків, pixel art рамки, scanlines
-- **Шрифти**:
-  - Chakra Petch (основний текст)
-  - Orbitron (заголовки)
-  - Share Tech Mono (code)
-- **Підсвічування коду**: Highlight.js з темою Monokai
-
-## 📁 Структура проєкту
-
-```
-obd-sp/
-├── src/                          # Вихідні файли
-│   ├── templates/                # Mustache шаблони
-│   │   ├── index.mustache       # Шаблон головної сторінки
-│   │   ├── lecture-slide.mustache # Шаблон слайдів лекції
-│   │   └── slides/              # 🆕 Окремі шаблони для кожного типу слайду
-│   │       ├── title.mustache
-│   │       ├── roadmap.mustache
-│   │       ├── previous-lecture.mustache
-│   │       ├── definition.mustache
-│   │       ├── syntax.mustache
-│   │       ├── code-example.mustache
-│   │       ├── code-breakdown.mustache
-│   │       ├── diagram.mustache
-│   │       ├── comparison.mustache
-│   │       ├── debugger.mustache
-│   │       ├── common-mistake.mustache
-│   │       ├── summary.mustache
-│   │       └── next-steps.mustache
-│   ├── data/                     # JSON дані
-│   │   ├── lectures.json        # Загальні дані (список лекцій)
-│   │   └── lectures/            # Дані окремих лекцій
-│   │       ├── lecture0.json    # 🆕 DEMO — всі типи слайдів
-│   │       ├── lecture1.json    # Лекція 1
-│   │       ├── lecture2.json    # Лекція 2 (створити)
-│   │       └── _template.json   # 🆕 Шаблон для нових лекцій
-│   ├── css/                      # Стилі
-│   │   ├── main.css             # Стилі головної сторінки
-│   │   └── cyberpunk-theme.css  # Тема для Reveal.js
-│   └── js/                       # JavaScript (якщо потрібен)
-├── dist/                         # Зібрані файли (генерується)
-│   ├── index.html
-│   ├── lectures/
-│   ├── css/
-│   └── js/
-├── package.json                  # NPM конфігурація
-├── gulpfile.js                   # Gulp tasks
-├── .gitignore
-├── README.md                     # Загальна документація
-├── SLIDE_TYPES_GUIDE.md          # 🆕 Детальний довідник по типах слайдів
-├── QUICKSTART.md                 # Швидкий старт
-└── REFACTORING_SUMMARY.md        # Історія рефакторингу
-```
-
-## 🚀 Швидкий старт
-
-### 1. Встановити залежності
-```bash
-npm install
-```
-
-### 2. Запустити Development сервер
-```bash
-npm run dev
-```
-Відкриється браузер на `http://localhost:3000` з автоматичним перезавантаженням.
-
-### 3. Зібрати Production версію
-```bash
-npm run build
-```
-Мінімізовані файли будуть в папці `dist/`
-
-## 📝 Як додати нову лекцію
-
-**Детальну інструкцію з прикладами всіх типів слайдів див. у [SLIDE_TYPES_GUIDE.md](./SLIDE_TYPES_GUIDE.md)**
-
-### Швидкий старт:
-
-1. **Скопіюйте шаблон:** `src/data/lectures/_template.json` → `lecture2.json`
-2. **Заповніть метадані та слайди** (використовуйте один з 13 типів)
-3. **Додайте в список:** оновіть `src/data/lectures.json`
-4. **Зберіть:** `npm run dev`
-
-### Приклад мінімальної лекції:
-
-```json
-{
-  "lectureNumber": 2,
-  "lectureTitle": "Моя лекція",
-  "courseTitle": "Курс програмування",
-  "year": "2024",
-  "slides": [
-    {
-      "type": "title",
-      "title": "Моя лекція",
-      "subtitle": "Підзаголовок",
-      "course": "Курс програмування"
-    },
-    {
-      "type": "summary",
-      "title": "Підсумок",
-      "items": ["Висновок 1", "Висновок 2"]
-    }
-  ]
-}
-```
-
-## 🎯 13 типів слайдів
-
-| № | Тип | Призначення |
-|---|-----|-------------|
-| 1 | `title` | Титульний слайд лекції |
-| 2 | `roadmap` | План лекції (дорожня карта) |
-| 3 | `previous-lecture` | Огляд попередньої лекції |
-| 4 | `definition` | Ключове поняття / визначення |
-| 5 | `syntax` | Розбір синтаксису конструкцій |
-| 6 | `code-example` | Приклад коду з поясненням |
-| 7 | `code-breakdown` | Покроковий розбір коду |
-| 8 | `diagram` | Діаграма / візуалізація |
-| 9 | `comparison` | Порівняння двох підходів |
-| 10 | `debugger` | Робота з відладчиком (GDB) |
-| 11 | `common-mistake` | Часта помилка + правильний варіант |
-| 12 | `summary` | Підсумок лекції |
-| 13 | `next-steps` | Наступні кроки та ресурси |
-
-**📖 Детальну документацію з JSON-прикладами див. у [SLIDE_TYPES_GUIDE.md](./SLIDE_TYPES_GUIDE.md)**
-
-**🎓 Демонстрацію всіх типів дивіться в Lecture 0:** `http://localhost:3000/lectures/lecture0.html`
-    }
-  ]
-}
-```
-
-### 3. List Slide (Список)
-```json
-{
-  "type": "list",
-  "title": "Заголовок",
-  "items": [
-    {
-      "text": "Пункт 1",
-      "subitems": ["Підпункт 1.1", "Підпункт 1.2"]
-    },
-    {
-      "text": "Пункт 2"
-    }
-  ]
-}
-```
-
-### 4. Table Slide (Таблиця)
-```json
-{
-  "type": "table",
-  "title": "Заголовок",
-  "headers": ["Колонка 1", "Колонка 2", "Колонка 3"],
-  "rows": [
-    ["Рядок 1, Комірка 1", "Рядок 1, Комірка 2", "Рядок 1, Комірка 3"],
-    ["Рядок 2, Комірка 1", "Рядок 2, Комірка 2", "Рядок 2, Комірка 3"]
-  ]
-}
-```
-
-### 5. Code Slide (Код)
-```json
-{
-  "type": "code",
-  "title": "Заголовок",
-  "description": "Опис коду",
-  "language": "sql",
-  "code": "SELECT * FROM users;\nWHERE age > 18;"
-}
-```
-
-Підтримувані мови: `sql`, `javascript`, `python`, `java`, `html`, `css`, тощо.
-
-### 6. Summary Slide (Підсумок)
-```json
-{
-  "type": "summary",
-  "title": "ПІДСУМОК",
-  "items": [
-    "Висновок 1",
-    "Висновок 2",
-    "Висновок 3"
-  ],
-  "footer": "Дякую за увагу! 💾"
-}
-```
-
-## 🛠 Технології
-
-- **Build System**: Gulp 5
-- **Templates**: Mustache
-- **CSS Minification**: gulp-clean-css
-- **JS Minification**: gulp-terser
-- **HTML Minification**: gulp-htmlmin
-- **Dev Server**: BrowserSync (auto-reload)
-- **Presentation**: Reveal.js 5
-- **Syntax Highlighting**: Highlight.js
-- **Fonts**: Google Fonts (Chakra Petch, Orbitron, Share Tech Mono)
-
-## 📊 Gulp Commands
-
-```bash
-npm run dev      # Development mode (watch + live reload)
-npm run build    # Production build (minified)
-npm run clean    # Clean dist folder
-```
-
-## ✨ Особливості
-
-- ✅ Повна підтримка кирилиці
-- ✅ Glitch-ефект для заголовків
-- ✅ Pixel art естетика з neon-ефектами
-- ✅ Адаптивний дизайн
-- ✅ Scanline ефект для екрану
-- ✅ JSON-based content management
-- ✅ Mustache templating
-- ✅ Автоматична мінімізація (CSS, JS, HTML)
-- ✅ Live reload development server
-- ✅ Separation of concerns (data/templates/styles)
-
-## 📝 Приклад робочого процесу
-
-1. Напишіть контент лекції в JSON (`src/data/lectures/lectureX.json`)
-2. Оновіть статус в `src/data/lectures.json`
-3. Запустіть `npm run dev`
-4. Редагуйте файли - браузер автоматично оновлюється
-5. Для production: `npm run build`
-
-## 🎯 Best Practices
-
-- Зберігайте всі дані в JSON файлах
-- Один JSON файл = одна лекція
-- Використовуйте типізовані слайди для консистентності
-- Тримайте слайди лаконічними (6-8 рядків максимум)
-- Код - не більше 15-20 рядків на слайд
-- Завжди тестуйте в `dev` режимі перед `build`
+[![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Code Style: Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://prettier.io/)
 
 ---
 
-**© 2025 VTFK** | Зроблено з ❤️ та 💾
+## 📖 Table of Contents
+
+- [Features](#-features)
+- [Quick Start](#-quick-start)
+- [Project Structure](#-project-structure)
+- [Creating Lectures](#-creating-lectures)
+- [Slide Types](#-slide-types)
+- [Development](#-development)
+- [Code Quality](#-code-quality)
+- [Technologies](#-technologies)
+- [License](#-license)
+
+---
+
+## ✨ Features
+
+### 🎨 **Cyberpunk 2077 Design**
+
+- Custom neon color palette (yellow, cyan, magenta)
+- Glitch animations and scanline effects
+- Pixel art SVG icons
+- Animated terminal with Typed.js
+
+### 📚 **14 Slide Types**
+
+- Title, Roadmap, Definition, Code Examples
+- Live Coding with animated terminal
+- Step-by-step code breakdown
+- Debugger workflows, Common mistakes
+- Diagrams, Comparisons, Summaries
+
+### � **Modern Build System**
+
+- **Gulp 5.0** - Task automation
+- **Mustache** - Template engine
+- **BrowserSync** - Live reload
+- **Prettier & ESLint** - Code quality
+- **Production optimization** - Minification
+
+### 🌐 **Internationalization**
+
+- Full Cyrillic support
+- Ukrainian language interface
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Node.js** >= 18.0.0
+- **npm** >= 9.0.0
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/AlexOrd/obd-sp.git
+cd obd-sp
+
+# Install dependencies
+npm install
+
+# Start development server
+npm start
+```
+
+The site will open at `http://localhost:3000` with live reload enabled.
+
+---
+
+## 📁 Project Structure
+
+```
+obd-sp/
+├── src/
+│   ├── templates/
+│   │   ├── index.mustache              # Main page template
+│   │   ├── lecture-slide.mustache      # Lecture wrapper
+│   │   └── slides/                     # Individual slide types (14 templates)
+│   ├── data/
+│   │   ├── lectures.json               # Lectures list
+│   │   └── lectures/
+│   │       ├── lecture0.json          # Demo lecture (all slide types)
+│   │       └── lecture1.json          # Your lectures
+│   ├── css/
+│   │   ├── cyberpunk-theme.css        # Reveal.js theme
+│   │   └── main.css                   # Index page styles
+│   ├── js/                            # JavaScript files
+│   └── images/                        # Static assets
+├── dist/                              # Built files (auto-generated)
+├── gulpfile.js                        # Build configuration
+├── package.json                       # Dependencies & scripts
+├── .prettierrc.json                   # Code formatting rules
+├── eslint.config.js                   # Linting rules
+└── README.md                          # This file
+```
+
+---
+
+## 📝 Creating Lectures
+
+### Step 1: Create Lecture Data File
+
+Create a new JSON file in `src/data/lectures/`:
+
+```json
+// src/data/lectures/lecture2.json
+{
+  "lectureNumber": "2",
+  "lectureTitle": "SQL Basics",
+  "courseTitle": "Основи Баз Даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 2",
+      "subtitle": "SQL Basics",
+      "meta": {
+        "course": "Основи Баз Даних",
+        "institution": "VTFK • 2025"
+      }
+    },
+    {
+      "type": "definition",
+      "title": "What is SQL?",
+      "term": "SQL",
+      "definition": "Structured Query Language for managing databases",
+      "analogy": "SQL is like a universal language for talking to databases"
+    }
+  ]
+}
+```
+
+### Step 2: Add to Lectures List
+
+Edit `src/data/lectures.json`:
+
+```json
+{
+  "lectures": [
+    { "number": "0", "title": "Демо всіх типів слайдів" },
+    { "number": "1", "title": "Вступ до баз даних" },
+    { "number": "2", "title": "SQL Basics" } // Add your lecture
+  ]
+}
+```
+
+### Step 3: Build
+
+```bash
+npm run build
+```
+
+Your lecture will be generated at `dist/lectures/lecture2.html`
+
+### Step 4: View
+
+Open `http://localhost:3000` and click on your lecture, or navigate directly to `http://localhost:3000/lectures/lecture2.html`
+
+---
+
+## 🎬 Slide Types
+
+### Basic Slides
+
+| Type               | Description                  | Use Case       |
+| ------------------ | ---------------------------- | -------------- |
+| `title`            | Lecture title page           | Opening slide  |
+| `roadmap`          | Lecture plan with checkboxes | Outline topics |
+| `previous-lecture` | Recap of previous material   | Review         |
+| `summary`          | Key takeaways with stars     | Conclusion     |
+| `next-steps`       | Resources and next lecture   | Closing        |
+
+### Content Slides
+
+| Type             | Description                      | Use Case             |
+| ---------------- | -------------------------------- | -------------------- |
+| `definition`     | Term + definition + analogy      | Concepts             |
+| `syntax`         | Syntax breakdown with highlights | Language features    |
+| `code-example`   | Code block with description      | Examples             |
+| `code-breakdown` | Code + step-by-step explanation  | Detailed walkthrough |
+| `diagram`        | ASCII art + labels               | Visual explanations  |
+
+### Advanced Slides
+
+| Type             | Description                            | Use Case           |
+| ---------------- | -------------------------------------- | ------------------ |
+| `live-coding`    | **Animated terminal + 3 action items** | Interactive coding |
+| `comparison`     | Two-column comparison boxes            | Contrasts          |
+| `debugger`       | Code + GDB commands                    | Debugging          |
+| `common-mistake` | Wrong vs correct code                  | Error prevention   |
+
+### Example: Live Coding Slide
+
+```json
+{
+  "type": "live-coding",
+  "title": "💻 Practice: Database Creation",
+  "description": "Let's create a library database together",
+  "actionItems": [
+    "Create tables with PRIMARY KEYs",
+    "Add FOREIGN KEY relationships",
+    "Write JOIN queries for book search"
+  ]
+}
+```
+
+**Features:**
+
+- ✨ Typed.js terminal animation (git, npm, gcc commands)
+- 🎨 Glowing terminal with macOS-style header
+- 📝 Exactly 3 action items with pixel art checkboxes
+- ⌨️ Animated keyboard keys
+
+> 📖 **Full documentation**: See `SLIDE_TYPES_GUIDE.md` for all slide types and properties
+
+---
+
+## 💻 Development
+
+### NPM Scripts
+
+```bash
+# Development
+npm start              # Start dev server with live reload
+npm run dev            # Same as start
+npm run watch          # Watch files only (no server)
+npm run serve          # Serve dist/ folder only
+
+# Building
+npm run build          # Build with validation
+npm run build:prod     # Production build (minified)
+npm run clean          # Clean dist/ folder
+
+# Code Quality
+npm run format         # Format all code with Prettier
+npm run format:check   # Check formatting (CI)
+npm run lint           # Lint JavaScript with ESLint
+npm run lint:fix       # Auto-fix linting issues
+npm run validate       # Lint + format check
+```
+
+### Development Workflow
+
+1. **Start dev server**: `npm start`
+2. **Edit files** in `src/`
+3. **Changes auto-reload** in browser
+4. **Before commit**: `npm run validate`
+5. **Build for production**: `npm run build:prod`
+
+### File Watching
+
+The dev server watches:
+
+- ✅ Templates (`.mustache`)
+- ✅ Data files (`.json`)
+- ✅ Styles (`.css`)
+- ✅ Scripts (`.js`)
+- ✅ Images
+
+Changes trigger automatic rebuild and browser refresh.
+
+---
+
+## 🎨 Code Quality
+
+### Prettier
+
+**Configuration**: `.prettierrc.json`
+
+```bash
+npm run format          # Auto-format all files
+npm run format:check    # Check without modifying
+```
+
+**Rules:**
+
+- Single quotes for JS
+- 2-space indentation
+- 100 char line width
+- Semicolons always
+- ES5 trailing commas
+
+### ESLint
+
+**Configuration**: `eslint.config.js`
+
+```bash
+npm run lint            # Check for errors
+npm run lint:fix        # Auto-fix issues
+```
+
+**Rules:**
+
+- ✅ No `var` (use `const`/`let`)
+- ✅ Prefer `const` over `let`
+- ✅ Strict equality (`===`)
+- ✅ Template strings preferred
+- ✅ Arrow function spacing
+
+### Build Integration
+
+Production builds **automatically**:
+
+1. ✅ Lint JavaScript
+2. ✅ Check code formatting
+3. ❌ **Fail build** if issues found
+
+### Git Hooks (Husky)
+
+**Pre-commit hook** runs automatically before every commit:
+
+1. ✅ **lint-staged** - Run ESLint & Prettier on staged files only
+2. ✅ **Production build** - Ensure code builds successfully
+3. ❌ **Prevent commit** if errors found
+
+**Configuration**: `.husky/pre-commit`
+
+```bash
+# Manually run pre-commit checks
+npx lint-staged
+npm run build:prod
+```
+
+**Benefits:**
+
+- 🛡️ Prevents broken code from being committed
+- ⚡ Fast - only checks staged files
+- 🎯 Catches errors before they reach the repository
+- 🔒 Enforces code quality standards
+
+### VS Code Integration
+
+**Auto-format on save** enabled via `.vscode/settings.json`
+
+**Recommended Extensions:**
+
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+
+> 📖 **Full documentation**: See `CODE_QUALITY.md`
+
+---
+
+## 🛠 Technologies
+
+### Core
+
+- **[Reveal.js](https://revealjs.com/)** 5.0.4 - Presentation framework
+- **[Mustache](https://mustache.github.io/)** 5.0.0 - Logic-less templates
+- **[Gulp](https://gulpjs.com/)** 5.0.0 - Task automation
+
+### Build Tools
+
+- **[BrowserSync](https://browsersync.io/)** 3.0.3 - Live reload
+- **[Terser](https://terser.org/)** - JavaScript minification
+- **[CleanCSS](https://github.com/clean-css/clean-css)** - CSS minification
+- **[Autoprefixer](https://github.com/postcss/autoprefixer)** - CSS vendor prefixes
+
+### Code Quality
+
+- **[Prettier](https://prettier.io/)** - Code formatter
+- **[ESLint](https://eslint.org/)** - JavaScript linter
+- **[Husky](https://typicode.github.io/husky/)** - Git hooks automation
+- **[lint-staged](https://github.com/okonet/lint-staged)** - Run linters on staged files
+
+### Animations
+
+- **[Typed.js](https://github.com/mattboldt/typed.js/)** 2.1.0 - Terminal typing animation
+- **[Highlight.js](https://highlightjs.org/)** 11.9.0 - Syntax highlighting
+
+### Fonts
+
+- **Orbitron** - Headings (cyberpunk style)
+- **Chakra Petch** - Body text (Cyrillic support)
+- **Share Tech Mono** - Code blocks
+
+---
+
+## 🎯 Browser Support
+
+- ✅ Chrome/Edge (latest)
+- ✅ Firefox (latest)
+- ✅ Safari (latest)
+- ⚠️ Mobile: Responsive design included
+
+---
+
+## 📦 Production Build
+
+```bash
+# Build optimized version
+npm run build:prod
+
+# Output in dist/
+dist/
+├── index.html              # Minified
+├── lectures/
+│   ├── lecture0.html      # Minified
+│   └── lecture1.html      # Minified
+├── css/
+│   ├── cyberpunk-theme.css  # Minified, prefixed
+│   └── main.css             # Minified, prefixed
+└── js/                      # Minified, console removed
+```
+
+**Optimizations:**
+
+- ✅ HTML minification
+- ✅ CSS minification (level 2)
+- ✅ JS minification with Terser
+- ✅ Console statements removed
+- ✅ File size reporting
+
+---
+
+## 🐛 Troubleshooting
+
+### Build fails with lint errors
+
+```bash
+# Check what's wrong
+npm run validate
+
+# Auto-fix what's possible
+npm run lint:fix
+npm run format
+
+# Rebuild
+npm run build
+```
+
+### BrowserSync won't start
+
+```bash
+# Kill existing processes
+killall node
+
+# Clean and restart
+npm run clean
+npm start
+```
+
+### Slides don't fit screen
+
+- Slides already optimized with `font-size: 0.9em`
+- Code examples are `1.15em` (15% bigger)
+- Check browser zoom (should be 100%)
+
+### Typed.js animation not working
+
+- Check browser console for errors
+- Verify `lectureNumber` is unique in JSON
+- Clear browser cache
+
+---
+
+## � License
+
+MIT License - see [LICENSE](LICENSE) file for details
+
+---
+
+## 👨‍💻 Author
+
+**VTFK Education Team**
+
+- Repository: [AlexOrd/obd-sp](https://github.com/AlexOrd/obd-sp)
+- Course: Основи Баз Даних та Спеціалізовані мови програмування
+
+---
+
+## 🙏 Acknowledgments
+
+- [Reveal.js](https://revealjs.com/) - Amazing presentation framework
+- [Cyberpunk 2077](https://www.cyberpunk.net/) - Design inspiration
+- [Typed.js](https://mattboldt.com/demos/typed-js/) - Terminal animations
+- [Gulp](https://gulpjs.com/) - Build automation
+
+---
+
+## 📚 Additional Documentation
+
+- **Slide Types Guide**: `SLIDE_TYPES_GUIDE.md` - Complete reference for all 14 slide types
+- **Code Quality**: `CODE_QUALITY.md` - Prettier & ESLint setup details
+- **Setup Summary**: `SETUP_SUMMARY.md` - Installation and configuration log
+
+---
+
+<div align="center">
+
+**Made with** 💜 **and** ⚡ **cyberpunk aesthetics**
+
+</div>

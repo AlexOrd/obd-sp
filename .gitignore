@@ -1,6 +1,5 @@
 # Dependencies
 node_modules/
-package-lock.json
 
 # Build output
 dist/
@@ -12,17 +11,31 @@ Thumbs.db
 *.db
 
 # IDE
-.vscode/
+# Keep .vscode/settings.json for team consistency, ignore user-specific files
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
 .idea/
 *.swp
 *.swo
 *.sublime-*
+
+# Husky
+# Keep .husky directory for git hooks, but ignore specific OS files
+.husky/_
 
 # Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+
+# Lock files (keep package-lock.json for npm, ignore others)
+# package-lock.json should be committed for consistency
+yarn.lock
+pnpm-lock.yaml
 
 # Temporary files
 *.tmp
