@@ -1,0 +1,154 @@
+# AI Lecture Creation Guide
+
+## Overview
+
+This guide provides instructions for AI agents to create new lectures for the OBD-SP education platform.
+
+**Important**: All lecture content (titles, descriptions, explanations, code comments) must be in **Ukrainian**.
+
+---
+
+## Available Slide Types
+
+The project has **14 slide templates** located in `src/templates/slides/`:
+
+| Template File           | Type               | Purpose                                       |
+| ----------------------- | ------------------ | --------------------------------------------- |
+| `title.html`            | `title`            | Opening slide with lecture title and metadata |
+| `roadmap.html`          | `roadmap`          | Lecture plan with topic list                  |
+| `previous-lecture.html` | `previous-lecture` | Recap of previous lecture                     |
+| `definition.html`       | `definition`       | Key term with definition and analogy          |
+| `syntax.html`           | `syntax`           | Syntax breakdown with color-coded parts       |
+| `code-example.html`     | `code-example`     | Code snippet with description                 |
+| `code-breakdown.html`   | `code-breakdown`   | Code with step-by-step explanation            |
+| `diagram.html`          | `diagram`          | ASCII art or image diagrams                   |
+| `comparison.html`       | `comparison`       | Two-column comparison (pros/cons, approaches) |
+| `debugger.html`         | `debugger`         | Debugging workflow with GDB commands          |
+| `common-mistake.html`   | `common-mistake`   | Wrong vs correct code examples                |
+| `summary.html`          | `summary`          | Key takeaways from the lecture                |
+| `next-steps.html`       | `next-steps`       | Resources and next lecture preview            |
+| `live-coding.html`      | `live-coding`      | Interactive coding with animated terminal     |
+
+**Reference**: See `SLIDE_TYPES_GUIDE.md` for detailed JSON schemas and examples in Ukrainian.
+
+---
+
+## Files to Update When Creating a New Lecture
+
+### 1. Create Lecture Data File
+
+**Location**: `src/data/lectures/lectureN.json` (where N is the lecture number)
+
+**Structure**:
+
+```json
+{
+  "lectureNumber": "N",
+  "lectureTitle": "Назва лекції (Ukrainian)",
+  "courseTitle": "Основи баз даних та спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ N",
+      "subtitle": "Назва лекції",
+      "meta": {
+        "course": "Основи баз даних та спеціалізовані мови програмування",
+        "institution": "VTFK • 2025"
+      }
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["Тема 1", "Тема 2", "Тема 3"]
+    },
+    {
+      "type": "summary",
+      "title": "Підсумок",
+      "items": ["Висновок 1", "Висновок 2"]
+    }
+  ]
+}
+```
+
+**Templates**: Use `src/data/lectures/_template.json` or `src/data/lectures/lecture0.json` as examples.
+
+### 2. Update Lectures List
+
+**File**: `src/data/lectures.json`
+
+Add new lecture entry:
+
+```json
+{
+  "lectures": [
+    { "number": "0", "title": "Демо всіх типів слайдів" },
+    { "number": "1", "title": "Вступ до баз даних" },
+    { "number": "N", "title": "Назва нової лекції" }
+  ]
+}
+```
+
+### 3. Build and Deploy
+
+Run build command:
+
+```bash
+npm run build
+```
+
+**Output**: `dist/lectures/lectureN.html` will be generated.
+
+**Verify**:
+
+- Open `http://localhost:3000` (if dev server running with `npm start`)
+- Check that new lecture appears on index page
+- Click to view `dist/lectures/lectureN.html`
+
+---
+
+## Recommended Lecture Structure
+
+Typical lecture flow:
+
+1. **title** - Opening slide
+2. **roadmap** - Lecture plan
+3. **previous-lecture** - Review (optional, skip for first lecture)
+4. **definition** - Key concepts (1-3 slides)
+5. **code-example** / **syntax** - Examples
+6. **code-breakdown** - Detailed walkthrough
+7. **diagram** - Visual explanations (optional)
+8. **comparison** - Alternative approaches (optional)
+9. **live-coding** - Practice session (optional)
+10. **common-mistake** - Pitfalls to avoid
+11. **debugger** - Debugging practice (optional)
+12. **summary** - Key takeaways
+13. **next-steps** - Resources and preview
+
+---
+
+## Quick Checklist
+
+- [ ] Create `src/data/lectures/lectureN.json` with Ukrainian content
+- [ ] Add entry to `src/data/lectures.json`
+- [ ] Run `npm run build`
+- [ ] Verify output in `dist/lectures/lectureN.html`
+- [ ] Check index page displays new lecture
+
+---
+
+## Common Mistakes to Avoid
+
+1. **Language**: All content must be in Ukrainian (titles, descriptions, code comments)
+2. **Lecture numbering**: Use consistent numbering (lectureN.json, "number": "N")
+3. **Required slides**: Include at least `title` and `summary` slides
+4. **JSON syntax**: Validate JSON format (no trailing commas, proper quotes)
+5. **Build errors**: Run `npm run build` to catch errors before deployment
+
+---
+
+## Additional Resources
+
+- `SLIDE_TYPES_GUIDE.md` - Complete JSON schemas for all 14 slide types (Ukrainian)
+- `CODE_QUALITY.md` - Code formatting and linting rules
+- `README.md` - Project overview and setup

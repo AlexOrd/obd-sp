@@ -9,6 +9,14 @@
 
 ---
 
+## 📚 Documentation
+
+- **[AI_LECTURE_CREATION.md](AI_LECTURE_CREATION.md)** - Guide for creating new lectures (for AI agents)
+- **[SLIDE_TYPES_GUIDE.md](SLIDE_TYPES_GUIDE.md)** - Complete reference for all 14 slide types (Ukrainian)
+- **[CODE_QUALITY.md](CODE_QUALITY.md)** - Code formatting, linting, and quality standards
+
+---
+
 ## 📖 Table of Contents
 
 - [Features](#-features)
@@ -17,9 +25,7 @@
 - [Creating Lectures](#-creating-lectures)
 - [Slide Types](#-slide-types)
 - [Development](#-development)
-- [Code Quality](#-code-quality)
 - [Technologies](#-technologies)
-- [License](#-license)
 
 ---
 
@@ -40,7 +46,7 @@
 - Debugger workflows, Common mistakes
 - Diagrams, Comparisons, Summaries
 
-### � **Modern Build System**
+### 🛠 **Modern Build System**
 
 - **Gulp 5.0** - Task automation
 - **Mustache** - Template engine
@@ -86,37 +92,37 @@ The site will open at `http://localhost:3000` with live reload enabled.
 obd-sp/
 ├── src/
 │   ├── templates/
-│   │   ├── index.mustache              # Main page template
-│   │   ├── lecture-slide.mustache      # Lecture wrapper
-│   │   └── slides/                     # Individual slide types (14 templates)
+│   │   ├── index.html              # Main page template
+│   │   ├── lecture-slide.html      # Lecture wrapper
+│   │   └── slides/                 # 14 slide type templates
 │   ├── data/
-│   │   ├── lectures.json               # Lectures list
+│   │   ├── lectures.json           # Lectures list
 │   │   └── lectures/
-│   │       ├── lecture0.json          # Demo lecture (all slide types)
-│   │       └── lecture1.json          # Your lectures
-│   ├── css/
-│   │   ├── cyberpunk-theme.css        # Reveal.js theme
-│   │   └── main.css                   # Index page styles
-│   ├── js/                            # JavaScript files
-│   └── images/                        # Static assets
-├── dist/                              # Built files (auto-generated)
-├── gulpfile.js                        # Build configuration
-├── package.json                       # Dependencies & scripts
-├── .prettierrc.json                   # Code formatting rules
-├── eslint.config.js                   # Linting rules
-└── README.md                          # This file
+│   │       ├── _template.json      # Template for new lectures
+│   │       ├── lecture0.json       # Demo (all slide types)
+│   │       └── lecture1.json       # Your lectures
+│   ├── css/                        # Stylesheets
+│   ├── js/                         # JavaScript files
+│   └── images/                     # Static assets
+├── dist/                           # Built files (auto-generated)
+├── gulpfile.js                     # Build configuration
+└── package.json                    # Dependencies & scripts
 ```
 
 ---
 
 ## 📝 Creating Lectures
 
-### Step 1: Create Lecture Data File
+### Quick Steps
 
-Create a new JSON file in `src/data/lectures/`:
+1. **Create lecture data file**: `src/data/lectures/lectureN.json`
+2. **Add to lectures list**: Edit `src/data/lectures.json`
+3. **Build**: Run `npm run build`
+4. **View**: Open `http://localhost:3000`
+
+### Example Lecture
 
 ```json
-// src/data/lectures/lecture2.json
 {
   "lectureNumber": "2",
   "lectureTitle": "SQL Basics",
@@ -134,97 +140,43 @@ Create a new JSON file in `src/data/lectures/`:
     },
     {
       "type": "definition",
-      "title": "What is SQL?",
+      "title": "Що таке SQL?",
       "term": "SQL",
-      "definition": "Structured Query Language for managing databases",
-      "analogy": "SQL is like a universal language for talking to databases"
+      "definition": "Structured Query Language для управління базами даних",
+      "analogy": "SQL - це універсальна мова для спілкування з базами даних"
     }
   ]
 }
 ```
 
-### Step 2: Add to Lectures List
+**Note**: All lecture content must be in **Ukrainian**.
 
-Edit `src/data/lectures.json`:
-
-```json
-{
-  "lectures": [
-    { "number": "0", "title": "Демо всіх типів слайдів" },
-    { "number": "1", "title": "Вступ до баз даних" },
-    { "number": "2", "title": "SQL Basics" } // Add your lecture
-  ]
-}
-```
-
-### Step 3: Build
-
-```bash
-npm run build
-```
-
-Your lecture will be generated at `dist/lectures/lecture2.html`
-
-### Step 4: View
-
-Open `http://localhost:3000` and click on your lecture, or navigate directly to `http://localhost:3000/lectures/lecture2.html`
+> 📖 **For AI agents**: See [AI_LECTURE_CREATION.md](AI_LECTURE_CREATION.md) for detailed instructions
 
 ---
 
 ## 🎬 Slide Types
 
-### Basic Slides
+### Overview
 
-| Type               | Description                  | Use Case       |
-| ------------------ | ---------------------------- | -------------- |
-| `title`            | Lecture title page           | Opening slide  |
-| `roadmap`          | Lecture plan with checkboxes | Outline topics |
-| `previous-lecture` | Recap of previous material   | Review         |
-| `summary`          | Key takeaways with stars     | Conclusion     |
-| `next-steps`       | Resources and next lecture   | Closing        |
+| Type               | Description                      | Use Case             |
+| ------------------ | -------------------------------- | -------------------- |
+| `title`            | Lecture title page               | Opening slide        |
+| `roadmap`          | Lecture plan with checkboxes     | Outline topics       |
+| `previous-lecture` | Recap of previous material       | Review               |
+| `definition`       | Term + definition + analogy      | Concepts             |
+| `syntax`           | Syntax breakdown with highlights | Language features    |
+| `code-example`     | Code block with description      | Examples             |
+| `code-breakdown`   | Code + step-by-step explanation  | Detailed walkthrough |
+| `diagram`          | ASCII art or images + labels     | Visual explanations  |
+| `comparison`       | Two-column comparison            | Contrasts            |
+| `debugger`         | Code + GDB commands              | Debugging            |
+| `common-mistake`   | Wrong vs correct code            | Error prevention     |
+| `live-coding`      | Animated terminal + action items | Interactive coding   |
+| `summary`          | Key takeaways with stars         | Conclusion           |
+| `next-steps`       | Resources and next lecture       | Closing              |
 
-### Content Slides
-
-| Type             | Description                      | Use Case             |
-| ---------------- | -------------------------------- | -------------------- |
-| `definition`     | Term + definition + analogy      | Concepts             |
-| `syntax`         | Syntax breakdown with highlights | Language features    |
-| `code-example`   | Code block with description      | Examples             |
-| `code-breakdown` | Code + step-by-step explanation  | Detailed walkthrough |
-| `diagram`        | ASCII art + labels               | Visual explanations  |
-
-### Advanced Slides
-
-| Type             | Description                            | Use Case           |
-| ---------------- | -------------------------------------- | ------------------ |
-| `live-coding`    | **Animated terminal + 3 action items** | Interactive coding |
-| `comparison`     | Two-column comparison boxes            | Contrasts          |
-| `debugger`       | Code + GDB commands                    | Debugging          |
-| `common-mistake` | Wrong vs correct code                  | Error prevention   |
-
-### Example: Live Coding Slide
-
-```json
-{
-  "type": "live-coding",
-  "title": "💻 Practice: Database Creation",
-  "description": "Let's create a library database together",
-  "actionItems": [
-    "Create tables with PRIMARY KEYs",
-    "Add FOREIGN KEY relationships",
-    "Write JOIN queries for book search"
-  ]
-}
-```
-
-**Features:**
-
-- ✨ Typed.js terminal animation (git, npm, gcc commands)
-- 🎨 Glowing terminal with macOS-style header
-- 📝 Exactly 3 action items with pixel art checkboxes
-- ⌨️ Animated keyboard keys
-
-> 📖 **Full documentation**: See `SLIDE_TYPES_GUIDE.md` for all slide types and properties
+> 📖 **Full documentation**: See [SLIDE_TYPES_GUIDE.md](SLIDE_TYPES_GUIDE.md) for all JSON schemas and examples
 
 ---
 
@@ -262,95 +214,21 @@ npm run validate       # Lint + format check
 
 ### File Watching
 
-The dev server watches:
+The dev server automatically watches and rebuilds:
 
-- ✅ Templates (`.mustache`)
-- ✅ Data files (`.json`)
-- ✅ Styles (`.css`)
-- ✅ Scripts (`.js`)
-- ✅ Images
+- Templates (`.html`, `.mustache`)
+- Data files (`.json`)
+- Styles (`.css`)
+- Scripts (`.js`)
+- Images
 
-Changes trigger automatic rebuild and browser refresh.
+### Code Quality
 
----
+**Prettier** - Code formatting with auto-format on save
+**ESLint** - JavaScript linting with auto-fix
+**Husky** - Pre-commit hooks for validation
 
-## 🎨 Code Quality
-
-### Prettier
-
-**Configuration**: `.prettierrc.json`
-
-```bash
-npm run format          # Auto-format all files
-npm run format:check    # Check without modifying
-```
-
-**Rules:**
-
-- Single quotes for JS
-- 2-space indentation
-- 100 char line width
-- Semicolons always
-- ES5 trailing commas
-
-### ESLint
-
-**Configuration**: `eslint.config.js`
-
-```bash
-npm run lint            # Check for errors
-npm run lint:fix        # Auto-fix issues
-```
-
-**Rules:**
-
-- ✅ No `var` (use `const`/`let`)
-- ✅ Prefer `const` over `let`
-- ✅ Strict equality (`===`)
-- ✅ Template strings preferred
-- ✅ Arrow function spacing
-
-### Build Integration
-
-Production builds **automatically**:
-
-1. ✅ Lint JavaScript
-2. ✅ Check code formatting
-3. ❌ **Fail build** if issues found
-
-### Git Hooks (Husky)
-
-**Pre-commit hook** runs automatically before every commit:
-
-1. ✅ **lint-staged** - Run ESLint & Prettier on staged files only
-2. ✅ **Production build** - Ensure code builds successfully
-3. ❌ **Prevent commit** if errors found
-
-**Configuration**: `.husky/pre-commit`
-
-```bash
-# Manually run pre-commit checks
-npx lint-staged
-npm run build:prod
-```
-
-**Benefits:**
-
-- 🛡️ Prevents broken code from being committed
-- ⚡ Fast - only checks staged files
-- 🎯 Catches errors before they reach the repository
-- 🔒 Enforces code quality standards
-
-### VS Code Integration
-
-**Auto-format on save** enabled via `.vscode/settings.json`
-
-**Recommended Extensions:**
-
-- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
-- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
-
-> 📖 **Full documentation**: See `CODE_QUALITY.md`
+> 📖 **Details**: See [CODE_QUALITY.md](CODE_QUALITY.md)
 
 ---
 
@@ -373,12 +251,12 @@ npm run build:prod
 
 - **[Prettier](https://prettier.io/)** - Code formatter
 - **[ESLint](https://eslint.org/)** - JavaScript linter
-- **[Husky](https://typicode.github.io/husky/)** - Git hooks automation
-- **[lint-staged](https://github.com/okonet/lint-staged)** - Run linters on staged files
+- **[Husky](https://typicode.github.io/husky/)** - Git hooks
+- **[lint-staged](https://github.com/okonet/lint-staged)** - Staged file linting
 
 ### Animations
 
-- **[Typed.js](https://github.com/mattboldt/typed.js/)** 2.1.0 - Terminal typing animation
+- **[Typed.js](https://github.com/mattboldt/typed.js/)** 2.1.0 - Terminal typing
 - **[Highlight.js](https://highlightjs.org/)** 11.9.0 - Syntax highlighting
 
 ### Fonts
@@ -410,10 +288,8 @@ dist/
 ├── lectures/
 │   ├── lecture0.html      # Minified
 │   └── lecture1.html      # Minified
-├── css/
-│   ├── cyberpunk-theme.css  # Minified, prefixed
-│   └── main.css             # Minified, prefixed
-└── js/                      # Minified, console removed
+├── css/                    # Minified, prefixed
+└── js/                     # Minified, console removed
 ```
 
 **Optimizations:**
@@ -431,33 +307,19 @@ dist/
 ### Build fails with lint errors
 
 ```bash
-# Check what's wrong
-npm run validate
-
-# Auto-fix what's possible
-npm run lint:fix
-npm run format
-
-# Rebuild
-npm run build
+npm run validate      # Check what's wrong
+npm run lint:fix      # Auto-fix
+npm run format        # Format code
+npm run build         # Rebuild
 ```
 
 ### BrowserSync won't start
 
 ```bash
-# Kill existing processes
-killall node
-
-# Clean and restart
-npm run clean
-npm start
+killall node          # Kill existing processes
+npm run clean         # Clean dist/
+npm start             # Restart
 ```
-
-### Slides don't fit screen
-
-- Slides already optimized with `font-size: 0.9em`
-- Code examples are `1.15em` (15% bigger)
-- Check browser zoom (should be 100%)
 
 ### Typed.js animation not working
 
@@ -467,7 +329,7 @@ npm start
 
 ---
 
-## � License
+## 📄 License
 
 MIT License - see [LICENSE](LICENSE) file for details
 
@@ -488,14 +350,6 @@ MIT License - see [LICENSE](LICENSE) file for details
 - [Cyberpunk 2077](https://www.cyberpunk.net/) - Design inspiration
 - [Typed.js](https://mattboldt.com/demos/typed-js/) - Terminal animations
 - [Gulp](https://gulpjs.com/) - Build automation
-
----
-
-## 📚 Additional Documentation
-
-- **Slide Types Guide**: `SLIDE_TYPES_GUIDE.md` - Complete reference for all 14 slide types
-- **Code Quality**: `CODE_QUALITY.md` - Prettier & ESLint setup details
-- **Setup Summary**: `SETUP_SUMMARY.md` - Installation and configuration log
 
 ---
 
