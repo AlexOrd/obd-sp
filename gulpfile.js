@@ -15,6 +15,8 @@ import autoprefixer from 'gulp-autoprefixer';
 import newer from 'gulp-newer';
 import eslint from 'gulp-eslint-new';
 import prettier from 'gulp-prettier';
+import puppeteer from 'puppeteer';
+import path from 'path';
 
 const bs = browserSync.create();
 const isProd = process.env.NODE_ENV === 'production';
@@ -39,6 +41,7 @@ const paths = {
     js: 'src/js/**/*.js',
     data: 'src/data/**/*.json',
     images: 'src/images/**/*',
+    static: 'static/**/*',
   },
   dist: {
     base: 'dist',
@@ -46,6 +49,7 @@ const paths = {
     js: 'dist/js',
     lectures: 'dist/lectures',
     images: 'dist/images',
+    static: 'dist/static',
   },
 };
 
@@ -144,6 +148,14 @@ export const lectures = (done) => {
       .pipe(gulp.dest(paths.dist.lectures))
       .pipe(size({ title: `Lecture ${lectureData.lectureNumber}`, showFiles: false }));
 
+    // Generate print-friendly version for PDF
+    gulp
+      .src('src/templates/lecture-slide.html')
+      .pipe(errorHandler('Lectures Print'))
+      .pipe(mustache({ ...layoutData, lecture: lectureData, isPrintVersion: true }, {}, partials))
+      .pipe(rename(file.replace('.json', '-print.html')))
+      .pipe(gulp.dest(paths.dist.lectures));
+
     processedCount++;
   });
 
@@ -227,6 +239,15 @@ export const htmlMinify = () => {
     .pipe(size({ title: 'HTML (minified)' }));
 };
 
+// Copy static files (like PDFs)
+export const copyStatic = () => {
+  log('📁 Copying static files...', 'cyan');
+  return gulp
+    .src(paths.src.static)
+    .pipe(gulp.dest(paths.dist.static))
+    .pipe(size({ title: 'Static files' }));
+};
+
 // Development server
 export const serve = (done) => {
   log('🚀 Starting BrowserSync server...', 'magenta');
@@ -256,6 +277,92 @@ const reload = (done) => {
   done();
 };
 
+// Generate PDFs from lecture HTML files (separate task)
+export const generatePDF = async () => {
+  log('📄 Generating PDFs from lectures...', 'magenta');
+
+  const lecturesDir = 'src/data/lectures/';
+  const pdfOutputDir = 'static/pdfs';
+
+  // Ensure static/pdfs directory exists
+  if (!fs.existsSync(pdfOutputDir)) {
+    fs.mkdirSync(pdfOutputDir, { recursive: true });
+    log('📁 Created static/pdfs directory', 'cyan');
+  }
+
+  const files = fs
+    .readdirSync(lecturesDir)
+    .filter((f) => f.endsWith('.json') && !f.startsWith('_'));
+
+  // Check if dist/lectures exists
+  if (!fs.existsSync('dist/lectures')) {
+    log('⚠️  dist/lectures not found. Please run build first.', 'yellow');
+    return;
+  }
+
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
+
+  let generatedCount = 0;
+
+  for (const file of files) {
+    const lectureData = JSON.parse(fs.readFileSync(lecturesDir + file, 'utf8'));
+    const { lectureNumber } = lectureData;
+
+    // Skip lecture 0 (template/demo lecture)
+    if (lectureNumber === 0) {
+      log('⏭️  Skipping lecture 0 (template)', 'cyan');
+      continue;
+    }
+
+    const printHtmlFile = `dist/lectures/lecture${lectureNumber}-print.html`;
+    const pdfFile = `${pdfOutputDir}/lecture${lectureNumber}.pdf`;
+
+    // Check if print HTML file exists
+    if (!fs.existsSync(printHtmlFile)) {
+      log(`⚠️  Skipping lecture${lectureNumber} - Print HTML not found`, 'yellow');
+      continue;
+    }
+
+    try {
+      const page = await browser.newPage();
+      await page.goto(`file://${path.resolve(printHtmlFile)}`, {
+        waitUntil: 'networkidle0',
+        timeout: 60000,
+      });
+
+      // Wait for Reveal.js to initialize
+      await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 2000)));
+
+      await page.pdf({
+        path: pdfFile,
+        format: 'A4',
+        landscape: true,
+        printBackground: true,
+        preferCSSPageSize: false,
+        margin: {
+          top: '10mm',
+          right: '10mm',
+          bottom: '10mm',
+          left: '10mm',
+        },
+      });
+
+      await page.close();
+      generatedCount++;
+      log(`✅ Generated PDF for lecture ${lectureNumber}`, 'green');
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      log(`❌ Error generating PDF for lecture ${lectureNumber}: ${errorMsg}`, 'red');
+    }
+  }
+
+  await browser.close();
+  log(`📦 Generated ${generatedCount} PDF file(s) in ${pdfOutputDir}`, 'cyan');
+};
+
 // Watch files
 export const watch = () => {
   log('👀 Watching for changes...', 'cyan');
@@ -281,6 +388,10 @@ export const watch = () => {
   gulp
     .watch(paths.src.images, gulp.series(images, reload))
     .on('change', (path) => log(`Image changed: ${path}`, 'yellow'));
+
+  gulp
+    .watch(paths.src.static, gulp.series(copyStatic, reload))
+    .on('change', (path) => log(`Static file changed: ${path}`, 'yellow'));
 };
 
 // Prettier - Format code
@@ -324,15 +435,14 @@ export const check = () => {
 // Validate - run both lint and format check
 export const validate = gulp.series(lint, check);
 
-// Development task
+// Development task - doesn't clean dist, includes static files
 export const dev = gulp.series(
-  clean,
-  gulp.parallel(templates, lectureTemplates, lectures, css, js, images),
+  gulp.parallel(templates, lectureTemplates, lectures, css, js, images, copyStatic),
   serve,
   watch
 );
 
-// Build task (production)
+// Build task (production) - without PDF generation
 export const build = gulp.series(
   (done) => {
     log('🏗️  Building for PRODUCTION...', 'magenta');
@@ -341,14 +451,18 @@ export const build = gulp.series(
   clean,
   format, // Auto-format before validation
   validate, // Add validation before build
-  gulp.parallel(templates, lectureTemplates, lectures, css, js, images),
+  gulp.parallel(templates, lectureTemplates, lectures, css, js, images, copyStatic),
   htmlMinify,
   (done) => {
     log('✅ Production build complete!', 'green');
     log('📦 Files are ready in the dist/ folder', 'cyan');
+    log('💡 Run "npm run pdf" to generate PDFs', 'yellow');
     done();
   }
 );
+
+// PDF generation task (separate from build)
+export const pdf = generatePDF;
 
 // Default task
 export default dev;

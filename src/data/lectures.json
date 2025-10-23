@@ -24,7 +24,9 @@
       "description": "Основні поняття, типи баз даних, історія розвитку",
       "available": true,
       "statusText": "ДОСТУПНА",
-      "file": "lecture1.html"
+      "file": "lecture1.html",
+      "pdfAvailable": true,
+      "pdfFile": "../static/pdfs/lecture1.pdf"
     },
     {
       "id": "lecture2",
