@@ -1,0 +1,537 @@
+/**
+ * Harry Potter Magical Theme for Reveal.js
+ * Gryffindor colors with pixel art and magical aesthetics
+ */
+
+/* Import magical fonts */
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=EB+Garamond:wght@400;700&family=Courier+Prime:wght@400;700&display=swap");
+
+/* Base colors - Gryffindor + Magical palette */
+:root {
+  --hp-scarlet: #740001;
+  --hp-gold: #d3a625;
+  --hp-bronze: #946b2d;
+  --hp-parchment: #f4e4c1;
+  --hp-parchment-dark: #e8d4a8;
+  --hp-ink: #2c2416;
+  --hp-ink-light: #5a4a3a;
+  --hp-magic-purple: #6b2d5c;
+  --hp-magic-blue: #4a5d8f;
+  --hp-green: #1a472a;
+  --hp-gold-glow: rgba(211, 166, 37, 0.6);
+  --hp-scarlet-glow: rgba(116, 0, 1, 0.4);
+}
+
+/* Global styles */
+.reveal {
+  font-family: "EB Garamond", serif;
+  font-size: 25.6px;
+  font-weight: 400;
+  color: var(--hp-ink);
+  background: linear-gradient(135deg, var(--hp-parchment) 0%, var(--hp-parchment-dark) 100%);
+  position: relative;
+}
+
+/* Parchment texture overlay */
+.reveal::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(92, 77, 55, 0.02) 0px,
+      transparent 1px,
+      transparent 2px,
+      rgba(92, 77, 55, 0.02) 3px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(92, 77, 55, 0.02) 0px,
+      transparent 1px,
+      transparent 2px,
+      rgba(92, 77, 55, 0.02) 3px
+    );
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+/* Headings - Medieval magical style */
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--hp-scarlet);
+  text-shadow:
+    2px 2px 0 var(--hp-gold),
+    4px 4px 8px var(--hp-scarlet-glow);
+  margin-bottom: 30px;
+  letter-spacing: 0.05em;
+}
+
+.reveal h1 {
+  font-size: 2.4em;
+  font-weight: 900;
+  border-bottom: 3px solid var(--hp-gold);
+  padding-bottom: 15px;
+  position: relative;
+}
+
+/* Golden glow effect for h1 */
+.reveal h1::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--hp-gold);
+  box-shadow: 0 0 15px var(--hp-gold-glow);
+  animation: golden-glow 2s ease-in-out infinite;
+}
+
+@keyframes golden-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 15px var(--hp-gold-glow);
+  }
+  50% {
+    box-shadow:
+      0 0 25px var(--hp-gold-glow),
+      0 0 35px var(--hp-gold-glow);
+  }
+}
+
+.reveal h2 {
+  font-size: 1.76em;
+  color: var(--hp-gold);
+  text-shadow:
+    1px 1px 0 var(--hp-bronze),
+    2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.reveal h3 {
+  font-size: 1.2em;
+  color: var(--hp-magic-purple);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Paragraphs and text */
+.reveal p {
+  margin-bottom: 20px;
+  line-height: 1.6;
+  color: var(--hp-ink);
+}
+
+.reveal strong,
+.reveal b {
+  color: var(--hp-scarlet);
+  font-weight: 700;
+}
+
+.reveal em,
+.reveal i {
+  color: var(--hp-magic-purple);
+  font-style: italic;
+}
+
+/* Lists - Magical bullets */
+.reveal ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.reveal ul li {
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 15px;
+}
+
+.reveal ul li::before {
+  content: "⚡";
+  position: absolute;
+  left: 0;
+  color: var(--hp-gold);
+  font-size: 1.2em;
+  animation: sparkle 3s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.reveal ol {
+  counter-reset: magical-counter;
+  list-style: none;
+  padding-left: 0;
+}
+
+.reveal ol li {
+  position: relative;
+  padding-left: 40px;
+  margin-bottom: 15px;
+  counter-increment: magical-counter;
+}
+
+.reveal ol li::before {
+  content: counter(magical-counter);
+  position: absolute;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  background: var(--hp-gold);
+  color: var(--hp-parchment);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Code blocks - Ancient scroll style */
+.reveal pre {
+  background: var(--hp-ink);
+  border: 2px solid var(--hp-bronze);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.3),
+    inset 0 0 20px rgba(211, 166, 37, 0.1);
+  font-family: "Courier Prime", monospace;
+}
+
+.reveal code {
+  font-family: "Courier Prime", monospace;
+  background: rgba(44, 36, 22, 0.1);
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: var(--hp-scarlet);
+  font-size: 0.9em;
+}
+
+.reveal pre code {
+  background: transparent;
+  padding: 0;
+  color: var(--hp-gold);
+  display: block;
+  overflow-x: auto;
+}
+
+/* Links - Magical portals */
+.reveal a {
+  color: var(--hp-magic-purple);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.reveal a:hover {
+  color: var(--hp-gold);
+  border-bottom-color: var(--hp-gold);
+  text-shadow: 0 0 10px var(--hp-gold-glow);
+}
+
+/* Boxes and panels - Magical frames */
+.hp-box {
+  border: 3px solid var(--hp-gold);
+  background: rgba(244, 228, 193, 0.7);
+  padding: 25px;
+  margin: 20px 0;
+  border-radius: 10px;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    inset 0 0 20px rgba(211, 166, 37, 0.1);
+  position: relative;
+}
+
+.hp-box::before {
+  content: "✨";
+  position: absolute;
+  top: -15px;
+  left: 20px;
+  background: var(--hp-parchment);
+  padding: 0 10px;
+  font-size: 1.5em;
+}
+
+.hp-box-scarlet {
+  border-color: var(--hp-scarlet);
+}
+
+.hp-box-purple {
+  border-color: var(--hp-magic-purple);
+}
+
+/* Title slide - Grand entrance */
+.reveal .title-slide {
+  text-align: center;
+  padding: 60px 40px;
+}
+
+.reveal .title-slide h1 {
+  font-size: 3em;
+  margin-bottom: 40px;
+  animation: magical-entrance 1s ease-out;
+}
+
+@keyframes magical-entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Definition box - Spellbook style */
+.definition-box {
+  background: var(--hp-ink);
+  color: var(--hp-parchment);
+  padding: 30px;
+  border-radius: 10px;
+  border: 3px solid var(--hp-gold);
+  margin: 25px 0;
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.3),
+    inset 0 0 30px rgba(211, 166, 37, 0.15);
+}
+
+.definition-term {
+  font-family: "Cinzel", serif;
+  font-size: 1.8em;
+  color: var(--hp-gold);
+  margin-bottom: 15px;
+  text-shadow: 0 0 15px var(--hp-gold-glow);
+}
+
+.definition-text {
+  font-size: 1.1em;
+  line-height: 1.7;
+  color: var(--hp-parchment);
+}
+
+/* Analogy box - Magical insight */
+.analogy-box {
+  background: rgba(107, 45, 92, 0.15);
+  border-left: 5px solid var(--hp-magic-purple);
+  padding: 20px 25px;
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+}
+
+.analogy-box::before {
+  content: "🔮 ";
+  font-style: normal;
+  font-size: 1.3em;
+}
+
+/* Code breakdown - Spellcasting steps */
+.code-breakdown {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin: 30px 0;
+}
+
+.code-breakdown-code {
+  background: var(--hp-ink);
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid var(--hp-bronze);
+}
+
+.code-breakdown-steps {
+  padding: 20px;
+}
+
+.code-breakdown-steps li {
+  background: rgba(211, 166, 37, 0.1);
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border-left: 4px solid var(--hp-gold);
+}
+
+/* Comparison - House rivalry */
+.comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin: 30px 0;
+}
+
+.comparison-left,
+.comparison-right {
+  padding: 25px;
+  border-radius: 10px;
+  border: 3px solid;
+}
+
+.comparison-left {
+  border-color: var(--hp-scarlet);
+  background: rgba(116, 0, 1, 0.05);
+}
+
+.comparison-right {
+  border-color: var(--hp-gold);
+  background: rgba(211, 166, 37, 0.05);
+}
+
+/* Summary - House points */
+.summary-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 15px;
+  background: rgba(211, 166, 37, 0.1);
+  border-radius: 8px;
+  border-left: 5px solid var(--hp-gold);
+}
+
+.summary-item::before {
+  content: "★";
+  color: var(--hp-gold);
+  font-size: 1.5em;
+  margin-right: 15px;
+  animation: star-twinkle 2s ease-in-out infinite;
+}
+
+@keyframes star-twinkle {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 15px var(--hp-gold-glow);
+  }
+}
+
+/* Common mistake - Dark magic warning */
+.mistake-warning {
+  background: rgba(116, 0, 1, 0.1);
+  border: 3px solid var(--hp-scarlet);
+  padding: 25px;
+  border-radius: 10px;
+  margin: 25px 0;
+}
+
+.mistake-warning h3 {
+  color: var(--hp-scarlet);
+  margin-bottom: 15px;
+}
+
+.wrong-code {
+  border-left: 5px solid var(--hp-scarlet);
+  background: rgba(116, 0, 1, 0.05);
+}
+
+.correct-code {
+  border-left: 5px solid var(--hp-green);
+  background: rgba(26, 71, 42, 0.05);
+}
+
+/* Navigation controls - Magical buttons */
+.reveal .controls {
+  color: var(--hp-gold);
+}
+
+.reveal .controls button {
+  color: var(--hp-gold) !important;
+}
+
+.reveal .controls button:hover {
+  color: var(--hp-scarlet) !important;
+  transform: scale(1.2);
+}
+
+/* Progress bar - Golden thread */
+.reveal .progress {
+  background: rgba(44, 36, 22, 0.2);
+  color: var(--hp-gold);
+}
+
+.reveal .progress span {
+  background: var(--hp-gold);
+  box-shadow: 0 0 10px var(--hp-gold-glow);
+}
+
+/* Slide number - Page counter */
+.reveal .slide-number {
+  font-family: "Cinzel", serif;
+  color: var(--hp-bronze);
+  background: rgba(244, 228, 193, 0.8);
+  border-radius: 4px;
+  padding: 5px 10px;
+}
+
+/* Print styles */
+@media print {
+  .reveal {
+    background: white;
+  }
+
+  .reveal h1,
+  .reveal h2,
+  .reveal h3 {
+    text-shadow: none;
+  }
+}
+
+/* Floating sparkles animation */
+@keyframes float-sparkle {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+}
+
+/* Magical particle effects */
+.magic-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.magic-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--hp-gold);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--hp-gold-glow);
+  animation: float-sparkle 3s ease-in-out infinite;
+  opacity: 0.7;
+}

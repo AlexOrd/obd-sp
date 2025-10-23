@@ -1,7 +1,7 @@
-# 🎓 OBD-SP | Cyberpunk Education Platform
+# 🎓 OBD-SP | Dual-Track Education Platform
 
 > **Основи Баз Даних та Спеціалізовані мови програмування**
-> Modern educational presentation system with Reveal.js and Cyberpunk 2077 aesthetics
+> Modern educational presentation system with dual themes: Cyberpunk 2077 & Harry Potter
 
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -14,6 +14,34 @@
 - **[AI_LECTURE_CREATION.md](AI_LECTURE_CREATION.md)** - Guide for creating new lectures (for AI agents)
 - **[SLIDE_TYPES_GUIDE.md](SLIDE_TYPES_GUIDE.md)** - Complete reference for all 14 slide types (Ukrainian)
 - **[CODE_QUALITY.md](CODE_QUALITY.md)** - Code formatting, linting, and quality standards
+
+---
+
+## 🎭 Dual-Track System
+
+The platform supports two independent lecture tracks with distinct themes:
+
+### 🌃 SP Track - System Programming (Cyberpunk 2077)
+
+- **Theme**: Neon colors, glitch effects, circuit animations
+- **Focus**: C/C++, memory management, system architecture, processes
+- **URL**: `/sp/`
+- **Colors**: Cyan (#00f0ff), Yellow (#fcee0a), Magenta (#ff00ff)
+
+### 📚 DB Track - Databases (Harry Potter Magical)
+
+- **Theme**: Parchment, gold accents, magical particles, pixel art
+- **Focus**: SQL, NoSQL, database design, query optimization
+- **URL**: `/db/`
+- **Colors**: Scarlet (#740001), Gold (#d3a625), Purple (#6b2d5c)
+
+### 🏠 Landing Page
+
+- **Vertical split** with Vanta.js animations
+- **Left side**: Cyberpunk NET effect with animated network nodes (SP)
+- **Right side**: Harry Potter BIRDS effect with golden birds flying (DB)
+- Interactive hover effects and themed sections
+- Real-time 3D graphics powered by Three.js r134
 
 ---
 
@@ -90,22 +118,44 @@ The site will open at `http://localhost:3000` with live reload enabled.
 
 ```
 obd-sp/
-├── src/
+├── src/                            # Shared resources
 │   ├── templates/
-│   │   ├── index.html              # Main page template
-│   │   ├── lecture-slide.html      # Lecture wrapper
-│   │   └── slides/                 # 14 slide type templates
+│   │   └── landing.html            # Landing page (dual-theme)
+│   ├── css/
+│   │   └── landing.css             # Landing styles
+│   ├── js/
+│   │   └── landing.js              # D3.js animations
+│   └── images/                     # Shared images
+├── sp/                             # System Programming track
 │   ├── data/
-│   │   ├── lectures.json           # Lectures list
+│   │   ├── lectures.json           # SP lectures list
 │   │   └── lectures/
-│   │       ├── _template.json      # Template for new lectures
-│   │       ├── lecture0.json       # Demo (all slide types)
-│   │       └── lecture1.json       # Your lectures
-│   ├── css/                        # Stylesheets
-│   ├── js/                         # JavaScript files
-│   └── images/                     # Static assets
+│   │       ├── lecture0.json       # Demo
+│   │       └── lecture1.json       # SP lectures
+│   ├── templates/
+│   │   ├── index.html              # SP index page
+│   │   ├── lecture-slide.html      # SP lecture wrapper
+│   │   └── slides/                 # 14 slide templates
+│   ├── css/
+│   │   └── cyberpunk-theme.css     # Cyberpunk theme
+│   └── images/                     # SP-specific images
+├── db/                             # Databases track
+│   ├── data/
+│   │   ├── lectures.json           # DB lectures list
+│   │   └── lectures/
+│   │       └── lecture1.json       # DB lectures
+│   ├── templates/
+│   │   ├── index.html              # DB index page
+│   │   ├── lecture-slide.html      # DB lecture wrapper
+│   │   └── slides/                 # 14 slide templates
+│   ├── css/
+│   │   └── harry-potter-theme.css  # Harry Potter theme
+│   └── images/                     # DB-specific images
 ├── dist/                           # Built files (auto-generated)
-├── gulpfile.js                     # Build configuration
+│   ├── index.html                  # Landing page
+│   ├── sp/                         # SP track output
+│   └── db/                         # DB track output
+├── gulpfile.js                     # Dual-track build system
 └── package.json                    # Dependencies & scripts
 ```
 
@@ -115,18 +165,24 @@ obd-sp/
 
 ### Quick Steps
 
-1. **Create lecture data file**: `src/data/lectures/lectureN.json`
-2. **Add to lectures list**: Edit `src/data/lectures.json`
-3. **Build**: Run `npm run build`
-4. **View**: Open `http://localhost:3000`
+1. **Choose track**: SP (system programming) or DB (databases)
+2. **Create lecture data file**:
+   - SP: `sp/data/lectures/lectureN.json`
+   - DB: `db/data/lectures/lectureN.json`
+3. **Add to lectures list**:
+   - SP: Edit `sp/data/lectures.json`
+   - DB: Edit `db/data/lectures.json`
+4. **Build**: Run `npm run build`
+5. **View**: Open `http://localhost:3000`, click on track section
 
-### Example Lecture
+### Example Lecture (DB Track)
 
 ```json
 {
+  "track": "db",
   "lectureNumber": "2",
   "lectureTitle": "SQL Basics",
-  "courseTitle": "Основи Баз Даних",
+  "courseTitle": "Основи баз даних",
   "year": "2025",
   "slides": [
     {
@@ -134,7 +190,7 @@ obd-sp/
       "title": "ЛЕКЦІЯ 2",
       "subtitle": "SQL Basics",
       "meta": {
-        "course": "Основи Баз Даних",
+        "course": "Основи баз даних",
         "institution": "VTFK • 2025"
       }
     },
@@ -149,7 +205,7 @@ obd-sp/
 }
 ```
 
-**Note**: All lecture content must be in **Ukrainian**.
+**Note**: All lecture content must be in **Ukrainian**. The `track` field is **required**.
 
 > 📖 **For AI agents**: See [AI_LECTURE_CREATION.md](AI_LECTURE_CREATION.md) for detailed instructions
 
@@ -254,8 +310,12 @@ The dev server automatically watches and rebuilds:
 - **[Husky](https://typicode.github.io/husky/)** - Git hooks
 - **[lint-staged](https://github.com/okonet/lint-staged)** - Staged file linting
 
-### Animations
+### Animations & 3D Graphics
 
+- **[Three.js](https://threejs.org/)** r134 - 3D graphics library
+- **[Vanta.js](https://www.vantajs.com/)** 0.5.24 - Animated 3D backgrounds
+  - NET effect for Cyberpunk theme (SP)
+  - BIRDS effect for Harry Potter theme (DB)
 - **[Typed.js](https://github.com/mattboldt/typed.js/)** 2.1.0 - Terminal typing
 - **[Highlight.js](https://highlightjs.org/)** 11.9.0 - Syntax highlighting
 
@@ -347,7 +407,10 @@ MIT License - see [LICENSE](LICENSE) file for details
 ## 🙏 Acknowledgments
 
 - [Reveal.js](https://revealjs.com/) - Amazing presentation framework
-- [Cyberpunk 2077](https://www.cyberpunk.net/) - Design inspiration
+- [Three.js](https://threejs.org/) - Powerful 3D graphics library
+- [Vanta.js](https://www.vantajs.com/) - Beautiful animated 3D backgrounds
+- [Cyberpunk 2077](https://www.cyberpunk.net/) - Cyberpunk theme design inspiration
+- [Harry Potter](https://www.wizardingworld.com/) - Magical theme design inspiration
 - [Typed.js](https://mattboldt.com/demos/typed-js/) - Terminal animations
 - [Gulp](https://gulpjs.com/) - Build automation
 

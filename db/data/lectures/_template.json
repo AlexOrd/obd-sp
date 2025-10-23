@@ -1,0 +1,35 @@
+{
+  "track": "db",
+  "lectureNumber": "X",
+  "lectureTitle": "[Назва вашої лекції]",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ X",
+      "subtitle": "[Назва вашої лекції]",
+      "meta": {
+        "course": "Основи баз даних",
+        "institution": "VTFK • 2025"
+      }
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["Тема 1", "Тема 2", "Тема 3"]
+    },
+    {
+      "type": "definition",
+      "title": "Ключове поняття",
+      "term": "Термін",
+      "definition": "Визначення...",
+      "analogy": "Аналогія для розуміння..."
+    },
+    {
+      "type": "summary",
+      "title": "Підсумок",
+      "items": ["Висновок 1", "Висновок 2", "Висновок 3"]
+    }
+  ]
+}

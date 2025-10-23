@@ -1,0 +1,258 @@
+/**
+ * Print-friendly Theme for PDF Generation
+ * Optimized for grayscale printing with clear hierarchy
+ */
+
+/* Import fonts */
+@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;700&family=Orbitron:wght@700&display=swap");
+
+/* Base colors - Grayscale for print */
+:root {
+  --print-black: #000;
+  --print-dark-gray: #333;
+  --print-medium-gray: #666;
+  --print-light-gray: #999;
+  --print-bg-gray: #f5f5f5;
+  --print-border: #ccc;
+  --print-white: #fff;
+}
+
+/* Global styles */
+.reveal {
+  font-family: "Chakra Petch", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--print-black);
+  background-color: var(--print-white);
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+/* Headings - Clear hierarchy with grayscale */
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-family: "Orbitron", sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--print-black);
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--print-dark-gray);
+  padding-bottom: 10px;
+}
+
+.reveal h1 {
+  font-size: 2.2em;
+  border-bottom: 4px solid var(--print-black);
+}
+
+.reveal h2 {
+  font-size: 1.6em;
+  border-bottom: 3px solid var(--print-dark-gray);
+}
+
+.reveal h3 {
+  font-size: 1.3em;
+  border-bottom: 2px solid var(--print-medium-gray);
+}
+
+/* Remove all animations and glitch effects */
+.glitch,
+.glitch::before,
+.glitch::after {
+  animation: none !important;
+  text-shadow: none !important;
+}
+
+/* Code blocks - Light gray background */
+.reveal pre {
+  width: 100%;
+  margin: 20px 0;
+  border: 2px solid var(--print-border);
+  background: var(--print-bg-gray);
+  border-radius: 4px;
+}
+
+.reveal code {
+  font-family: "Courier New", monospace;
+  color: var(--print-black);
+  background: var(--print-bg-gray);
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid var(--print-border);
+}
+
+.reveal pre code {
+  padding: 15px;
+  line-height: 1.5;
+  display: block;
+  overflow-x: auto;
+  background: var(--print-bg-gray);
+  color: var(--print-black);
+  border: none;
+}
+
+/* Lists */
+.reveal ul,
+.reveal ol {
+  margin: 15px 0;
+  padding-left: 30px;
+}
+
+.reveal li {
+  margin: 8px 0;
+  color: var(--print-dark-gray);
+  line-height: 1.6;
+}
+
+/* Tables - Gray headers */
+.reveal table {
+  border-collapse: collapse;
+  margin: 20px 0;
+  width: 100%;
+  border: 2px solid var(--print-dark-gray);
+}
+
+.reveal th,
+.reveal td {
+  border: 1px solid var(--print-border);
+  padding: 12px;
+  text-align: left;
+  color: var(--print-black);
+  background: var(--print-white);
+}
+
+.reveal th {
+  background: var(--print-bg-gray);
+  font-weight: 700;
+  border-bottom: 2px solid var(--print-dark-gray);
+}
+
+.reveal tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+/* Remove all shadows and glows */
+* {
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+
+/* Hide decorative elements */
+.scanlines,
+.pixel-border,
+.card-glitch,
+.cyber-grid,
+.neon-glow {
+  display: none !important;
+}
+
+/* Simple borders instead of glowing ones */
+.pixel-box {
+  border: 2px solid var(--print-dark-gray) !important;
+  background: var(--print-white) !important;
+  box-shadow: none !important;
+  padding: 15px;
+  margin: 15px 0;
+}
+
+/* Comparison boxes - Different gray tones */
+.comparison-box {
+  border: 2px solid var(--print-dark-gray);
+  background: var(--print-bg-gray);
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+
+.comparison-box.wrong {
+  border: 3px solid var(--print-black);
+  border-left: 6px solid var(--print-black);
+  background: #f0f0f0;
+}
+
+.comparison-box.correct {
+  border: 3px solid var(--print-medium-gray);
+  border-left: 6px solid var(--print-medium-gray);
+  background: var(--print-white);
+}
+
+/* Terminal - Gray background */
+.terminal {
+  background: var(--print-bg-gray);
+  border: 2px solid var(--print-dark-gray);
+  padding: 15px;
+  font-family: "Courier New", monospace;
+  color: var(--print-black);
+  border-radius: 4px;
+}
+
+.terminal-header {
+  display: none;
+}
+
+/* Action items */
+.action-items {
+  list-style: none;
+  padding-left: 0;
+}
+
+.action-item {
+  margin: 10px 0;
+  padding: 12px;
+  padding-left: 40px;
+  position: relative;
+  background: var(--print-bg-gray);
+  border-left: 4px solid var(--print-dark-gray);
+}
+
+.action-item::before {
+  content: "☑";
+  position: absolute;
+  left: 12px;
+  font-size: 1.2em;
+  color: var(--print-black);
+}
+
+/* Remove background effects */
+body,
+.reveal {
+  background: var(--print-white) !important;
+}
+
+/* Page breaks for print */
+.reveal .slides section {
+  page-break-after: always;
+  page-break-inside: avoid;
+  background: var(--print-white) !important;
+}
+
+/* Ensure text is readable */
+.reveal p,
+.reveal li,
+.reveal td,
+.reveal th {
+  color: var(--print-black) !important;
+}
+
+/* Highlight important text with gray backgrounds */
+.highlight {
+  background: var(--print-bg-gray) !important;
+  color: var(--print-black) !important;
+  padding: 2px 6px;
+  border-bottom: 2px solid var(--print-dark-gray);
+  font-weight: 700;
+}
+
+strong,
+.text-cyan,
+.text-yellow,
+.text-magenta {
+  color: var(--print-black) !important;
+  font-weight: 700;
+}

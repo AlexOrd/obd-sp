@@ -4,6 +4,11 @@
 
 This guide provides instructions for AI agents to create new lectures for the OBD-SP education platform.
 
+The platform supports **two independent lecture tracks**:
+
+- **SP (System Programming)** - Cyberpunk 2077 theme, focused on system-level programming
+- **DB (Databases)** - Harry Potter magical theme, focused on database fundamentals
+
 **Important**: All lecture content (titles, descriptions, explanations, code comments) must be in **Ukrainian**.
 
 ---
@@ -35,17 +40,28 @@ The project has **14 slide templates** located in `src/templates/slides/`:
 
 ## Files to Update When Creating a New Lecture
 
-### 1. Create Lecture Data File
+### 1. Choose Your Track
 
-**Location**: `src/data/lectures/lectureN.json` (where N is the lecture number)
+Determine which track the lecture belongs to:
+
+- **SP Track**: System programming topics (C/C++, memory, processes, etc.) - Cyberpunk theme
+- **DB Track**: Database topics (SQL, NoSQL, design, optimization, etc.) - Harry Potter theme
+
+### 2. Create Lecture Data File
+
+**For SP Track**: `sp/data/lectures/lectureN.json`
+**For DB Track**: `db/data/lectures/lectureN.json`
+
+(where N is the lecture number)
 
 **Structure**:
 
 ```json
 {
+  "track": "sp", // or "db" - REQUIRED field
   "lectureNumber": "N",
   "lectureTitle": "Назва лекції (Ukrainian)",
-  "courseTitle": "Основи баз даних та спеціалізовані мови програмування",
+  "courseTitle": "Спеціалізовані мови програмування", // or "Основи баз даних"
   "year": "2025",
   "slides": [
     {
@@ -71,25 +87,35 @@ The project has **14 slide templates** located in `src/templates/slides/`:
 }
 ```
 
-**Templates**: Use `src/data/lectures/_template.json` or `src/data/lectures/lecture0.json` as examples.
+**Templates**:
 
-### 2. Update Lectures List
+- **SP**: Use `sp/data/lectures/_template.json` or `sp/data/lectures/lecture0.json` as examples
+- **DB**: Use `db/data/lectures/_template.json` or `db/data/lectures/lecture1.json` as examples
 
-**File**: `src/data/lectures.json`
+### 3. Update Track Lectures List
 
-Add new lecture entry:
+**For SP Track**: Edit `sp/data/lectures.json`
+**For DB Track**: Edit `db/data/lectures.json`
+
+Add new lecture entry to the `lectures` array:
 
 ```json
 {
   "lectures": [
-    { "number": "0", "title": "Демо всіх типів слайдів" },
-    { "number": "1", "title": "Вступ до баз даних" },
-    { "number": "N", "title": "Назва нової лекції" }
+    {
+      "id": "lectureN",
+      "number": "0N",
+      "title": "Назва лекції",
+      "description": "Короткий опис теми",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lectureN.html"
+    }
   ]
 }
 ```
 
-### 3. Build and Deploy
+### 4. Build and Deploy
 
 Run build command:
 
@@ -97,13 +123,18 @@ Run build command:
 npm run build
 ```
 
-**Output**: `dist/lectures/lectureN.html` will be generated.
+**Output**:
+
+- **SP lectures**: `dist/sp/lectures/lectureN.html`
+- **DB lectures**: `dist/db/lectures/lectureN.html`
 
 **Verify**:
 
 - Open `http://localhost:3000` (if dev server running with `npm start`)
-- Check that new lecture appears on index page
-- Click to view `dist/lectures/lectureN.html`
+- Landing page shows both SP (Cyberpunk) and DB (Harry Potter) sections
+- Click on appropriate track section
+- Check that new lecture appears on track's index page
+- Click to view the lecture slides
 
 ---
 
@@ -129,11 +160,13 @@ Typical lecture flow:
 
 ## Quick Checklist
 
-- [ ] Create `src/data/lectures/lectureN.json` with Ukrainian content
-- [ ] Add entry to `src/data/lectures.json`
+- [ ] Choose track: SP (system programming) or DB (databases)
+- [ ] Create `sp/data/lectures/lectureN.json` or `db/data/lectures/lectureN.json` with Ukrainian content
+- [ ] Add `"track": "sp"` or `"track": "db"` field to JSON
+- [ ] Add entry to `sp/data/lectures.json` or `db/data/lectures.json`
 - [ ] Run `npm run build`
-- [ ] Verify output in `dist/lectures/lectureN.html`
-- [ ] Check index page displays new lecture
+- [ ] Verify output in `dist/sp/lectures/lectureN.html` or `dist/db/lectures/lectureN.html`
+- [ ] Check landing page and track index page displays new lecture
 
 ---
 

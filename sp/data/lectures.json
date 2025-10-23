@@ -1,0 +1,78 @@
+{
+  "track": "sp",
+  "siteTitle": "SP | System Programming",
+  "siteSubtitle": "СПЕЦІАЛІЗОВАНІ МОВИ ПРОГРАМУВАННЯ",
+  "systemInfo": "VTFK EDUCATION v2.0 | CYBERPUNK MODE",
+  "teacherName": "Ординський Олександр",
+  "teacherTitle": "викладач",
+  "teacherNameEn": "Alex Ordynski",
+  "teacherTitleEn": "Software Developer & Educator",
+  "college": "ВТФК • Вінниця, Україна",
+  "collegeEn": "VTFK • Vinnytsia, Ukraine",
+  "footer": "© 2025 VTFK | Викладач: Ординський Олександр",
+  "socialLinks": {
+    "github": "https://github.com/AlexOrd",
+    "linkedin": "https://www.linkedin.com/in/alex-ordynski/",
+    "facebook": "https://www.facebook.com/alexandr.ordynski"
+  },
+  "seoDescription": "Курс лекцій зі спеціалізованих мов програмування та системного програмування. ВТФК, Вінниця. Викладач: Ординський Олександр",
+  "seoKeywords": "системне програмування, C, C++, memory management, курс, лекції, ВТФК, Вінниця",
+  "lectures": [
+    {
+      "id": "lecture0",
+      "number": "00",
+      "title": "Демонстрація всіх типів слайдів",
+      "description": "Довідник для викладачів — приклади всіх 14 типів слайдів",
+      "available": true,
+      "statusText": "DEMO",
+      "file": "lecture0.html"
+    },
+    {
+      "id": "lecture1",
+      "number": "01",
+      "title": "Вступ до системного програмування",
+      "description": "Основні поняття, архітектура процесора, пам'ять",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture1.html",
+      "pdfAvailable": true,
+      "pdfFile": "../static/pdfs/lecture1.pdf"
+    },
+    {
+      "id": "lecture2",
+      "number": "02",
+      "title": "Управління пам'яттю в C",
+      "description": "Скоро буде доступна...",
+      "locked": true,
+      "statusText": "🔒 ЗАБЛОКОВАНО",
+      "file": "lecture2.html"
+    },
+    {
+      "id": "lecture3",
+      "number": "03",
+      "title": "Покажчики та масиви",
+      "description": "Скоро буде доступна...",
+      "locked": true,
+      "statusText": "🔒 ЗАБЛОКОВАНО",
+      "file": "lecture3.html"
+    },
+    {
+      "id": "lecture4",
+      "number": "04",
+      "title": "Файлові операції",
+      "description": "Скоро буде доступна...",
+      "locked": true,
+      "statusText": "🔒 ЗАБЛОКОВАНО",
+      "file": "lecture4.html"
+    },
+    {
+      "id": "lecture5",
+      "number": "05",
+      "title": "Процеси та потоки",
+      "description": "Скоро буде доступна...",
+      "locked": true,
+      "statusText": "🔒 ЗАБЛОКОВАНО",
+      "file": "lecture5.html"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+<!-- 3. Огляд попередньої лекції -->
+<section>
+  <h2>{{title}}</h2>
+  {{#previousLecture}}
+  <p style="color: var(--cyber-yellow); margin-bottom: 30px">
+    <strong>{{previousLecture}}</strong>
+  </p>
+  {{/previousLecture}}
+  <div style="margin-top: 30px">
+    <ul style="font-size: 1.1em; line-height: 1.8">
+      {{#items}}
+      <li>{{{.}}}</li>
+      {{/items}}
+    </ul>
+  </div>
+</section>
