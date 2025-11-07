@@ -71,6 +71,15 @@
       "locked": true,
       "statusText": "🔒 ЗАБЛОКОВАНО",
       "file": "lecture5.html"
+    },
+    {
+      "id": "lecture10",
+      "number": "10",
+      "title": "Магія Порожнечі! Як приборкати NULL у SQL",
+      "description": "IS NULL, COALESCE, NULLIF та робота з невідомими значеннями",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture10.html"
     }
   ]
 }

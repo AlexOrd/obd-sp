@@ -11,6 +11,7 @@
 
 ## 📚 Documentation
 
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - GitHub Actions & GitHub Pages deployment guide
 - **[AI_LECTURE_CREATION.md](AI_LECTURE_CREATION.md)** - Guide for creating new lectures (for AI agents)
 - **[SLIDE_TYPES_GUIDE.md](SLIDE_TYPES_GUIDE.md)** - Complete reference for all 14 slide types (Ukrainian)
 - **[CODE_QUALITY.md](CODE_QUALITY.md)** - Code formatting, linting, and quality standards
@@ -49,6 +50,7 @@ The platform supports two independent lecture tracks with distinct themes:
 
 - [Features](#-features)
 - [Quick Start](#-quick-start)
+- [Deployment & GitHub Pages](#-deployment--github-pages)
 - [Project Structure](#-project-structure)
 - [Creating Lectures](#-creating-lectures)
 - [Slide Types](#-slide-types)
@@ -111,6 +113,83 @@ npm start
 ```
 
 The site will open at `http://localhost:3000` with live reload enabled.
+
+---
+
+## 🌐 Deployment & GitHub Pages
+
+### Automated Deployment
+
+This project uses **GitHub Actions** for automatic deployment to GitHub Pages.
+
+**How it works:**
+- Push to `master` branch → Automatic build & deploy
+- Build runs `npm run build:prod`
+- Deploys to `gh-pages` branch
+- Site goes live at GitHub Pages URL
+
+### GitHub Pages Configuration
+
+#### 1. Configure Actions Permissions (Required First!)
+
+**Settings** → **Actions** → **General**
+
+1. Go to: https://github.com/AlexOrd/obd-sp/settings/actions
+2. Scroll to **"Workflow permissions"**
+3. Select **"Read and write permissions"**
+4. Click **Save**
+
+> **Note**: The `GITHUB_TOKEN` is automatically provided. This setting allows the workflow to push to your repository.
+
+#### 2. Enable GitHub Pages
+
+**Settings** → **Pages**
+
+1. Go to: https://github.com/AlexOrd/obd-sp/settings/pages
+2. Under **"Build and deployment"**:
+   - **Source**: Deploy from a branch
+   - **Branch**: `gh-pages` / `root`
+3. Click **Save**
+
+#### 3. Custom Domain (Optional)
+
+To use a custom domain like `vtfk.ordynski.com`:
+
+**Step 3a: Create Subdomain in GoDaddy**
+
+1. Log in to your GoDaddy account at https://www.godaddy.com
+2. Go to **My Products** → **Domains**
+3. Click on your domain (e.g., `ordynski.com`)
+4. Select **DNS** or **Manage DNS**
+5. Scroll to **DNS Records** section
+6. Click **Add** or **Add New Record**
+7. Configure the CNAME record:
+   - **Type**: CNAME
+   - **Name**: `vtfk` (this creates vtfk.ordynski.com)
+   - **Value**: `alexord.github.io`
+   - **TTL**: 600 seconds (or 1 hour)
+8. Click **Save**
+9. Wait 10-30 minutes for DNS propagation
+
+**Step 3b: Configure GitHub Pages**
+
+1. Go to GitHub Pages settings: https://github.com/AlexOrd/obd-sp/settings/pages
+2. Under **"Custom domain"**, enter: `vtfk.ordynski.com`
+3. Click **Save** (GitHub will create a CNAME file in your repository)
+4. Wait a few minutes, then check **"Enforce HTTPS"**
+
+> **Note**: DNS propagation can take 10-30 minutes (sometimes up to 48 hours). You can check status at https://dnschecker.org
+
+### Deployment Status
+
+Check deployment status: https://github.com/AlexOrd/obd-sp/actions
+
+### Live Site
+
+- **GitHub Pages**: https://alexord.github.io/obd-sp/
+- **Custom Domain**: https://vtfk.ordynski.com (if configured)
+
+> 📖 **Detailed setup guide**: See [DEPLOYMENT.md](DEPLOYMENT.md) for complete instructions
 
 ---
 
