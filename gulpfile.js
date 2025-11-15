@@ -464,6 +464,15 @@ export const serve = (done) => {
   bs.init({
     server: {
       baseDir: './dist',
+      middleware: [
+        (req, res, next) => {
+          // Redirect /tg_bot to /static/tg_bot/index.html
+          if (req.url === '/tg_bot' || req.url === '/tg_bot/') {
+            req.url = '/static/tg_bot/index.html';
+          }
+          next();
+        },
+      ],
     },
     port: 3000,
     notify: false,
