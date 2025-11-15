@@ -223,6 +223,104 @@ h6 {
   transform: translateX(-5px);
 }
 
+/* Slideshow Styles (90% of screen) */
+.slideshow-section {
+  display: flex;
+  justify-content: center;
+}
+
+.slideshow-container {
+  position: relative;
+  width: 90vw;
+  height: 90vh;
+  max-width: 1400px;
+  max-height: 900px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(26, 26, 51, 0.6), rgba(26, 26, 51, 0.9));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.6),
+    0 0 60px rgba(70, 130, 180, 0.08) inset;
+}
+
+.slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.slideshow-prev,
+
+  /* About - slideshow only layout tweaks */
+  .about-container.slideshow-only {
+  max-width: none;
+  width: 100%;
+  height: 100vh;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Small back button */
+.back-button.small {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  padding: 0.35rem 0.6rem;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  border-width: 1px;
+  z-index: 30;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Make slideshow take precedence on small screens */
+@media (max-width: 768px) {
+  .slideshow-container {
+    width: 96vw;
+    height: 76vh;
+  }
+  .back-button.small {
+    top: 10px;
+    left: 10px;
+  }
+}
+.slideshow-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  border: none;
+  width: 48px;
+  height: 64px;
+  font-size: 2.25rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.slideshow-prev {
+  left: 12px;
+}
+.slideshow-next {
+  right: 12px;
+}
+
+.slideshow-prev:hover,
+.slideshow-next:hover {
+  transform: translateY(-50%) scale(1.05);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .logo-glow {
