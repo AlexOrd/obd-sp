@@ -7,6 +7,7 @@ import rename from 'gulp-rename';
 import browserSync from 'browser-sync';
 import { deleteAsync } from 'del';
 import fs from 'fs';
+import path from 'path';
 import plumber from 'gulp-plumber';
 import notify from 'gulp-notify';
 import gulpif from 'gulp-if';
@@ -20,6 +21,7 @@ const bs = browserSync.create();
 const isProd = process.env.NODE_ENV === 'production';
 
 // Color codes for console output
+/** @type {Record<string,string>} */
 const colors = {
   reset: '\x1b[0m',
   cyan: '\x1b[36m',
@@ -56,6 +58,7 @@ const paths = {
       images: 'db/images/**/*',
     },
     static: 'static/**/*',
+    single: 'single/**/*',
   },
   dist: {
     base: 'dist',
@@ -63,6 +66,7 @@ const paths = {
     js: 'dist/js',
     images: 'dist/images',
     static: 'dist/static',
+    single: 'dist', // Copy to root of dist
     sp: {
       base: 'dist/sp',
       lectures: 'dist/sp/lectures',
@@ -79,8 +83,13 @@ const paths = {
 };
 
 // Error handler
+/**
+ * Create a plumber error handler wrapper.
+ * @param {string} title
+ */
 const errorHandler = (title) => {
   return plumber({
+    // @ts-ignore - notify.onError exists at runtime
     errorHandler: notify.onError({
       title: `Gulp Error: ${title}`,
       message: '<%= error.message %>',
@@ -90,9 +99,23 @@ const errorHandler = (title) => {
 };
 
 // Log helper
+/**
+ * Prefixed color console logger.
+ * @param {string} message
+ * @param {'cyan'|'green'|'yellow'|'red'|'magenta'} [color='cyan']
+ */
 const log = (message, color = 'cyan') => {
+  // @ts-ignore - dynamic indexing into colors map
   console.log(`${colors[color]}[OBD-SP]${colors.reset} ${message}`);
 };
+
+// Duration formatting helper
+/**
+ * Format a millisecond duration for logging.
+ * @param {number} ms
+ * @returns {string}
+ */
+const formatDuration = (ms) => (ms < 1000 ? `${ms}ms` : `${(ms / 1000).toFixed(2)}s`);
 
 // Clean dist folder
 export const clean = () => {
@@ -107,13 +130,14 @@ export const clean = () => {
 // Build landing page
 export const buildLanding = () => {
   log('🏠 Building landing page...', 'cyan');
-
+  const start = Date.now();
   return gulp
     .src('src/templates/landing.html')
     .pipe(errorHandler('Landing Page'))
     .pipe(rename('index.html'))
     .pipe(gulp.dest(paths.dist.base))
-    .pipe(size({ title: 'Landing Page', showFiles: true }));
+    .pipe(size({ title: 'Landing Page', showFiles: true }))
+    .on('end', () => log(`✅ Landing page built (${formatDuration(Date.now() - start)})`, 'green'));
 };
 
 // ==============================================
@@ -123,20 +147,26 @@ export const buildLanding = () => {
 // Build SP index page
 export const buildSPIndex = () => {
   log('📄 Building SP index page...', 'cyan');
+  const start = Date.now();
   const lecturesData = JSON.parse(fs.readFileSync('sp/data/lectures.json', 'utf8'));
-
   return gulp
     .src('sp/templates/index.html')
     .pipe(errorHandler('SP Index'))
     .pipe(mustache(lecturesData))
     .pipe(rename('index.html'))
     .pipe(gulp.dest(paths.dist.sp.base))
-    .pipe(size({ title: 'SP Index', showFiles: true }));
+    .pipe(size({ title: 'SP Index', showFiles: true }))
+    .on('end', () => log(`✅ SP index built (${formatDuration(Date.now() - start)})`, 'green'));
 };
 
 // Build SP lectures
+/**
+ * Generate SP lectures HTML files from JSON definitions.
+ * @param {(err?: any) => void} done
+ */
 export const buildSPLectures = (done) => {
   log('📚 Generating SP lectures...', 'cyan');
+  const start = Date.now();
 
   const lecturesDir = 'sp/data/lectures/';
   const files = fs
@@ -151,7 +181,7 @@ export const buildSPLectures = (done) => {
 
   // Load SP slide partials
   const partialsDir = 'sp/templates/slides/';
-  const partials = {};
+  const partials = /** @type {Record<string,string>} */ ({});
   fs.readdirSync(partialsDir).forEach((file) => {
     const partialName = `slides/${file.replace('.html', '')}`;
     partials[partialName] = fs.readFileSync(`${partialsDir}${file}`, 'utf8');
@@ -165,25 +195,27 @@ export const buildSPLectures = (done) => {
 
     // Add boolean flags for each slide type
     if (lectureData.slides) {
-      lectureData.slides = lectureData.slides.map((slide) => {
-        return {
-          ...slide,
-          isTitle: slide.type === 'title',
-          isRoadmap: slide.type === 'roadmap',
-          isPreviousLecture: slide.type === 'previous-lecture',
-          isDefinition: slide.type === 'definition',
-          isSyntax: slide.type === 'syntax',
-          isCodeExample: slide.type === 'code-example',
-          isCodeBreakdown: slide.type === 'code-breakdown',
-          isDiagram: slide.type === 'diagram',
-          isComparison: slide.type === 'comparison',
-          isDebugger: slide.type === 'debugger',
-          isCommonMistake: slide.type === 'common-mistake',
-          isSummary: slide.type === 'summary',
-          isNextSteps: slide.type === 'next-steps',
-          isLiveCoding: slide.type === 'live-coding',
-        };
-      });
+      lectureData.slides = lectureData.slides.map(
+        /** @param {any} slide */ (slide) => {
+          return {
+            ...slide,
+            isTitle: slide.type === 'title',
+            isRoadmap: slide.type === 'roadmap',
+            isPreviousLecture: slide.type === 'previous-lecture',
+            isDefinition: slide.type === 'definition',
+            isSyntax: slide.type === 'syntax',
+            isCodeExample: slide.type === 'code-example',
+            isCodeBreakdown: slide.type === 'code-breakdown',
+            isDiagram: slide.type === 'diagram',
+            isComparison: slide.type === 'comparison',
+            isDebugger: slide.type === 'debugger',
+            isCommonMistake: slide.type === 'common-mistake',
+            isSummary: slide.type === 'summary',
+            isNextSteps: slide.type === 'next-steps',
+            isLiveCoding: slide.type === 'live-coding',
+          };
+        }
+      );
     }
 
     gulp
@@ -205,13 +237,17 @@ export const buildSPLectures = (done) => {
     processedCount++;
   });
 
-  log(`✅ Generated ${processedCount} SP lecture(s)`, 'green');
+  log(
+    `✅ Generated ${processedCount} SP lecture(s) (${formatDuration(Date.now() - start)})`,
+    'green'
+  );
   done();
 };
 
 // Build SP CSS
 export const buildSPCSS = () => {
   log('🎨 Processing SP CSS...', 'cyan');
+  const start = Date.now();
   return gulp
     .src(paths.src.sp.css)
     .pipe(errorHandler('SP CSS'))
@@ -226,17 +262,20 @@ export const buildSPCSS = () => {
       )
     )
     .pipe(gulp.dest(paths.dist.sp.css))
-    .pipe(size({ title: 'SP CSS', showFiles: true }));
+    .pipe(size({ title: 'SP CSS', showFiles: true }))
+    .on('end', () => log(`✅ SP CSS processed (${formatDuration(Date.now() - start)})`, 'green'));
 };
 
 // Build SP images
 export const buildSPImages = () => {
   log('🖼️  Processing SP images...', 'cyan');
+  const start = Date.now();
   return gulp
     .src(paths.src.sp.images, { encoding: false })
     .pipe(errorHandler('SP Images'))
     .pipe(newer(paths.dist.sp.images))
-    .pipe(gulp.dest(paths.dist.sp.images));
+    .pipe(gulp.dest(paths.dist.sp.images))
+    .on('end', () => log(`✅ SP images copied (${formatDuration(Date.now() - start)})`, 'green'));
 };
 
 // ==============================================
@@ -246,20 +285,26 @@ export const buildSPImages = () => {
 // Build DB index page
 export const buildDBIndex = () => {
   log('📄 Building DB index page...', 'cyan');
+  const start = Date.now();
   const lecturesData = JSON.parse(fs.readFileSync('db/data/lectures.json', 'utf8'));
-
   return gulp
     .src('db/templates/index.html')
     .pipe(errorHandler('DB Index'))
     .pipe(mustache(lecturesData))
     .pipe(rename('index.html'))
     .pipe(gulp.dest(paths.dist.db.base))
-    .pipe(size({ title: 'DB Index', showFiles: true }));
+    .pipe(size({ title: 'DB Index', showFiles: true }))
+    .on('end', () => log(`✅ DB index built (${formatDuration(Date.now() - start)})`, 'green'));
 };
 
 // Build DB lectures
+/**
+ * Generate DB lectures HTML files from JSON definitions.
+ * @param {(err?: any) => void} done
+ */
 export const buildDBLectures = (done) => {
   log('📚 Generating DB lectures...', 'cyan');
+  const start = Date.now();
 
   const lecturesDir = 'db/data/lectures/';
   const files = fs
@@ -274,7 +319,7 @@ export const buildDBLectures = (done) => {
 
   // Load DB slide partials
   const partialsDir = 'db/templates/slides/';
-  const partials = {};
+  const partials = /** @type {Record<string,string>} */ ({});
   fs.readdirSync(partialsDir).forEach((file) => {
     const partialName = `slides/${file.replace('.html', '')}`;
     partials[partialName] = fs.readFileSync(`${partialsDir}${file}`, 'utf8');
@@ -288,25 +333,27 @@ export const buildDBLectures = (done) => {
 
     // Add boolean flags for each slide type
     if (lectureData.slides) {
-      lectureData.slides = lectureData.slides.map((slide) => {
-        return {
-          ...slide,
-          isTitle: slide.type === 'title',
-          isRoadmap: slide.type === 'roadmap',
-          isPreviousLecture: slide.type === 'previous-lecture',
-          isDefinition: slide.type === 'definition',
-          isSyntax: slide.type === 'syntax',
-          isCodeExample: slide.type === 'code-example',
-          isCodeBreakdown: slide.type === 'code-breakdown',
-          isDiagram: slide.type === 'diagram',
-          isComparison: slide.type === 'comparison',
-          isDebugger: slide.type === 'debugger',
-          isCommonMistake: slide.type === 'common-mistake',
-          isSummary: slide.type === 'summary',
-          isNextSteps: slide.type === 'next-steps',
-          isLiveCoding: slide.type === 'live-coding',
-        };
-      });
+      lectureData.slides = lectureData.slides.map(
+        /** @param {any} slide */ (slide) => {
+          return {
+            ...slide,
+            isTitle: slide.type === 'title',
+            isRoadmap: slide.type === 'roadmap',
+            isPreviousLecture: slide.type === 'previous-lecture',
+            isDefinition: slide.type === 'definition',
+            isSyntax: slide.type === 'syntax',
+            isCodeExample: slide.type === 'code-example',
+            isCodeBreakdown: slide.type === 'code-breakdown',
+            isDiagram: slide.type === 'diagram',
+            isComparison: slide.type === 'comparison',
+            isDebugger: slide.type === 'debugger',
+            isCommonMistake: slide.type === 'common-mistake',
+            isSummary: slide.type === 'summary',
+            isNextSteps: slide.type === 'next-steps',
+            isLiveCoding: slide.type === 'live-coding',
+          };
+        }
+      );
     }
 
     gulp
@@ -328,13 +375,17 @@ export const buildDBLectures = (done) => {
     processedCount++;
   });
 
-  log(`✅ Generated ${processedCount} DB lecture(s)`, 'green');
+  log(
+    `✅ Generated ${processedCount} DB lecture(s) (${formatDuration(Date.now() - start)})`,
+    'green'
+  );
   done();
 };
 
 // Build DB CSS
 export const buildDBCSS = () => {
   log('🎨 Processing DB CSS...', 'cyan');
+  const start = Date.now();
   return gulp
     .src(paths.src.db.css)
     .pipe(errorHandler('DB CSS'))
@@ -349,17 +400,20 @@ export const buildDBCSS = () => {
       )
     )
     .pipe(gulp.dest(paths.dist.db.css))
-    .pipe(size({ title: 'DB CSS', showFiles: true }));
+    .pipe(size({ title: 'DB CSS', showFiles: true }))
+    .on('end', () => log(`✅ DB CSS processed (${formatDuration(Date.now() - start)})`, 'green'));
 };
 
 // Build DB images
 export const buildDBImages = () => {
   log('🖼️  Processing DB images...', 'cyan');
+  const start = Date.now();
   return gulp
     .src(paths.src.db.images, { encoding: false })
     .pipe(errorHandler('DB Images'))
     .pipe(newer(paths.dist.db.images))
-    .pipe(gulp.dest(paths.dist.db.images));
+    .pipe(gulp.dest(paths.dist.db.images))
+    .on('end', () => log(`✅ DB images copied (${formatDuration(Date.now() - start)})`, 'green'));
 };
 
 // ==============================================
@@ -369,6 +423,7 @@ export const buildDBImages = () => {
 // Build shared CSS (landing page, etc.)
 export const buildSharedCSS = () => {
   log('🎨 Processing shared CSS...', 'cyan');
+  const start = Date.now();
   return gulp
     .src(paths.src.shared.css)
     .pipe(errorHandler('Shared CSS'))
@@ -384,12 +439,16 @@ export const buildSharedCSS = () => {
     )
     .pipe(gulp.dest(paths.dist.css))
     .pipe(gulpif(!isProd, bs.stream()))
-    .pipe(size({ title: 'Shared CSS', showFiles: true }));
+    .pipe(size({ title: 'Shared CSS', showFiles: true }))
+    .on('end', () =>
+      log(`✅ Shared CSS processed (${formatDuration(Date.now() - start)})`, 'green')
+    );
 };
 
 // Build shared JS
 export const buildSharedJS = () => {
   log('⚡ Processing shared JavaScript...', 'cyan');
+  const start = Date.now();
   return gulp
     .src(paths.src.shared.js)
     .pipe(errorHandler('Shared JavaScript'))
@@ -405,26 +464,54 @@ export const buildSharedJS = () => {
       )
     )
     .pipe(gulp.dest(paths.dist.js))
-    .pipe(size({ title: 'Shared JavaScript', showFiles: true }));
+    .pipe(size({ title: 'Shared JavaScript', showFiles: true }))
+    .on('end', () =>
+      log(`✅ Shared JavaScript processed (${formatDuration(Date.now() - start)})`, 'green')
+    );
 };
 
 // Build shared images
 export const buildSharedImages = () => {
   log('🖼️  Processing shared images...', 'cyan');
+  const start = Date.now();
   return gulp
     .src(paths.src.shared.images, { encoding: false })
     .pipe(errorHandler('Shared Images'))
     .pipe(newer(paths.dist.images))
-    .pipe(gulp.dest(paths.dist.images));
+    .pipe(gulp.dest(paths.dist.images))
+    .on('end', () =>
+      log(`✅ Shared images copied (${formatDuration(Date.now() - start)})`, 'green')
+    );
 };
 
 // Copy static files
 export const copyStatic = () => {
   log('📁 Copying static files...', 'cyan');
+  const start = Date.now();
   return gulp
     .src(paths.src.static, { encoding: false })
     .pipe(gulp.dest(paths.dist.static))
-    .pipe(size({ title: 'Static files' }));
+    .pipe(size({ title: 'Static files' }))
+    .on('end', () =>
+      log(`✅ Static files copied (${formatDuration(Date.now() - start)})`, 'green')
+    );
+};
+
+// ==============================================
+// SINGLE PAGES
+// ==============================================
+
+export const copySingle = () => {
+  log('📄 Copying single pages...', 'cyan');
+  const start = Date.now();
+  return gulp
+    .src(paths.src.single)
+    .pipe(newer(paths.dist.single))
+    .pipe(gulp.dest(paths.dist.single))
+    .pipe(size({ title: 'Single Pages' }))
+    .on('end', () =>
+      log(`✅ Single pages copied (${formatDuration(Date.now() - start)})`, 'green')
+    );
 };
 
 // ==============================================
@@ -436,7 +523,7 @@ export const htmlMinify = () => {
     log('⏭️  Skipping HTML minification (dev mode)', 'yellow');
     return Promise.resolve();
   }
-
+  const start = Date.now();
   log('🗜️  Minifying HTML...', 'cyan');
   return gulp
     .src(`${paths.dist.base}/**/*.html`)
@@ -452,27 +539,23 @@ export const htmlMinify = () => {
       })
     )
     .pipe(gulp.dest(paths.dist.base))
-    .pipe(size({ title: 'HTML (minified)' }));
+    .pipe(size({ title: 'HTML (minified)' }))
+    .on('end', () => log(`✅ HTML minified (${formatDuration(Date.now() - start)})`, 'green'));
 };
 
 // ==============================================
 // DEVELOPMENT SERVER
 // ==============================================
 
+/**
+ * Start development server.
+ * @param {(err?: any) => void} done
+ */
 export const serve = (done) => {
   log('🚀 Starting BrowserSync server...', 'magenta');
   bs.init({
     server: {
       baseDir: './dist',
-      middleware: [
-        (req, res, next) => {
-          // Redirect /tg_bot to /static/tg_bot/index.html
-          if (req.url === '/tg_bot' || req.url === '/tg_bot/') {
-            req.url = '/static/tg_bot/index.html';
-          }
-          next();
-        },
-      ],
     },
     port: 3000,
     notify: false,
@@ -490,6 +573,10 @@ export const serve = (done) => {
   done();
 };
 
+/**
+ * BrowserSync reload callback wrapper.
+ * @param {(err?: any) => void} done
+ */
 const reload = (done) => {
   bs.reload();
   done();
@@ -519,6 +606,14 @@ export const watch = () => {
   gulp
     .watch(paths.src.shared.images, gulp.series(buildSharedImages, reload))
     .on('change', (path) => log(`Shared image changed: ${path}`, 'yellow'));
+
+  gulp
+    .watch(paths.src.static, gulp.series(copyStatic, reload))
+    .on('change', (path) => log(`Static file changed: ${path}`, 'yellow'));
+
+  gulp
+    .watch(paths.src.single, gulp.series(copySingle, reload))
+    .on('change', (path) => log(`Single page changed: ${path}`, 'yellow'));
 
   // Watch SP track
   gulp
@@ -564,6 +659,7 @@ export const watch = () => {
 
 export const format = () => {
   log('💅 Formatting code with Prettier...', 'cyan');
+  const start = Date.now();
   return gulp
     .src(
       [
@@ -579,25 +675,34 @@ export const format = () => {
     .pipe(errorHandler('Prettier'))
     .pipe(prettier())
     .pipe(gulp.dest('.'))
-    .pipe(size({ title: 'Formatted', showFiles: false }));
+    .pipe(size({ title: 'Formatted', showFiles: false }))
+    .on('end', () =>
+      log(`✅ Formatting complete (${formatDuration(Date.now() - start)})`, 'green')
+    );
 };
 
 export const lint = () => {
   log('🔍 Linting JavaScript with ESLint...', 'cyan');
+  const start = Date.now();
   return gulp
     .src(['src/**/*.js', 'gulpfile.js', '!node_modules/**'])
     .pipe(errorHandler('ESLint'))
     .pipe(eslint())
     .pipe(eslint.format())
-    .pipe(eslint.failAfterError());
+    .pipe(eslint.failAfterError())
+    .on('end', () => log(`✅ Lint passed (${formatDuration(Date.now() - start)})`, 'green'));
 };
 
 export const check = () => {
   log('🔍 Checking code formatting...', 'cyan');
+  const start = Date.now();
   return gulp
     .src(['src/**/*.{js,css,html}', 'gulpfile.js'], { base: '.' })
     .pipe(errorHandler('Format Check'))
-    .pipe(prettier.check());
+    .pipe(prettier.check())
+    .on('end', () =>
+      log(`✅ Format check passed (${formatDuration(Date.now() - start)})`, 'green')
+    );
 };
 
 export const validate = gulp.series(lint, check);
@@ -617,7 +722,8 @@ export const buildShared = gulp.parallel(
   buildSharedCSS,
   buildSharedJS,
   buildSharedImages,
-  copyStatic
+  copyStatic,
+  copySingle
 );
 
 // Development task
@@ -644,6 +750,24 @@ export const build = gulp.series(
     log('   - Landing: dist/index.html', 'cyan');
     log('   - SP Track: dist/sp/', 'cyan');
     log('   - DB Track: dist/db/', 'cyan');
+    // Single pages summary
+    try {
+      const singleSourceDir = 'single';
+      if (fs.existsSync(singleSourceDir)) {
+        const entries = fs.readdirSync(singleSourceDir).filter((name) => {
+          const full = path.join(singleSourceDir, name);
+          return fs.existsSync(full) && fs.statSync(full).isDirectory();
+        });
+        const count = entries.length;
+        const list = count > 0 ? entries.map((e) => `dist/${e}/`).join(', ') : 'none';
+        log(`   - Single Pages (${count}): ${list}`, 'cyan');
+      } else {
+        log('   - Single Pages: source folder missing', 'yellow');
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      log(`   - Single Pages summary error: ${msg}`, 'red');
+    }
     done();
   }
 );
