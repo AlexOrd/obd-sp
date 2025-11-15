@@ -1,29 +1,21 @@
 <!doctype html>
-<html lang="en">
+<html lang="uk">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Learn more about GlowJelly - An educational Arduino clock project"
+      content="Про проєкт GlowJelly - освітній годинник на базі Arduino, що імітує біолюмінесцентну медузу"
     />
-    <title>About GlowJelly | Time to Shine</title>
-
-    <!-- Google Fonts -->
+    <title>GlowJelly | Про проєкт</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;700&family=Roboto:wght@400;500&display=swap"
       rel="stylesheet"
     />
-
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Custom Styles -->
     <link rel="stylesheet" href="style.css" />
-
-    <!-- Tailwind Custom Config -->
     <script>
       tailwind.config = {
         theme: {
@@ -35,85 +27,98 @@
               'soft-teal': '#00FFAA',
               'dark-navy': '#1A1A33',
             },
-            fontFamily: {
-              poppins: ['Poppins', 'sans-serif'],
-              roboto: ['Roboto', 'sans-serif'],
-            },
+            fontFamily: { poppins: ['Poppins', 'sans-serif'], roboto: ['Roboto', 'sans-serif'] },
           },
         },
       };
     </script>
   </head>
   <body class="bg-dark-navy text-white">
-    <!-- Three.js Canvas Background -->
     <canvas id="three-canvas"></canvas>
-
-    <!-- Main Content -->
     <div class="content-layer">
-      <div class="about-container">
-        <!-- Back Button -->
-        <div class="mb-12">
-          <a href="index.html" class="back-button"> ← Back to Home </a>
+      <main class="flex flex-col items-center justify-start min-h-screen px-4 py-12 w-full">
+        <div class="w-full max-w-6xl flex items-start mb-6">
+          <a href="index.html" class="back-button small" aria-label="Назад">←</a>
         </div>
-
-        <!-- Header -->
-        <header class="text-center mb-16">
+        <header class="text-center mb-14">
           <h1 class="text-5xl md:text-6xl font-poppins font-bold mb-4 gradient-text">
-            About GlowJelly
+            Проєкт GlowJelly
           </h1>
-          <p class="tagline">Time to Shine</p>
+          <p class="tagline">Час сяяти</p>
         </header>
-
-        <!-- Content Placeholder -->
-        <section class="space-y-8">
+        <section class="w-full max-w-6xl mb-12 grid md:grid-cols-2 gap-8">
           <div
-            class="bg-dark-navy bg-opacity-50 backdrop-blur-sm border border-bright-cyan border-opacity-30 rounded-2xl p-8"
+            class="bg-dark-navy/60 backdrop-blur-sm border border-bright-cyan/30 rounded-2xl p-8"
           >
-            <h2 class="text-3xl font-poppins font-bold text-soft-teal mb-4">Coming Soon</h2>
+            <h2 class="text-3xl font-poppins font-bold text-soft-teal mb-4">Місія</h2>
             <p class="text-lg text-gray-300 leading-relaxed">
-              Detailed description and information about the GlowJelly project will be added here.
+              GlowJelly перетворює цікавість на творчість за допомогою годинника на базі Arduino,
+              натхненного біолюмінесцентними медузами. Учні створюють апаратне забезпечення, кодують
+              логіку та розробляють світлові анімації крок за кроком.
             </p>
           </div>
-
           <div
-            class="bg-dark-navy bg-opacity-50 backdrop-blur-sm border border-electric-green border-opacity-20 rounded-2xl p-8"
+            class="bg-dark-navy/60 backdrop-blur-sm border border-electric-green/25 rounded-2xl p-8"
           >
-            <h3 class="text-2xl font-poppins font-semibold text-electric-green mb-3">
-              Key Features
-            </h3>
-            <ul class="list-disc list-inside text-gray-300 space-y-2">
-              <li>Arduino-based educational clock</li>
-              <li>Glowing jellyfish design</li>
-              <li>Voice time announcements</li>
-              <li>Digital display and alarm functionality</li>
-              <li>Perfect for summer camp students</li>
+            <h2 class="text-3xl font-poppins font-bold text-electric-green mb-4">
+              Основні моменти
+            </h2>
+            <ul class="list-disc list-inside text-gray-300 space-y-2 text-base">
+              <li>Архітектура на базі Arduino</li>
+              <li>Світлодіодні ефекти, що імітують біолюмінесценцію</li>
+              <li>Голосові сповіщення часу</li>
+              <li>Налаштовувані будильники та режими</li>
+              <li>Чудово підходить для таборів та майстер-класів</li>
             </ul>
           </div>
-
+        </section>
+        <section class="w-full max-w-6xl mb-16 grid md:grid-cols-3 gap-8">
           <div
-            class="bg-dark-navy bg-opacity-50 backdrop-blur-sm border border-deep-purple border-opacity-30 rounded-2xl p-8"
+            class="bg-dark-navy/60 backdrop-blur-sm border border-deep-purple/40 rounded-2xl p-6"
           >
-            <h3 class="text-2xl font-poppins font-semibold text-deep-purple mb-3">Technology</h3>
-            <p class="text-gray-300 leading-relaxed">
-              Built with Arduino, featuring bioluminescent-inspired LED effects and interactive
-              audio components for an engaging learning experience.
+            <h3 class="text-2xl font-poppins font-semibold text-deep-purple mb-3">
+              Ключові технології
+            </h3>
+            <p class="text-gray-300 text-sm leading-relaxed">
+              Логіка мікроконтролера керує світлодіодними анімаціями, аудіомодулями та сенсорними
+              входами для створення захоплюючого досвіду.
+            </p>
+          </div>
+          <div
+            class="bg-dark-navy/60 backdrop-blur-sm border border-bright-cyan/40 rounded-2xl p-6"
+          >
+            <h3 class="text-2xl font-poppins font-semibold text-bright-cyan mb-3">
+              Навчальний шлях
+            </h3>
+            <p class="text-gray-300 text-sm leading-relaxed">
+              Прогрес від основ підключення до динамічних світлових патернів та модульних розширень
+              функцій.
+            </p>
+          </div>
+          <div
+            class="bg-dark-navy/60 backdrop-blur-sm border border-electric-green/40 rounded-2xl p-6"
+          >
+            <h3 class="text-2xl font-poppins font-semibold text-electric-green mb-3">Розширення</h3>
+            <p class="text-gray-300 text-sm leading-relaxed">
+              Дорожня карта включає мобільну інтеграцію, датчики навколишнього середовища, адаптивні
+              палітри та режими світіння на основі даних.
             </p>
           </div>
         </section>
-
-        <!-- Footer -->
-        <footer class="mt-16 text-center">
-          <p class="text-sm text-bright-cyan opacity-70">© 2025 GlowJelly Project</p>
+        <section class="slideshow-section flex justify-center mb-20 w-full">
+          <div class="slideshow-container" id="slideshow">
+            <img src="assets/slide1.png" alt="Слайд GlowJelly" class="slide-img" id="slide-image" />
+            <button class="slideshow-prev" id="slide-prev" aria-label="Попередній слайд">‹</button>
+            <button class="slideshow-next" id="slide-next" aria-label="Наступний слайд">›</button>
+          </div>
+        </section>
+        <footer class="text-center opacity-70 mb-4">
+          <p class="text-sm text-bright-cyan">© 2025 Проєкт GlowJelly</p>
         </footer>
-      </div>
+      </main>
     </div>
-
-    <!-- Three.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-    <!-- Three.js Scene Script (simplified version for about page) -->
     <script>
-      // Scene setup
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(
         75,
@@ -126,64 +131,87 @@
         alpha: true,
         antialias: true,
       });
-
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setPixelRatio(window.devicePixelRatio);
       camera.position.z = 50;
-
-      // Simplified particle system
-      const particleCount = 400;
+      const particleCount = 600;
       const particles = new THREE.BufferGeometry();
       const positions = new Float32Array(particleCount * 3);
       const colors = new Float32Array(particleCount * 3);
-
       const brandColors = [
         new THREE.Color(0x8a2be1),
         new THREE.Color(0x4682b4),
+        new THREE.Color(0x00ff00),
         new THREE.Color(0x00ffaa),
       ];
-
       for (let i = 0; i < particleCount; i++) {
         positions[i * 3] = (Math.random() - 0.5) * 100;
         positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
         positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
-
-        const color = brandColors[Math.floor(Math.random() * brandColors.length)];
-        colors[i * 3] = color.r;
-        colors[i * 3 + 1] = color.g;
-        colors[i * 3 + 2] = color.b;
+        const c = brandColors[Math.floor(Math.random() * brandColors.length)];
+        colors[i * 3] = c.r;
+        colors[i * 3 + 1] = c.g;
+        colors[i * 3 + 2] = c.b;
       }
-
       particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
       particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
       const particleMaterial = new THREE.PointsMaterial({
-        size: 1.2,
+        size: 1.4,
         vertexColors: true,
         transparent: true,
-        opacity: 0.6,
+        opacity: 0.7,
         blending: THREE.AdditiveBlending,
+        sizeAttenuation: true,
       });
-
       const particleSystem = new THREE.Points(particles, particleMaterial);
       scene.add(particleSystem);
-
-      // Animation
       function animate() {
         requestAnimationFrame(animate);
-        particleSystem.rotation.y += 0.0003;
-        particleSystem.rotation.x += 0.0001;
+        particleSystem.rotation.y += 0.0004;
+        particleSystem.rotation.x += 0.00015;
         renderer.render(scene, camera);
       }
-
       animate();
-
-      // Handle resize
       window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
       });
+    </script>
+    <script>
+      (function () {
+        const slideCount = 8;
+        const slides = Array.from({ length: slideCount }, (_, i) => `assets/slide${i + 1}.png`);
+        let idx = 0;
+        const imgEl = document.getElementById('slide-image');
+        const prevBtn = document.getElementById('slide-prev');
+        const nextBtn = document.getElementById('slide-next');
+        function show(i) {
+          idx = (i + slides.length) % slides.length;
+          imgEl.src = slides[idx];
+        }
+        prevBtn.addEventListener('click', () => {
+          show(idx - 1);
+          resetTimer();
+        });
+        nextBtn.addEventListener('click', () => {
+          show(idx + 1);
+          resetTimer();
+        });
+        let timer = setInterval(() => show(idx + 1), 4000);
+        function resetTimer() {
+          clearInterval(timer);
+          timer = setInterval(() => show(idx + 1), 4000);
+        }
+        const container = document.getElementById('slideshow');
+        container.addEventListener('mouseenter', () => clearInterval(timer));
+        container.addEventListener('mouseleave', () => resetTimer());
+        slides.forEach((s) => {
+          const i = new Image();
+          i.src = s;
+        });
+        show(0);
+      })();
     </script>
   </body>
 </html>
