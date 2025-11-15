@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="GlowJelly - A fun, educational Arduino-based clock in the shape of a glowing jellyfish"
+    />
+    <title>GlowJelly | Time to Shine</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;700&family=Roboto:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Tailwind Custom Config -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'deep-purple': '#8A2BE1',
+              'bright-cyan': '#4682B4',
+              'electric-green': '#00FF00',
+              'soft-teal': '#00FFAA',
+              'dark-navy': '#1A1A33',
+            },
+            fontFamily: {
+              poppins: ['Poppins', 'sans-serif'],
+              roboto: ['Roboto', 'sans-serif'],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-dark-navy text-white">
+    <!-- Three.js Canvas Background -->
+    <canvas id="three-canvas"></canvas>
+
+    <!-- Main Content -->
+    <div class="content-layer">
+      <main class="flex flex-col items-center justify-center min-h-screen px-4 py-12">
+        <!-- Logo -->
+        <div class="logo-glow mb-12">
+          <img
+            src="./assets/logo.png"
+            alt="GlowJelly Logo"
+            class="w-[40vw] max-w-xl h-auto mx-auto"
+          />
+        </div>
+
+        <!-- CTA Button -->
+        <a href="about.html" class="glow-button">
+          <span>GlowJelly</span>
+        </a>
+      </main>
+    </div>
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Three.js Scene Script -->
+    <script>
+      // Scene setup
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      const renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById('three-canvas'),
+        alpha: true,
+        antialias: true,
+      });
+
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(window.devicePixelRatio);
+      camera.position.z = 50;
+
+      // Particle system for glowing jellyfish effect
+      const particleCount = 800;
+      const particles = new THREE.BufferGeometry();
+      const positions = new Float32Array(particleCount * 3);
+      const colors = new Float32Array(particleCount * 3);
+      const sizes = new Float32Array(particleCount);
+
+      // Brand colors
+      const brandColors = [
+        new THREE.Color(0x8a2be1), // Deep Purple
+        new THREE.Color(0x4682b4), // Bright Cyan
+        new THREE.Color(0x00ff00), // Electric Green
+        new THREE.Color(0x00ffaa), // Soft Teal
+      ];
+
+      for (let i = 0; i < particleCount; i++) {
+        // Position
+        positions[i * 3] = (Math.random() - 0.5) * 100;
+        positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
+
+        // Color - randomly pick from brand colors
+        const color = brandColors[Math.floor(Math.random() * brandColors.length)];
+        colors[i * 3] = color.r;
+        colors[i * 3 + 1] = color.g;
+        colors[i * 3 + 2] = color.b;
+
+        // Size
+        sizes[i] = Math.random() * 2 + 0.5;
+      }
+
+      particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      particles.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+      // Particle material
+      const particleMaterial = new THREE.PointsMaterial({
+        size: 1.5,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.8,
+        blending: THREE.AdditiveBlending,
+        sizeAttenuation: true,
+      });
+
+      const particleSystem = new THREE.Points(particles, particleMaterial);
+      scene.add(particleSystem);
+
+      // Add subtle ambient glow spheres
+      const glowGeometry = new THREE.SphereGeometry(15, 32, 32);
+      const glowMaterial1 = new THREE.MeshBasicMaterial({
+        color: 0x8a2be1,
+        transparent: true,
+        opacity: 0.1,
+      });
+      const glowSphere1 = new THREE.Mesh(glowGeometry, glowMaterial1);
+      glowSphere1.position.set(-20, 10, -20);
+      scene.add(glowSphere1);
+
+      const glowMaterial2 = new THREE.MeshBasicMaterial({
+        color: 0x00ffaa,
+        transparent: true,
+        opacity: 0.1,
+      });
+      const glowSphere2 = new THREE.Mesh(glowGeometry, glowMaterial2);
+      glowSphere2.position.set(20, -10, -30);
+      scene.add(glowSphere2);
+
+      // Animation
+      let time = 0;
+      function animate() {
+        requestAnimationFrame(animate);
+        time += 0.001;
+
+        // Rotate particle system
+        particleSystem.rotation.y += 0.0005;
+        particleSystem.rotation.x += 0.0002;
+
+        // Animate particles - create jellyfish-like floating motion
+        const positions = particleSystem.geometry.attributes.position.array;
+        for (let i = 0; i < particleCount; i++) {
+          const i3 = i * 3;
+          positions[i3 + 1] += Math.sin(time * 2 + positions[i3]) * 0.01;
+          positions[i3] += Math.cos(time * 2 + positions[i3 + 2]) * 0.005;
+        }
+        particleSystem.geometry.attributes.position.needsUpdate = true;
+
+        // Pulse glow spheres
+        glowSphere1.scale.set(
+          1 + Math.sin(time * 2) * 0.1,
+          1 + Math.sin(time * 2) * 0.1,
+          1 + Math.sin(time * 2) * 0.1
+        );
+        glowSphere2.scale.set(
+          1 + Math.cos(time * 2) * 0.1,
+          1 + Math.cos(time * 2) * 0.1,
+          1 + Math.cos(time * 2) * 0.1
+        );
+
+        renderer.render(scene, camera);
+      }
+
+      animate();
+
+      // Handle resize
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      // Mouse interaction
+      let mouseX = 0;
+      let mouseY = 0;
+      document.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+        mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        particleSystem.rotation.x = mouseY * 0.2;
+        particleSystem.rotation.y = mouseX * 0.2;
+      });
+    </script>
+  </body>
+</html>

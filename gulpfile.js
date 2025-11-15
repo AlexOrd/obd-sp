@@ -505,7 +505,7 @@ export const copySingle = () => {
   log('📄 Copying single pages...', 'cyan');
   const start = Date.now();
   return gulp
-    .src(paths.src.single)
+    .src(paths.src.single, { encoding: false })
     .pipe(newer(paths.dist.single))
     .pipe(gulp.dest(paths.dist.single))
     .pipe(size({ title: 'Single Pages' }))

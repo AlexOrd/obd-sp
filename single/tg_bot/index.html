@@ -1,0 +1,807 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Telegram-бот з ШІ за 60 хвилин | Майстер-клас ВТФК</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background: linear-gradient(135deg, #0a0a0f 0%, #1a0a1f 50%, #0f0a1a 100%);
+        color: #e0e0e0;
+        overflow: hidden;
+        position: relative;
+      }
+
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background:
+          repeating-linear-gradient(
+            0deg,
+            rgba(0, 212, 255, 0.03) 0px,
+            transparent 1px,
+            transparent 2px,
+            rgba(0, 212, 255, 0.03) 3px
+          ),
+          repeating-linear-gradient(
+            90deg,
+            rgba(255, 0, 255, 0.03) 0px,
+            transparent 1px,
+            transparent 2px,
+            rgba(255, 0, 255, 0.03) 3px
+          );
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      body::after {
+        content: '';
+        position: fixed;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+        animation: rotate 30s linear infinite;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .slides-container {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        z-index: 2;
+      }
+
+      .slide {
+        width: 100%;
+        height: 100%;
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 60px;
+        text-align: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: radial-gradient(
+          ellipse at center,
+          rgba(26, 10, 31, 0.8) 0%,
+          rgba(10, 10, 15, 0.95) 100%
+        );
+        border: 1px solid rgba(0, 212, 255, 0.1);
+      }
+
+      .slide.active {
+        display: flex;
+        animation:
+          fadeIn 0.5s ease-in,
+          glitchEffect 0.8s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes glitchEffect {
+        0%,
+        100% {
+          text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+        25% {
+          text-shadow:
+            -2px 0 0 rgba(255, 0, 255, 0.7),
+            2px 0 0 rgba(0, 212, 255, 0.7);
+        }
+        50% {
+          text-shadow:
+            2px 0 0 rgba(255, 0, 255, 0.7),
+            -2px 0 0 rgba(0, 212, 255, 0.7);
+        }
+        75% {
+          text-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
+        }
+      }
+
+      h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #00d4ff;
+        text-shadow:
+          0 0 10px rgba(0, 212, 255, 0.8),
+          0 0 20px rgba(0, 212, 255, 0.5),
+          0 0 30px rgba(0, 212, 255, 0.3),
+          2px 2px 0 rgba(255, 0, 255, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      h2 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        margin-bottom: 40px;
+        color: #00d4ff;
+        text-shadow:
+          0 0 10px rgba(0, 212, 255, 0.6),
+          0 0 20px rgba(0, 212, 255, 0.4);
+        border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+        padding-bottom: 15px;
+      }
+
+      h3 {
+        font-size: 1.8rem;
+        font-weight: 500;
+        margin-bottom: 15px;
+        color: #ff00ff;
+        text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+      }
+
+      .subtitle {
+        font-size: 1.5rem;
+        color: #ff00ff;
+        margin-bottom: 40px;
+        text-shadow: 0 0 8px rgba(255, 0, 255, 0.4);
+      }
+
+      .author {
+        position: absolute;
+        bottom: 40px;
+        font-size: 1.2rem;
+        color: #00d4ff;
+        text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
+      }
+
+      .content {
+        max-width: 1000px;
+        width: 100%;
+      }
+
+      .list-item {
+        font-size: 1.4rem;
+        line-height: 2.2;
+        margin: 20px 0;
+        text-align: left;
+        padding-left: 40px;
+        position: relative;
+      }
+
+      .list-item::before {
+        content: '▸';
+        position: absolute;
+        left: 0;
+        color: #00d4ff;
+        font-weight: bold;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          text-shadow: 0 0 5px rgba(0, 212, 255, 0.8);
+        }
+        50% {
+          opacity: 0.6;
+          text-shadow: 0 0 10px rgba(0, 212, 255, 1);
+        }
+      }
+
+      .list-item strong {
+        color: #ff00ff;
+        text-shadow: 0 0 5px rgba(255, 0, 255, 0.4);
+      }
+
+      .emoji {
+        font-size: 4rem;
+        margin: 20px 0;
+        filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+        animation: float 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .checklist {
+        font-size: 1.6rem;
+        margin: 15px 0;
+        text-align: left;
+      }
+
+      .note {
+        font-size: 1.2rem;
+        color: #ffaa00;
+        font-style: italic;
+        margin-top: 30px;
+        padding: 20px;
+        border-left: 4px solid #ffaa00;
+        background: rgba(255, 170, 0, 0.1);
+        box-shadow:
+          0 0 10px rgba(255, 170, 0, 0.2),
+          inset 0 0 20px rgba(255, 170, 0, 0.05);
+        border-radius: 0 8px 8px 0;
+      }
+
+      .action {
+        font-size: 1.3rem;
+        margin: 15px 0;
+        padding: 15px 20px;
+        background: rgba(0, 212, 255, 0.08);
+        border-left: 4px solid #00d4ff;
+        text-align: left;
+        box-shadow:
+          0 0 15px rgba(0, 212, 255, 0.2),
+          inset 0 0 20px rgba(0, 212, 255, 0.05);
+        border-radius: 0 8px 8px 0;
+        transition: all 0.3s ease;
+      }
+
+      .action:hover {
+        background: rgba(0, 212, 255, 0.15);
+        box-shadow:
+          0 0 20px rgba(0, 212, 255, 0.4),
+          inset 0 0 30px rgba(0, 212, 255, 0.1);
+        transform: translateX(5px);
+      }
+
+      .action strong {
+        color: #ff00ff;
+        text-shadow: 0 0 5px rgba(255, 0, 255, 0.5);
+      }
+
+      .code-block {
+        background: #0a0a0a;
+        border: 1px solid #00d4ff;
+        border-radius: 8px;
+        padding: 25px;
+        margin: 20px 0;
+        font-family: 'Courier New', monospace;
+        font-size: 1.1rem;
+        text-align: left;
+        line-height: 1.8;
+        color: #00ff88;
+        box-shadow:
+          0 0 20px rgba(0, 212, 255, 0.3),
+          inset 0 0 30px rgba(0, 212, 255, 0.05);
+        position: relative;
+      }
+
+      .code-block::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #00d4ff, #ff00ff, #00d4ff);
+        animation: scanline 2s linear infinite;
+      }
+
+      @keyframes scanline {
+        0% {
+          background-position: 0% 0%;
+        }
+        100% {
+          background-position: 100% 0%;
+        }
+      }
+
+      .code-block .comment {
+        color: #808080;
+      }
+
+      .diagram {
+        font-size: 1.3rem;
+        margin: 30px 0;
+        padding: 30px;
+        background: rgba(0, 212, 255, 0.05);
+        border: 2px solid #00d4ff;
+        border-radius: 10px;
+        line-height: 2;
+        box-shadow:
+          0 0 20px rgba(0, 212, 255, 0.2),
+          inset 0 0 30px rgba(0, 212, 255, 0.05);
+      }
+
+      .controls {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        display: flex;
+        gap: 15px;
+        z-index: 1000;
+      }
+
+      .controls button {
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(255, 0, 255, 0.2));
+        border: 2px solid #00d4ff;
+        color: #00d4ff;
+        padding: 15px 25px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow:
+          0 0 15px rgba(0, 212, 255, 0.3),
+          inset 0 0 15px rgba(0, 212, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .controls button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+      }
+
+      .controls button:hover::before {
+        left: 100%;
+      }
+
+      .controls button:hover {
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.4), rgba(255, 0, 255, 0.4));
+        transform: scale(1.05) translateY(-2px);
+        box-shadow:
+          0 0 25px rgba(0, 212, 255, 0.6),
+          0 5px 15px rgba(0, 0, 0, 0.3),
+          inset 0 0 20px rgba(0, 212, 255, 0.2);
+        border-color: #ff00ff;
+        color: #ff00ff;
+        text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+      }
+
+      .controls button:active {
+        transform: scale(0.98) translateY(0);
+      }
+
+      .controls button:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+        transform: scale(1);
+        border-color: #444;
+        color: #666;
+        background: rgba(50, 50, 50, 0.3);
+        box-shadow: none;
+      }
+
+      .controls button:disabled:hover {
+        transform: scale(1);
+        box-shadow: none;
+      }
+
+      .slide-number {
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        font-size: 1.2rem;
+        color: #00d4ff;
+        z-index: 1000;
+        background: rgba(10, 10, 15, 0.8);
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: 2px solid rgba(0, 212, 255, 0.3);
+        box-shadow:
+          0 0 15px rgba(0, 212, 255, 0.3),
+          inset 0 0 15px rgba(0, 212, 255, 0.05);
+        text-shadow: 0 0 5px rgba(0, 212, 255, 0.8);
+      }
+
+      .highlight {
+        color: #00ff88;
+        font-weight: 600;
+        text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+      }
+
+      .url {
+        color: #ff00ff;
+        text-decoration: underline;
+        cursor: pointer;
+        text-shadow: 0 0 5px rgba(255, 0, 255, 0.5);
+        transition: all 0.3s ease;
+      }
+
+      .url:hover {
+        color: #00d4ff;
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide-number">
+      <span id="current-slide">1</span> / <span id="total-slides">20</span>
+    </div>
+
+    <div class="slides-container">
+      <!-- Слайд 1: Титульний -->
+      <div class="slide active">
+        <div class="emoji">🤖</div>
+        <h1>Telegram-бот з ШІ за 60 хвилин</h1>
+        <p class="subtitle">Майстер-клас ВТФК</p>
+        <div class="emoji">⚡</div>
+        <p class="author">Олександр Ординський<br />Викладач ВТФК</p>
+      </div>
+
+      <!-- Слайд 2: Наш План -->
+      <div class="slide">
+        <h2>Наш план на 60 хвилин</h2>
+        <div class="content">
+          <div class="list-item">
+            <strong>Рівень 1 (Ви робите):</strong> Запускаємо <em>вашого</em> першого бота в хмарі.
+          </div>
+          <div class="list-item">
+            <strong>Рівень 2 (Я показую):</strong> Додаємо "мозок" — інтеграцію з ШІ (ChatGPT).
+          </div>
+        </div>
+        <div class="emoji">🎯</div>
+      </div>
+
+      <!-- Слайд 3: Що таке GitHub? -->
+      <div class="slide">
+        <h2>Що таке GitHub?</h2>
+        <div class="content">
+          <div class="list-item">
+            <strong>GitHub</strong> — це платформа для зберігання коду в "хмарі".
+          </div>
+          <div class="list-item">
+            Ваш код зберігається онлайн і доступний з будь-якого комп'ютера.
+          </div>
+          <div class="list-item">
+            <strong>GitHub Codespaces</strong> — це повноцінний комп'ютер для розробки у браузері!
+          </div>
+          <div class="list-item">Не потрібно нічого встановлювати на свій ПК.</div>
+        </div>
+        <div class="emoji">☁️</div>
+      </div>
+
+      <!-- Слайд 4: Навіщо нам GitHub? -->
+      <div class="slide">
+        <h2>Навіщо нам GitHub?</h2>
+        <div class="content">
+          <div class="list-item">
+            ✅ <strong>Зберігання:</strong> Код не зникне, якщо щось станеться з вашим комп'ютером.
+          </div>
+          <div class="list-item">
+            ✅ <strong>Співпраця:</strong> Легко працювати в команді над одним проектом.
+          </div>
+          <div class="list-item">
+            ✅ <strong>Codespaces:</strong> Розробка у браузері — працюйте з iPad, телефону або
+            будь-якого ПК!
+          </div>
+          <div class="list-item">
+            ✅ <strong>Портфоліо:</strong> Покажіть свої проекти роботодавцям.
+          </div>
+        </div>
+        <div class="emoji">💎</div>
+      </div>
+
+      <!-- Слайд 5: Реєстрація в GitHub -->
+      <div class="slide">
+        <h2>Як зареєструватись у GitHub?</h2>
+        <div class="content">
+          <div class="action">
+            <strong>Крок 1:</strong> Відкрийте <span class="url">github.com</span>
+          </div>
+          <div class="action">
+            <strong>Крок 2:</strong> Натисніть <strong>"Sign up"</strong> (Зареєструватись)
+          </div>
+          <div class="action">
+            <strong>Крок 3:</strong> Введіть email, придумайте username та пароль
+          </div>
+          <div class="action"><strong>Крок 4:</strong> Підтвердіть email</div>
+          <div class="note" style="margin-top: 20px">
+            💡 <strong>Порада:</strong> Виберіть username, який можна показати роботодавцю!<br />
+            (Наприклад: alex_dev, maria_codes, ivan_programmer)
+          </div>
+        </div>
+      </div>
+
+      <!-- Слайд 6: Наші Інструменти -->
+      <div class="slide">
+        <h2>Що ми використовуємо?</h2>
+        <div class="content">
+          <div class="list-item">
+            <strong>Telegram + @BotFather:</strong> Для створення бота та отримання токена.
+          </div>
+          <div class="list-item"><strong>GitHub:</strong> Для зберігання коду.</div>
+          <div class="list-item">
+            <strong>GitHub Codespaces:</strong> Наша "хмарна" IDE. (Нічого не треба встановлювати!)
+          </div>
+        </div>
+        <div class="emoji">🛠️</div>
+      </div>
+
+      <!-- Слайд 7: Перевірка готовності -->
+      <div class="slide">
+        <h2>Чи всі готові?</h2>
+        <div class="content">
+          <div class="checklist">✅ Є акаунт GitHub?</div>
+          <div class="checklist">✅ Є акаунт Telegram?</div>
+          <div class="checklist">
+            ✅ <strong>Найважливіше:</strong> Є <span class="highlight">ТОКЕН</span> від @BotFather?
+          </div>
+          <div class="note">
+            Немає токена? Робіть це ПРЯМО ЗАРАЗ:<br />
+            <code>@BotFather</code> → <code>/newbot</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Слайд 8: Рівень 1 -->
+      <div class="slide">
+        <div class="emoji">🚀</div>
+        <h2>Рівень 1: Запуск (Працюємо разом!)</h2>
+        <h3>Мета: Ваш особистий бот працює у вашому Telegram.</h3>
+      </div>
+
+      <!-- Слайд 9: Крок 1 — Fork -->
+      <div class="slide">
+        <h2>Крок 1: Копіюємо проект</h2>
+        <div class="content">
+          <div class="action">
+            <strong>Дія 1:</strong> Заходьте на
+            <span class="url">github.com/AlexOrd/telegram-bot-workshop</span>
+          </div>
+          <div class="action">
+            <strong>Дія 2:</strong> Натисніть кнопку <strong>"Fork"</strong> у правому верхньому
+            куті.
+          </div>
+        </div>
+        <div class="emoji">🍴</div>
+      </div>
+
+      <!-- Слайд 10: Крок 2 — Codespace -->
+      <div class="slide">
+        <h2>Крок 2: Запускаємо хмарний ПК</h2>
+        <div class="content">
+          <div class="action">
+            <strong>Дія 1:</strong> На сторінці <em>вашого</em> форку натисніть
+            <code>&lt; &gt; Code</code>.
+          </div>
+          <div class="action">
+            <strong>Дія 2:</strong> Перейдіть на вкладку <strong>"Codespaces"</strong>.
+          </div>
+          <div class="action">
+            <strong>Дія 3:</strong> Натисніть <strong>"Create codespace on main"</strong>.
+          </div>
+        </div>
+        <div class="emoji">☁️</div>
+      </div>
+
+      <!-- Слайд 11: Крок 3 — Secrets -->
+      <div class="slide">
+        <h2>Крок 3: Додаємо токен (Безпечно!)</h2>
+        <div class="content">
+          <div class="action">
+            <strong>Дія 1:</strong> У VS Code, що відкрився, натисніть <code>Ctrl+Shift+P</code>.
+          </div>
+          <div class="action">
+            <strong>Дія 2:</strong> Введіть <code>Codespaces: Manage Secrets</code>.
+          </div>
+          <div class="action">
+            <strong>Дія 3:</strong> Створіть <strong>New secret</strong>:<br />
+            <span class="highlight">Name:</span> <code>BOT_TOKEN</code><br />
+            <span class="highlight">Value:</span> [вставте_ваш_токен]
+          </div>
+          <div class="action">
+            <strong>Дія 4:</strong> <span class="highlight">ОБОВ'ЯЗКОВО:</span> Натисніть
+            <strong>"Rebuild now"</strong>, коли з'явиться запит.
+          </div>
+        </div>
+        <div class="emoji">🔐</div>
+      </div>
+
+      <!-- Слайд 12: Крок 4 — Запуск -->
+      <div class="slide">
+        <h2>Крок 4: Момент істини</h2>
+        <div class="content">
+          <div class="action">
+            <strong>Дія 1:</strong> Внизу відкрийте вкладку <strong>"TERMINAL"</strong>.
+          </div>
+          <div class="action">
+            <strong>Дія 2:</strong> Введіть команду: <code>python bot.py</code>
+          </div>
+          <div class="action"><strong>Дія 3:</strong> Натисніть Enter.</div>
+        </div>
+        <div class="emoji">⌨️</div>
+      </div>
+
+      <!-- Слайд 13: Результат Рівень 1 -->
+      <div class="slide">
+        <div class="emoji">🎉</div>
+        <h2>Він живий! 🤖</h2>
+        <div class="content">
+          <div class="action">
+            <strong>Дія:</strong> Зайдіть у Telegram → Знайдіть свого бота → Напишіть
+            <code>/start</code>.
+          </div>
+          <h3>Результат: Бот відповідає і реагує на кнопки.</h3>
+        </div>
+      </div>
+
+      <!-- Слайд 14: Рівень 2 -->
+      <div class="slide">
+        <div class="emoji">🧠</div>
+        <h2>Рівень 2: Додаємо "мозок" (Я показую)</h2>
+        <h3>Мета: Перетворити нашого бота на "Знавця ВТФК" (ChatGPT).</h3>
+      </div>
+
+      <!-- Слайд 15: Як це працює -->
+      <div class="slide">
+        <h2>Архітектура "Розумного" бота</h2>
+        <div class="content">
+          <div class="diagram">
+            [User] → [Telegram Bot] → [Python Code] → [OpenAI Assistant API] →<br />
+            → [Python Code] → [Telegram Bot] → [User]
+          </div>
+          <p style="font-size: 1.3rem; margin-top: 30px">
+            Наш код викликає спеціального "асистента" (якого я навчив),<br />коли не знає відповіді.
+          </p>
+        </div>
+      </div>
+
+      <!-- Слайд 16: Секретні ключі -->
+      <div class="slide">
+        <h2>У чому різниця?</h2>
+        <div class="content">
+          <p style="font-size: 1.4rem; margin-bottom: 30px">У мої "Secrets" додано ще 2 ключі:</p>
+          <div class="list-item">
+            <code class="highlight">OPENAI_API_KEY</code> (Доступ до OpenAI)
+          </div>
+          <div class="list-item">
+            <code class="highlight">ASSISTANT_ID</code> (ID мого "Знавця ВТФК")
+          </div>
+        </div>
+        <div class="emoji">🔑</div>
+      </div>
+
+      <!-- Слайд 17: Пояснення коду -->
+      <div class="slide">
+        <h2>Магія в bot.py</h2>
+        <div class="content">
+          <div class="code-block">
+            <span class="comment"># Перевіряємо, чи є ключі</span>
+            <span class="highlight">if</span> OPENAI_API_KEY
+            <span class="highlight">and</span> ASSISTANT_ID:
+            <span class="comment"># Якщо є - вмикаємо ШІ</span>
+            logging.info(<span style="color: #ffaa00">"Активую режим ШІ-асистента."</span>)
+            openai_client = AsyncOpenAI(...)
+            <span class="comment"># ... і реєструємо обробник для ЧАТУ</span>
+            dp.message.register(handle_chat)
+            <span class="highlight">else</span>:
+            <span class="comment"># Якщо немає - працюють ТІЛЬКИ кнопки</span>
+            logging.warning(<span style="color: #ffaa00">"Бот працює в базовому режимі."</span>)
+          </div>
+        </div>
+      </div>
+
+      <!-- Слайд 18: Live Demo -->
+      <div class="slide">
+        <div class="emoji">🎬</div>
+        <h2>Live Demo: "Знавець ВТФК" в дії</h2>
+        <h3 style="margin-top: 40px">Приклад запиту: "поясни рекурсію"</h3>
+      </div>
+
+      <!-- Слайд 19: Висновки -->
+      <div class="slide">
+        <h2>Що ми встигли?</h2>
+        <div class="content">
+          <div class="list-item">✅ Навчились працювати в <strong>GitHub Codespaces</strong>.</div>
+          <div class="list-item">✅ Запустили <strong>особистого</strong> Telegram-бота.</div>
+          <div class="list-item">
+            ✅ Навчились <strong>безпечно</strong> ховати ключі (Secrets).
+          </div>
+          <div class="list-item">
+            ✅ Побачили, як інтегрувати <strong>справжній ШІ</strong> (OpenAI).
+          </div>
+        </div>
+      </div>
+
+      <!-- Слайд 20: Дякую -->
+      <div class="slide">
+        <div class="emoji">🙏</div>
+        <h1>Дякую за увагу!</h1>
+        <h3 style="margin-top: 30px">Питання?</h3>
+        <p class="author">
+          GitHub: github.com/AlexOrd<br />
+          LinkedIn: linkedin.com/in/alexord<br />
+          Facebook: facebook.com/alexordinskyi
+        </p>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="prev">← Назад</button>
+      <button id="next">Далі →</button>
+    </div>
+
+    <script>
+      let currentSlide = 0;
+      const slides = document.querySelectorAll('.slide');
+      const totalSlides = slides.length;
+      const prevBtn = document.getElementById('prev');
+      const nextBtn = document.getElementById('next');
+      const currentSlideSpan = document.getElementById('current-slide');
+      const totalSlidesSpan = document.getElementById('total-slides');
+
+      totalSlidesSpan.textContent = totalSlides;
+
+      function showSlide(n) {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (n + totalSlides) % totalSlides;
+        slides[currentSlide].classList.add('active');
+        currentSlideSpan.textContent = currentSlide + 1;
+
+        prevBtn.disabled = currentSlide === 0;
+        nextBtn.disabled = currentSlide === totalSlides - 1;
+      }
+
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          if (currentSlide > 0) {
+            showSlide(currentSlide - 1);
+          }
+        } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+          if (currentSlide < totalSlides - 1) {
+            showSlide(currentSlide + 1);
+          }
+        } else if (e.key === 'Home') {
+          showSlide(0);
+        } else if (e.key === 'End') {
+          showSlide(totalSlides - 1);
+        }
+      });
+
+      // Initialize
+      showSlide(0);
+    </script>
+  </body>
+</html>
