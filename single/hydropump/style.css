@@ -113,12 +113,14 @@ body {
 }
 
 .logo-image {
-  /* Let the image scale inside the circular container reliably. Use a
-     contained fit and small inset so border remains visible and the image
-     doesn't get squashed if parent sizing is affected at build-time. */
-  width: 90%;
-  height: 90%;
-  object-fit: contain;
+  /* Fill the circular button and center the image. The logo artwork itself
+     is centered inside the source image, so `cover` will crop edges but keep
+     the central logo fully visible and fill the button area. */
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
   border-radius: 50%;
   position: relative;
   z-index: 2;
@@ -367,8 +369,8 @@ body {
   }
 
   .logo-image {
-    width: 88%;
-    height: 88%;
+    width: 100%;
+    height: 100%;
   }
 
   /* Larger desktop screens: give it a bit more presence */
