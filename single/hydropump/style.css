@@ -33,8 +33,17 @@ body {
 }
 
 .content-layer {
-  position: relative;
+  /* Anchor content above the WebGL canvas so renderer scaling won't cascade
+     into the content layout. Make this a full-screen fixed layer and center
+     children; pointer-events are disabled on the layer so only interactive
+     children (logo button) receive events. */
+  position: fixed;
+  inset: 0;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
 }
 
 /* Water Gradient Text */
@@ -75,6 +84,12 @@ body {
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(10px);
+  /* Ensure the logo creates its own stacking context and accepts pointer events
+     even though the parent `content-layer` disables pointer events. Also use
+     a transform to force GPU compositing — this keeps it visually stable. */
+  pointer-events: auto;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .logo-button::before {
@@ -98,9 +113,12 @@ body {
 }
 
 .logo-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  /* Let the image scale inside the circular container reliably. Use a
+     contained fit and small inset so border remains visible and the image
+     doesn't get squashed if parent sizing is affected at build-time. */
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
   border-radius: 50%;
   position: relative;
   z-index: 2;
@@ -349,8 +367,8 @@ body {
   }
 
   .logo-image {
-    width: 100%;
-    height: 100%;
+    width: 88%;
+    height: 88%;
   }
 
   /* Larger desktop screens: give it a bit more presence */
