@@ -62,7 +62,7 @@
         </section>
 
         <!-- About Tab -->
-        <section id="about" class="tab-content w-full max-w-4xl px-4 mb-12">
+        <section id="about" class="tab-content w-full max-w-4xl px-4 mb-12" style="display: none">
           <div class="project-details">
             <div class="about-description">
               <h2 class="text-3xl font-poppins font-bold text-aqua mb-6">Опис проєкту</h2>
@@ -87,7 +87,10 @@
               <ul class="text-gray-300 space-y-3 mb-6">
                 <li class="flex items-start">
                   <span class="text-aqua mr-3">💧</span>
-                  <span><strong>Arduino мікроконтролер</strong> — мозок системи, керує всіма процесами</span>
+                  <span
+                    ><strong>Arduino мікроконтролер</strong> — мозок системи, керує всіма
+                    процесами</span
+                  >
                 </li>
                 <li class="flex items-start">
                   <span class="text-aqua mr-3">💧</span>
@@ -99,11 +102,17 @@
                 </li>
                 <li class="flex items-start">
                   <span class="text-aqua mr-3">💧</span>
-                  <span><strong>3D друкований корпус</strong> — захищає електроніку та забезпечує компактність</span>
+                  <span
+                    ><strong>3D друкований корпус</strong> — захищає електроніку та забезпечує
+                    компактність</span
+                  >
                 </li>
                 <li class="flex items-start">
                   <span class="text-aqua mr-3">💧</span>
-                  <span><strong>Система управління</strong> — інтерфейс для налаштування дозування</span>
+                  <span
+                    ><strong>Система управління</strong> — інтерфейс для налаштування
+                    дозування</span
+                  >
                 </li>
               </ul>
               <h3 class="text-2xl font-poppins font-semibold text-light-aqua mb-4 mt-8">
@@ -144,7 +153,8 @@
                 Перспективи розвитку
               </h3>
               <p class="text-lg text-gray-300 leading-relaxed mb-4">
-                Проєкт має значний потенціал для подальшого розвитку. Плануються наступні покращення:
+                Проєкт має значний потенціал для подальшого розвитку. Плануються наступні
+                покращення:
               </p>
               <ul class="text-gray-300 space-y-3">
                 <li class="flex items-start">
@@ -173,7 +183,7 @@
         </section>
 
         <!-- Details Tab (hidden, keeping for reference) -->
-        <section id="details" class="tab-content w-full max-w-4xl px-4" style="display: none;">
+        <section id="details" class="tab-content w-full max-w-4xl px-4" style="display: none">
           <div class="project-details">
             <div class="details-grid">
               <div class="detail-card">
@@ -349,10 +359,15 @@
           const targetTab = button.getAttribute('data-tab');
 
           tabButtons.forEach((btn) => btn.classList.remove('active'));
-          tabContents.forEach((content) => content.classList.remove('active'));
+          tabContents.forEach((content) => {
+            content.classList.remove('active');
+            content.style.display = 'none'; // Ensure inline style is set
+          });
 
           button.classList.add('active');
-          document.getElementById(targetTab).classList.add('active');
+          const targetContent = document.getElementById(targetTab);
+          targetContent.style.display = 'block'; // Override inline style
+          targetContent.classList.add('active');
         });
       });
 

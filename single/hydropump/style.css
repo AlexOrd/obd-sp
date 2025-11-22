@@ -46,6 +46,11 @@ body {
   pointer-events: none;
 }
 
+/* Override for about page - enable pointer events for all interactive content */
+body:has(main .tabs-container) .content-layer {
+  pointer-events: auto;
+}
+
 /* Water Gradient Text */
 .water-gradient-text {
   background: linear-gradient(135deg, var(--aqua) 0%, var(--ocean-blue) 50%, var(--deep-blue) 100%);
