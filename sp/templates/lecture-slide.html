@@ -71,7 +71,9 @@
         {{/isComparison}} {{#isDebugger}} {{> slides/debugger}} {{/isDebugger}} {{#isCommonMistake}}
         {{> slides/common-mistake}} {{/isCommonMistake}} {{#isSummary}} {{> slides/summary}}
         {{/isSummary}} {{#isLiveCoding}} {{> slides/live-coding}} {{/isLiveCoding}} {{#isNextSteps}}
-        {{> slides/next-steps}} {{/isNextSteps}} {{/lecture.slides}}
+        {{> slides/next-steps}} {{/isNextSteps}} {{#isTable}} {{> slides/table}} {{/isTable}}
+        {{#isContent}} {{> slides/content}} {{/isContent}} {{#isList}} {{> slides/list}} {{/isList}}
+        {{/lecture.slides}}
       </div>
     </div>
 
@@ -91,7 +93,13 @@
         controls: true,
         progress: true,
         center: true,
+        center: true,
         transition: 'slide',
+        width: 1200,
+        height: 700,
+        margin: 0.1,
+        minScale: 0.2,
+        maxScale: 2.0,
 
         plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
       });

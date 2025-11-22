@@ -1,0 +1,18 @@
+<!-- Content Slide -->
+<section>
+  <h2>{{title}}</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+    {{#content}} {{#text}}
+    <div style="margin-bottom: 15px">
+      {{#type}} {{#isSubtitle}}
+      <h3 style="color: var(--cyber-magenta); margin-top: 20px; margin-bottom: 10px">{{{text}}}</h3>
+      {{/isSubtitle}} {{^isSubtitle}}
+      <p style="color: var(--cyber-light)">{{{text}}}</p>
+      {{/isSubtitle}} {{/type}} {{^type}}
+      <!-- Fallback if type is not specified, assume paragraph -->
+      <p style="color: var(--cyber-light)">{{{text}}}</p>
+      {{/type}}
+    </div>
+    {{/text}} {{/content}}
+  </div>
+</section>

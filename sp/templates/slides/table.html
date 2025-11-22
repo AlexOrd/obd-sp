@@ -1,0 +1,37 @@
+<!-- Table Slide -->
+<section>
+  <h2>{{title}}</h2>
+  <div style="margin-top: 20px; overflow-x: auto">
+    <table style="width: 100%; border-collapse: collapse; font-size: 0.7em">
+      <thead>
+        <tr>
+          {{#headers}}
+          <th
+            style="
+              border: 2px solid var(--cyber-cyan);
+              padding: 10px;
+              background: rgba(0, 240, 255, 0.1);
+              color: var(--cyber-yellow);
+              text-transform: uppercase;
+              text-align: left;
+            "
+          >
+            {{.}}
+          </th>
+          {{/headers}}
+        </tr>
+      </thead>
+      <tbody>
+        {{#rows}}
+        <tr style="border-bottom: 1px solid var(--cyber-cyan)">
+          {{#.}}
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            {{{.}}}
+          </td>
+          {{/.}}
+        </tr>
+        {{/rows}}
+      </tbody>
+    </table>
+  </div>
+</section>

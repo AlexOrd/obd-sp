@@ -213,6 +213,10 @@ export const buildSPLectures = (done) => {
             isSummary: slide.type === 'summary',
             isNextSteps: slide.type === 'next-steps',
             isLiveCoding: slide.type === 'live-coding',
+            isTable: slide.type === 'table',
+            isContent: slide.type === 'content',
+            isList: slide.type === 'list',
+            isCodeExample: slide.type === 'code-example' || slide.type === 'code',
           };
         }
       );
@@ -351,6 +355,10 @@ export const buildDBLectures = (done) => {
             isSummary: slide.type === 'summary',
             isNextSteps: slide.type === 'next-steps',
             isLiveCoding: slide.type === 'live-coding',
+            isTable: slide.type === 'table',
+            isContent: slide.type === 'content',
+            isList: slide.type === 'list',
+            isCodeExample: slide.type === 'code-example' || slide.type === 'code',
           };
         }
       );

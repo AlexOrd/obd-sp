@@ -1,0 +1,28 @@
+<!-- List Slide -->
+<section>
+  <h2>{{title}}</h2>
+  <div style="text-align: left; margin-top: 20px">
+    <ul style="font-size: 0.85em; line-height: 1.6">
+      {{#items}}
+      <li style="margin-bottom: 10px; color: var(--cyber-light)">
+        <span style="color: var(--cyber-cyan)">{{{text}}}</span>
+        {{#subitems}}
+        <ul
+          style="
+            margin-top: 5px;
+            margin-left: 20px;
+            font-size: 0.9em;
+            border-left: 2px solid var(--cyber-magenta);
+            padding-left: 10px;
+          "
+        >
+          {{#.}}
+          <li style="margin-bottom: 5px; color: var(--cyber-light)">{{{.}}}</li>
+          {{/.}}
+        </ul>
+        {{/subitems}}
+      </li>
+      {{/items}}
+    </ul>
+  </div>
+</section>

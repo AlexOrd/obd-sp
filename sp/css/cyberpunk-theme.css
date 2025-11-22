@@ -21,7 +21,7 @@
 /* Global styles */
 .reveal {
   font-family: "Chakra Petch", sans-serif;
-  font-size: 25.6px;
+  font-size: 22px;
   font-weight: 400;
   color: var(--cyber-cyan);
   background-color: var(--cyber-dark);
@@ -46,7 +46,7 @@
     0 0 10px var(--cyber-yellow),
     0 0 20px var(--cyber-yellow),
     0 0 30px var(--cyber-yellow);
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .reveal h1 {
@@ -226,8 +226,8 @@
 
 /* Text content */
 .reveal p {
-  margin: 20px 0;
-  line-height: 1.6;
+  margin: 10px 0;
+  line-height: 1.4;
   color: var(--cyber-light);
 }
 
@@ -239,7 +239,7 @@
 }
 
 .reveal li {
-  margin: 15px 0;
+  margin: 8px 0;
   color: var(--cyber-light);
 }
 
