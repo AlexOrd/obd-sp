@@ -16,6 +16,7 @@ import autoprefixer from 'gulp-autoprefixer';
 import newer from 'gulp-newer';
 import eslint from 'gulp-eslint-new';
 import prettier from 'gulp-prettier';
+import favicons from 'favicons';
 
 const bs = browserSync.create();
 const isProd = process.env.NODE_ENV === 'production';
@@ -526,6 +527,98 @@ export const copySingle = () => {
 // HTML MINIFICATION
 // ==============================================
 
+// Generate favicons and inject link tags into built HTML files.
+export const generateFavicons = (done) => {
+  log('🖼️  Generating favicons...', 'cyan');
+  const start = Date.now();
+
+  // Candidate source images - pick the first existing file
+  const candidates = [
+    'static/favicon-source.png',
+    'single/hydropump/assets/logo.jpg',
+    'assets/logo.jpg',
+    'single/hydropump/assets/logo.png',
+  ];
+  const src = candidates.find((p) => fs.existsSync(p));
+
+  if (!src) {
+    log(
+      '⚠️  No favicon source image found (looked in common locations). Skipping favicons generation.',
+      'yellow'
+    );
+    done();
+    return;
+  }
+
+  const configuration = {
+    path: '/favicons/',
+    appName: 'HydroPump',
+    appShortName: 'HydroPump',
+    developerName: 'VTFK',
+    icons: {
+      android: true,
+      appleIcon: true,
+      favicons: true,
+      firefox: true,
+      windows: true,
+      yandex: false,
+      coast: false,
+    },
+  };
+
+  const outDir = path.join(paths.dist.base, 'favicons');
+  if (!fs.existsSync(outDir)) {
+    fs.mkdirSync(outDir, { recursive: true });
+  }
+
+  try {
+    const source = fs.readFileSync(src);
+    favicons(source, configuration, (error, response) => {
+      if (error) {
+        log(`Favicons generation failed: ${error.message || error}`, 'red');
+        done(error);
+        return;
+      }
+
+      // Write images
+      response.images.forEach((img) => {
+        fs.writeFileSync(path.join(outDir, img.name), img.contents);
+      });
+
+      // Write files (manifest, browserconfig, etc.) to dist root
+      response.files.forEach((file) => {
+        fs.writeFileSync(path.join(paths.dist.base, file.name), file.contents);
+      });
+
+      // Inject HTML tags into all built HTML files under dist
+      const linkHtml = response.html.join('\n');
+      const walkHtmlFiles = (dir) => {
+        fs.readdirSync(dir).forEach((entry) => {
+          const full = path.join(dir, entry);
+          if (fs.statSync(full).isDirectory()) {
+            walkHtmlFiles(full);
+          } else if (full.endsWith('.html')) {
+            const content = fs.readFileSync(full, 'utf8');
+            if (content.includes(linkHtml)) {
+              return;
+            } // already injected
+            const updated = content.replace('</head>', `${linkHtml}\n</head>`);
+            fs.writeFileSync(full, updated, 'utf8');
+          }
+        });
+      };
+
+      walkHtmlFiles(paths.dist.base);
+
+      log(`✅ Favicons generated (${formatDuration(Date.now() - start)})`, 'green');
+      done();
+    });
+  } catch (err) {
+    log(`Favicons generation error: ${err.message || err}`, 'red');
+    done(err);
+  }
+};
+
 export const htmlMinify = () => {
   if (!isProd) {
     log('⏭️  Skipping HTML minification (dev mode)', 'yellow');
@@ -751,6 +844,7 @@ export const build = gulp.series(
   format,
   validate,
   gulp.parallel(buildLanding, buildSP, buildDB, buildShared),
+  generateFavicons,
   htmlMinify,
   (done) => {
     log('✅ Production build complete!', 'green');
