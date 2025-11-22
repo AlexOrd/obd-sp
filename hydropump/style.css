@@ -1,0 +1,353 @@
+/* HydroPump Water Theme Styles */
+
+:root {
+  --deep-blue: #0a2463;
+  --ocean-blue: #1e88e5;
+  --aqua: #00bcd4;
+  --light-aqua: #4dd0e1;
+  --water-dark: #0d1b2a;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  overflow-x: hidden;
+  background: var(--water-dark);
+  color: white;
+}
+
+/* Water Canvas Background */
+#water-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.content-layer {
+  position: relative;
+  z-index: 1;
+}
+
+/* Water Gradient Text */
+.water-gradient-text {
+  background: linear-gradient(135deg, var(--aqua) 0%, var(--ocean-blue) 50%, var(--deep-blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(0, 188, 212, 0.5);
+}
+
+.water-tagline {
+  font-size: 1.5rem;
+  color: var(--light-aqua);
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(77, 208, 225, 0.6);
+}
+
+/* Logo Button */
+.logo-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(30, 136, 229, 0.3), rgba(0, 188, 212, 0.3));
+  border: 3px solid var(--aqua);
+  box-shadow:
+    0 0 40px rgba(0, 188, 212, 0.6),
+    0 0 80px rgba(30, 136, 229, 0.4),
+    inset 0 0 30px rgba(77, 208, 225, 0.2);
+  transition: all 0.4s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.logo-button::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(77, 208, 225, 0.3) 0%, transparent 70%);
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.logo-button:hover {
+  transform: scale(1.1) translateY(-5px);
+  box-shadow:
+    0 0 60px rgba(0, 188, 212, 0.8),
+    0 0 100px rgba(30, 136, 229, 0.6),
+    inset 0 0 40px rgba(77, 208, 225, 0.3);
+  border-color: var(--light-aqua);
+}
+
+.logo-image {
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 15px rgba(0, 188, 212, 0.8));
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.5) rotate(180deg);
+    opacity: 0.8;
+  }
+}
+
+/* About Page Styles */
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--ocean-blue), var(--aqua));
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 188, 212, 0.4);
+}
+
+.back-button:hover {
+  transform: translateX(-5px);
+  box-shadow: 0 6px 20px rgba(0, 188, 212, 0.6);
+}
+
+.back-button.small {
+  padding: 8px 16px;
+  font-size: 1.5rem;
+}
+
+/* Tabs */
+.tabs-container {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+  border-bottom: 2px solid rgba(0, 188, 212, 0.3);
+  justify-content: center;
+}
+
+.tab-button {
+  padding: 16px 32px;
+  background: transparent;
+  border: none;
+  color: var(--light-aqua);
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
+  font-family: "Poppins", sans-serif;
+}
+
+.tab-button:hover {
+  color: var(--aqua);
+  border-bottom-color: rgba(0, 188, 212, 0.5);
+}
+
+.tab-button.active {
+  color: var(--aqua);
+  border-bottom-color: var(--aqua);
+  text-shadow: 0 0 10px rgba(0, 188, 212, 0.6);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slideshow */
+.slideshow-container {
+  position: relative;
+  width: 90vw;
+  max-width: 1200px;
+  height: 80vh;
+  background: rgba(13, 27, 42, 0.6);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow:
+    0 10px 40px rgba(0, 188, 212, 0.3),
+    inset 0 0 30px rgba(30, 136, 229, 0.1);
+  border: 2px solid rgba(0, 188, 212, 0.3);
+}
+
+.slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: rgba(10, 36, 99, 0.3);
+}
+
+.slideshow-prev,
+.slideshow-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 188, 212, 0.7);
+  color: white;
+  border: none;
+  font-size: 3rem;
+  padding: 20px 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  border-radius: 8px;
+  font-weight: bold;
+  backdrop-filter: blur(10px);
+}
+
+.slideshow-prev {
+  left: 20px;
+}
+
+.slideshow-next {
+  right: 20px;
+}
+
+.slideshow-prev:hover,
+.slideshow-next:hover {
+  background: rgba(0, 188, 212, 0.9);
+  box-shadow: 0 0 20px rgba(0, 188, 212, 0.8);
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Project Details Section */
+.project-details {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.detail-card {
+  background: rgba(13, 27, 42, 0.6);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(0, 188, 212, 0.3);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+
+.detail-card:hover {
+  border-color: var(--aqua);
+  box-shadow: 0 8px 30px rgba(0, 188, 212, 0.4);
+  transform: translateY(-5px);
+}
+
+.detail-card h3 {
+  color: var(--aqua);
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  font-family: "Poppins", sans-serif;
+}
+
+.detail-card p,
+.detail-card ul {
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+}
+
+.detail-card ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.detail-card li {
+  padding-left: 24px;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.detail-card li::before {
+  content: "💧";
+  position: absolute;
+  left: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .water-gradient-text {
+    font-size: 3rem;
+  }
+
+  .water-tagline {
+    font-size: 1rem;
+  }
+
+  .logo-button {
+    width: 150px;
+    height: 150px;
+  }
+
+  .logo-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .slideshow-container {
+    width: 95vw;
+    height: 70vh;
+  }
+
+  .slideshow-prev,
+  .slideshow-next {
+    font-size: 2rem;
+    padding: 15px 20px;
+  }
+
+  .tabs-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .tab-button {
+    padding: 12px 24px;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+}

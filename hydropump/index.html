@@ -1,0 +1,97 @@
+<!doctype html><html lang="uk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="HydroPump - автоматична помпа-дозатор води на базі Arduino з 3D друкованим корпусом"><title>HydroPump | Розумний дозатор води</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="style.css"><script>tailwind.config={theme:{extend:{colors:{"deep-blue":"#0A2463","ocean-blue":"#1E88E5",aqua:"#00BCD4","light-aqua":"#4DD0E1","water-dark":"#0D1B2A"},fontFamily:{poppins:["Poppins","sans-serif"],roboto:["Roboto","sans-serif"]}}}}</script></head><body class="bg-water-dark text-white"><canvas id="water-canvas"></canvas><div class="content-layer"><main class="flex flex-col items-center justify-center min-h-screen px-4"><div class="text-center mb-8"><h1 class="text-6xl md:text-7xl font-poppins font-bold mb-4 water-gradient-text">HydroPump</h1><p class="water-tagline">Розумний дозатор води</p></div><a href="about.html" class="logo-button" aria-label="Дізнатись більше"><img src="assets/logo.svg" alt="HydroPump Logo" class="logo-image"></a></main></div><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script><script>// Water wave animation with Three.js
+      const canvas = document.getElementById('water-canvas');
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(window.devicePixelRatio);
+
+      camera.position.z = 50;
+
+      // Create water wave particles
+      const particleCount = 3000;
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(particleCount * 3);
+      const colors = new Float32Array(particleCount * 3);
+
+      for (let i = 0; i < particleCount * 3; i += 3) {
+        positions[i] = (Math.random() - 0.5) * 200;
+        positions[i + 1] = (Math.random() - 0.5) * 200;
+        positions[i + 2] = (Math.random() - 0.5) * 100;
+
+        // Water colors (blue/aqua tones)
+        const colorChoice = Math.random();
+        if (colorChoice < 0.33) {
+          colors[i] = 0.06;
+          colors[i + 1] = 0.54;
+          colors[i + 2] = 0.89; // Ocean blue
+        } else if (colorChoice < 0.66) {
+          colors[i] = 0.0;
+          colors[i + 1] = 0.74;
+          colors[i + 2] = 0.83; // Aqua
+        } else {
+          colors[i] = 0.3;
+          colors[i + 1] = 0.81;
+          colors[i + 2] = 0.88; // Light aqua
+        }
+      }
+
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      const material = new THREE.PointsMaterial({
+        size: 2,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.8,
+        blending: THREE.AdditiveBlending,
+      });
+
+      const particles = new THREE.Points(geometry, material);
+      scene.add(particles);
+
+      // Animation with wave effect
+      let animationTime = 0;
+      function animate() {
+        requestAnimationFrame(animate);
+        animationTime += 0.005;
+
+        const positions = particles.geometry.attributes.position.array;
+
+        for (let i = 0; i < particleCount * 3; i += 3) {
+          const x = positions[i];
+          const z = positions[i + 2];
+
+          // Create wave motion
+          positions[i + 1] += Math.sin(animationTime + x * 0.05) * 0.3;
+          positions[i + 1] += Math.cos(animationTime + z * 0.05) * 0.2;
+
+          // Reset particles that drift too far
+          if (positions[i + 1] > 100) {
+            positions[i + 1] = -100;
+          }
+          if (positions[i + 1] < -100) {
+            positions[i + 1] = 100;
+          }
+        }
+
+        particles.geometry.attributes.position.needsUpdate = true;
+        particles.rotation.y += 0.0005;
+
+        renderer.render(scene, camera);
+      }
+
+      animate();
+
+      // Handle resize
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });</script></body></html>
