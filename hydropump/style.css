@@ -49,6 +49,9 @@ body {
 /* Override for about page - enable pointer events for all interactive content */
 body:has(main .tabs-container) .content-layer {
   pointer-events: auto;
+  align-items: flex-start;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Water Gradient Text */
