@@ -1,0 +1,363 @@
+/* JingleCell Color Palette & Custom Styles */
+:root {
+  /* Brand Color Palette */
+  --festive-red: #d32f2f;
+  --festive-green: #388e3c;
+  --festive-gold: #fbc02d;
+  --festive-brown: #5d4037;
+  --festive-blue: #1976d2;
+  --dark-bg: #0a0a0a;
+
+  /* Gradients */
+  --christmas-gradient: linear-gradient(135deg, var(--festive-red), var(--festive-green));
+  --golden-glow: radial-gradient(circle at center, var(--festive-gold), var(--festive-brown));
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family:
+    "Montserrat",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  background: var(--dark-bg);
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-weight: 700;
+}
+
+/* Particles.js Canvas Background */
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, #0a0a0a 0%, #1a0f0f 50%, #0a0a0a 100%);
+}
+
+/* Content Layer */
+.content-layer {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+}
+
+/* Logo Festive Effect */
+.logo-festive {
+  position: relative;
+  width: 40vw;
+  max-width: 42rem;
+  height: auto;
+  filter: drop-shadow(0 0 20px var(--festive-gold)) drop-shadow(0 0 40px var(--festive-red))
+    drop-shadow(0 0 60px var(--festive-green));
+  animation: pulse-festive 3s ease-in-out infinite;
+}
+
+.logo-festive::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle at center, rgba(251, 192, 45, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+  animation: rotate-glow 8s linear infinite;
+}
+
+.logo-festive img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  border-radius: 20px;
+}
+
+@keyframes pulse-festive {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 20px var(--festive-gold)) drop-shadow(0 0 40px var(--festive-red))
+      drop-shadow(0 0 60px var(--festive-green));
+  }
+  50% {
+    filter: drop-shadow(0 0 30px var(--festive-gold)) drop-shadow(0 0 60px var(--festive-red))
+      drop-shadow(0 0 90px var(--festive-green));
+  }
+}
+
+@keyframes rotate-glow {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* JingleCell Button */
+.jingle-button {
+  position: relative;
+  background: var(--christmas-gradient);
+  color: #ffffff;
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  padding: 1rem 3rem;
+  border: 2px solid var(--festive-gold);
+  border-radius: 50px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow:
+    0 0 20px rgba(211, 47, 47, 0.5),
+    0 0 40px rgba(56, 142, 60, 0.3),
+    inset 0 0 20px rgba(251, 192, 45, 0.2);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.jingle-button:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow:
+    0 0 30px rgba(211, 47, 47, 0.8),
+    0 0 60px rgba(56, 142, 60, 0.5),
+    0 0 80px rgba(251, 192, 45, 0.4),
+    inset 0 0 30px rgba(251, 192, 45, 0.3);
+  border-color: #ffffff;
+}
+
+.jingle-button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.6s,
+    height 0.6s;
+}
+
+.jingle-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.jingle-button span {
+  position: relative;
+  z-index: 1;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Tagline */
+.tagline {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 300;
+  font-size: 1.5rem;
+  color: var(--festive-gold);
+  text-shadow:
+    0 0 10px rgba(251, 192, 45, 0.8),
+    0 0 20px rgba(211, 47, 47, 0.4);
+  letter-spacing: 0.1em;
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    text-shadow:
+      0 0 10px rgba(251, 192, 45, 0.8),
+      0 0 20px rgba(211, 47, 47, 0.4);
+  }
+  50% {
+    text-shadow:
+      0 0 20px rgba(251, 192, 45, 1),
+      0 0 30px rgba(211, 47, 47, 0.6),
+      0 0 40px rgba(56, 142, 60, 0.4);
+  }
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: var(--christmas-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 10px rgba(251, 192, 45, 0.5));
+}
+
+/* Back Button */
+.back-button {
+  background: transparent;
+  border: 2px solid var(--festive-gold);
+  color: var(--festive-gold);
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.back-button:hover {
+  background: var(--festive-gold);
+  color: var(--dark-bg);
+  box-shadow: 0 0 20px rgba(251, 192, 45, 0.6);
+  transform: translateX(-5px);
+}
+
+.back-button.small {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  padding: 0.35rem 0.6rem;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  border-width: 1px;
+  z-index: 30;
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+/* Slideshow Styles */
+.slideshow-section {
+  display: flex;
+  justify-content: center;
+}
+
+.slideshow-container {
+  position: relative;
+  width: 90vw;
+  height: 90vh;
+  max-width: 1400px;
+  max-height: 900px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(10, 10, 10, 0.6), rgba(26, 15, 15, 0.9));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.8),
+    0 0 60px rgba(251, 192, 45, 0.1) inset,
+    0 0 20px rgba(211, 47, 47, 0.1);
+  border: 2px solid rgba(251, 192, 45, 0.3);
+}
+
+.slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.slideshow-prev,
+.slideshow-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(251, 192, 45, 0.3);
+  color: #fff;
+  border: 2px solid var(--festive-gold);
+  width: 48px;
+  height: 64px;
+  font-size: 2.25rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+}
+
+.slideshow-prev {
+  left: 12px;
+}
+
+.slideshow-next {
+  right: 12px;
+}
+
+.slideshow-prev:hover,
+.slideshow-next:hover {
+  transform: translateY(-50%) scale(1.1);
+  background: rgba(251, 192, 45, 0.6);
+  box-shadow: 0 0 20px rgba(251, 192, 45, 0.8);
+}
+
+/* Floating Snowflakes Animation */
+@keyframes float-snow {
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-10px) translateX(5px);
+  }
+  50% {
+    transform: translateY(-5px) translateX(-5px);
+  }
+  75% {
+    transform: translateY(-15px) translateX(3px);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .logo-festive {
+    width: 60vw;
+    max-width: 250px;
+  }
+
+  .jingle-button {
+    font-size: 1.125rem;
+    padding: 0.875rem 2rem;
+  }
+
+  .tagline {
+    font-size: 1.125rem;
+  }
+
+  .slideshow-container {
+    width: 96vw;
+    height: 76vh;
+  }
+
+  .back-button.small {
+    top: 10px;
+    left: 10px;
+  }
+
+  .slideshow-prev,
+  .slideshow-next {
+    width: 40px;
+    height: 52px;
+    font-size: 1.75rem;
+  }
+}

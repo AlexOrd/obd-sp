@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Про проєкт JingleCell - інноваційну музичну скриньку на базі Arduino"
+    />
+    <title>JingleCell | Про проєкт</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;700&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'festive-red': '#D32F2F',
+              'festive-green': '#388E3C',
+              'festive-gold': '#FBC02D',
+              'festive-brown': '#5D4037',
+              'festive-blue': '#1976D2',
+              'dark-bg': '#0a0a0a',
+            },
+            fontFamily: {
+              montserrat: ['Montserrat', 'sans-serif'],
+              playfair: ['Playfair Display', 'serif'],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-dark-bg text-white">
+    <div id="particles-js"></div>
+    <div class="content-layer">
+      <main class="flex flex-col items-center justify-start min-h-screen px-4 py-12 w-full">
+        <div class="w-full max-w-6xl flex items-start mb-6">
+          <a href="index.html" class="back-button small" aria-label="Назад">←</a>
+        </div>
+        <header class="text-center mb-14">
+          <h1 class="text-5xl md:text-6xl font-playfair font-bold mb-4 gradient-text">
+            Проєкт JingleCell
+          </h1>
+          <p class="tagline">Музична Магія Нового Року</p>
+        </header>
+        <section class="w-full max-w-6xl mb-12 grid md:grid-cols-2 gap-8">
+          <div class="bg-dark-bg/60 backdrop-blur-sm border border-festive-red/30 rounded-2xl p-8">
+            <h2 class="text-3xl font-playfair font-bold text-festive-gold mb-4">Місія проєкту</h2>
+            <p class="text-lg text-gray-300 leading-relaxed">
+              Продемонструвати навички інженерії та програмування, створивши емоційний та
+              персоналізований різдвяний гаджет. JingleCell перетворює вручення подарунка на яскраве
+              інтерактивне шоу.
+            </p>
+          </div>
+          <div
+            class="bg-dark-bg/60 backdrop-blur-sm border border-festive-green/25 rounded-2xl p-8"
+          >
+            <h2 class="text-3xl font-playfair font-bold text-festive-green mb-4">
+              Ключові особливості
+            </h2>
+            <ul class="list-disc list-inside text-gray-300 space-y-2 text-base">
+              <li><strong>Технологічне серце:</strong> Працює на базі мікроконтролера Arduino</li>
+              <li>
+                <strong>Унікальний корпус:</strong> Спроектований та виготовлений за допомогою
+                3D-друку
+              </li>
+              <li><strong>Музичний супровід:</strong> Відтворює святкові мелодії</li>
+              <li>
+                <strong>Світлові ефекти:</strong> Динамічна LED-підсвітка створює атмосферу свята
+              </li>
+              <li><strong>Елемент сюрпризу:</strong> Прихована схованка всередині для подарунка</li>
+            </ul>
+          </div>
+        </section>
+        <section class="w-full max-w-6xl mb-16 grid md:grid-cols-3 gap-8">
+          <div class="bg-dark-bg/60 backdrop-blur-sm border border-festive-red/40 rounded-2xl p-6">
+            <h3 class="text-2xl font-playfair font-semibold text-festive-red mb-3">
+              Arduino & 3D-друк
+            </h3>
+            <p class="text-gray-300 text-sm leading-relaxed">
+              Мікроконтролер керує музичним супроводом, світловими ефектами та сенсорними входами.
+              Корпус створений за допомогою 3D-принтера для унікального дизайну.
+            </p>
+          </div>
+          <div class="bg-dark-bg/60 backdrop-blur-sm border border-festive-gold/40 rounded-2xl p-6">
+            <h3 class="text-2xl font-playfair font-semibold text-festive-gold mb-3">
+              Інтерактивність
+            </h3>
+            <p class="text-gray-300 text-sm leading-relaxed">
+              Світиться зсередини, відтворює новорічні мелодії та створює незабутню атмосферу
+              святкування для кожного отримувача подарунка.
+            </p>
+          </div>
+          <div
+            class="bg-dark-bg/60 backdrop-blur-sm border border-festive-green/40 rounded-2xl p-6"
+          >
+            <h3 class="text-2xl font-playfair font-semibold text-festive-green mb-3">
+              Персоналізація
+            </h3>
+            <p class="text-gray-300 text-sm leading-relaxed">
+              Можливість налаштування мелодій, світлових ефектів та розміщення реального подарунка
+              всередині музичної скриньки.
+            </p>
+          </div>
+        </section>
+        <section class="slideshow-section flex justify-center mb-20 w-full">
+          <div class="slideshow-container" id="slideshow">
+            <img src="assets/1.png" alt="Слайд JingleCell" class="slide-img" id="slide-image" />
+            <button class="slideshow-prev" id="slide-prev" aria-label="Попередній слайд">‹</button>
+            <button class="slideshow-next" id="slide-next" aria-label="Наступний слайд">›</button>
+          </div>
+        </section>
+        <footer class="text-center opacity-70 mb-4">
+          <p class="text-sm text-festive-gold">© 2025 Проєкт JingleCell</p>
+        </footer>
+      </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+      particlesJS('particles-js', {
+        particles: {
+          number: {
+            value: 100,
+            density: {
+              enable: true,
+              value_area: 800,
+            },
+          },
+          color: {
+            value: ['#ffffff', '#FBC02D', '#D32F2F', '#388E3C'],
+          },
+          shape: {
+            type: 'circle',
+          },
+          opacity: {
+            value: 0.6,
+            random: true,
+            anim: {
+              enable: true,
+              speed: 1,
+              opacity_min: 0.2,
+              sync: false,
+            },
+          },
+          size: {
+            value: 3,
+            random: true,
+            anim: {
+              enable: true,
+              speed: 2,
+              size_min: 1,
+              sync: false,
+            },
+          },
+          line_linked: {
+            enable: false,
+          },
+          move: {
+            enable: true,
+            speed: 1.5,
+            direction: 'bottom',
+            random: true,
+            straight: false,
+            out_mode: 'out',
+            bounce: false,
+          },
+        },
+        interactivity: {
+          detect_on: 'canvas',
+          events: {
+            onhover: {
+              enable: false,
+            },
+            onclick: {
+              enable: false,
+            },
+            resize: true,
+          },
+        },
+        retina_detect: true,
+      });
+    </script>
+    <script>
+      (function () {
+        const slideCount = 13;
+        const slides = Array.from({ length: slideCount }, (_, i) => `assets/${i + 1}.png`);
+        let idx = 0;
+        const imgEl = document.getElementById('slide-image');
+        const prevBtn = document.getElementById('slide-prev');
+        const nextBtn = document.getElementById('slide-next');
+        function show(i) {
+          idx = (i + slides.length) % slides.length;
+          imgEl.src = slides[idx];
+        }
+        prevBtn.addEventListener('click', () => {
+          show(idx - 1);
+          resetTimer();
+        });
+        nextBtn.addEventListener('click', () => {
+          show(idx + 1);
+          resetTimer();
+        });
+        let timer = setInterval(() => show(idx + 1), 4000);
+        function resetTimer() {
+          clearInterval(timer);
+          timer = setInterval(() => show(idx + 1), 4000);
+        }
+        const container = document.getElementById('slideshow');
+        container.addEventListener('mouseenter', () => clearInterval(timer));
+        container.addEventListener('mouseleave', () => resetTimer());
+        slides.forEach((s) => {
+          const i = new Image();
+          i.src = s;
+        });
+        show(0);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="JingleCell - Розумна музична скринька з Arduino для незабутнього новорічного свята"
+    />
+    <title>JingleCell | Новорічна Музична Магія</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;700&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Tailwind Custom Config -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'festive-red': '#D32F2F',
+              'festive-green': '#388E3C',
+              'festive-gold': '#FBC02D',
+              'festive-brown': '#5D4037',
+              'festive-blue': '#1976D2',
+              'dark-bg': '#0a0a0a',
+            },
+            fontFamily: {
+              montserrat: ['Montserrat', 'sans-serif'],
+              playfair: ['Playfair Display', 'serif'],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-dark-bg text-white">
+    <!-- Snowfall Canvas Background -->
+    <div id="particles-js"></div>
+
+    <!-- Main Content -->
+    <div class="content-layer">
+      <main class="flex flex-col items-center justify-center min-h-screen px-4 py-12">
+        <!-- CTA Button (moved above logo) -->
+        <a href="about.html" class="jingle-button mb-10">
+          <span>JingleCell</span>
+        </a>
+
+        <!-- Logo (centered) -->
+        <div class="logo-festive mb-12">
+          <img
+            src="./assets/logo.jpg"
+            alt="JingleCell Logo"
+            class="w-[40vw] max-w-xl h-auto mx-auto"
+          />
+        </div>
+
+        <!-- Tagline -->
+        <p class="tagline">Музична Магія Нового Року</p>
+      </main>
+    </div>
+
+    <!-- Particles.js Library -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+    <!-- Snowfall Animation Configuration -->
+    <script>
+      particlesJS('particles-js', {
+        particles: {
+          number: {
+            value: 150,
+            density: {
+              enable: true,
+              value_area: 800,
+            },
+          },
+          color: {
+            value: ['#ffffff', '#FBC02D', '#D32F2F', '#388E3C'],
+          },
+          shape: {
+            type: 'circle',
+            stroke: {
+              width: 0,
+              color: '#000000',
+            },
+          },
+          opacity: {
+            value: 0.8,
+            random: true,
+            anim: {
+              enable: true,
+              speed: 1,
+              opacity_min: 0.3,
+              sync: false,
+            },
+          },
+          size: {
+            value: 4,
+            random: true,
+            anim: {
+              enable: true,
+              speed: 2,
+              size_min: 1,
+              sync: false,
+            },
+          },
+          line_linked: {
+            enable: false,
+          },
+          move: {
+            enable: true,
+            speed: 2,
+            direction: 'bottom',
+            random: true,
+            straight: false,
+            out_mode: 'out',
+            bounce: false,
+            attract: {
+              enable: false,
+              rotateX: 600,
+              rotateY: 1200,
+            },
+          },
+        },
+        interactivity: {
+          detect_on: 'canvas',
+          events: {
+            onhover: {
+              enable: true,
+              mode: 'bubble',
+            },
+            onclick: {
+              enable: true,
+              mode: 'repulse',
+            },
+            resize: true,
+          },
+          modes: {
+            bubble: {
+              distance: 200,
+              size: 8,
+              duration: 2,
+              opacity: 1,
+              speed: 3,
+            },
+            repulse: {
+              distance: 150,
+              duration: 0.4,
+            },
+          },
+        },
+        retina_detect: true,
+      });
+    </script>
+  </body>
+</html>
