@@ -39,6 +39,12 @@ function initTabs() {
       if (targetContent) {
         targetContent.classList.add('active');
 
+        // Scroll to top smoothly
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+
         // Trigger audio feedback
         playTabSound();
 
