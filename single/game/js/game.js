@@ -3,6 +3,42 @@
  * STAR COMMAND ACADEMY - Game Page Interactivity
  * Handles tab switching, animations, and user interactions
  * ============================================================================
+ *
+ * GOOGLE ANALYTICS EVENTS TRACKED:
+ * ─────────────────────────────────────────────────────────────────────────
+ * 1. tab_click
+ *    - Tracks lesson/tab navigation (HOME, LESSON 1-4)
+ *    - Helps understand learning path progression
+ *    - Category: Navigation
+ *
+ * 2. lesson_link_click
+ *    - Tracks clicks on lesson links in home tab
+ *    - Shows user engagement with course overview
+ *    - Category: Learning
+ *
+ * 3. external_link_click
+ *    - Tracks clicks to external resources (MakeCode, GitHub, Gemini, etc.)
+ *    - Shows resource utilization
+ *    - Category: Outbound
+ *
+ * 4. page_view
+ *    - Tracks initial page load
+ *    - Basic engagement metric
+ *    - Category: Engagement
+ *
+ * 5. scroll_depth
+ *    - Tracks scroll milestones (25%, 50%, 75%, 100%)
+ *    - Shows content engagement depth
+ *    - Category: Engagement
+ *
+ * Best Practices Followed:
+ * • Event-based tracking (GA4 recommended approach)
+ * • Descriptive event names and labels
+ * • Consistent event categories
+ * • Non-intrusive tracking (doesn't impact UX)
+ * • Scroll depth fires only once per threshold
+ * • Tab tracking works with keyboard navigation too
+ * ============================================================================
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,7 +46,23 @@ document.addEventListener('DOMContentLoaded', () => {
   initCursorEffects();
   initAudioFeedback();
   initParallaxAnimation();
+  initExternalLinkTracking();
+  initLessonLinkTracking();
+  trackPageView();
 });
+
+/**
+ * ============================================================================
+ * GOOGLE ANALYTICS EVENT TRACKING
+ * ============================================================================
+ */
+
+function trackEvent(eventName, eventData = {}) {
+  if (typeof gtag !== 'undefined') {
+    // eslint-disable-next-line no-undef
+    gtag('event', eventName, eventData);
+  }
+}
 
 /**
  * ============================================================================
@@ -23,11 +75,12 @@ function initTabs() {
   const tabContents = document.querySelectorAll('.tab-content');
 
   tabButtons.forEach((button) => {
-    button.addEventListener('click', (e) => {
-      e.preventDefault();
+    button.addEventListener('click', (evt) => {
+      evt.preventDefault();
 
       // Get the target tab ID
       const targetTabId = button.getAttribute('data-tab');
+      const tabName = button.textContent.trim();
 
       // Remove active class from all buttons and contents
       tabButtons.forEach((btn) => btn.classList.remove('active'));
@@ -38,6 +91,13 @@ function initTabs() {
       const targetContent = document.getElementById(targetTabId);
       if (targetContent) {
         targetContent.classList.add('active');
+
+        // Track tab navigation event
+        trackEvent('tab_click', {
+          event_category: 'Navigation',
+          event_label: tabName,
+          tab_id: targetTabId,
+        });
 
         // Scroll to top smoothly
         window.scrollTo({
@@ -265,6 +325,134 @@ document.addEventListener('keydown', (e) => {
     tabButtons[tabButtons.length - 1].click();
   }
 });
+
+/**
+ * ============================================================================
+ * EXTERNAL LINK TRACKING
+ * ============================================================================
+ */
+
+function initExternalLinkTracking() {
+  const externalLinks = document.querySelectorAll('a[href^="http"], a[href^="https"]');
+
+  externalLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      const url = link.href;
+      const linkText = link.textContent.trim();
+      // eslint-disable-next-line no-undef
+      const domain = new URL(url).hostname;
+
+      trackEvent('external_link_click', {
+        event_category: 'Outbound',
+        event_label: linkText || domain,
+        link_url: domain,
+      });
+    });
+  });
+}
+
+/**
+ * ============================================================================
+ * LESSON LINK TRACKING (From home tab)
+ * ============================================================================
+ */
+
+function initLessonLinkTracking() {
+  const lessonLinks = document.querySelectorAll('.data-card a[onclick*="lesson"]');
+
+  lessonLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      const lessonText = link.textContent.trim();
+      const onclickAttr = link.getAttribute('onclick');
+      const lessonMatch = onclickAttr ? onclickAttr.match(/data-tab=lesson(\d)/) : null;
+      const lessonNumber = lessonMatch ? lessonMatch[1] : 'unknown';
+
+      trackEvent('lesson_link_click', {
+        event_category: 'Learning',
+        event_label: lessonText,
+        lesson_number: lessonNumber,
+      });
+    });
+  });
+}
+
+/**
+ * ============================================================================
+ * PAGE VIEW TRACKING
+ * ============================================================================
+ */
+
+function trackPageView() {
+  trackEvent('page_view', {
+    event_category: 'Engagement',
+    event_label: 'Game Page Loaded',
+    page_title: document.title,
+  });
+}
+
+/**
+ * ============================================================================
+ * SCROLL DEPTH TRACKING
+ * ============================================================================
+ */
+
+function initScrollDepthTracking() {
+  let scrolled25 = false;
+  let scrolled50 = false;
+  let scrolled75 = false;
+  let scrolled100 = false;
+
+  window.addEventListener('scroll', () => {
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+    const scrollTop = window.scrollY;
+
+    const scrollPercentage = (scrollTop + windowHeight) / documentHeight;
+
+    if (scrollPercentage > 0.25 && !scrolled25) {
+      scrolled25 = true;
+      trackEvent('scroll_depth', {
+        event_category: 'Engagement',
+        event_label: '25%',
+        scroll_depth: '25',
+      });
+    }
+
+    if (scrollPercentage > 0.5 && !scrolled50) {
+      scrolled50 = true;
+      trackEvent('scroll_depth', {
+        event_category: 'Engagement',
+        event_label: '50%',
+        scroll_depth: '50',
+      });
+    }
+
+    if (scrollPercentage > 0.75 && !scrolled75) {
+      scrolled75 = true;
+      trackEvent('scroll_depth', {
+        event_category: 'Engagement',
+        event_label: '75%',
+        scroll_depth: '75',
+      });
+    }
+
+    if (scrollPercentage > 0.95 && !scrolled100) {
+      scrolled100 = true;
+      trackEvent('scroll_depth', {
+        event_category: 'Engagement',
+        event_label: '100%',
+        scroll_depth: '100',
+      });
+    }
+  });
+}
+
+// Initialize scroll depth tracking
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initScrollDepthTracking);
+} else {
+  initScrollDepthTracking();
+}
 
 /**
  * ============================================================================
