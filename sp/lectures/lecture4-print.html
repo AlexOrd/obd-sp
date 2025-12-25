@@ -4,17 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-      Лекція 1: Огляд системного програмування | Спеціалізовані мови програмування
+      Лекція 4: Робота з терміналом, NASM, Makefiles | Спеціалізовані мови програмування
     </title>
 
     <!-- SEO Meta Tags -->
     <meta
       name="description"
-      content="Лекція 1: Огляд системного програмування. Курс: Спеціалізовані мови програмування. Викладач: Ординський Олександр, ВТФК Вінниця"
+      content="Лекція 4: Робота з терміналом, NASM, Makefiles. Курс: Спеціалізовані мови програмування. Викладач: Ординський Олександр, ВТФК Вінниця"
     />
     <meta
       name="keywords"
-      content="Огляд системного програмування, Спеціалізовані мови програмування, бази даних, SQL, програмування, лекція, ВТФК"
+      content="Робота з терміналом, NASM, Makefiles, Спеціалізовані мови програмування, бази даних, SQL, програмування, лекція, ВТФК"
     />
     <meta name="author" content="Alex Ordynski" />
     <meta name="robots" content="index, follow" />
@@ -22,7 +22,7 @@
     <!-- Open Graph Meta Tags -->
     <meta
       property="og:title"
-      content="Лекція 1: Огляд системного програмування"
+      content="Лекція 4: Робота з терміналом, NASM, Makefiles"
     />
     <meta
       property="og:description"
@@ -35,7 +35,7 @@
     <meta name="twitter:card" content="summary" />
     <meta
       name="twitter:title"
-      content="Лекція 1: Огляд системного програмування"
+      content="Лекція 4: Робота з терміналом, NASM, Makefiles"
     />
     <meta name="twitter:description" content="Спеціалізовані мови програмування" />
 
@@ -64,14 +64,28 @@
       <div class="slides">
 <!-- 1. Титульний слайд -->
 <section>
-  <h1 class="glitch" data-text="ЛЕКЦІЯ 1">ЛЕКЦІЯ 1</h1>
-  <h2>Огляд системного програмування</h2>
+  <h1 class="glitch" data-text="ЛЕКЦІЯ 4">ЛЕКЦІЯ 4</h1>
+  <h2>Робота з терміналом. Вступ до компілятора NASM та Makefiles</h2>
   <p style="margin-top: 20px; color: var(--cyber-yellow)">
     <strong>Спеціалізовані мови програмування</strong>
   </p>
   <p style="color: var(--cyber-cyan)">
     <em>VTFK • 2025</em>
   </p>
+</section>
+<!-- 3. Огляд попередньої лекції -->
+<section>
+  <h2>Що вже вивчили</h2>
+  <p style="color: var(--cyber-yellow); margin-bottom: 30px">
+    <strong>Лекція 3: Архітектура x86-64</strong>
+  </p>
+  <div style="margin-top: 30px">
+    <ul style="font-size: 1.1em; line-height: 1.8">
+      <li>Регістри та їх призначення</li>
+      <li>Пам'ять: стек та heap</li>
+      <li>Адресування та вказівники</li>
+    </ul>
+  </div>
 </section>
 <!-- 2. Дорожня карта (План лекції) -->
 <section>
@@ -97,28 +111,28 @@
           <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
           <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
         </svg>
-        <span>Системне програмування: визначення</span>
+        <span>Основні команди терміналу</span>
       </li>
       <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
           <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
         </svg>
-        <span>C, Rust, Assembly — порівняння</span>
+        <span>Встановлення NASM</span>
       </li>
       <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
           <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
         </svg>
-        <span>Архітектура комп'ютера</span>
+        <span>Компіляція та лінкування</span>
       </li>
       <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
           <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
         </svg>
-        <span>Навіщо вчити низькорівневе</span>
+        <span>Написання Makefile</span>
       </li>
     </ul>
   </div>
@@ -133,7 +147,7 @@
       <rect x="11" y="6" width="2" height="7" fill="#00f0ff" />
       <rect x="11" y="15" width="2" height="2" fill="#00f0ff" />
     </svg>
-    <em>Фокус: від теорії до практики</em>
+    <em>Фокус: інструменти розробки</em>
   </p>
 </section>
 <!-- 4. Ключове поняття / Визначення -->
@@ -150,7 +164,7 @@
       <rect x="13" y="7" width="4" height="4" fill="#ff00ff" />
       <rect x="7" y="13" width="10" height="2" fill="#fcee0a" />
     </svg>
-    Системне програмування
+    Асемблер NASM
   </h2>
   <div
     style="
@@ -173,9 +187,9 @@
         <rect x="4" y="4" width="16" height="16" fill="#fcee0a" />
         <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
       </svg>
-      System Programming
+      NASM (Netwide Assembler)
     </h3>
-    <p style="font-size: 1.1em; line-height: 1.6">Розробка програм, які взаємодіють прямо з апаратурою: операційні системи, драйвери, компілятори, базові утиліти.</p>
+    <p style="font-size: 1.1em; line-height: 1.6">Портативний асемблер для x86/x86-64, який перетворює Assembly код в машинний код.</p>
   </div>
   <div
     style="
@@ -195,311 +209,69 @@
     </svg>
     <p style="color: var(--cyber-cyan); margin: 0">
       <strong>Аналогія:</strong>
-      Як архітектор будівель розуміє не тільки дизайн, але й основу, фундамент, конструкцію
+      Як перекладач з англійської в китайську — Assembly для людини, машинний код для CPU
     </p>
   </div>
 </section>
 <!-- Content Slide -->
 <section>
-  <h2>Три рівні абстракції</h2>
+  <h2>Основні команди терміналу (macOS&#x2F;Linux)</h2>
   <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
   </div>
 </section>
-<!-- 8. Діаграма / Візуалізація (Mermaid) -->
-<section style="font-size: 1em">
-  <h2>Рівні програмування</h2>
-  <p style="margin-bottom: 25px; color: var(--cyber-cyan)">Абстракція і контроль</p>
-
-  <div class="mermaid-container" style="text-align: center; margin: 25px auto">
-    <div
-      class="mermaid"
-      style="background: transparent; border: none; display: inline-block; text-align: left"
-    >
-      %%{init: {"theme": "neutral", "mermaid": {"version": "11.12.2"}}}%%
-graph LR
-  App["Додатки<br/>Python, JS"] -->|calls| OS["ОС<br/>Linux/Windows<br/>C, Rust"]
-  OS -->|calls| HW["Апаратура<br/>Assembly<br/>x86-64"]
-  
-  Dev1["High-level"] -.-> App
-  Dev2["System-level"] -.-> OS
-  Dev3["Low-level"] -.-> HW
-  
-  style App fill:#E5F3FF
-  style OS fill:#FFE5E5
-  style HW fill:#FFE5FF
-    </div>
-  </div>
-</section>
-<!-- Table Slide -->
+<!-- 6. Приклад коду -->
 <section>
-  <h2>Мови системного програмування</h2>
-  <div style="margin-top: 20px; overflow-x: auto">
-    <table style="width: 100%; border-collapse: collapse; font-size: 0.7em">
-      <thead>
-        <tr>
-          <th
-            style="
-              border: 2px solid var(--cyber-cyan);
-              padding: 10px;
-              background: rgba(0, 240, 255, 0.1);
-              color: var(--cyber-yellow);
-              text-transform: uppercase;
-              text-align: left;
-            "
-          >
-            Мова
-          </th>
-          <th
-            style="
-              border: 2px solid var(--cyber-cyan);
-              padding: 10px;
-              background: rgba(0, 240, 255, 0.1);
-              color: var(--cyber-yellow);
-              text-transform: uppercase;
-              text-align: left;
-            "
-          >
-            Рівень
-          </th>
-          <th
-            style="
-              border: 2px solid var(--cyber-cyan);
-              padding: 10px;
-              background: rgba(0, 240, 255, 0.1);
-              color: var(--cyber-yellow);
-              text-transform: uppercase;
-              text-align: left;
-            "
-          >
-            Безпека
-          </th>
-          <th
-            style="
-              border: 2px solid var(--cyber-cyan);
-              padding: 10px;
-              background: rgba(0, 240, 255, 0.1);
-              color: var(--cyber-yellow);
-              text-transform: uppercase;
-              text-align: left;
-            "
-          >
-            Продуктивність
-          </th>
-          <th
-            style="
-              border: 2px solid var(--cyber-cyan);
-              padding: 10px;
-              background: rgba(0, 240, 255, 0.1);
-              color: var(--cyber-yellow);
-              text-transform: uppercase;
-              text-align: left;
-            "
-          >
-            Крива навчання
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="border-bottom: 1px solid var(--cyber-cyan)">
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            C
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Низький
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Ручна
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Дуже висока
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Висока
-          </td>
-        </tr>
-        <tr style="border-bottom: 1px solid var(--cyber-cyan)">
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Rust
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Низький
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Автоматична
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Висока
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Дуже висока
-          </td>
-        </tr>
-        <tr style="border-bottom: 1px solid var(--cyber-cyan)">
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Assembly
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Дуже низький
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Немає
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Максимальна
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Найвища
-          </td>
-        </tr>
-        <tr style="border-bottom: 1px solid var(--cyber-cyan)">
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Python
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Високий
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Автоматична
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Низька
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Низька
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Практичні команди
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    День на день
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-bash"># Навігація
+pwd              # /Users/alex/dev
+ls -la           # Список з прихованими файлами
+cd ~/projects    # Home directory
+cd ..            # Батьківська папка
+
+# Роботи з файлами
+cat main.asm     # Показати вміст
+touch hello.asm  # Новий файл
+mkdir src        # Нова папка
+cp main.asm backup.asm  # Копіювання
+rm backup.asm    # Видалення</code></pre>
 </section>
 <!-- Content Slide -->
 <section>
-  <h2>Який файл як вибрати?</h2>
+  <h2>Встановлення NASM</h2>
   <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
   </div>
 </section>
-<!-- 6. Приклад коду -->
-<section>
-  <h2>
-    <svg
-      width="32"
-      height="32"
-      viewBox="0 0 24 24"
-      style="vertical-align: middle; margin-right: 12px"
-    >
-      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
-      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
-      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
-    </svg>
-    Той самий код: три мови
-  </h2>
-  <p
-    style="
-      margin-bottom: 20px;
-      color: var(--cyber-cyan);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    "
-  >
-    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
-      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
-      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
-    </svg>
-    Додавання двох чисел
-  </p>
-  <pre style="font-size: 1.15em"><code class="language-c">// C: контроль над всім
-#include <stdio.h>
-
-int main() {
-    int a = 5, b = 3;
-    int sum = a + b;  // + в C = одна машинна інструкція
-    printf("%d\n", sum);
-    return 0;
-}
-
-// Результат: 8</code></pre>
-</section>
-<!-- 6. Приклад коду -->
-<section>
-  <h2>
-    <svg
-      width="32"
-      height="32"
-      viewBox="0 0 24 24"
-      style="vertical-align: middle; margin-right: 12px"
-    >
-      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
-      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
-      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
-    </svg>
-    Той самий код: Rust
-  </h2>
-  <p
-    style="
-      margin-bottom: 20px;
-      color: var(--cyber-cyan);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    "
-  >
-    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
-      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
-      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
-    </svg>
-    Безпечніше, але більше синтаксису
-  </p>
-  <pre style="font-size: 1.15em"><code class="language-rust">// Rust: безпека + контроль
-fn main() {
-    let a = 5;
-    let b = 3;
-    let sum = a + b;  // Компілятор перевіряє типи
-    println!("{}", sum);
-}
-
-// Результат: 8</code></pre>
-</section>
-<!-- 6. Приклад коду -->
-<section>
-  <h2>
-    <svg
-      width="32"
-      height="32"
-      viewBox="0 0 24 24"
-      style="vertical-align: middle; margin-right: 12px"
-    >
-      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
-      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
-      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
-    </svg>
-    Той самий код: Assembly (x86-64)
-  </h2>
-  <p
-    style="
-      margin-bottom: 20px;
-      color: var(--cyber-cyan);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    "
-  >
-    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
-      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
-      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
-    </svg>
-    Машина говорить нам
-  </p>
-  <pre style="font-size: 1.15em"><code class="language-nasm">; Assembly: абсолютний контроль
-mov rax, 5      ; rax = 5
-mov rbx, 3      ; rbx = 3
-add rax, rbx    ; rax = rax + rbx (8)
-; Результат у rax: 8</code></pre>
-</section>
 <!-- 8. Діаграма / Візуалізація (Mermaid) -->
 <section style="font-size: 1em">
-  <h2>Як код стає бітами</h2>
-  <p style="margin-bottom: 25px; color: var(--cyber-cyan)">Шлях компіляції</p>
+  <h2>Pipeline: код → виконавець</h2>
+  <p style="margin-bottom: 25px; color: var(--cyber-cyan)">Як Assembly стає програмою</p>
 
   <div class="mermaid-container" style="text-align: center; margin: 25px auto">
     <div
@@ -508,50 +280,235 @@ add rax, rbx    ; rax = rax + rbx (8)
     >
       %%{init: {"theme": "neutral", "mermaid": {"version": "11.12.2"}}}%%
 flowchart LR
-  Source["C код<br/>main.c"] --> Compiler["Компілятор<br/>gcc/clang"]
-  Compiler --> ASM["Assembly<br/>main.s"]
-  ASM --> Assembler["Асемблер<br/>as"]
-  Assembler --> OBJ["Об'єктний файл<br/>main.o"]
-  OBJ --> Linker["Лінкер<br/>ld"]
-  Linker --> BIN["Виконавець<br/>./main"]
-  BIN --> CPU["CPU<br/>виконує"]
+  SOURCE["main.asm<br/>Assembly код"] --> NASM["nasm<br/>Асемблер"]
+  NASM --> OBJ["main.o<br/>Об'єктний файл<br/>(машинний код)"]
+  OBJ --> LINKER["ld<br/>Лінкер"]
+  LINKER --> EXE["./main<br/>Виконавець"]
+  EXE --> RUN["./main<br/>Результат"]
   
-  style Source fill:#E5F3FF
-  style BIN fill:#FFE5E5
-  style CPU fill:#FFE5FF
+  style SOURCE fill:#E5F3FF
+  style EXE fill:#FFE5E5
+  style RUN fill:#E5FFE5
     </div>
   </div>
 </section>
-<!-- List Slide -->
+<!-- 6. Приклад коду -->
 <section>
-  <h2>Чому системне програмування важливо?</h2>
-  <div style="text-align: left; margin-top: 20px">
-    <ul style="font-size: 0.85em; line-height: 1.6">
-      <li style="margin-bottom: 10px; color: var(--cyber-light)">
-        <span style="color: var(--cyber-cyan)"></span>
-      </li>
-      <li style="margin-bottom: 10px; color: var(--cyber-light)">
-        <span style="color: var(--cyber-cyan)"></span>
-      </li>
-      <li style="margin-bottom: 10px; color: var(--cyber-light)">
-        <span style="color: var(--cyber-cyan)"></span>
-      </li>
-      <li style="margin-bottom: 10px; color: var(--cyber-light)">
-        <span style="color: var(--cyber-cyan)"></span>
-      </li>
-    </ul>
-  </div>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Hello World в Assembly (64-bit macOS)
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Мінімальна програма
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-nasm">; hello.asm - Hello World
+section .data
+    msg db "Hello, World!", 0
+
+section .text
+    global _main  ; точка входу для macOS
+
+_main:
+    mov rax, 0x2000004  ; syscall: write
+    mov rdi, 1          ; stdout
+    mov rsi, msg        ; адреса повідомлення
+    mov rdx, 13         ; довжина
+    syscall
+    
+    mov rax, 0x2000001  ; syscall: exit
+    mov rdi, 0
+    syscall</code></pre>
 </section>
 <!-- Content Slide -->
 <section>
-  <h2>Архітектура: коротко</h2>
+  <h2>Компіляція вручну</h2>
   <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
   </div>
+</section>
+<!-- 4. Ключове поняття / Визначення -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="3" y="3" width="18" height="18" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="7" y="7" width="4" height="4" fill="#00f0ff" />
+      <rect x="13" y="7" width="4" height="4" fill="#ff00ff" />
+      <rect x="7" y="13" width="10" height="2" fill="#fcee0a" />
+    </svg>
+    Makefile
+  </h2>
+  <div
+    style="
+      background: rgba(252, 238, 10, 0.1);
+      border-left: 4px solid var(--cyber-yellow);
+      padding: 20px;
+      margin: 30px 0;
+    "
+  >
+    <h3
+      style="
+        color: var(--cyber-yellow);
+        margin-top: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      "
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <rect x="4" y="4" width="16" height="16" fill="#fcee0a" />
+        <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+      </svg>
+      Makefile
+    </h3>
+    <p style="font-size: 1.1em; line-height: 1.6">Файл, що описує як компілювати проект: залежності, команди, мета (target).</p>
+  </div>
+  <div
+    style="
+      margin-top: 30px;
+      padding: 15px;
+      background: rgba(0, 240, 255, 0.05);
+      border: 1px solid var(--cyber-cyan);
+      display: flex;
+      gap: 12px;
+      align-items: start;
+    "
+  >
+    <svg width="28" height="28" viewBox="0 0 24 24" style="flex-shrink: 0; margin-top: 2px">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <rect x="11" y="6" width="2" height="2" fill="#fcee0a" />
+      <path d="M10,10 L10,17 L14,17 L14,10 Z" fill="#00f0ff" />
+    </svg>
+    <p style="color: var(--cyber-cyan); margin: 0">
+      <strong>Аналогія:</strong>
+      Як рецепт готування: 'якщо A змінилось, перебудувати B, потім запустити C'
+    </p>
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Простий Makefile
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Автоматизація компіляції
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-makefile"># Makefile для Assembly проекту
+CC = nasm
+LD = ld
+FLAGS = -f macho64
+
+all: hello
+
+hello: hello.o
+	$(LD) -lSystem -o hello hello.o
+
+hello.o: hello.asm
+	$(CC) $(FLAGS) hello.asm -o hello.o
+
+clean:
+	rm -f hello.o hello
+
+.PHONY: all clean</code></pre>
+</section>
+<!-- Content Slide -->
+<section>
+  <h2>Синтаксис Makefile</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Запуск make
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Приклади команд
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-bash"># Побудувати все (за замовчуванням перший target)
+make
+
+# Побудувати конкретна мета
+make hello.o
+
+# Очистити побудовані файли
+make clean
+
+# Примусова перебудова (навіть якщо файли не змінилися)
+make -B all</code></pre>
 </section>
 <!-- Quiz Slide (Cyberpunk Theme) -->
 <section class="quiz-slide">
   <h2>Міні-вікторина</h2>
-  <h3 style="margin-bottom: 30px; color: var(--cyber-cyan); font-size: 1.3em">Яка різниця між C та Assembly?</h3>
+  <h3 style="margin-bottom: 30px; color: var(--cyber-cyan); font-size: 1.3em">Яка різниця між .o та виконавцем?</h3>
 
   <ul style="list-style: none; font-size: 1.1em; padding: 0">
     <li
@@ -565,7 +522,7 @@ flowchart LR
         transition: all 0.3s ease;
       "
     >
-      Немає — Assembly швидше
+      .o — об&#39;єктний код без адрес, exe — лінковані адреси
     </li>
     <li
       class="fragment quiz-option"
@@ -578,7 +535,7 @@ flowchart LR
         transition: all 0.3s ease;
       "
     >
-      C — переносима, Assembly — архітектурна
+      .o — більший файл
     </li>
     <li
       class="fragment quiz-option"
@@ -591,7 +548,7 @@ flowchart LR
         transition: all 0.3s ease;
       "
     >
-      Assembly безпечніший
+      Немає різниці
     </li>
   </ul>
 
@@ -608,7 +565,7 @@ flowchart LR
       letter-spacing: 0.5px;
     "
   >
-    ✅ Правильна відповідь: C — переносима, Assembly — архітектурна
+    ✅ Правильна відповідь: .o — об&#39;єктний код без адрес, exe — лінковані адреси
   </div>
   <div
     class="fragment quiz-explanation"
@@ -621,12 +578,12 @@ flowchart LR
     "
   >
     <strong style="color: var(--cyber-yellow); font-size: 1.2em">💡 Пояснення:</strong>
-    <p style="margin-top: 10px; color: var(--cyber-text)">Assembly для x86-64 не працює на ARM. C — зв&#39;язок між логікою та машиною.</p>
+    <p style="margin-top: 10px; color: var(--cyber-text)">.o — готовий машинний код, але функції мають відносні адреси. Лінкер розміщує їх в памяти і фіксує адреси.</p>
   </div>
 </section>
         <!-- 11. Часта помилка / Застереження -->
         <section style="font-size: 0.9em">
-          <h2>Помилка: мислити &#39;C &#x3D; Assembly&#39;</h2>
+          <h2>Помилка: пробіли замість TAB в Makefile</h2>
           <div
             style="
               background: rgba(255, 0, 60, 0.1);
@@ -636,7 +593,7 @@ flowchart LR
             "
           >
             <h3 style="color: var(--cyber-red); margin-top: 0">⚠️ ЗАСТЕРЕЖЕННЯ</h3>
-            <p style="font-size: 1em; line-height: 1.5">C часто простіший, ніж Assembly, та переносимий</p>
+            <p style="font-size: 1em; line-height: 1.5">Makefile дуже щепетлив до форматування</p>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px">
@@ -644,28 +601,43 @@ flowchart LR
               <h3 style="color: var(--cyber-red); text-align: center; font-size: 1em">❌ Неправильно</h3>
               <pre
                 style="font-size: 1.15em"
-              ><code class="language-c">// Я писатиму Assembly
-// щоб мій код був швидшим
-int c_version() { return 5 + 3; }</code></pre>
+              ><code class="language-makefile">hello.o: hello.asm
+    nasm -f macho64 hello.asm -o hello.o  # пробілами</code></pre>
               <p style="color: var(--cyber-red); font-size: 0.85em; margin-top: 12px">
-                Сучасні компілятори (gcc -O3) генерують ідентичний Assembly
+                Помилка: make: *** missing separator.  Stop.
               </p>
             </div>
             <div>
               <h3 style="color: #00ff00; text-align: center; font-size: 1em">✓ Правильно</h3>
               <pre
                 style="font-size: 1.15em"
-              ><code class="language-c">// Пиши на C/Rust першим
-// Оптимізуй тільки вузькі місця
-// Профілюй інструментами: perf, valgrind</code></pre>
-              <p style="color: #00ff00; font-size: 0.85em; margin-top: 12px">Правило 80/20: 80% часу у 20% коду</p>
+              ><code class="language-makefile">hello.o: hello.asm
+	nasm -f macho64 hello.asm -o hello.o  # TAB символ</code></pre>
+              <p style="color: #00ff00; font-size: 0.85em; margin-top: 12px">Команда має починатися с символу TAB (не 4 пробілів!)</p>
             </div>
           </div>
         </section>
-<!-- Content Slide -->
+<!-- List Slide -->
 <section>
-  <h2>Модулі цього курсу</h2>
-  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  <h2>Етапи розробки Assembly програми</h2>
+  <div style="text-align: left; margin-top: 20px">
+    <ul style="font-size: 0.85em; line-height: 1.6">
+      <li style="margin-bottom: 10px; color: var(--cyber-light)">
+        <span style="color: var(--cyber-cyan)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--cyber-light)">
+        <span style="color: var(--cyber-cyan)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--cyber-light)">
+        <span style="color: var(--cyber-cyan)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--cyber-light)">
+        <span style="color: var(--cyber-cyan)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--cyber-light)">
+        <span style="color: var(--cyber-cyan)"></span>
+      </li>
+    </ul>
   </div>
 </section>
 <!-- 12. Підсумок / Ключові висновки -->
@@ -693,7 +665,7 @@ int c_version() { return 5 + 3; }</code></pre>
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
         </svg>
-        <span>Системне програмування — взаємодія з апаратурою</span>
+        <span>NASM: асемблер для переведення Assembly → машинний код</span>
       </li>
       <li
         class="fragment highlight-cyber"
@@ -702,7 +674,7 @@ int c_version() { return 5 + 3; }</code></pre>
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
         </svg>
-        <span>C — компроміс між контролем і переносимістю</span>
+        <span>Makefile: автоматизує компіляцію та лінкування</span>
       </li>
       <li
         class="fragment highlight-cyber"
@@ -711,7 +683,7 @@ int c_version() { return 5 + 3; }</code></pre>
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
         </svg>
-        <span>Rust — сучасна альтернатива з гарантіями безпеки</span>
+        <span>Pipeline: .asm → .o (NASM) → exe (ld)</span>
       </li>
     </ul>
   </div>
@@ -732,7 +704,7 @@ int c_version() { return 5 + 3; }</code></pre>
       <rect x="10" y="6" width="3" height="10" fill="#fcee0a" />
       <rect x="16" y="4" width="3" height="12" fill="#ff00ff" />
     </svg>
-    <em>Далі — системи числення</em>
+    <em>Далі — основи NASM: секції, інструкції, пам'ять</em>
     <svg width="24" height="24" viewBox="0 0 24 24">
       <rect x="4" y="8" width="3" height="8" fill="#ff00ff" />
       <rect x="10" y="6" width="3" height="10" fill="#fcee0a" />
@@ -753,17 +725,17 @@ int c_version() { return 5 + 3; }</code></pre>
             "
           >
             <h3 style="color: var(--cyber-yellow); margin-top: 0; font-size: 1em">Наступна лекція:</h3>
-            <p style="font-size: 1em">Лекція 2: Системи числення</p>
+            <p style="font-size: 1em">Лекція 5: Основи NASM</p>
           </div>
           <div style="margin-top: 30px">
             <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
             <ul style="font-size: 0.9em; line-height: 1.7">
               <li>
-                <a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Systems_programming" style="color: var(--cyber-cyan)">The Art of Computer Systems Programming</a>
+                <a href="https:&#x2F;&#x2F;www.nasm.us&#x2F;doc&#x2F;" style="color: var(--cyber-cyan)">NASM Manual</a>
                  
               </li>
               <li>
-                <a href="https:&#x2F;&#x2F;www.rust-lang.org&#x2F;what&#x2F;why-rust&#x2F;" style="color: var(--cyber-cyan)">Why Rust?</a>
+                <a href="https:&#x2F;&#x2F;www.gnu.org&#x2F;software&#x2F;make&#x2F;manual&#x2F;" style="color: var(--cyber-cyan)">GNU Make Manual</a>
                  
               </li>
             </ul>
@@ -772,11 +744,11 @@ int c_version() { return 5 + 3; }</code></pre>
             <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
             <ul style="font-size: 0.9em; line-height: 1.7">
               <li>
-                <a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Systems_programming" style="color: var(--cyber-cyan)">The Art of Computer Systems Programming</a>
+                <a href="https:&#x2F;&#x2F;www.nasm.us&#x2F;doc&#x2F;" style="color: var(--cyber-cyan)">NASM Manual</a>
                  
               </li>
               <li>
-                <a href="https:&#x2F;&#x2F;www.rust-lang.org&#x2F;what&#x2F;why-rust&#x2F;" style="color: var(--cyber-cyan)">Why Rust?</a>
+                <a href="https:&#x2F;&#x2F;www.gnu.org&#x2F;software&#x2F;make&#x2F;manual&#x2F;" style="color: var(--cyber-cyan)">GNU Make Manual</a>
                  
               </li>
             </ul>

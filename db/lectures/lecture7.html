@@ -1,0 +1,1172 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Лекція 7: SELECT та вбудовані функції | Основи баз даних
+    </title>
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="Лекція 7: SELECT та вбудовані функції. Курс: Основи баз даних. Викладач: Ординський Олександр, ВТФК Вінниця"
+    />
+    <meta
+      name="keywords"
+      content="SELECT та вбудовані функції, Основи баз даних, бази даних, SQL, програмування, лекція, ВТФК"
+    />
+    <meta name="author" content="Alex Ordynski" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta
+      property="og:title"
+      content="Лекція 7: SELECT та вбудовані функції"
+    />
+    <meta
+      property="og:description"
+      content="Основи баз даних. Викладач: Ординський Олександр, ВТФК Вінниця"
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="uk_UA" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="Лекція 7: SELECT та вбудовані функції"
+    />
+    <meta name="twitter:description" content="Основи баз даних" />
+
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.css" />
+
+    <!-- Highlight.js Theme (Monokai) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css"
+    />
+
+    <!-- ШРИФТИ (HARRY POTTER + КИРИЛИЦЯ) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=EB+Garamond:wght@400;700&family=Courier+Prime:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom Harry Potter Theme -->
+    <link rel="stylesheet" href="../css/harry-potter-theme.css" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+<!-- 1. Титульний слайд -->
+<section>
+  <h1 class="glitch" data-text="ЛЕКЦІЯ 7">ЛЕКЦІЯ 7</h1>
+  <h2>SELECT та вбудовані функції</h2>
+  <p style="margin-top: 20px; color: var(--cyber-yellow)">
+    <strong>Основи баз даних</strong>
+  </p>
+  <p style="color: var(--cyber-cyan)">
+    <em>VTFK • 2025</em>
+  </p>
+</section>
+<!-- 3. Огляд попередньої лекції -->
+<section>
+  <h2>Що вже вивчили</h2>
+  <p style="color: var(--cyber-yellow); margin-bottom: 30px">
+    <strong>Лекція 6: Вступ до SQL</strong>
+  </p>
+  <div style="margin-top: 30px">
+    <ul style="font-size: 1.1em; line-height: 1.8">
+      <li>SELECT та FROM</li>
+      <li>Декларативний підхід</li>
+      <li>Коментарі та синтаксис</li>
+    </ul>
+  </div>
+</section>
+<!-- 2. Дорожня карта (План лекції) -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <path
+        d="M3,6 L3,10 L7,10 L7,6 Z M10,4 L10,12 L14,12 L14,4 Z M17,8 L17,14 L21,14 L21,8 Z"
+        fill="#fcee0a"
+      />
+      <rect x="3" y="18" width="18" height="2" fill="#00f0ff" />
+    </svg>
+    План лекції
+  </h2>
+  <div style="margin-top: 40px">
+    <ul style="list-style: none; font-size: 1.2em; line-height: 2; padding-left: 0">
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>Функції у SELECT</span>
+      </li>
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>Рядкові та математичні функції</span>
+      </li>
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>Агрегатні функції</span>
+      </li>
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>Перейменування (AS)</span>
+      </li>
+    </ul>
+  </div>
+  <p style="margin-top: 40px; color: var(--cyber-cyan); font-size: 0.9em; opacity: 0.8">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 8px"
+    >
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <rect x="11" y="6" width="2" height="7" fill="#00f0ff" />
+      <rect x="11" y="15" width="2" height="2" fill="#00f0ff" />
+    </svg>
+    <em>Фокус: трансформувати дані прямо у запиті</em>
+  </p>
+</section>
+<!-- Content Slide (DB Theme) -->
+<section>
+  <h2>Функції в SQL</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  </div>
+</section>
+<!-- 4. Ключове поняття / Визначення -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="3" y="3" width="18" height="18" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="7" y="7" width="4" height="4" fill="#00f0ff" />
+      <rect x="13" y="7" width="4" height="4" fill="#ff00ff" />
+      <rect x="7" y="13" width="10" height="2" fill="#fcee0a" />
+    </svg>
+    Функція у SQL
+  </h2>
+  <div
+    style="
+      background: rgba(252, 238, 10, 0.1);
+      border-left: 4px solid var(--cyber-yellow);
+      padding: 20px;
+      margin: 30px 0;
+    "
+  >
+    <h3
+      style="
+        color: var(--cyber-yellow);
+        margin-top: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      "
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <rect x="4" y="4" width="16" height="16" fill="#fcee0a" />
+        <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+      </svg>
+      SQL Function
+    </h3>
+    <p style="font-size: 1.1em; line-height: 1.6">Вбудована процедура, яка приймає вхідні параметри та повертає результат.</p>
+  </div>
+  <div
+    style="
+      margin-top: 30px;
+      padding: 15px;
+      background: rgba(0, 240, 255, 0.05);
+      border: 1px solid var(--cyber-cyan);
+      display: flex;
+      gap: 12px;
+      align-items: start;
+    "
+  >
+    <svg width="28" height="28" viewBox="0 0 24 24" style="flex-shrink: 0; margin-top: 2px">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <rect x="11" y="6" width="2" height="2" fill="#fcee0a" />
+      <path d="M10,10 L10,17 L14,17 L14,10 Z" fill="#00f0ff" />
+    </svg>
+    <p style="color: var(--cyber-cyan); margin: 0">
+      <strong>Аналогія:</strong>
+      Як функція у математиці: f(x) = 2*x, але в базах даних
+    </p>
+  </div>
+</section>
+<!-- 8. Діаграма / Візуалізація (Mermaid) -->
+<section style="font-size: 1em">
+  <h2>Категорії функцій</h2>
+  <p style="margin-bottom: 25px; color: var(--hp-gold)">Три основні групи</p>
+
+  <div class="mermaid-container" style="text-align: center; margin: 25px auto">
+    <div
+      class="mermaid"
+      style="background: transparent; border: none; display: inline-block; text-align: left"
+    >
+      %%{init: {"theme": "neutral", "mermaid": {"version": "11.12.2"}}}%%
+graph TB
+  Functions[SQL Functions]
+  Functions --> Scalar[Скалярні]
+  Functions --> Aggregate[Агрегатні]
+  Functions --> Window[Віконні]
+  Scalar --> String[Рядкові]
+  Scalar --> Math[Математичні]
+  Scalar --> Date[Часові]
+  Aggregate --> COUNT
+  Aggregate --> SUM
+  Aggregate --> AVG
+    </div>
+  </div>
+</section>
+<!-- Table Slide (DB Theme) -->
+<section>
+  <h2>Рядкові функції</h2>
+  <div style="margin-top: 20px; overflow-x: auto">
+    <table
+      style="
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.75em;
+        background: var(--hp-parchment);
+      "
+    >
+      <thead>
+        <tr>
+          <th
+            style="
+              border: 2px solid var(--hp-gold);
+              padding: 10px;
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
+              text-transform: uppercase;
+              text-align: left;
+              letter-spacing: 0.04em;
+            "
+          >
+            Функція
+          </th>
+          <th
+            style="
+              border: 2px solid var(--hp-gold);
+              padding: 10px;
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
+              text-transform: uppercase;
+              text-align: left;
+              letter-spacing: 0.04em;
+            "
+          >
+            Приклад
+          </th>
+          <th
+            style="
+              border: 2px solid var(--hp-gold);
+              padding: 10px;
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
+              text-transform: uppercase;
+              text-align: left;
+              letter-spacing: 0.04em;
+            "
+          >
+            Результат
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            UPPER(str)
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            UPPER('hello')
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            HELLO
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            LOWER(str)
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            LOWER('WORLD')
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            world
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            LENGTH(str)
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            LENGTH('SQL')
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            3
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            SUBSTR(str,pos,len)
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            SUBSTR('Database', 1, 4)
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Data
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            CONCAT(s1,s2)
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            CONCAT('Hello',' World')
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Hello World
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            TRIM(str)
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            TRIM('  text  ')
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            text
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Рядкові функції у SELECT
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Трансформуємо імена
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">SELECT 
+  id,
+  UPPER(name) AS upper_name,
+  LOWER(name) AS lower_name,
+  LENGTH(name) AS name_length,
+  SUBSTR(email, 1, 5) AS email_prefix
+FROM users;</code></pre>
+</section>
+<!-- List Slide (DB Theme) -->
+<section>
+  <h2>Математичні функції</h2>
+  <div style="text-align: left; margin-top: 20px">
+    <ul style="font-size: 0.85em; line-height: 1.6">
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+    </ul>
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Математичні обчислення
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    З прайсом та знижками
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">SELECT 
+  id,
+  product_name,
+  price,
+  quantity,
+  price * quantity AS total,
+  ROUND(price * 0.9, 2) AS discounted_price,
+  ROUND(ABS(price - 100), 2) AS diff_from_100
+FROM products;</code></pre>
+</section>
+<!-- Table Slide (DB Theme) -->
+<section>
+  <h2>Агрегатні функції</h2>
+  <div style="margin-top: 20px; overflow-x: auto">
+    <table
+      style="
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.75em;
+        background: var(--hp-parchment);
+      "
+    >
+      <thead>
+        <tr>
+          <th
+            style="
+              border: 2px solid var(--hp-gold);
+              padding: 10px;
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
+              text-transform: uppercase;
+              text-align: left;
+              letter-spacing: 0.04em;
+            "
+          >
+            Функція
+          </th>
+          <th
+            style="
+              border: 2px solid var(--hp-gold);
+              padding: 10px;
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
+              text-transform: uppercase;
+              text-align: left;
+              letter-spacing: 0.04em;
+            "
+          >
+            Назва
+          </th>
+          <th
+            style="
+              border: 2px solid var(--hp-gold);
+              padding: 10px;
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
+              text-transform: uppercase;
+              text-align: left;
+              letter-spacing: 0.04em;
+            "
+          >
+            Приклад
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            COUNT(*)
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Кількість рядків
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            COUNT(*) FROM users
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            COUNT(col)
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Неоткл значення
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            COUNT(email) FROM users
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            SUM(col)
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Сума
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            SUM(amount) FROM orders
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            AVG(col)
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Середнє
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            AVG(price) FROM products
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            MAX(col)
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Максимум
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            MAX(salary) FROM employees
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            MIN(col)
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Мінімум
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            MIN(created_at) FROM posts
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<!-- Content Slide (DB Theme) -->
+<section>
+  <h2>Важне про агрегатні функції</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Агрегатні запити
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Аналіз даних
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">-- Статистика по всій таблиці
+SELECT 
+  COUNT(*) AS total_orders,
+  SUM(amount) AS total_revenue,
+  AVG(amount) AS avg_order,
+  MAX(amount) AS biggest_order,
+  MIN(amount) AS smallest_order
+FROM orders;</code></pre>
+</section>
+<!-- Quiz Slide (Harry Potter Theme) -->
+<section class="quiz-slide">
+  <h2>Міні-вікторина</h2>
+  <h3 style="margin-bottom: 30px; color: var(--hp-scarlet); font-size: 1.3em">Що повертає COUNT(*)?</h3>
+
+  <ul style="list-style: none; font-size: 1.1em; padding: 0">
+    <li
+      class="fragment quiz-option"
+      style="
+        padding: 20px;
+        margin: 15px 0;
+        border: 3px solid var(--hp-gold);
+        border-radius: 8px;
+        background: rgba(244, 228, 193, 0.3);
+        transition: all 0.3s ease;
+      "
+    >
+      Кількість колонок
+    </li>
+    <li
+      class="fragment quiz-option"
+      style="
+        padding: 20px;
+        margin: 15px 0;
+        border: 3px solid var(--hp-gold);
+        border-radius: 8px;
+        background: rgba(244, 228, 193, 0.3);
+        transition: all 0.3s ease;
+      "
+    >
+      Кількість рядків у таблиці
+    </li>
+    <li
+      class="fragment quiz-option"
+      style="
+        padding: 20px;
+        margin: 15px 0;
+        border: 3px solid var(--hp-gold);
+        border-radius: 8px;
+        background: rgba(244, 228, 193, 0.3);
+        transition: all 0.3s ease;
+      "
+    >
+      Кількість NULL значень
+    </li>
+  </ul>
+
+  <div
+    class="fragment quiz-highlight"
+    style="
+      margin-top: 25px;
+      padding: 16px 20px;
+      border: 2px solid var(--hp-gold);
+      border-radius: 10px;
+      background: rgba(211, 166, 37, 0.12);
+      color: var(--hp-scarlet);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    "
+  >
+    ✅ Правильна відповідь: Кількість рядків у таблиці
+  </div>
+  <div
+    class="fragment quiz-explanation"
+    style="
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(211, 166, 37, 0.1);
+      border-left: 4px solid var(--hp-gold);
+      border-radius: 4px;
+    "
+  >
+    <strong style="color: var(--hp-gold); font-size: 1.2em">💡 Пояснення:</strong>
+    <p style="margin-top: 10px; color: var(--hp-ink)">COUNT(*) лічить всі рядки, включаючи NULL.</p>
+  </div>
+</section>
+<!-- 4. Ключове поняття / Визначення -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="3" y="3" width="18" height="18" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="7" y="7" width="4" height="4" fill="#00f0ff" />
+      <rect x="13" y="7" width="4" height="4" fill="#ff00ff" />
+      <rect x="7" y="13" width="10" height="2" fill="#fcee0a" />
+    </svg>
+    Перейменування з AS
+  </h2>
+  <div
+    style="
+      background: rgba(252, 238, 10, 0.1);
+      border-left: 4px solid var(--cyber-yellow);
+      padding: 20px;
+      margin: 30px 0;
+    "
+  >
+    <h3
+      style="
+        color: var(--cyber-yellow);
+        margin-top: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      "
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <rect x="4" y="4" width="16" height="16" fill="#fcee0a" />
+        <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+      </svg>
+      Column Alias
+    </h3>
+    <p style="font-size: 1.1em; line-height: 1.6">Тимчасова назва для колонки у SELECT результатах.</p>
+  </div>
+  <div
+    style="
+      margin-top: 30px;
+      padding: 15px;
+      background: rgba(0, 240, 255, 0.05);
+      border: 1px solid var(--cyber-cyan);
+      display: flex;
+      gap: 12px;
+      align-items: start;
+    "
+  >
+    <svg width="28" height="28" viewBox="0 0 24 24" style="flex-shrink: 0; margin-top: 2px">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <rect x="11" y="6" width="2" height="2" fill="#fcee0a" />
+      <path d="M10,10 L10,17 L14,17 L14,10 Z" fill="#00f0ff" />
+    </svg>
+    <p style="color: var(--cyber-cyan); margin: 0">
+      <strong>Аналогія:</strong>
+      Як прізвисько: реальне ім'я = колонка, прізвисько = AS
+    </p>
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Використання AS
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Зробляємо результати зрозумілішими
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">SELECT 
+  id AS user_id,
+  first_name || ' ' || last_name AS full_name,
+  email AS contact_email,
+  price * quantity AS total_spent
+FROM users;</code></pre>
+</section>
+        <!-- 11. Часта помилка / Застереження -->
+        <section style="font-size: 0.9em">
+          <h2>Помилка: неправильна функція</h2>
+          <div
+            style="
+              background: rgba(255, 0, 60, 0.1);
+              border: 3px solid var(--cyber-red);
+              padding: 25px;
+              margin: 25px 0;
+            "
+          >
+            <h3 style="color: var(--cyber-red); margin-top: 0">⚠️ ЗАСТЕРЕЖЕННЯ</h3>
+            <p style="font-size: 1em; line-height: 1.5">Функція без правильного синтаксису</p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px">
+            <div>
+              <h3 style="color: var(--cyber-red); text-align: center; font-size: 1em">❌ Неправильно</h3>
+              <pre
+                style="font-size: 1.15em"
+              ><code class="language-sql">SELECT name, length(name) FROM users;  -- lowercase</code></pre>
+              <p style="color: var(--cyber-red); font-size: 0.85em; margin-top: 12px">
+                Деякі БД чутливі до регістру функцій
+              </p>
+            </div>
+            <div>
+              <h3 style="color: #00ff00; text-align: center; font-size: 1em">✓ Правильно</h3>
+              <pre
+                style="font-size: 1.15em"
+              ><code class="language-sql">SELECT name, LENGTH(name) FROM users;  -- UPPERCASE</code></pre>
+              <p style="color: #00ff00; font-size: 0.85em; margin-top: 12px">Явно UPPERCASE для портативності</p>
+            </div>
+          </div>
+        </section>
+<!-- Timeline Slide (Harry Potter Theme) -->
+<section style="font-size: 0.9em">
+  <h2>Еволюція функцій у SQL</h2>
+  <p style="margin-bottom: 30px; color: var(--hp-gold); font-style: italic">Від простих до складних</p>
+
+  <div class="timeline-horizontal">
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="background: var(--hp-gold);"
+      >
+        <span class="timeline-year">1974</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">SQL-86</h3>
+        <p class="timeline-description">Базові COUNT, SUM, AVG</p>
+      </div>
+    </div>
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="background: var(--hp-gold);"
+      >
+        <span class="timeline-year">1992</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">SQL-92</h3>
+        <p class="timeline-description">Рядкові та математичні</p>
+      </div>
+    </div>
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="background: var(--hp-gold);"
+      >
+        <span class="timeline-year">2003</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">SQL:2003</h3>
+        <p class="timeline-description">Віконні функції</p>
+      </div>
+    </div>
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="background: var(--hp-gold);"
+      >
+        <span class="timeline-year">2025</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">Сьогодні</h3>
+        <p class="timeline-description">JSON, XML, AI функції</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- List Slide (DB Theme) -->
+<section>
+  <h2>Best practices для функцій</h2>
+  <div style="text-align: left; margin-top: 20px">
+    <ul style="font-size: 0.85em; line-height: 1.6">
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+    </ul>
+  </div>
+</section>
+<!-- Content Slide (DB Theme) -->
+<section>
+  <h2>Міні ТЗ: аналіз продажів</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Комплексний приклад
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Кілька функцій разом
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">SELECT 
+  COUNT(*) AS total_users,
+  ROUND(AVG(age), 1) AS avg_age,
+  MAX(created_at) AS newest_user,
+  MIN(created_at) AS oldest_user,
+  UPPER(SUBSTR(country, 1, 2)) AS country_code
+FROM users
+WHERE active = true;</code></pre>
+</section>
+<!-- 12. Підсумок / Ключові висновки -->
+<section>
+  <h2 class="glitch" data-text="Підсумки">
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="3" y="3" width="8" height="8" fill="#fcee0a" />
+      <rect x="13" y="3" width="8" height="8" fill="#00f0ff" />
+      <rect x="3" y="13" width="8" height="8" fill="#ff00ff" />
+      <rect x="13" y="13" width="8" height="8" fill="#fcee0a" />
+    </svg>
+    Підсумки
+  </h2>
+  <div style="margin-top: 50px">
+    <ul style="list-style: none; font-size: 1.15em; line-height: 2.2; padding-left: 0">
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>Функції трансформують дані у SELECT</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>AS робить результати зрозумілішими</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>Агрегатні функції звужують результати</span>
+      </li>
+    </ul>
+  </div>
+  <p
+    style="
+      margin-top: 50px;
+      text-align: center;
+      color: var(--cyber-cyan);
+      font-size: 1.1em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    "
+  >
+    <svg width="24" height="24" viewBox="0 0 24 24">
+      <rect x="4" y="8" width="3" height="8" fill="#00f0ff" />
+      <rect x="10" y="6" width="3" height="10" fill="#fcee0a" />
+      <rect x="16" y="4" width="3" height="12" fill="#ff00ff" />
+    </svg>
+    <em>Далі — WHERE для фільтрації</em>
+    <svg width="24" height="24" viewBox="0 0 24 24">
+      <rect x="4" y="8" width="3" height="8" fill="#ff00ff" />
+      <rect x="10" y="6" width="3" height="10" fill="#fcee0a" />
+      <rect x="16" y="4" width="3" height="12" fill="#00f0ff" />
+    </svg>
+  </p>
+</section>
+        <!-- 13. Наступні кроки та ресурси -->
+        <section style="font-size: 0.9em">
+          <h2>Домашнє завдання</h2>
+
+          <div
+            style="
+              background: rgba(252, 238, 10, 0.1);
+              border-left: 4px solid var(--cyber-yellow);
+              padding: 18px;
+              margin: 25px 0;
+            "
+          >
+            <h3 style="color: var(--cyber-yellow); margin-top: 0; font-size: 1em">Наступна лекція:</h3>
+            <p style="font-size: 1em">Лекція 8: WHERE Filtering</p>
+          </div>
+          <div style="margin-top: 30px">
+            <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
+            <ul style="font-size: 0.9em; line-height: 1.7">
+              <li>
+                <a href="https:&#x2F;&#x2F;www.sqlite.org&#x2F;lang_aggfunc.html" style="color: var(--cyber-cyan)">SQLite functions</a>
+                 
+              </li>
+              <li>
+                <a href="https:&#x2F;&#x2F;www.postgresql.org&#x2F;docs&#x2F;current&#x2F;functions.html" style="color: var(--cyber-cyan)">PostgreSQL functions</a>
+                 
+              </li>
+            </ul>
+          </div>
+          <div style="margin-top: 30px">
+            <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
+            <ul style="font-size: 0.9em; line-height: 1.7">
+              <li>
+                <a href="https:&#x2F;&#x2F;www.sqlite.org&#x2F;lang_aggfunc.html" style="color: var(--cyber-cyan)">SQLite functions</a>
+                 
+              </li>
+              <li>
+                <a href="https:&#x2F;&#x2F;www.postgresql.org&#x2F;docs&#x2F;current&#x2F;functions.html" style="color: var(--cyber-cyan)">PostgreSQL functions</a>
+                 
+              </li>
+            </ul>
+          </div>
+
+          <p style="margin-top: 40px; text-align: center; color: var(--cyber-yellow); font-size: 1.2em">
+            <strong>Дякую за увагу! 💾</strong>
+          </p>
+
+          <p style="text-align: center; color: var(--cyber-cyan); margin-top: 18px; font-size: 0.95em">
+            <a href="../index.html">← Повернутися до списку лекцій</a>
+          </p>
+        </section>
+      </div>
+    </div>
+
+    <!-- Reveal.js -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.js"></script>
+
+    <!-- Reveal.js Plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/highlight/highlight.js"></script>
+
+    <!-- Mermaid.js (non-module for compatibility) -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <script>
+      const getMermaidConfig = () => {
+        const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+        const mono = prefersDark ? '#ffffff' : '#000000';
+
+        return {
+          startOnLoad: false,
+          theme: 'neutral',
+          themeVariables: {
+            fontSize: '18px',
+            fontFamily: 'EB Garamond, serif',
+            background: 'transparent',
+            mainBkg: 'transparent',
+            secondBkg: 'transparent',
+            primaryColor: 'transparent',
+            secondaryColor: 'transparent',
+            tertiaryColor: 'transparent',
+            primaryBorderColor: mono,
+            clusterBorder: mono,
+            clusterBkg: 'transparent',
+            lineColor: mono,
+            edgeLabelBackground: 'transparent',
+            primaryTextColor: mono,
+            labelTextColor: mono,
+            nodeTextColor: mono,
+            titleColor: mono,
+          },
+        };
+      };
+
+      if (window.mermaid) {
+        window.mermaid.initialize(getMermaidConfig());
+      }
+    </script>
+
+    <!-- Initialize Reveal.js -->
+    <script>
+      Reveal.initialize({
+        hash: true,
+        slideNumber: true,
+        controls: true,
+        progress: true,
+        center: true,
+        transition: 'slide',
+
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+
+      // Initialize Mermaid diagrams when Reveal is ready
+      Reveal.on('ready', () => {
+        if (window.mermaid) {
+          window.mermaid.run({
+            querySelector: '.mermaid',
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

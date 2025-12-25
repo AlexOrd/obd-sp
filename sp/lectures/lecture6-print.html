@@ -4,17 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-      Лекція 1: Огляд системного програмування | Спеціалізовані мови програмування
+      Лекція 6: Арифметичні інструкції | Спеціалізовані мови програмування
     </title>
 
     <!-- SEO Meta Tags -->
     <meta
       name="description"
-      content="Лекція 1: Огляд системного програмування. Курс: Спеціалізовані мови програмування. Викладач: Ординський Олександр, ВТФК Вінниця"
+      content="Лекція 6: Арифметичні інструкції. Курс: Спеціалізовані мови програмування. Викладач: Ординський Олександр, ВТФК Вінниця"
     />
     <meta
       name="keywords"
-      content="Огляд системного програмування, Спеціалізовані мови програмування, бази даних, SQL, програмування, лекція, ВТФК"
+      content="Арифметичні інструкції, Спеціалізовані мови програмування, бази даних, SQL, програмування, лекція, ВТФК"
     />
     <meta name="author" content="Alex Ordynski" />
     <meta name="robots" content="index, follow" />
@@ -22,7 +22,7 @@
     <!-- Open Graph Meta Tags -->
     <meta
       property="og:title"
-      content="Лекція 1: Огляд системного програмування"
+      content="Лекція 6: Арифметичні інструкції"
     />
     <meta
       property="og:description"
@@ -35,7 +35,7 @@
     <meta name="twitter:card" content="summary" />
     <meta
       name="twitter:title"
-      content="Лекція 1: Огляд системного програмування"
+      content="Лекція 6: Арифметичні інструкції"
     />
     <meta name="twitter:description" content="Спеціалізовані мови програмування" />
 
@@ -64,14 +64,28 @@
       <div class="slides">
 <!-- 1. Титульний слайд -->
 <section>
-  <h1 class="glitch" data-text="ЛЕКЦІЯ 1">ЛЕКЦІЯ 1</h1>
-  <h2>Огляд системного програмування</h2>
+  <h1 class="glitch" data-text="ЛЕКЦІЯ 6">ЛЕКЦІЯ 6</h1>
+  <h2>Арифметичні інструкції (ADD, SUB, INC, DEC)</h2>
   <p style="margin-top: 20px; color: var(--cyber-yellow)">
     <strong>Спеціалізовані мови програмування</strong>
   </p>
   <p style="color: var(--cyber-cyan)">
     <em>VTFK • 2025</em>
   </p>
+</section>
+<!-- 3. Огляд попередньої лекції -->
+<section>
+  <h2>Що вже вивчили</h2>
+  <p style="color: var(--cyber-yellow); margin-bottom: 30px">
+    <strong>Лекція 5: Основи NASM</strong>
+  </p>
+  <div style="margin-top: 30px">
+    <ul style="font-size: 1.1em; line-height: 1.8">
+      <li>Секції: .text, .data, .bss</li>
+      <li>Інструкція MOV</li>
+      <li>RIP-relative адресація</li>
+    </ul>
+  </div>
 </section>
 <!-- 2. Дорожня карта (План лекції) -->
 <section>
@@ -97,28 +111,28 @@
           <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
           <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
         </svg>
-        <span>Системне програмування: визначення</span>
+        <span>ADD: додавання</span>
       </li>
       <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
           <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
         </svg>
-        <span>C, Rust, Assembly — порівняння</span>
+        <span>SUB: віднімання</span>
       </li>
       <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
           <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
         </svg>
-        <span>Архітектура комп'ютера</span>
+        <span>INC/DEC: збільшення/зменшення</span>
       </li>
       <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
           <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
         </svg>
-        <span>Навіщо вчити низькорівневе</span>
+        <span>Прапорці (flags)</span>
       </li>
     </ul>
   </div>
@@ -133,7 +147,7 @@
       <rect x="11" y="6" width="2" height="7" fill="#00f0ff" />
       <rect x="11" y="15" width="2" height="2" fill="#00f0ff" />
     </svg>
-    <em>Фокус: від теорії до практики</em>
+    <em>Фокус: перша математика в Assembly</em>
   </p>
 </section>
 <!-- 4. Ключове поняття / Визначення -->
@@ -150,7 +164,7 @@
       <rect x="13" y="7" width="4" height="4" fill="#ff00ff" />
       <rect x="7" y="13" width="10" height="2" fill="#fcee0a" />
     </svg>
-    Системне програмування
+    Арифметичні інструкції
   </h2>
   <div
     style="
@@ -173,9 +187,9 @@
         <rect x="4" y="4" width="16" height="16" fill="#fcee0a" />
         <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
       </svg>
-      System Programming
+      Arithmetic Instructions
     </h3>
-    <p style="font-size: 1.1em; line-height: 1.6">Розробка програм, які взаємодіють прямо з апаратурою: операційні системи, драйвери, компілятори, базові утиліти.</p>
+    <p style="font-size: 1.1em; line-height: 1.6">Набір інструкцій для математичних операцій: додавання, віднімання, множення. Встановлюють прапорці ZF, CF, OF.</p>
   </div>
   <div
     style="
@@ -195,20 +209,20 @@
     </svg>
     <p style="color: var(--cyber-cyan); margin: 0">
       <strong>Аналогія:</strong>
-      Як архітектор будівель розуміє не тільки дизайн, але й основу, фундамент, конструкцію
+      Як калькулятор: операція + результат + индикатори (overflow, zero)
     </p>
   </div>
 </section>
 <!-- Content Slide -->
 <section>
-  <h2>Три рівні абстракції</h2>
+  <h2>Основні арифметичні операції</h2>
   <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
   </div>
 </section>
 <!-- 8. Діаграма / Візуалізація (Mermaid) -->
 <section style="font-size: 1em">
-  <h2>Рівні програмування</h2>
-  <p style="margin-bottom: 25px; color: var(--cyber-cyan)">Абстракція і контроль</p>
+  <h2>Арифметичні операції та прапорці</h2>
+  <p style="margin-bottom: 25px; color: var(--cyber-cyan)">Результат впливає на ZF, CF</p>
 
   <div class="mermaid-container" style="text-align: center; margin: 25px auto">
     <div
@@ -216,23 +230,24 @@
       style="background: transparent; border: none; display: inline-block; text-align: left"
     >
       %%{init: {"theme": "neutral", "mermaid": {"version": "11.12.2"}}}%%
-graph LR
-  App["Додатки<br/>Python, JS"] -->|calls| OS["ОС<br/>Linux/Windows<br/>C, Rust"]
-  OS -->|calls| HW["Апаратура<br/>Assembly<br/>x86-64"]
+flowchart LR
+  ADD["ADD rax, 5"] --> EXEC["rax += 5"]
+  EXEC --> FLAGS["Встановлюються прапорці"]
+  FLAGS --> ZF{"ZF=1?<br/>Result=0?"}
+  FLAGS --> CF{"CF=1?<br/>Overflow?"}
+  FLAGS --> SF{"SF=1?<br/>Negative?"}
   
-  Dev1["High-level"] -.-> App
-  Dev2["System-level"] -.-> OS
-  Dev3["Low-level"] -.-> HW
+  ZF -->|Так| ZERO["Результат нуль"]
+  ZF -->|Ні| NONZERO["Результат ≠ нуль"]
   
-  style App fill:#E5F3FF
-  style OS fill:#FFE5E5
-  style HW fill:#FFE5FF
+  style ADD fill:#E5F3FF
+  style FLAGS fill:#FFE5E5
     </div>
   </div>
 </section>
 <!-- Table Slide -->
 <section>
-  <h2>Мови системного програмування</h2>
+  <h2>Арифметичні інструкції</h2>
   <div style="margin-top: 20px; overflow-x: auto">
     <table style="width: 100%; border-collapse: collapse; font-size: 0.7em">
       <thead>
@@ -247,7 +262,7 @@ graph LR
               text-align: left;
             "
           >
-            Мова
+            Інструкція
           </th>
           <th
             style="
@@ -259,7 +274,7 @@ graph LR
               text-align: left;
             "
           >
-            Рівень
+            Операція
           </th>
           <th
             style="
@@ -271,7 +286,7 @@ graph LR
               text-align: left;
             "
           >
-            Безпека
+            Приклад
           </th>
           <th
             style="
@@ -283,101 +298,99 @@ graph LR
               text-align: left;
             "
           >
-            Продуктивність
-          </th>
-          <th
-            style="
-              border: 2px solid var(--cyber-cyan);
-              padding: 10px;
-              background: rgba(0, 240, 255, 0.1);
-              color: var(--cyber-yellow);
-              text-transform: uppercase;
-              text-align: left;
-            "
-          >
-            Крива навчання
+            Прапорці?
           </th>
         </tr>
       </thead>
       <tbody>
         <tr style="border-bottom: 1px solid var(--cyber-cyan)">
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            C
+            ADD
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Низький
+            rax += src
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Ручна
+            add rax, 5
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Дуже висока
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Висока
+            Так (ZF, CF, OF)
           </td>
         </tr>
         <tr style="border-bottom: 1px solid var(--cyber-cyan)">
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Rust
+            SUB
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Низький
+            rax -= src
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Автоматична
+            sub rbx, rcx
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Висока
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Дуже висока
+            Так (ZF, CF, OF)
           </td>
         </tr>
         <tr style="border-bottom: 1px solid var(--cyber-cyan)">
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Assembly
+            INC
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Дуже низький
+            rax += 1
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Немає
+            inc r8
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Максимальна
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Найвища
+            Так (крім CF)
           </td>
         </tr>
         <tr style="border-bottom: 1px solid var(--cyber-cyan)">
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Python
+            DEC
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Високий
+            rax -= 1
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Автоматична
+            dec rdx
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Низька
+            Так (крім CF)
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--cyber-cyan)">
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            NEG
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Низька
+            rax = -rax
+          </td>
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            neg rax
+          </td>
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            Так (ZF, CF, OF)
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--cyber-cyan)">
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            IMUL
+          </td>
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            rax *= src (signed)
+          </td>
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            imul rax, 3
+          </td>
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            Так (CF, OF)
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </section>
-<!-- Content Slide -->
-<section>
-  <h2>Який файл як вибрати?</h2>
-  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
-  </div>
-</section>
 <!-- 6. Приклад коду -->
 <section>
   <h2>
@@ -391,7 +404,7 @@ graph LR
       <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
       <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
     </svg>
-    Той самий код: три мови
+    Приклади: базові операції
   </h2>
   <p
     style="
@@ -406,152 +419,31 @@ graph LR
       <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
       <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
     </svg>
-    Додавання двох чисел
+    Від просто до складного
   </p>
-  <pre style="font-size: 1.15em"><code class="language-c">// C: контроль над всім
-#include <stdio.h>
+  <pre style="font-size: 1.15em"><code class="language-nasm">mov rax, 10
+add rax, 5      ; rax = 15
 
-int main() {
-    int a = 5, b = 3;
-    int sum = a + b;  // + в C = одна машинна інструкція
-    printf("%d\n", sum);
-    return 0;
-}
+mov rbx, 20
+sub rbx, 3      ; rbx = 17
 
-// Результат: 8</code></pre>
-</section>
-<!-- 6. Приклад коду -->
-<section>
-  <h2>
-    <svg
-      width="32"
-      height="32"
-      viewBox="0 0 24 24"
-      style="vertical-align: middle; margin-right: 12px"
-    >
-      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
-      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
-      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
-    </svg>
-    Той самий код: Rust
-  </h2>
-  <p
-    style="
-      margin-bottom: 20px;
-      color: var(--cyber-cyan);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    "
-  >
-    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
-      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
-      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
-    </svg>
-    Безпечніше, але більше синтаксису
-  </p>
-  <pre style="font-size: 1.15em"><code class="language-rust">// Rust: безпека + контроль
-fn main() {
-    let a = 5;
-    let b = 3;
-    let sum = a + b;  // Компілятор перевіряє типи
-    println!("{}", sum);
-}
+inc rcx         ; rcx += 1
+inc rcx         ; rcx += 1
 
-// Результат: 8</code></pre>
-</section>
-<!-- 6. Приклад коду -->
-<section>
-  <h2>
-    <svg
-      width="32"
-      height="32"
-      viewBox="0 0 24 24"
-      style="vertical-align: middle; margin-right: 12px"
-    >
-      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
-      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
-      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
-    </svg>
-    Той самий код: Assembly (x86-64)
-  </h2>
-  <p
-    style="
-      margin-bottom: 20px;
-      color: var(--cyber-cyan);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    "
-  >
-    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
-      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
-      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
-    </svg>
-    Машина говорить нам
-  </p>
-  <pre style="font-size: 1.15em"><code class="language-nasm">; Assembly: абсолютний контроль
-mov rax, 5      ; rax = 5
-mov rbx, 3      ; rbx = 3
-add rax, rbx    ; rax = rax + rbx (8)
-; Результат у rax: 8</code></pre>
-</section>
-<!-- 8. Діаграма / Візуалізація (Mermaid) -->
-<section style="font-size: 1em">
-  <h2>Як код стає бітами</h2>
-  <p style="margin-bottom: 25px; color: var(--cyber-cyan)">Шлях компіляції</p>
+dec rdx         ; rdx -= 1
 
-  <div class="mermaid-container" style="text-align: center; margin: 25px auto">
-    <div
-      class="mermaid"
-      style="background: transparent; border: none; display: inline-block; text-align: left"
-    >
-      %%{init: {"theme": "neutral", "mermaid": {"version": "11.12.2"}}}%%
-flowchart LR
-  Source["C код<br/>main.c"] --> Compiler["Компілятор<br/>gcc/clang"]
-  Compiler --> ASM["Assembly<br/>main.s"]
-  ASM --> Assembler["Асемблер<br/>as"]
-  Assembler --> OBJ["Об'єктний файл<br/>main.o"]
-  OBJ --> Linker["Лінкер<br/>ld"]
-  Linker --> BIN["Виконавець<br/>./main"]
-  BIN --> CPU["CPU<br/>виконує"]
-  
-  style Source fill:#E5F3FF
-  style BIN fill:#FFE5E5
-  style CPU fill:#FFE5FF
-    </div>
-  </div>
-</section>
-<!-- List Slide -->
-<section>
-  <h2>Чому системне програмування важливо?</h2>
-  <div style="text-align: left; margin-top: 20px">
-    <ul style="font-size: 0.85em; line-height: 1.6">
-      <li style="margin-bottom: 10px; color: var(--cyber-light)">
-        <span style="color: var(--cyber-cyan)"></span>
-      </li>
-      <li style="margin-bottom: 10px; color: var(--cyber-light)">
-        <span style="color: var(--cyber-cyan)"></span>
-      </li>
-      <li style="margin-bottom: 10px; color: var(--cyber-light)">
-        <span style="color: var(--cyber-cyan)"></span>
-      </li>
-      <li style="margin-bottom: 10px; color: var(--cyber-light)">
-        <span style="color: var(--cyber-cyan)"></span>
-      </li>
-    </ul>
-  </div>
+neg r8          ; r8 = -r8 (якщо r8 був 5, тепер -5)</code></pre>
 </section>
 <!-- Content Slide -->
 <section>
-  <h2>Архітектура: коротко</h2>
+  <h2>Прапорці: стан після операції</h2>
   <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
   </div>
 </section>
 <!-- Quiz Slide (Cyberpunk Theme) -->
 <section class="quiz-slide">
   <h2>Міні-вікторина</h2>
-  <h3 style="margin-bottom: 30px; color: var(--cyber-cyan); font-size: 1.3em">Яка різниця між C та Assembly?</h3>
+  <h3 style="margin-bottom: 30px; color: var(--cyber-cyan); font-size: 1.3em">Яке значення ZF після: add rax, 0 (коли rax&#x3D;5)?</h3>
 
   <ul style="list-style: none; font-size: 1.1em; padding: 0">
     <li
@@ -565,7 +457,7 @@ flowchart LR
         transition: all 0.3s ease;
       "
     >
-      Немає — Assembly швидше
+      ZF&#x3D;0 (результат 5, не нуль)
     </li>
     <li
       class="fragment quiz-option"
@@ -578,7 +470,7 @@ flowchart LR
         transition: all 0.3s ease;
       "
     >
-      C — переносима, Assembly — архітектурна
+      ZF&#x3D;1 (додавання зробило 0)
     </li>
     <li
       class="fragment quiz-option"
@@ -591,7 +483,7 @@ flowchart LR
         transition: all 0.3s ease;
       "
     >
-      Assembly безпечніший
+      ZF не змінюється
     </li>
   </ul>
 
@@ -608,7 +500,7 @@ flowchart LR
       letter-spacing: 0.5px;
     "
   >
-    ✅ Правильна відповідь: C — переносима, Assembly — архітектурна
+    ✅ Правильна відповідь: ZF&#x3D;0 (результат 5, не нуль)
   </div>
   <div
     class="fragment quiz-explanation"
@@ -621,12 +513,12 @@ flowchart LR
     "
   >
     <strong style="color: var(--cyber-yellow); font-size: 1.2em">💡 Пояснення:</strong>
-    <p style="margin-top: 10px; color: var(--cyber-text)">Assembly для x86-64 не працює на ARM. C — зв&#39;язок між логікою та машиною.</p>
+    <p style="margin-top: 10px; color: var(--cyber-text)">ZF встановлюється залежно від результату. 5+0&#x3D;5, тому ZF&#x3D;0.</p>
   </div>
 </section>
         <!-- 11. Часта помилка / Застереження -->
         <section style="font-size: 0.9em">
-          <h2>Помилка: мислити &#39;C &#x3D; Assembly&#39;</h2>
+          <h2>Помилка: забути про CF та OF</h2>
           <div
             style="
               background: rgba(255, 0, 60, 0.1);
@@ -636,7 +528,7 @@ flowchart LR
             "
           >
             <h3 style="color: var(--cyber-red); margin-top: 0">⚠️ ЗАСТЕРЕЖЕННЯ</h3>
-            <p style="font-size: 1em; line-height: 1.5">C часто простіший, ніж Assembly, та переносимий</p>
+            <p style="font-size: 1em; line-height: 1.5">ADD/SUB мають побічні ефекти (встановлюють прапорці)</p>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px">
@@ -644,28 +536,89 @@ flowchart LR
               <h3 style="color: var(--cyber-red); text-align: center; font-size: 1em">❌ Неправильно</h3>
               <pre
                 style="font-size: 1.15em"
-              ><code class="language-c">// Я писатиму Assembly
-// щоб мій код був швидшим
-int c_version() { return 5 + 3; }</code></pre>
+              ><code class="language-nasm">mov rax, 0xFFFFFFFFFFFFFFFF
+add rax, 1      ; rax = 0, CF = 1 (переповнення!)
+jz end          ; JZ перевіряє ZF, не помічає переповнення</code></pre>
               <p style="color: var(--cyber-red); font-size: 0.85em; margin-top: 12px">
-                Сучасні компілятори (gcc -O3) генерують ідентичний Assembly
+                CF (переповнення) і ZF (нуль) — різні прапорці
               </p>
             </div>
             <div>
               <h3 style="color: #00ff00; text-align: center; font-size: 1em">✓ Правильно</h3>
               <pre
                 style="font-size: 1.15em"
-              ><code class="language-c">// Пиши на C/Rust першим
-// Оптимізуй тільки вузькі місця
-// Профілюй інструментами: perf, valgrind</code></pre>
-              <p style="color: #00ff00; font-size: 0.85em; margin-top: 12px">Правило 80/20: 80% часу у 20% коду</p>
+              ><code class="language-nasm">mov rax, 0xFFFFFFFFFFFFFFFF
+add rax, 1      ; rax = 0, CF = 1, ZF = 1
+jc overflow     ; JC перевіряє CF (переповнення)
+jz is_zero      ; JZ перевіряє ZF (результат нуль)</code></pre>
+              <p style="color: #00ff00; font-size: 0.85em; margin-top: 12px">Кожний прапорець для своєї мети</p>
             </div>
           </div>
         </section>
-<!-- Content Slide -->
+<!-- 6. Приклад коду -->
 <section>
-  <h2>Модулі цього курсу</h2>
-  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Програма: Сума чисел
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    ADD в дії
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-nasm">section .data
+    x dd 42
+    y dd 8
+
+section .text
+    global main
+main:
+    mov rax, [rel x]    ; rax = 42
+    add rax, [rel y]    ; rax += 8 → 50
+    ; rax тепер має 50
+    ; Виходимо (вже с системою, вихід буде в rax)
+    ret</code></pre>
+</section>
+<!-- List Slide -->
+<section>
+  <h2>Прапорці та умовні переходи</h2>
+  <div style="text-align: left; margin-top: 20px">
+    <ul style="font-size: 0.85em; line-height: 1.6">
+      <li style="margin-bottom: 10px; color: var(--cyber-light)">
+        <span style="color: var(--cyber-cyan)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--cyber-light)">
+        <span style="color: var(--cyber-cyan)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--cyber-light)">
+        <span style="color: var(--cyber-cyan)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--cyber-light)">
+        <span style="color: var(--cyber-cyan)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--cyber-light)">
+        <span style="color: var(--cyber-cyan)"></span>
+      </li>
+    </ul>
   </div>
 </section>
 <!-- 12. Підсумок / Ключові висновки -->
@@ -693,7 +646,7 @@ int c_version() { return 5 + 3; }</code></pre>
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
         </svg>
-        <span>Системне програмування — взаємодія з апаратурою</span>
+        <span>ADD/SUB: додавання та віднімання з встановленням прапорців</span>
       </li>
       <li
         class="fragment highlight-cyber"
@@ -702,7 +655,7 @@ int c_version() { return 5 + 3; }</code></pre>
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
         </svg>
-        <span>C — компроміс між контролем і переносимістю</span>
+        <span>INC/DEC: збільшення/зменшення на 1</span>
       </li>
       <li
         class="fragment highlight-cyber"
@@ -711,7 +664,7 @@ int c_version() { return 5 + 3; }</code></pre>
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
         </svg>
-        <span>Rust — сучасна альтернатива з гарантіями безпеки</span>
+        <span>Прапорці ZF, CF, OF критичні для умовного коду</span>
       </li>
     </ul>
   </div>
@@ -732,7 +685,7 @@ int c_version() { return 5 + 3; }</code></pre>
       <rect x="10" y="6" width="3" height="10" fill="#fcee0a" />
       <rect x="16" y="4" width="3" height="12" fill="#ff00ff" />
     </svg>
-    <em>Далі — системи числення</em>
+    <em>Далі — CMP та прапорці детально</em>
     <svg width="24" height="24" viewBox="0 0 24 24">
       <rect x="4" y="8" width="3" height="8" fill="#ff00ff" />
       <rect x="10" y="6" width="3" height="10" fill="#fcee0a" />
@@ -753,17 +706,17 @@ int c_version() { return 5 + 3; }</code></pre>
             "
           >
             <h3 style="color: var(--cyber-yellow); margin-top: 0; font-size: 1em">Наступна лекція:</h3>
-            <p style="font-size: 1em">Лекція 2: Системи числення</p>
+            <p style="font-size: 1em">Лекція 7: CMP та прапорці</p>
           </div>
           <div style="margin-top: 30px">
             <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
             <ul style="font-size: 0.9em; line-height: 1.7">
               <li>
-                <a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Systems_programming" style="color: var(--cyber-cyan)">The Art of Computer Systems Programming</a>
+                <a href="https:&#x2F;&#x2F;www.felixcloutier.com&#x2F;x86&#x2F;" style="color: var(--cyber-cyan)">x86-64 Instruction Set</a>
                  
               </li>
               <li>
-                <a href="https:&#x2F;&#x2F;www.rust-lang.org&#x2F;what&#x2F;why-rust&#x2F;" style="color: var(--cyber-cyan)">Why Rust?</a>
+                <a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;FLAGS_register" style="color: var(--cyber-cyan)">Flags Register</a>
                  
               </li>
             </ul>
@@ -772,11 +725,11 @@ int c_version() { return 5 + 3; }</code></pre>
             <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
             <ul style="font-size: 0.9em; line-height: 1.7">
               <li>
-                <a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Systems_programming" style="color: var(--cyber-cyan)">The Art of Computer Systems Programming</a>
+                <a href="https:&#x2F;&#x2F;www.felixcloutier.com&#x2F;x86&#x2F;" style="color: var(--cyber-cyan)">x86-64 Instruction Set</a>
                  
               </li>
               <li>
-                <a href="https:&#x2F;&#x2F;www.rust-lang.org&#x2F;what&#x2F;why-rust&#x2F;" style="color: var(--cyber-cyan)">Why Rust?</a>
+                <a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;FLAGS_register" style="color: var(--cyber-cyan)">Flags Register</a>
                  
               </li>
             </ul>

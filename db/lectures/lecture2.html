@@ -1,0 +1,1483 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Лекція 2: Що таке база даних? Типи та моделі | Основи баз даних
+    </title>
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="Лекція 2: Що таке база даних? Типи та моделі. Курс: Основи баз даних. Викладач: Ординський Олександр, ВТФК Вінниця"
+    />
+    <meta
+      name="keywords"
+      content="Що таке база даних? Типи та моделі, Основи баз даних, бази даних, SQL, програмування, лекція, ВТФК"
+    />
+    <meta name="author" content="Alex Ordynski" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta
+      property="og:title"
+      content="Лекція 2: Що таке база даних? Типи та моделі"
+    />
+    <meta
+      property="og:description"
+      content="Основи баз даних. Викладач: Ординський Олександр, ВТФК Вінниця"
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="uk_UA" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="Лекція 2: Що таке база даних? Типи та моделі"
+    />
+    <meta name="twitter:description" content="Основи баз даних" />
+
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.css" />
+
+    <!-- Highlight.js Theme (Monokai) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css"
+    />
+
+    <!-- ШРИФТИ (HARRY POTTER + КИРИЛИЦЯ) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=EB+Garamond:wght@400;700&family=Courier+Prime:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom Harry Potter Theme -->
+    <link rel="stylesheet" href="../css/harry-potter-theme.css" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+<!-- 1. Титульний слайд -->
+<section>
+  <h1 class="glitch" data-text="ЛЕКЦІЯ 2">ЛЕКЦІЯ 2</h1>
+  <h2>Типи та моделі баз даних</h2>
+  <p style="margin-top: 20px; color: var(--cyber-yellow)">
+    <strong>Основи баз даних</strong>
+  </p>
+  <p style="color: var(--cyber-cyan)">
+    <em>VTFK • 2025</em>
+  </p>
+</section>
+<!-- 3. Огляд попередньої лекції -->
+<section>
+  <h2>Що ми вже знаємо</h2>
+  <p style="color: var(--cyber-yellow); margin-bottom: 30px">
+    <strong>Лекція 1: Огляд курсу</strong>
+  </p>
+  <div style="margin-top: 30px">
+    <ul style="font-size: 1.1em; line-height: 1.8">
+      <li>Навіщо потрібні СУБД замість файлів</li>
+      <li>Перший SELECT та компоненти СУБД</li>
+      <li>Практика: створення простої таблиці students</li>
+    </ul>
+  </div>
+</section>
+<!-- 2. Дорожня карта (План лекції) -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <path
+        d="M3,6 L3,10 L7,10 L7,6 Z M10,4 L10,12 L14,12 L14,4 Z M17,8 L17,14 L21,14 L21,8 Z"
+        fill="#fcee0a"
+      />
+      <rect x="3" y="18" width="18" height="2" fill="#00f0ff" />
+    </svg>
+    План лекції
+  </h2>
+  <div style="margin-top: 40px">
+    <ul style="list-style: none; font-size: 1.2em; line-height: 2; padding-left: 0">
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>Визначення БД та роль СУБД</span>
+      </li>
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>Класифікація моделей: реляційні, NoSQL, об'єктні</span>
+      </li>
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>Коли яку модель обирати</span>
+      </li>
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>Міні-демо та домашнє завдання</span>
+      </li>
+    </ul>
+  </div>
+  <p style="margin-top: 40px; color: var(--cyber-cyan); font-size: 0.9em; opacity: 0.8">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 8px"
+    >
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <rect x="11" y="6" width="2" height="7" fill="#00f0ff" />
+      <rect x="11" y="15" width="2" height="2" fill="#00f0ff" />
+    </svg>
+    <em>Фокус: зрозуміти різні моделі зберігання</em>
+  </p>
+</section>
+<!-- Content Slide (DB Theme) -->
+<section>
+  <h2>Проблематика</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  </div>
+</section>
+<!-- 4. Ключове поняття / Визначення -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="3" y="3" width="18" height="18" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="7" y="7" width="4" height="4" fill="#00f0ff" />
+      <rect x="13" y="7" width="4" height="4" fill="#ff00ff" />
+      <rect x="7" y="13" width="10" height="2" fill="#fcee0a" />
+    </svg>
+    Що таке база даних?
+  </h2>
+  <div
+    style="
+      background: rgba(252, 238, 10, 0.1);
+      border-left: 4px solid var(--cyber-yellow);
+      padding: 20px;
+      margin: 30px 0;
+    "
+  >
+    <h3
+      style="
+        color: var(--cyber-yellow);
+        margin-top: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      "
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <rect x="4" y="4" width="16" height="16" fill="#fcee0a" />
+        <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+      </svg>
+      Database
+    </h3>
+    <p style="font-size: 1.1em; line-height: 1.6">Організована колекція даних, якою керує СУБД для збереження, пошуку, оновлення та захисту інформації за правилами моделі даних.</p>
+  </div>
+  <div
+    style="
+      margin-top: 30px;
+      padding: 15px;
+      background: rgba(0, 240, 255, 0.05);
+      border: 1px solid var(--cyber-cyan);
+      display: flex;
+      gap: 12px;
+      align-items: start;
+    "
+  >
+    <svg width="28" height="28" viewBox="0 0 24 24" style="flex-shrink: 0; margin-top: 2px">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <rect x="11" y="6" width="2" height="2" fill="#fcee0a" />
+      <path d="M10,10 L10,17 L14,17 L14,10 Z" fill="#00f0ff" />
+    </svg>
+    <p style="color: var(--cyber-cyan); margin: 0">
+      <strong>Аналогія:</strong>
+      Як склад із полицями: модель визначає, як розкладені коробки (рядки/документи), та як ми їх знаходимо.
+    </p>
+  </div>
+</section>
+<!-- 8. Діаграма / Візуалізація (Mermaid) -->
+<section style="font-size: 1em">
+  <h2>Класифікація моделей</h2>
+  <p style="margin-bottom: 25px; color: var(--hp-gold)">Основні типи баз даних</p>
+
+  <div class="mermaid-container" style="text-align: center; margin: 25px auto">
+    <div
+      class="mermaid"
+      style="background: transparent; border: none; display: inline-block; text-align: left"
+    >
+      %%{init: {"theme": "neutral", "mermaid": {"version": "11.12.2"}}}%%
+flowchart TB; DB[Бази даних]-->R[Реляційні (SQL)]; DB-->D[Документні]; DB-->KV[Ключ-значення]; DB-->C[Колонкові]; DB-->G[Графові]; DB-->O[Об'єктні];
+    </div>
+  </div>
+</section>
+<!-- 5. Розбір синтаксису -->
+<section style="font-size: 0.9em">
+  <h2>Базовий CRUD у реляційній БД</h2>
+  <div style="margin: 30px 0">
+    <div
+      style="
+        background: rgba(10, 10, 15, 0.8);
+        border: 2px solid var(--cyber-magenta);
+        padding: 25px;
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 1.38em;
+      "
+    >
+      <code style="color: var(--cyber-yellow)">CREATE TABLE products (...);
+INSERT INTO products (...) VALUES (...);
+SELECT * FROM products WHERE ...;
+UPDATE products SET ... WHERE ...;
+DELETE FROM products WHERE ...;</code>
+    </div>
+  </div>
+  <div style="margin-top: 25px">
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        CREATE
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — створюємо схему
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        INSERT
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — додаємо дані
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        SELECT
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — читаємо дані
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        UPDATE
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — оновлюємо
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        DELETE
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — видаляємо
+      </span>
+    </div>
+  </div>
+  <div style="margin-top: 25px">
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        CREATE
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — створюємо схему
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        INSERT
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — додаємо дані
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        SELECT
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — читаємо дані
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        UPDATE
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — оновлюємо
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        DELETE
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — видаляємо
+      </span>
+    </div>
+  </div>
+  <div style="margin-top: 25px">
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        CREATE
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — створюємо схему
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        INSERT
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — додаємо дані
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        SELECT
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — читаємо дані
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        UPDATE
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — оновлюємо
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        DELETE
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — видаляємо
+      </span>
+    </div>
+  </div>
+  <div style="margin-top: 25px">
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        CREATE
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — створюємо схему
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        INSERT
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — додаємо дані
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        SELECT
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — читаємо дані
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        UPDATE
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — оновлюємо
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        DELETE
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — видаляємо
+      </span>
+    </div>
+  </div>
+  <div style="margin-top: 25px">
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        CREATE
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — створюємо схему
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        INSERT
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — додаємо дані
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        SELECT
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — читаємо дані
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        UPDATE
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — оновлюємо
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        DELETE
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — видаляємо
+      </span>
+    </div>
+  </div>
+</section>
+<!-- 8. Діаграма / Візуалізація (Mermaid) -->
+<section style="font-size: 1em">
+  <h2>Реляційна модель (ER)</h2>
+  <p style="margin-bottom: 25px; color: var(--hp-gold)">Таблиці, ключі та зв'язки</p>
+
+  <div class="mermaid-container" style="text-align: center; margin: 25px auto">
+    <div
+      class="mermaid"
+      style="background: transparent; border: none; display: inline-block; text-align: left"
+    >
+      %%{init: {"theme": "neutral", "mermaid": {"version": "11.12.2"}}}%%
+erDiagram
+  PRODUCTS ||--o{ ORDERS : містить
+  CUSTOMERS ||--o{ ORDERS : робить
+  PRODUCTS {
+    int id PK
+    string name
+    decimal price
+  }
+  CUSTOMERS {
+    int id PK
+    string full_name
+    string email
+  }
+  ORDERS {
+    int id PK
+    int customer_id FK
+    int product_id FK
+    int qty
+  }
+    </div>
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Приклад: реляційна вставка та вибірка
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Створюємо таблиці та читаємо замовлення
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">CREATE TABLE customers (id INT PRIMARY KEY, full_name TEXT, email TEXT);
+CREATE TABLE products (id INT PRIMARY KEY, name TEXT, price NUMERIC);
+CREATE TABLE orders (id INT PRIMARY KEY, customer_id INT, product_id INT, qty INT);
+
+INSERT INTO customers VALUES (1, 'Олена', 'olena@shop.com');
+INSERT INTO products VALUES (1, 'Ноутбук', 32000);
+INSERT INTO orders VALUES (1, 1, 1, 2);
+
+SELECT c.full_name, p.name, o.qty
+FROM orders o
+JOIN customers c ON o.customer_id = c.id
+JOIN products p ON o.product_id = p.id;</code></pre>
+</section>
+<!-- Table Slide (DB Theme) -->
+<section>
+  <h2>Моделі та коли їх обирати</h2>
+  <div style="margin-top: 20px; overflow-x: auto">
+    <table
+      style="
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.75em;
+        background: var(--hp-parchment);
+      "
+    >
+      <thead>
+        <tr>
+          <th
+            style="
+              border: 2px solid var(--hp-gold);
+              padding: 10px;
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
+              text-transform: uppercase;
+              text-align: left;
+              letter-spacing: 0.04em;
+            "
+          >
+            Модель
+          </th>
+          <th
+            style="
+              border: 2px solid var(--hp-gold);
+              padding: 10px;
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
+              text-transform: uppercase;
+              text-align: left;
+              letter-spacing: 0.04em;
+            "
+          >
+            Коли доречна
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Реляційна
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Структуровані дані, чіткі зв'язки, транзакції
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Документна
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Гнучка схема, швидкі ітерації, JSON об'єкти
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Ключ-значення
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Кеш, сесії, наднизька латентність
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Графова
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Соцмережі, рекомендації, складні зв'язки
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Колонкова
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Аналітика, великі агрегації, OLAP
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Об'єктна
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Тісна інтеграція з ООП-моделлю додатка
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<!-- Timeline Slide (Harry Potter Theme) -->
+<section style="font-size: 0.9em">
+  <h2>Еволюція моделей</h2>
+  <p style="margin-bottom: 30px; color: var(--hp-gold); font-style: italic">Як змінювалися підходи</p>
+
+  <div class="timeline-horizontal">
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="background: var(--hp-gold);"
+      >
+        <span class="timeline-year">1970</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">Реляційні</h3>
+        <p class="timeline-description">SQL та реляційна модель</p>
+      </div>
+    </div>
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="background: var(--hp-gold);"
+      >
+        <span class="timeline-year">1998</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">Об&#39;єктні</h3>
+        <p class="timeline-description">Спроба зблизити БД та ООП</p>
+      </div>
+    </div>
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="background: var(--hp-gold);"
+      >
+        <span class="timeline-year">2007</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">NoSQL</h3>
+        <p class="timeline-description">Документні, ключ-значення, колонки</p>
+      </div>
+    </div>
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="background: var(--hp-gold);"
+      >
+        <span class="timeline-year">2015</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">Графові&#x2F;векторні</h3>
+        <p class="timeline-description">Запити по зв&#39;язках та ембеддингах</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Content Slide (DB Theme) -->
+<section>
+  <h2>Продуктивність та обмеження</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  </div>
+</section>
+<!-- List Slide (DB Theme) -->
+<section>
+  <h2>Best practices вибору моделі</h2>
+  <div style="text-align: left; margin-top: 20px">
+    <ul style="font-size: 0.85em; line-height: 1.6">
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+    </ul>
+  </div>
+</section>
+        <!-- 11. Часта помилка / Застереження -->
+        <section style="font-size: 0.9em">
+          <h2>Хибний вибір: NoSQL заради моди</h2>
+          <div
+            style="
+              background: rgba(255, 0, 60, 0.1);
+              border: 3px solid var(--cyber-red);
+              padding: 25px;
+              margin: 25px 0;
+            "
+          >
+            <h3 style="color: var(--cyber-red); margin-top: 0">⚠️ ЗАСТЕРЕЖЕННЯ</h3>
+            <p style="font-size: 1em; line-height: 1.5">Перехід на NoSQL без потреби у гнучкій схемі чи горизонтальному масштабі</p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px">
+            <div>
+              <h3 style="color: var(--cyber-red); text-align: center; font-size: 1em">❌ Неправильно</h3>
+              <pre
+                style="font-size: 1.15em"
+              ><code class="language-bash"># Викидаємо SQL, бо "модно"
+drop database shop;</code></pre>
+              <p style="color: var(--cyber-red); font-size: 0.85em; margin-top: 12px">
+                Втрачаємо транзакції, валідацію схеми і потрапляємо у хаос даних
+              </p>
+            </div>
+            <div>
+              <h3 style="color: #00ff00; text-align: center; font-size: 1em">✓ Правильно</h3>
+              <pre
+                style="font-size: 1.15em"
+              ><code class="language-bash"># Спершу вимірюємо потребу
+# Якщо потрібен JSON, але важливі транзакції
+-- PostgreSQL з JSONB може закрити гнучкість без втрати ACID</code></pre>
+              <p style="color: #00ff00; font-size: 0.85em; margin-top: 12px">Обираємо модель під задачу, а не під хайп</p>
+            </div>
+          </div>
+        </section>
+<!-- Quiz Slide (Harry Potter Theme) -->
+<section class="quiz-slide">
+  <h2>Перевірка розуміння</h2>
+  <h3 style="margin-bottom: 30px; color: var(--hp-scarlet); font-size: 1.3em">Яку модель обрати для соцмережі з багатьма зв&#39;язками між користувачами?</h3>
+
+  <ul style="list-style: none; font-size: 1.1em; padding: 0">
+    <li
+      class="fragment quiz-option"
+      style="
+        padding: 20px;
+        margin: 15px 0;
+        border: 3px solid var(--hp-gold);
+        border-radius: 8px;
+        background: rgba(244, 228, 193, 0.3);
+        transition: all 0.3s ease;
+      "
+    >
+      Реляційну таблицю без індексів
+    </li>
+    <li
+      class="fragment quiz-option"
+      style="
+        padding: 20px;
+        margin: 15px 0;
+        border: 3px solid var(--hp-gold);
+        border-radius: 8px;
+        background: rgba(244, 228, 193, 0.3);
+        transition: all 0.3s ease;
+      "
+    >
+      Графову базу даних
+    </li>
+    <li
+      class="fragment quiz-option"
+      style="
+        padding: 20px;
+        margin: 15px 0;
+        border: 3px solid var(--hp-gold);
+        border-radius: 8px;
+        background: rgba(244, 228, 193, 0.3);
+        transition: all 0.3s ease;
+      "
+    >
+      Тільки key-value
+    </li>
+  </ul>
+
+  <div
+    class="fragment quiz-highlight"
+    style="
+      margin-top: 25px;
+      padding: 16px 20px;
+      border: 2px solid var(--hp-gold);
+      border-radius: 10px;
+      background: rgba(211, 166, 37, 0.12);
+      color: var(--hp-scarlet);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    "
+  >
+    ✅ Правильна відповідь: Графову базу даних
+  </div>
+  <div
+    class="fragment quiz-explanation"
+    style="
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(211, 166, 37, 0.1);
+      border-left: 4px solid var(--hp-gold);
+      border-radius: 4px;
+    "
+  >
+    <strong style="color: var(--hp-gold); font-size: 1.2em">💡 Пояснення:</strong>
+    <p style="margin-top: 10px; color: var(--hp-ink)">Графові БД добре обходять зв&#39;язки та короткі шляхи.</p>
+  </div>
+</section>
+<!-- Content Slide (DB Theme) -->
+<section>
+  <h2>Міні ТЗ: одна модель не вистачає</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  </div>
+</section>
+<!-- 8. Діаграма / Візуалізація (Mermaid) -->
+<section style="font-size: 1em">
+  <h2>Проєктування рішення</h2>
+  <p style="margin-bottom: 25px; color: var(--hp-gold)">Кроки для ТЗ</p>
+
+  <div class="mermaid-container" style="text-align: center; margin: 25px auto">
+    <div
+      class="mermaid"
+      style="background: transparent; border: none; display: inline-block; text-align: left"
+    >
+      %%{init: {"theme": "neutral", "mermaid": {"version": "11.12.2"}}}%%
+flowchart TB; Design[Моделювання SQL/JSON]-->Create[Створення таблиць/колекцій]; Create-->Insert[Завантаження даних]; Insert-->Query[Запити SQL та find()]; Query-->Compare[Порівняння швидкості/зручності];
+    </div>
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Налаштування середовища
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    SQLite + MongoDB (Docker)
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-bash"># SQLite (локально)
+brew install sqlite
+sqlite3 catalog.db ".databases"
+
+# MongoDB у Docker
+docker run -d --name mongo -p 27017:27017 mongo:7
+
+# Перевірка клієнтом
+mongo --eval 'db.runCommand({ ping: 1 })'</code></pre>
+</section>
+<!-- 14. Практика Live Coding -->
+<section style="font-size: 0.9em" data-auto-animate>
+  <h2>Live coding: дві моделі</h2>
+
+  <div
+    style="
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 40px;
+      align-items: start;
+      margin-top: 30px;
+    "
+  >
+    <!-- Animated Terminal with Typed.js -->
+    <div style="position: relative">
+      <style>
+        @keyframes screen-glow {
+          0%,
+          100% {
+            box-shadow:
+              0 0 15px rgba(0, 240, 255, 0.4),
+              inset 0 0 10px rgba(0, 240, 255, 0.1);
+          }
+          50% {
+            box-shadow:
+              0 0 30px rgba(0, 240, 255, 0.7),
+              inset 0 0 15px rgba(0, 240, 255, 0.2);
+          }
+        }
+        @keyframes pixel-float {
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-5px);
+          }
+        }
+        @keyframes key-press {
+          0%,
+          100% {
+            transform: scale(1);
+            opacity: 0.7;
+          }
+          50% {
+            transform: scale(0.95);
+            opacity: 1;
+          }
+        }
+        .live-coding-terminal {
+          width: 280px;
+          background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+          border: 3px solid var(--cyber-cyan);
+          border-radius: 12px;
+          position: relative;
+          animation:
+            screen-glow 3s ease-in-out infinite,
+            pixel-float 4s ease-in-out infinite;
+          box-shadow: 0 10px 30px rgba(0, 240, 255, 0.3);
+        }
+        .terminal-header {
+          background: linear-gradient(90deg, var(--cyber-cyan) 0%, var(--cyber-magenta) 100%);
+          padding: 8px 12px;
+          border-radius: 9px 9px 0 0;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .terminal-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: var(--cyber-yellow);
+        }
+        .terminal-dot:nth-child(2) {
+          background: var(--cyber-magenta);
+        }
+        .terminal-dot:nth-child(3) {
+          background: var(--cyber-red);
+        }
+        .terminal-screen {
+          padding: 15px;
+          min-height: 180px;
+          background: #0a0a0f;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 11px;
+          color: var(--cyber-cyan);
+          line-height: 1.6;
+        }
+        .terminal-prompt {
+          color: var(--cyber-yellow);
+        }
+        .terminal-output {
+          color: var(--cyber-cyan);
+          margin: 3px 0;
+        }
+        .terminal-success {
+          color: #00ff41;
+        }
+        .typed-cursor {
+          color: var(--cyber-cyan);
+          animation: blink 1s infinite;
+        }
+        @keyframes blink {
+          0%,
+          49% {
+            opacity: 1;
+          }
+          50%,
+          100% {
+            opacity: 0;
+          }
+        }
+        .pixel-keys {
+          display: flex;
+          gap: 4px;
+          padding: 10px;
+          justify-content: center;
+        }
+        .pixel-key {
+          width: 22px;
+          height: 18px;
+          background: linear-gradient(180deg, var(--cyber-yellow) 0%, #b8a408 100%);
+          border-radius: 3px;
+          border: 2px solid rgba(252, 238, 10, 0.3);
+          animation: key-press 2s ease-in-out infinite;
+        }
+        .pixel-key:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+        .pixel-key:nth-child(3) {
+          animation-delay: 0.4s;
+        }
+        .pixel-key:nth-child(4) {
+          animation-delay: 0.6s;
+        }
+      </style>
+
+      <div class="live-coding-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+        </div>
+        <div class="terminal-screen" id="typed-terminal-">
+          <div class="terminal-prompt">
+            $
+            <span class="typed-text"></span>
+          </div>
+        </div>
+        <div class="pixel-keys">
+          <div class="pixel-key"></div>
+          <div class="pixel-key"></div>
+          <div class="pixel-key"></div>
+          <div class="pixel-key"></div>
+        </div>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"></script>
+      <script>
+        // Initialize Typed.js for terminal animation
+        document.addEventListener('DOMContentLoaded', function () {
+          const terminalEl = document.querySelector(
+            '#typed-terminal- .typed-text'
+          );
+          if (terminalEl && !terminalEl.dataset.typed) {
+            terminalEl.dataset.typed = 'true';
+            new Typed('#typed-terminal- .typed-text', {
+              strings: [
+                'git clone repo.git',
+                'cd project^500\nls -la',
+                'npm install^500\nnpm start^500\n<span class="terminal-success">✓ Server running!</span>',
+                'code main.c^500\ngcc -Wall main.c^500\n./a.out^500\n<span class="terminal-success">Hello, World!</span>',
+              ],
+              typeSpeed: 40,
+              backSpeed: 20,
+              backDelay: 2000,
+              startDelay: 500,
+              loop: true,
+              contentType: 'html',
+              cursorChar: '▋',
+            });
+          }
+        });
+      </script>
+    </div>
+
+    <!-- Action Items -->
+    <div>
+      <div
+        style="
+          background: rgba(252, 238, 10, 0.1);
+          border-left: 4px solid var(--cyber-yellow);
+          padding: 20px;
+          margin-bottom: 25px;
+        "
+      >
+        <h3 style="color: var(--cyber-yellow); margin-top: 0; font-size: 1.1em">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            style="vertical-align: middle; margin-right: 8px"
+          >
+            <rect x="4" y="4" width="6" height="6" fill="#fcee0a" />
+            <rect x="12" y="4" width="6" height="6" fill="#00f0ff" />
+            <rect x="4" y="12" width="6" height="6" fill="#ff00ff" />
+            <rect x="12" y="12" width="6" height="6" fill="#fcee0a" />
+          </svg>
+          Що будемо робити:
+        </h3>
+        <p style="font-size: 1em; line-height: 1.6; margin: 0">Створюємо products у SQL та в Mongo, виконуємо запити</p>
+      </div>
+
+      <div style="margin-top: 20px">
+        <h3
+          style="
+            color: var(--cyber-cyan);
+            font-size: 1em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+          "
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <rect x="3" y="5" width="18" height="3" fill="#00f0ff" />
+            <rect x="3" y="11" width="18" height="3" fill="#00f0ff" />
+            <rect x="3" y="17" width="18" height="3" fill="#00f0ff" />
+          </svg>
+          Action Items:
+        </h3>
+        <div style="display: grid; gap: 12px">
+          <div
+            style="
+              display: flex;
+              gap: 12px;
+              align-items: start;
+              background: rgba(0, 240, 255, 0.05);
+              padding: 12px;
+              border-radius: 6px;
+              border-left: 3px solid var(--cyber-cyan);
+            "
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0; margin-top: 2px">
+              <rect
+                x="4"
+                y="4"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="#00f0ff"
+                stroke-width="2"
+              />
+              <rect x="8" y="8" width="8" height="8" fill="#fcee0a" />
+            </svg>
+            <span style="font-size: 0.95em; line-height: 1.5">CREATE TABLE products ...;</span>
+          </div>
+          <div
+            style="
+              display: flex;
+              gap: 12px;
+              align-items: start;
+              background: rgba(0, 240, 255, 0.05);
+              padding: 12px;
+              border-radius: 6px;
+              border-left: 3px solid var(--cyber-cyan);
+            "
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0; margin-top: 2px">
+              <rect
+                x="4"
+                y="4"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="#00f0ff"
+                stroke-width="2"
+              />
+              <rect x="8" y="8" width="8" height="8" fill="#fcee0a" />
+            </svg>
+            <span style="font-size: 0.95em; line-height: 1.5">INSERT декілька рядків</span>
+          </div>
+          <div
+            style="
+              display: flex;
+              gap: 12px;
+              align-items: start;
+              background: rgba(0, 240, 255, 0.05);
+              padding: 12px;
+              border-radius: 6px;
+              border-left: 3px solid var(--cyber-cyan);
+            "
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0; margin-top: 2px">
+              <rect
+                x="4"
+                y="4"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="#00f0ff"
+                stroke-width="2"
+              />
+              <rect x="8" y="8" width="8" height="8" fill="#fcee0a" />
+            </svg>
+            <span style="font-size: 0.95em; line-height: 1.5">db.products.insertMany([...])</span>
+          </div>
+          <div
+            style="
+              display: flex;
+              gap: 12px;
+              align-items: start;
+              background: rgba(0, 240, 255, 0.05);
+              padding: 12px;
+              border-radius: 6px;
+              border-left: 3px solid var(--cyber-cyan);
+            "
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0; margin-top: 2px">
+              <rect
+                x="4"
+                y="4"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="#00f0ff"
+                stroke-width="2"
+              />
+              <rect x="8" y="8" width="8" height="8" fill="#fcee0a" />
+            </svg>
+            <span style="font-size: 0.95em; line-height: 1.5">db.products.find({ category: 'laptops' })</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p style="text-align: center; margin-top: 30px; font-size: 1.15em; color: var(--cyber-magenta)">
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 8px"
+    >
+      <polygon points="8,5 8,19 18,12" fill="#ff00ff" />
+      <rect x="6" y="3" width="14" height="2" fill="#ff00ff" />
+      <rect x="6" y="19" width="14" height="2" fill="#ff00ff" />
+    </svg>
+    <strong>Готові? Почали кодити!</strong>
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-left: 8px"
+    >
+      <rect x="4" y="8" width="4" height="8" fill="#fcee0a" />
+      <rect x="10" y="6" width="4" height="10" fill="#00f0ff" />
+      <rect x="16" y="4" width="4" height="12" fill="#ff00ff" />
+    </svg>
+  </p>
+</section>
+<!-- 7. Покроковий розбір коду -->
+<section style="font-size: 0.9em">
+  <h2>Приклад JSON-документа</h2>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px">
+    <div>
+      <h3 style="color: var(--cyber-yellow); font-size: 1.1em">Код:</h3>
+      <pre style="font-size: 1.15em"><code class="language-javascript">{
+  "_id": 1,
+  "name": "Ноутбук",
+  "price": 32000,
+  "categories": ["electronics", "laptops"],
+  "specs": { "ram": "16GB", "ssd": "512GB" }
+}</code></pre>
+    </div>
+    <div>
+      <h3 style="color: var(--cyber-cyan); font-size: 1.1em">Пояснення:</h3>
+      <ul style="font-size: 0.95em; line-height: 1.7">
+        <li class="fragment">Гнучка схема: можна додати specs без ALTER TABLE</li>
+        <li class="fragment">Категорії в одному документі → швидке читання</li>
+        <li class="fragment">Цілісність лежить на застосунку/валідації</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<!-- 12. Підсумок / Ключові висновки -->
+<section>
+  <h2 class="glitch" data-text="Підсумки">
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="3" y="3" width="8" height="8" fill="#fcee0a" />
+      <rect x="13" y="3" width="8" height="8" fill="#00f0ff" />
+      <rect x="3" y="13" width="8" height="8" fill="#ff00ff" />
+      <rect x="13" y="13" width="8" height="8" fill="#fcee0a" />
+    </svg>
+    Підсумки
+  </h2>
+  <div style="margin-top: 50px">
+    <ul style="list-style: none; font-size: 1.15em; line-height: 2.2; padding-left: 0">
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>Реляційні БД = структура, транзакції, складні запити</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>NoSQL моделі = гнучкість і масштабування під конкретні патерни</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>Обираємо модель під задачу, а не під тренд</span>
+      </li>
+    </ul>
+  </div>
+  <p
+    style="
+      margin-top: 50px;
+      text-align: center;
+      color: var(--cyber-cyan);
+      font-size: 1.1em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    "
+  >
+    <svg width="24" height="24" viewBox="0 0 24 24">
+      <rect x="4" y="8" width="3" height="8" fill="#00f0ff" />
+      <rect x="10" y="6" width="3" height="10" fill="#fcee0a" />
+      <rect x="16" y="4" width="3" height="12" fill="#ff00ff" />
+    </svg>
+    <em>Далі — глибше у реляційну модель</em>
+    <svg width="24" height="24" viewBox="0 0 24 24">
+      <rect x="4" y="8" width="3" height="8" fill="#ff00ff" />
+      <rect x="10" y="6" width="3" height="10" fill="#fcee0a" />
+      <rect x="16" y="4" width="3" height="12" fill="#00f0ff" />
+    </svg>
+  </p>
+</section>
+        <!-- 13. Наступні кроки та ресурси -->
+        <section style="font-size: 0.9em">
+          <h2>Домашнє завдання</h2>
+
+          <div
+            style="
+              background: rgba(252, 238, 10, 0.1);
+              border-left: 4px solid var(--cyber-yellow);
+              padding: 18px;
+              margin: 25px 0;
+            "
+          >
+            <h3 style="color: var(--cyber-yellow); margin-top: 0; font-size: 1em">Наступна лекція:</h3>
+            <p style="font-size: 1em">Лекція 3: Векторні бази даних</p>
+          </div>
+          <div style="margin-top: 30px">
+            <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
+            <ul style="font-size: 0.9em; line-height: 1.7">
+              <li>
+                <a href="https:&#x2F;&#x2F;www.mongodb.com&#x2F;compare&#x2F;mongodb-postgresql" style="color: var(--cyber-cyan)">PostgreSQL vs MongoDB</a>
+                 
+              </li>
+              <li>
+                <a href="https:&#x2F;&#x2F;redis.io&#x2F;docs&#x2F;latest&#x2F;develop&#x2F;data-types&#x2F;" style="color: var(--cyber-cyan)">Redis data types</a>
+                 
+              </li>
+            </ul>
+          </div>
+          <div style="margin-top: 30px">
+            <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
+            <ul style="font-size: 0.9em; line-height: 1.7">
+              <li>
+                <a href="https:&#x2F;&#x2F;www.mongodb.com&#x2F;compare&#x2F;mongodb-postgresql" style="color: var(--cyber-cyan)">PostgreSQL vs MongoDB</a>
+                 
+              </li>
+              <li>
+                <a href="https:&#x2F;&#x2F;redis.io&#x2F;docs&#x2F;latest&#x2F;develop&#x2F;data-types&#x2F;" style="color: var(--cyber-cyan)">Redis data types</a>
+                 
+              </li>
+            </ul>
+          </div>
+
+          <p style="margin-top: 40px; text-align: center; color: var(--cyber-yellow); font-size: 1.2em">
+            <strong>Дякую за увагу! 💾</strong>
+          </p>
+
+          <p style="text-align: center; color: var(--cyber-cyan); margin-top: 18px; font-size: 0.95em">
+            <a href="../index.html">← Повернутися до списку лекцій</a>
+          </p>
+        </section>
+<!-- Content Slide (DB Theme) -->
+<section>
+  <h2>Документація та Q&amp;A</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  </div>
+</section>
+      </div>
+    </div>
+
+    <!-- Reveal.js -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.js"></script>
+
+    <!-- Reveal.js Plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/highlight/highlight.js"></script>
+
+    <!-- Mermaid.js (non-module for compatibility) -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <script>
+      const getMermaidConfig = () => {
+        const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+        const mono = prefersDark ? '#ffffff' : '#000000';
+
+        return {
+          startOnLoad: false,
+          theme: 'neutral',
+          themeVariables: {
+            fontSize: '18px',
+            fontFamily: 'EB Garamond, serif',
+            background: 'transparent',
+            mainBkg: 'transparent',
+            secondBkg: 'transparent',
+            primaryColor: 'transparent',
+            secondaryColor: 'transparent',
+            tertiaryColor: 'transparent',
+            primaryBorderColor: mono,
+            clusterBorder: mono,
+            clusterBkg: 'transparent',
+            lineColor: mono,
+            edgeLabelBackground: 'transparent',
+            primaryTextColor: mono,
+            labelTextColor: mono,
+            nodeTextColor: mono,
+            titleColor: mono,
+          },
+        };
+      };
+
+      if (window.mermaid) {
+        window.mermaid.initialize(getMermaidConfig());
+      }
+    </script>
+
+    <!-- Initialize Reveal.js -->
+    <script>
+      Reveal.initialize({
+        hash: true,
+        slideNumber: true,
+        controls: true,
+        progress: true,
+        center: true,
+        transition: 'slide',
+
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+
+      // Initialize Mermaid diagrams when Reveal is ready
+      Reveal.on('ready', () => {
+        if (window.mermaid) {
+          window.mermaid.run({
+            querySelector: '.mermaid',
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

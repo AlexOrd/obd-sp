@@ -1,0 +1,1188 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Лекція 12: Вступ до NoSQL: MongoDB CRUD | Основи баз даних
+    </title>
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="Лекція 12: Вступ до NoSQL: MongoDB CRUD. Курс: Основи баз даних. Викладач: Ординський Олександр, ВТФК Вінниця"
+    />
+    <meta
+      name="keywords"
+      content="Вступ до NoSQL: MongoDB CRUD, Основи баз даних, бази даних, SQL, програмування, лекція, ВТФК"
+    />
+    <meta name="author" content="Alex Ordynski" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta
+      property="og:title"
+      content="Лекція 12: Вступ до NoSQL: MongoDB CRUD"
+    />
+    <meta
+      property="og:description"
+      content="Основи баз даних. Викладач: Ординський Олександр, ВТФК Вінниця"
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="uk_UA" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="Лекція 12: Вступ до NoSQL: MongoDB CRUD"
+    />
+    <meta name="twitter:description" content="Основи баз даних" />
+
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.css" />
+
+    <!-- Highlight.js Theme (Monokai) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css"
+    />
+
+    <!-- ШРИФТИ (HARRY POTTER + КИРИЛИЦЯ) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=EB+Garamond:wght@400;700&family=Courier+Prime:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom Harry Potter Theme -->
+    <link rel="stylesheet" href="../css/harry-potter-theme.css" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+<!-- 1. Титульний слайд -->
+<section>
+  <h1 class="glitch" data-text="ЛЕКЦІЯ 12">ЛЕКЦІЯ 12</h1>
+  <h2>Вступ до NoSQL: MongoDB CRUD</h2>
+  <p style="margin-top: 20px; color: var(--cyber-yellow)">
+    <strong>Основи баз даних</strong>
+  </p>
+  <p style="color: var(--cyber-cyan)">
+    <em>VTFK • 2025</em>
+  </p>
+</section>
+<!-- 3. Огляд попередньої лекції -->
+<section>
+  <h2>Що вже вивчили</h2>
+  <p style="color: var(--cyber-yellow); margin-bottom: 30px">
+    <strong>Лекція 11: Пріоритет операторів</strong>
+  </p>
+  <div style="margin-top: 30px">
+    <ul style="font-size: 1.1em; line-height: 1.8">
+      <li>SQL запити та фільтрація</li>
+      <li>AND/OR/NOT логіка</li>
+      <li>Комментарии та документація</li>
+    </ul>
+  </div>
+</section>
+<!-- 2. Дорожня карта (План лекції) -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <path
+        d="M3,6 L3,10 L7,10 L7,6 Z M10,4 L10,12 L14,12 L14,4 Z M17,8 L17,14 L21,14 L21,8 Z"
+        fill="#fcee0a"
+      />
+      <rect x="3" y="18" width="18" height="2" fill="#00f0ff" />
+    </svg>
+    План лекції
+  </h2>
+  <div style="margin-top: 40px">
+    <ul style="list-style: none; font-size: 1.2em; line-height: 2; padding-left: 0">
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>Що таке NoSQL та MongoDB</span>
+      </li>
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>Документи vs таблиці</span>
+      </li>
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>Операції CRUD</span>
+      </li>
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>Індекси та запити</span>
+      </li>
+    </ul>
+  </div>
+  <p style="margin-top: 40px; color: var(--cyber-cyan); font-size: 0.9em; opacity: 0.8">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 8px"
+    >
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <rect x="11" y="6" width="2" height="7" fill="#00f0ff" />
+      <rect x="11" y="15" width="2" height="2" fill="#00f0ff" />
+    </svg>
+    <em>Фокус: гнучка схема, JSON-подібні дані</em>
+  </p>
+</section>
+<!-- Content Slide (DB Theme) -->
+<section>
+  <h2>Навіщо NoSQL</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  </div>
+</section>
+<!-- 4. Ключове поняття / Визначення -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="3" y="3" width="18" height="18" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="7" y="7" width="4" height="4" fill="#00f0ff" />
+      <rect x="13" y="7" width="4" height="4" fill="#ff00ff" />
+      <rect x="7" y="13" width="10" height="2" fill="#fcee0a" />
+    </svg>
+    MongoDB
+  </h2>
+  <div
+    style="
+      background: rgba(252, 238, 10, 0.1);
+      border-left: 4px solid var(--cyber-yellow);
+      padding: 20px;
+      margin: 30px 0;
+    "
+  >
+    <h3
+      style="
+        color: var(--cyber-yellow);
+        margin-top: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      "
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <rect x="4" y="4" width="16" height="16" fill="#fcee0a" />
+        <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+      </svg>
+      Document Database
+    </h3>
+    <p style="font-size: 1.1em; line-height: 1.6">СУБД, яка зберігає дані як JSON документи в колекціях, без фіксованої схеми.</p>
+  </div>
+  <div
+    style="
+      margin-top: 30px;
+      padding: 15px;
+      background: rgba(0, 240, 255, 0.05);
+      border: 1px solid var(--cyber-cyan);
+      display: flex;
+      gap: 12px;
+      align-items: start;
+    "
+  >
+    <svg width="28" height="28" viewBox="0 0 24 24" style="flex-shrink: 0; margin-top: 2px">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <rect x="11" y="6" width="2" height="2" fill="#fcee0a" />
+      <path d="M10,10 L10,17 L14,17 L14,10 Z" fill="#00f0ff" />
+    </svg>
+    <p style="color: var(--cyber-cyan); margin: 0">
+      <strong>Аналогія:</strong>
+      Як папка файлів, де кожен файл = JSON, а не рядки таблиці
+    </p>
+  </div>
+</section>
+<!-- 8. Діаграма / Візуалізація (Mermaid) -->
+<section style="font-size: 1em">
+  <h2>SQL vs MongoDB</h2>
+  <p style="margin-bottom: 25px; color: var(--hp-gold)">Структура данных</p>
+
+  <div class="mermaid-container" style="text-align: center; margin: 25px auto">
+    <div
+      class="mermaid"
+      style="background: transparent; border: none; display: inline-block; text-align: left"
+    >
+      %%{init: {"theme": "neutral", "mermaid": {"version": "11.12.2"}}}%%
+flowchart LR
+  SQL[(SQL Database<br/>Таблиці<br/>Рядки & Колонки<br/>Схема обов'язкова)]
+  NoSQL[(MongoDB<br/>Колекції<br/>Документи JSON<br/>Гнучка схема)]
+  SQL -->|SELECT FROM| Rows[Рядки]
+  NoSQL -->|find()| Docs[Документи]
+    </div>
+  </div>
+</section>
+<!-- Table Slide (DB Theme) -->
+<section>
+  <h2>Термінологія</h2>
+  <div style="margin-top: 20px; overflow-x: auto">
+    <table
+      style="
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.75em;
+        background: var(--hp-parchment);
+      "
+    >
+      <thead>
+        <tr>
+          <th
+            style="
+              border: 2px solid var(--hp-gold);
+              padding: 10px;
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
+              text-transform: uppercase;
+              text-align: left;
+              letter-spacing: 0.04em;
+            "
+          >
+            SQL
+          </th>
+          <th
+            style="
+              border: 2px solid var(--hp-gold);
+              padding: 10px;
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
+              text-transform: uppercase;
+              text-align: left;
+              letter-spacing: 0.04em;
+            "
+          >
+            MongoDB
+          </th>
+          <th
+            style="
+              border: 2px solid var(--hp-gold);
+              padding: 10px;
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
+              text-transform: uppercase;
+              text-align: left;
+              letter-spacing: 0.04em;
+            "
+          >
+            Опис
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Database
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Database
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Контейнер
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Table
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Collection
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Набір даних
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Row
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Document
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Запис
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Column
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Field
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Атрибут
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Index
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Index
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Прискорення пошуку
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Primary Key
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            _id
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Унікальний ідентифікатор
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<!-- Content Slide (DB Theme) -->
+<section>
+  <h2>Структура документа</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Документ MongoDB
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Типовий структура
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-javascript">{
+  _id: ObjectId("507f1f77bcf86cd799439011"),
+  name: "Alice",
+  email: "alice@example.com",
+  age: 28,
+  active: true,
+  address: {
+    city: "Kyiv",
+    zipcode: "01001"
+  },
+  hobbies: ["reading", "coding", "travel"]
+}</code></pre>
+</section>
+<!-- List Slide (DB Theme) -->
+<section>
+  <h2>CRUD операції</h2>
+  <div style="text-align: left; margin-top: 20px">
+    <ul style="font-size: 0.85em; line-height: 1.6">
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+    </ul>
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    CREATE: Додаємо документ
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    insertOne та insertMany
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-javascript">// Додаємо одного користувача
+db.users.insertOne({
+  name: "Bob",
+  email: "bob@example.com",
+  age: 25
+});
+
+// Додаємо кількох за раз
+db.users.insertMany([
+  { name: "Carol", age: 30 },
+  { name: "David", age: 35 }
+]);</code></pre>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    READ: Отримуємо документи
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    find та findOne
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-javascript">// Отримуємо всіх користувачів
+db.users.find();
+
+// Отримуємо першого відповідного
+db.users.findOne({ name: "Bob" });
+
+// З фільтром
+db.users.find({ age: { $gt: 25 } });  // вік > 25
+
+// З проекцією (вибір колонок)
+db.users.find({}, { name: 1, email: 1 });</code></pre>
+</section>
+<!-- Table Slide (DB Theme) -->
+<section>
+  <h2>Оператори запиту</h2>
+  <div style="margin-top: 20px; overflow-x: auto">
+    <table
+      style="
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.75em;
+        background: var(--hp-parchment);
+      "
+    >
+      <thead>
+        <tr>
+          <th
+            style="
+              border: 2px solid var(--hp-gold);
+              padding: 10px;
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
+              text-transform: uppercase;
+              text-align: left;
+              letter-spacing: 0.04em;
+            "
+          >
+            Оператор
+          </th>
+          <th
+            style="
+              border: 2px solid var(--hp-gold);
+              padding: 10px;
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
+              text-transform: uppercase;
+              text-align: left;
+              letter-spacing: 0.04em;
+            "
+          >
+            Значення
+          </th>
+          <th
+            style="
+              border: 2px solid var(--hp-gold);
+              padding: 10px;
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
+              text-transform: uppercase;
+              text-align: left;
+              letter-spacing: 0.04em;
+            "
+          >
+            Приклад
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            $gt
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            більше
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            { age: { $gt: 25 } }
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            $lt
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            менше
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            { age: { $lt: 65 } }
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            $gte
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            ≥
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            { age: { $gte: 18 } }
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            $lte
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            ≤
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            { age: { $lte: 100 } }
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            $eq
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            дорівнює
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            { status: { $eq: 'active' } }
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            $ne
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            не дорівнює
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            { role: { $ne: 'admin' } }
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            $in
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            у списку
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            { status: { $in: ['active','pending'] } }
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    UPDATE: Оновлюємо дані
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    updateOne та updateMany
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-javascript">// Оновляємо одного користувача
+db.users.updateOne(
+  { name: "Bob" },
+  { $set: { age: 26, updated_at: new Date() } }
+);
+
+// Оновляємо кількох
+db.users.updateMany(
+  { age: { $lt: 18 } },
+  { $set: { status: "minor" } }
+);
+
+// Інкремент
+db.users.updateOne(
+  { _id: 123 },
+  { $inc: { login_count: 1 } }
+);</code></pre>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    DELETE: Видаляємо документи
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    deleteOne та deleteMany
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-javascript">// Видаляємо одного
+db.users.deleteOne({ _id: ObjectId("...") });
+
+// Видаляємо кількох
+db.users.deleteMany({ age: { $lt: 18 } });
+
+// Видаляємо всіх (ОБЕРЕЖНО!)
+db.users.deleteMany({});</code></pre>
+</section>
+<!-- Quiz Slide (Harry Potter Theme) -->
+<section class="quiz-slide">
+  <h2>Міні-вікторина</h2>
+  <h3 style="margin-bottom: 30px; color: var(--hp-scarlet); font-size: 1.3em">Як отримати користувачів віком &gt; 25?</h3>
+
+  <ul style="list-style: none; font-size: 1.1em; padding: 0">
+    <li
+      class="fragment quiz-option"
+      style="
+        padding: 20px;
+        margin: 15px 0;
+        border: 3px solid var(--hp-gold);
+        border-radius: 8px;
+        background: rgba(244, 228, 193, 0.3);
+        transition: all 0.3s ease;
+      "
+    >
+      db.users.find(age &gt; 25)
+    </li>
+    <li
+      class="fragment quiz-option"
+      style="
+        padding: 20px;
+        margin: 15px 0;
+        border: 3px solid var(--hp-gold);
+        border-radius: 8px;
+        background: rgba(244, 228, 193, 0.3);
+        transition: all 0.3s ease;
+      "
+    >
+      db.users.find({ age: { $gt: 25 } })
+    </li>
+    <li
+      class="fragment quiz-option"
+      style="
+        padding: 20px;
+        margin: 15px 0;
+        border: 3px solid var(--hp-gold);
+        border-radius: 8px;
+        background: rgba(244, 228, 193, 0.3);
+        transition: all 0.3s ease;
+      "
+    >
+      db.users.select(age) WHERE age &gt; 25
+    </li>
+  </ul>
+
+  <div
+    class="fragment quiz-highlight"
+    style="
+      margin-top: 25px;
+      padding: 16px 20px;
+      border: 2px solid var(--hp-gold);
+      border-radius: 10px;
+      background: rgba(211, 166, 37, 0.12);
+      color: var(--hp-scarlet);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    "
+  >
+    ✅ Правильна відповідь: db.users.find({ age: { $gt: 25 } })
+  </div>
+  <div
+    class="fragment quiz-explanation"
+    style="
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(211, 166, 37, 0.1);
+      border-left: 4px solid var(--hp-gold);
+      border-radius: 4px;
+    "
+  >
+    <strong style="color: var(--hp-gold); font-size: 1.2em">💡 Пояснення:</strong>
+    <p style="margin-top: 10px; color: var(--hp-ink)">MongoDB використовує оператори $gt, $lt итак далі</p>
+  </div>
+</section>
+        <!-- 11. Часта помилка / Застереження -->
+        <section style="font-size: 0.9em">
+          <h2>Помилка: забути $set</h2>
+          <div
+            style="
+              background: rgba(255, 0, 60, 0.1);
+              border: 3px solid var(--cyber-red);
+              padding: 25px;
+              margin: 25px 0;
+            "
+          >
+            <h3 style="color: var(--cyber-red); margin-top: 0">⚠️ ЗАСТЕРЕЖЕННЯ</h3>
+            <p style="font-size: 1em; line-height: 1.5">Без $set весь документ заміниться</p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px">
+            <div>
+              <h3 style="color: var(--cyber-red); text-align: center; font-size: 1em">❌ Неправильно</h3>
+              <pre
+                style="font-size: 1.15em"
+              ><code class="language-javascript">db.users.updateOne(
+  { _id: 123 },
+  { age: 26 }  // НЕПРАВИЛЬНО! замінить весь документ
+);</code></pre>
+              <p style="color: var(--cyber-red); font-size: 0.85em; margin-top: 12px">
+                Документ буде мати тільки поле age
+              </p>
+            </div>
+            <div>
+              <h3 style="color: #00ff00; text-align: center; font-size: 1em">✓ Правильно</h3>
+              <pre
+                style="font-size: 1.15em"
+              ><code class="language-javascript">db.users.updateOne(
+  { _id: 123 },
+  { $set: { age: 26 } }  // оновити тільки age
+);</code></pre>
+              <p style="color: #00ff00; font-size: 0.85em; margin-top: 12px">$set оновлює конкретні поля</p>
+            </div>
+          </div>
+        </section>
+<!-- Timeline Slide (Harry Potter Theme) -->
+<section style="font-size: 0.9em">
+  <h2>Еволюція NoSQL</h2>
+  <p style="margin-bottom: 30px; color: var(--hp-gold); font-style: italic">Від документів до AI</p>
+
+  <div class="timeline-horizontal">
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="background: var(--hp-gold);"
+      >
+        <span class="timeline-year">2009</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">MongoDB</h3>
+        <p class="timeline-description">Перша версія</p>
+      </div>
+    </div>
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="background: var(--hp-gold);"
+      >
+        <span class="timeline-year">2012</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">Atlas</h3>
+        <p class="timeline-description">Cloud MongoDB</p>
+      </div>
+    </div>
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="background: var(--hp-gold);"
+      >
+        <span class="timeline-year">2020</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">Aggregation</h3>
+        <p class="timeline-description">Pipeline для аналізу</p>
+      </div>
+    </div>
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="background: var(--hp-gold);"
+      >
+        <span class="timeline-year">2025</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">AI Search</h3>
+        <p class="timeline-description">Векторний пошук</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- List Slide (DB Theme) -->
+<section>
+  <h2>Best practices MongoDB</h2>
+  <div style="text-align: left; margin-top: 20px">
+    <ul style="font-size: 0.85em; line-height: 1.6">
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+    </ul>
+  </div>
+</section>
+<!-- Content Slide (DB Theme) -->
+<section>
+  <h2>Міні ТЗ: MongoDB блог</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Комплексний приклад
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Схема блога
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-javascript">// Додаємо пост
+db.posts.insertOne({
+  title: "MongoDB вступ",
+  content: "Документоорієнтована база",
+  author: "alice@example.com",
+  likes: 5,
+  created_at: new Date(),
+  tags: ["database", "nosql"]
+});
+
+// Шукаємо посты автора
+db.posts.find({ author: "alice@example.com" });
+
+// Додаємо лайк
+db.posts.updateOne(
+  { _id: ObjectId("...") },
+  { $inc: { likes: 1 } }
+);</code></pre>
+</section>
+<!-- 12. Підсумок / Ключові висновки -->
+<section>
+  <h2 class="glitch" data-text="Підсумки">
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="3" y="3" width="8" height="8" fill="#fcee0a" />
+      <rect x="13" y="3" width="8" height="8" fill="#00f0ff" />
+      <rect x="3" y="13" width="8" height="8" fill="#ff00ff" />
+      <rect x="13" y="13" width="8" height="8" fill="#fcee0a" />
+    </svg>
+    Підсумки
+  </h2>
+  <div style="margin-top: 50px">
+    <ul style="list-style: none; font-size: 1.15em; line-height: 2.2; padding-left: 0">
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>MongoDB = документна БД без фіксованої схеми</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>CRUD операції: insert, find, update, delete</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>$gt, $lt, $in для складних запитів</span>
+      </li>
+    </ul>
+  </div>
+  <p
+    style="
+      margin-top: 50px;
+      text-align: center;
+      color: var(--cyber-cyan);
+      font-size: 1.1em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    "
+  >
+    <svg width="24" height="24" viewBox="0 0 24 24">
+      <rect x="4" y="8" width="3" height="8" fill="#00f0ff" />
+      <rect x="10" y="6" width="3" height="10" fill="#fcee0a" />
+      <rect x="16" y="4" width="3" height="12" fill="#ff00ff" />
+    </svg>
+    <em>Далі — роботав з датами та часом</em>
+    <svg width="24" height="24" viewBox="0 0 24 24">
+      <rect x="4" y="8" width="3" height="8" fill="#ff00ff" />
+      <rect x="10" y="6" width="3" height="10" fill="#fcee0a" />
+      <rect x="16" y="4" width="3" height="12" fill="#00f0ff" />
+    </svg>
+  </p>
+</section>
+        <!-- 13. Наступні кроки та ресурси -->
+        <section style="font-size: 0.9em">
+          <h2>Домашнє завдання</h2>
+
+          <div
+            style="
+              background: rgba(252, 238, 10, 0.1);
+              border-left: 4px solid var(--cyber-yellow);
+              padding: 18px;
+              margin: 25px 0;
+            "
+          >
+            <h3 style="color: var(--cyber-yellow); margin-top: 0; font-size: 1em">Наступна лекція:</h3>
+            <p style="font-size: 1em">Лекція 13: Дати та час у SQL</p>
+          </div>
+          <div style="margin-top: 30px">
+            <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
+            <ul style="font-size: 0.9em; line-height: 1.7">
+              <li>
+                <a href="https:&#x2F;&#x2F;docs.mongodb.com&#x2F;" style="color: var(--cyber-cyan)">MongoDB docs</a>
+                 
+              </li>
+              <li>
+                <a href="https:&#x2F;&#x2F;www.mongodb.com&#x2F;docs&#x2F;mongodb-shell&#x2F;" style="color: var(--cyber-cyan)">MongoDB shell</a>
+                 
+              </li>
+            </ul>
+          </div>
+          <div style="margin-top: 30px">
+            <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
+            <ul style="font-size: 0.9em; line-height: 1.7">
+              <li>
+                <a href="https:&#x2F;&#x2F;docs.mongodb.com&#x2F;" style="color: var(--cyber-cyan)">MongoDB docs</a>
+                 
+              </li>
+              <li>
+                <a href="https:&#x2F;&#x2F;www.mongodb.com&#x2F;docs&#x2F;mongodb-shell&#x2F;" style="color: var(--cyber-cyan)">MongoDB shell</a>
+                 
+              </li>
+            </ul>
+          </div>
+
+          <p style="margin-top: 40px; text-align: center; color: var(--cyber-yellow); font-size: 1.2em">
+            <strong>Дякую за увагу! 💾</strong>
+          </p>
+
+          <p style="text-align: center; color: var(--cyber-cyan); margin-top: 18px; font-size: 0.95em">
+            <a href="../index.html">← Повернутися до списку лекцій</a>
+          </p>
+        </section>
+      </div>
+    </div>
+
+    <!-- Reveal.js -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.js"></script>
+
+    <!-- Reveal.js Plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/highlight/highlight.js"></script>
+
+    <!-- Mermaid.js (non-module for compatibility) -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <script>
+      const getMermaidConfig = () => {
+        const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+        const mono = prefersDark ? '#ffffff' : '#000000';
+
+        return {
+          startOnLoad: false,
+          theme: 'neutral',
+          themeVariables: {
+            fontSize: '18px',
+            fontFamily: 'EB Garamond, serif',
+            background: 'transparent',
+            mainBkg: 'transparent',
+            secondBkg: 'transparent',
+            primaryColor: 'transparent',
+            secondaryColor: 'transparent',
+            tertiaryColor: 'transparent',
+            primaryBorderColor: mono,
+            clusterBorder: mono,
+            clusterBkg: 'transparent',
+            lineColor: mono,
+            edgeLabelBackground: 'transparent',
+            primaryTextColor: mono,
+            labelTextColor: mono,
+            nodeTextColor: mono,
+            titleColor: mono,
+          },
+        };
+      };
+
+      if (window.mermaid) {
+        window.mermaid.initialize(getMermaidConfig());
+      }
+    </script>
+
+    <!-- Initialize Reveal.js -->
+    <script>
+      Reveal.initialize({
+        hash: true,
+        slideNumber: true,
+        controls: true,
+        progress: true,
+        center: true,
+        transition: 'slide',
+
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+
+      // Initialize Mermaid diagrams when Reveal is ready
+      Reveal.on('ready', () => {
+        if (window.mermaid) {
+          window.mermaid.run({
+            querySelector: '.mermaid',
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

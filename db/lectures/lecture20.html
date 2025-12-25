@@ -4,17 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-      Лекція 1: Огляд системного програмування | Спеціалізовані мови програмування
+      Лекція 20: Індекси та оптимізація | Основи баз даних
     </title>
 
     <!-- SEO Meta Tags -->
     <meta
       name="description"
-      content="Лекція 1: Огляд системного програмування. Курс: Спеціалізовані мови програмування. Викладач: Ординський Олександр, ВТФК Вінниця"
+      content="Лекція 20: Індекси та оптимізація. Курс: Основи баз даних. Викладач: Ординський Олександр, ВТФК Вінниця"
     />
     <meta
       name="keywords"
-      content="Огляд системного програмування, Спеціалізовані мови програмування, бази даних, SQL, програмування, лекція, ВТФК"
+      content="Індекси та оптимізація, Основи баз даних, бази даних, SQL, програмування, лекція, ВТФК"
     />
     <meta name="author" content="Alex Ordynski" />
     <meta name="robots" content="index, follow" />
@@ -22,11 +22,11 @@
     <!-- Open Graph Meta Tags -->
     <meta
       property="og:title"
-      content="Лекція 1: Огляд системного програмування"
+      content="Лекція 20: Індекси та оптимізація"
     />
     <meta
       property="og:description"
-      content="Спеціалізовані мови програмування. Викладач: Ординський Олександр, ВТФК Вінниця"
+      content="Основи баз даних. Викладач: Ординський Олександр, ВТФК Вінниця"
     />
     <meta property="og:type" content="article" />
     <meta property="og:locale" content="uk_UA" />
@@ -35,9 +35,9 @@
     <meta name="twitter:card" content="summary" />
     <meta
       name="twitter:title"
-      content="Лекція 1: Огляд системного програмування"
+      content="Лекція 20: Індекси та оптимізація"
     />
-    <meta name="twitter:description" content="Спеціалізовані мови програмування" />
+    <meta name="twitter:description" content="Основи баз даних" />
 
     <!-- Reveal.js CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.css" />
@@ -48,30 +48,44 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css"
     />
 
-    <!-- ШРИФТИ (CYBERPUNK + КИРИЛИЦЯ) -->
+    <!-- ШРИФТИ (HARRY POTTER + КИРИЛИЦЯ) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;700&family=Orbitron:wght@700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=EB+Garamond:wght@400;700&family=Courier+Prime:wght@400;700&display=swap"
       rel="stylesheet"
     />
 
-    <!-- Custom Cyberpunk Theme -->
-    <link rel="stylesheet" href="../css/cyberpunk-theme.css" />
+    <!-- Custom Harry Potter Theme -->
+    <link rel="stylesheet" href="../css/harry-potter-theme.css" />
   </head>
   <body>
     <div class="reveal">
       <div class="slides">
 <!-- 1. Титульний слайд -->
 <section>
-  <h1 class="glitch" data-text="ЛЕКЦІЯ 1">ЛЕКЦІЯ 1</h1>
-  <h2>Огляд системного програмування</h2>
+  <h1 class="glitch" data-text="ЛЕКЦІЯ 20">ЛЕКЦІЯ 20</h1>
+  <h2>Індекси та оптимізація</h2>
   <p style="margin-top: 20px; color: var(--cyber-yellow)">
-    <strong>Спеціалізовані мови програмування</strong>
+    <strong>Основи баз даних</strong>
   </p>
   <p style="color: var(--cyber-cyan)">
     <em>VTFK • 2025</em>
   </p>
+</section>
+<!-- 3. Огляд попередньої лекції -->
+<section>
+  <h2>Що вже вивчили</h2>
+  <p style="color: var(--cyber-yellow); margin-bottom: 30px">
+    <strong>Лекція 19: MongoDB Aggregation</strong>
+  </p>
+  <div style="margin-top: 30px">
+    <ul style="font-size: 1.1em; line-height: 1.8">
+      <li>Aggregation pipeline етапи</li>
+      <li>$match, $group, $sort</li>
+      <li>JOIN у MongoDB</li>
+    </ul>
+  </div>
 </section>
 <!-- 2. Дорожня карта (План лекції) -->
 <section>
@@ -97,28 +111,28 @@
           <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
           <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
         </svg>
-        <span>Системне програмування: визначення</span>
+        <span>Як працюють індекси</span>
       </li>
       <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
           <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
         </svg>
-        <span>C, Rust, Assembly — порівняння</span>
+        <span>B-tree структура</span>
       </li>
       <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
           <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
         </svg>
-        <span>Архітектура комп'ютера</span>
+        <span>Коли індексувати</span>
       </li>
       <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
           <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
         </svg>
-        <span>Навіщо вчити низькорівневе</span>
+        <span>EXPLAIN ANALYZE</span>
       </li>
     </ul>
   </div>
@@ -133,7 +147,7 @@
       <rect x="11" y="6" width="2" height="7" fill="#00f0ff" />
       <rect x="11" y="15" width="2" height="2" fill="#00f0ff" />
     </svg>
-    <em>Фокус: від теорії до практики</em>
+    <em>Фокус: продуктивність запитів</em>
   </p>
 </section>
 <!-- 4. Ключове поняття / Визначення -->
@@ -150,7 +164,7 @@
       <rect x="13" y="7" width="4" height="4" fill="#ff00ff" />
       <rect x="7" y="13" width="10" height="2" fill="#fcee0a" />
     </svg>
-    Системне програмування
+    Індекс
   </h2>
   <div
     style="
@@ -173,9 +187,9 @@
         <rect x="4" y="4" width="16" height="16" fill="#fcee0a" />
         <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
       </svg>
-      System Programming
+      Index
     </h3>
-    <p style="font-size: 1.1em; line-height: 1.6">Розробка програм, які взаємодіють прямо з апаратурою: операційні системи, драйвери, компілятори, базові утиліти.</p>
+    <p style="font-size: 1.1em; line-height: 1.6">Окрема структура даних, яка зберігає відсортовані значення поля з посиланням на рядки.</p>
   </div>
   <div
     style="
@@ -195,20 +209,20 @@
     </svg>
     <p style="color: var(--cyber-cyan); margin: 0">
       <strong>Аналогія:</strong>
-      Як архітектор будівель розуміє не тільки дизайн, але й основу, фундамент, конструкцію
+      Як алфавітний покажчик у кінці книги — швидко знайти потрібне
     </p>
   </div>
 </section>
-<!-- Content Slide -->
+<!-- Content Slide (DB Theme) -->
 <section>
-  <h2>Три рівні абстракції</h2>
+  <h2>Без індексу: full table scan</h2>
   <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
   </div>
 </section>
 <!-- 8. Діаграма / Візуалізація (Mermaid) -->
 <section style="font-size: 1em">
-  <h2>Рівні програмування</h2>
-  <p style="margin-bottom: 25px; color: var(--cyber-cyan)">Абстракція і контроль</p>
+  <h2>B-tree індекс</h2>
+  <p style="margin-bottom: 25px; color: var(--hp-gold)">Структура під капотом</p>
 
   <div class="mermaid-container" style="text-align: center; margin: 25px auto">
     <div
@@ -216,166 +230,222 @@
       style="background: transparent; border: none; display: inline-block; text-align: left"
     >
       %%{init: {"theme": "neutral", "mermaid": {"version": "11.12.2"}}}%%
-graph LR
-  App["Додатки<br/>Python, JS"] -->|calls| OS["ОС<br/>Linux/Windows<br/>C, Rust"]
-  OS -->|calls| HW["Апаратура<br/>Assembly<br/>x86-64"]
+graph TD
+  Root["Root<br/>(a-m)"] --> L1["Left<br/>(a-d)"] 
+  Root --> L2["Middle<br/>(e-l)"]
+  Root --> L3["Right<br/>(m-z)"]
+  L1 --> Data1["Rows:<br/>aa, ab, ad"]
+  L2 --> Data2["Rows:<br/>ee, kg, ll"]
+  L3 --> Data3["Rows:<br/>mm, qw, zz"]
   
-  Dev1["High-level"] -.-> App
-  Dev2["System-level"] -.-> OS
-  Dev3["Low-level"] -.-> HW
-  
-  style App fill:#E5F3FF
-  style OS fill:#FFE5E5
-  style HW fill:#FFE5FF
+  style Root fill:#FFE5E5
+  style L1 fill:#FFE5E5
+  style L2 fill:#FFE5E5
+  style L3 fill:#FFE5E5
     </div>
   </div>
 </section>
-<!-- Table Slide -->
+<!-- Content Slide (DB Theme) -->
 <section>
-  <h2>Мови системного програмування</h2>
+  <h2>З індексом: быстрий пошук</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  </div>
+</section>
+<!-- Table Slide (DB Theme) -->
+<section>
+  <h2>Порівняння: scan vs index</h2>
   <div style="margin-top: 20px; overflow-x: auto">
-    <table style="width: 100%; border-collapse: collapse; font-size: 0.7em">
+    <table
+      style="
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.75em;
+        background: var(--hp-parchment);
+      "
+    >
       <thead>
         <tr>
           <th
             style="
-              border: 2px solid var(--cyber-cyan);
+              border: 2px solid var(--hp-gold);
               padding: 10px;
-              background: rgba(0, 240, 255, 0.1);
-              color: var(--cyber-yellow);
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
               text-transform: uppercase;
               text-align: left;
+              letter-spacing: 0.04em;
             "
           >
-            Мова
+            Операція
           </th>
           <th
             style="
-              border: 2px solid var(--cyber-cyan);
+              border: 2px solid var(--hp-gold);
               padding: 10px;
-              background: rgba(0, 240, 255, 0.1);
-              color: var(--cyber-yellow);
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
               text-transform: uppercase;
               text-align: left;
+              letter-spacing: 0.04em;
             "
           >
-            Рівень
+            Full Scan
           </th>
           <th
             style="
-              border: 2px solid var(--cyber-cyan);
+              border: 2px solid var(--hp-gold);
               padding: 10px;
-              background: rgba(0, 240, 255, 0.1);
-              color: var(--cyber-yellow);
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
               text-transform: uppercase;
               text-align: left;
+              letter-spacing: 0.04em;
             "
           >
-            Безпека
+            З індексом
           </th>
           <th
             style="
-              border: 2px solid var(--cyber-cyan);
+              border: 2px solid var(--hp-gold);
               padding: 10px;
-              background: rgba(0, 240, 255, 0.1);
-              color: var(--cyber-yellow);
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
               text-transform: uppercase;
               text-align: left;
+              letter-spacing: 0.04em;
             "
           >
-            Продуктивність
-          </th>
-          <th
-            style="
-              border: 2px solid var(--cyber-cyan);
-              padding: 10px;
-              background: rgba(0, 240, 255, 0.1);
-              color: var(--cyber-yellow);
-              text-transform: uppercase;
-              text-align: left;
-            "
-          >
-            Крива навчання
+            Прискорення
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr style="border-bottom: 1px solid var(--cyber-cyan)">
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            C
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            10K рядків
           </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Низький
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            10,000
           </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Ручна
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            ~14
           </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Дуже висока
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Висока
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            714x
           </td>
         </tr>
-        <tr style="border-bottom: 1px solid var(--cyber-cyan)">
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Rust
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            100K рядків
           </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Низький
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            100,000
           </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Автоматична
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            ~17
           </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Висока
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Дуже висока
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            5,882x
           </td>
         </tr>
-        <tr style="border-bottom: 1px solid var(--cyber-cyan)">
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Assembly
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            1M рядків
           </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Дуже низький
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            1,000,000
           </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Немає
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            ~20
           </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Максимальна
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Найвища
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            50,000x
           </td>
         </tr>
-        <tr style="border-bottom: 1px solid var(--cyber-cyan)">
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Python
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            10M рядків
           </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Високий
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            10,000,000
           </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Автоматична
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            ~24
           </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Низька
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Низька
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            416,666x
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </section>
-<!-- Content Slide -->
+<!-- 6. Приклад коду -->
 <section>
-  <h2>Який файл як вибрати?</h2>
-  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Створення індексів (SQL)
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Базові синтаксиси
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">-- Простий індекс
+CREATE INDEX idx_email ON users(email);
+
+-- Композитний (на кількох полях)
+CREATE INDEX idx_user_created ON orders(user_id, created_at);
+
+-- Унікальний
+CREATE UNIQUE INDEX idx_email_unique ON users(email);
+
+-- DESC індекс (для сортування)
+CREATE INDEX idx_recent_orders ON orders(created_at DESC);
+
+-- Видалення
+DROP INDEX idx_email ON users;</code></pre>
+</section>
+<!-- List Slide (DB Theme) -->
+<section>
+  <h2>Коли індексувати</h2>
+  <div style="text-align: left; margin-top: 20px">
+    <ul style="font-size: 0.85em; line-height: 1.6">
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+    </ul>
   </div>
 </section>
 <!-- 6. Приклад коду -->
@@ -391,7 +461,7 @@ graph LR
       <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
       <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
     </svg>
-    Той самий код: три мови
+    EXPLAIN ANALYZE
   </h2>
   <p
     style="
@@ -406,100 +476,23 @@ graph LR
       <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
       <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
     </svg>
-    Додавання двох чисел
+    Перегляд плану виконання
   </p>
-  <pre style="font-size: 1.15em"><code class="language-c">// C: контроль над всім
-#include <stdio.h>
+  <pre style="font-size: 1.15em"><code class="language-sql">-- Без індексу
+EXPLAIN ANALYZE
+SELECT * FROM users WHERE email='test@example.com';
+-- Seq Scan on users (cost=0.00..35.50, rows=1)
 
-int main() {
-    int a = 5, b = 3;
-    int sum = a + b;  // + в C = одна машинна інструкція
-    printf("%d\n", sum);
-    return 0;
-}
-
-// Результат: 8</code></pre>
-</section>
-<!-- 6. Приклад коду -->
-<section>
-  <h2>
-    <svg
-      width="32"
-      height="32"
-      viewBox="0 0 24 24"
-      style="vertical-align: middle; margin-right: 12px"
-    >
-      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
-      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
-      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
-    </svg>
-    Той самий код: Rust
-  </h2>
-  <p
-    style="
-      margin-bottom: 20px;
-      color: var(--cyber-cyan);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    "
-  >
-    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
-      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
-      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
-    </svg>
-    Безпечніше, але більше синтаксису
-  </p>
-  <pre style="font-size: 1.15em"><code class="language-rust">// Rust: безпека + контроль
-fn main() {
-    let a = 5;
-    let b = 3;
-    let sum = a + b;  // Компілятор перевіряє типи
-    println!("{}", sum);
-}
-
-// Результат: 8</code></pre>
-</section>
-<!-- 6. Приклад коду -->
-<section>
-  <h2>
-    <svg
-      width="32"
-      height="32"
-      viewBox="0 0 24 24"
-      style="vertical-align: middle; margin-right: 12px"
-    >
-      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
-      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
-      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
-    </svg>
-    Той самий код: Assembly (x86-64)
-  </h2>
-  <p
-    style="
-      margin-bottom: 20px;
-      color: var(--cyber-cyan);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    "
-  >
-    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
-      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
-      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
-    </svg>
-    Машина говорить нам
-  </p>
-  <pre style="font-size: 1.15em"><code class="language-nasm">; Assembly: абсолютний контроль
-mov rax, 5      ; rax = 5
-mov rbx, 3      ; rbx = 3
-add rax, rbx    ; rax = rax + rbx (8)
-; Результат у rax: 8</code></pre>
+-- З індексом
+CREATE INDEX idx_email ON users(email);
+EXPLAIN ANALYZE
+SELECT * FROM users WHERE email='test@example.com';
+-- Index Scan using idx_email (cost=0.29..8.30, rows=1)</code></pre>
 </section>
 <!-- 8. Діаграма / Візуалізація (Mermaid) -->
 <section style="font-size: 1em">
-  <h2>Як код стає бітами</h2>
-  <p style="margin-bottom: 25px; color: var(--cyber-cyan)">Шлях компіляції</p>
+  <h2>査план выполнення</h2>
+  <p style="margin-bottom: 25px; color: var(--hp-gold)">Порівняння стратегій</p>
 
   <div class="mermaid-container" style="text-align: center; margin: 25px auto">
     <div
@@ -508,50 +501,71 @@ add rax, rbx    ; rax = rax + rbx (8)
     >
       %%{init: {"theme": "neutral", "mermaid": {"version": "11.12.2"}}}%%
 flowchart LR
-  Source["C код<br/>main.c"] --> Compiler["Компілятор<br/>gcc/clang"]
-  Compiler --> ASM["Assembly<br/>main.s"]
-  ASM --> Assembler["Асемблер<br/>as"]
-  Assembler --> OBJ["Об'єктний файл<br/>main.o"]
-  OBJ --> Linker["Лінкер<br/>ld"]
-  Linker --> BIN["Виконавець<br/>./main"]
-  BIN --> CPU["CPU<br/>виконує"]
+  Query[SELECT WHERE] --> Choose{Індекс<br/>існує?}
+  Choose -->|Немає| Seq[Sequential Scan<br/>O(n)]
+  Choose -->|Так| Idx[Index Lookup<br/>O(log n)]
+  Seq --> Result1["Повільно:<br/>1M шукань"]
+  Idx --> Result2["Швидко:<br/>20 шукань"]
   
-  style Source fill:#E5F3FF
-  style BIN fill:#FFE5E5
-  style CPU fill:#FFE5FF
+  style Result1 fill:#FFE5E5
+  style Result2 fill:#E5FFE5
     </div>
   </div>
 </section>
-<!-- List Slide -->
+<!-- Content Slide (DB Theme) -->
 <section>
-  <h2>Чому системне програмування важливо?</h2>
-  <div style="text-align: left; margin-top: 20px">
-    <ul style="font-size: 0.85em; line-height: 1.6">
-      <li style="margin-bottom: 10px; color: var(--cyber-light)">
-        <span style="color: var(--cyber-cyan)"></span>
-      </li>
-      <li style="margin-bottom: 10px; color: var(--cyber-light)">
-        <span style="color: var(--cyber-cyan)"></span>
-      </li>
-      <li style="margin-bottom: 10px; color: var(--cyber-light)">
-        <span style="color: var(--cyber-cyan)"></span>
-      </li>
-      <li style="margin-bottom: 10px; color: var(--cyber-light)">
-        <span style="color: var(--cyber-cyan)"></span>
-      </li>
-    </ul>
-  </div>
-</section>
-<!-- Content Slide -->
-<section>
-  <h2>Архітектура: коротко</h2>
+  <h2>Типи індексів</h2>
   <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
   </div>
 </section>
-<!-- Quiz Slide (Cyberpunk Theme) -->
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Композитний індекс
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Оптимізація сложних запитів
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">-- Поширений запит
+SELECT * FROM orders 
+WHERE user_id=123 AND created_at>'2025-01-01'
+ORDER BY created_at DESC
+LIMIT 10;
+
+-- Оптимальний індекс
+CREATE INDEX idx_user_created ON orders(
+  user_id,      -- перше (більш селективне)
+  created_at DESC -- друге (для ORDER BY)
+);
+
+-- Тепер БД використовує один індекс</code></pre>
+</section>
+<!-- Quiz Slide (Harry Potter Theme) -->
 <section class="quiz-slide">
   <h2>Міні-вікторина</h2>
-  <h3 style="margin-bottom: 30px; color: var(--cyber-cyan); font-size: 1.3em">Яка різниця між C та Assembly?</h3>
+  <h3 style="margin-bottom: 30px; color: var(--hp-scarlet); font-size: 1.3em">На скільки полів потрібен індекс для запиту: WHERE a&#x3D;1 AND b&#x3D;2 AND c&#x3D;3?</h3>
 
   <ul style="list-style: none; font-size: 1.1em; padding: 0">
     <li
@@ -559,39 +573,39 @@ flowchart LR
       style="
         padding: 20px;
         margin: 15px 0;
-        border: 3px solid var(--cyber-cyan);
+        border: 3px solid var(--hp-gold);
         border-radius: 8px;
-        background: rgba(0, 240, 255, 0.05);
+        background: rgba(244, 228, 193, 0.3);
         transition: all 0.3s ease;
       "
     >
-      Немає — Assembly швидше
+      Потрібно 3 індекси
     </li>
     <li
       class="fragment quiz-option"
       style="
         padding: 20px;
         margin: 15px 0;
-        border: 3px solid var(--cyber-cyan);
+        border: 3px solid var(--hp-gold);
         border-radius: 8px;
-        background: rgba(0, 240, 255, 0.05);
+        background: rgba(244, 228, 193, 0.3);
         transition: all 0.3s ease;
       "
     >
-      C — переносима, Assembly — архітектурна
+      Можна 1 композитний
     </li>
     <li
       class="fragment quiz-option"
       style="
         padding: 20px;
         margin: 15px 0;
-        border: 3px solid var(--cyber-cyan);
+        border: 3px solid var(--hp-gold);
         border-radius: 8px;
-        background: rgba(0, 240, 255, 0.05);
+        background: rgba(244, 228, 193, 0.3);
         transition: all 0.3s ease;
       "
     >
-      Assembly безпечніший
+      Індекси не потрібні
     </li>
   </ul>
 
@@ -600,33 +614,33 @@ flowchart LR
     style="
       margin-top: 25px;
       padding: 16px 20px;
-      border: 2px solid var(--cyber-yellow);
+      border: 2px solid var(--hp-gold);
       border-radius: 10px;
-      background: rgba(252, 238, 10, 0.08);
-      color: var(--cyber-yellow);
+      background: rgba(211, 166, 37, 0.12);
+      color: var(--hp-scarlet);
       font-weight: 700;
       letter-spacing: 0.5px;
     "
   >
-    ✅ Правильна відповідь: C — переносима, Assembly — архітектурна
+    ✅ Правильна відповідь: Можна 1 композитний
   </div>
   <div
     class="fragment quiz-explanation"
     style="
       margin-top: 40px;
       padding: 20px;
-      background: rgba(252, 238, 10, 0.1);
-      border-left: 4px solid var(--cyber-yellow);
+      background: rgba(211, 166, 37, 0.1);
+      border-left: 4px solid var(--hp-gold);
       border-radius: 4px;
     "
   >
-    <strong style="color: var(--cyber-yellow); font-size: 1.2em">💡 Пояснення:</strong>
-    <p style="margin-top: 10px; color: var(--cyber-text)">Assembly для x86-64 не працює на ARM. C — зв&#39;язок між логікою та машиною.</p>
+    <strong style="color: var(--hp-gold); font-size: 1.2em">💡 Пояснення:</strong>
+    <p style="margin-top: 10px; color: var(--hp-ink)">Композитний індекс (a, b, c) покриває всі три умови за один lookup</p>
   </div>
 </section>
         <!-- 11. Часта помилка / Застереження -->
         <section style="font-size: 0.9em">
-          <h2>Помилка: мислити &#39;C &#x3D; Assembly&#39;</h2>
+          <h2>Помилка: забагато індексів</h2>
           <div
             style="
               background: rgba(255, 0, 60, 0.1);
@@ -636,7 +650,7 @@ flowchart LR
             "
           >
             <h3 style="color: var(--cyber-red); margin-top: 0">⚠️ ЗАСТЕРЕЖЕННЯ</h3>
-            <p style="font-size: 1em; line-height: 1.5">C часто простіший, ніж Assembly, та переносимий</p>
+            <p style="font-size: 1em; line-height: 1.5">Індекси сповільнюють INSERT/UPDATE/DELETE</p>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px">
@@ -644,29 +658,100 @@ flowchart LR
               <h3 style="color: var(--cyber-red); text-align: center; font-size: 1em">❌ Неправильно</h3>
               <pre
                 style="font-size: 1.15em"
-              ><code class="language-c">// Я писатиму Assembly
-// щоб мій код був швидшим
-int c_version() { return 5 + 3; }</code></pre>
+              ><code class="language-sql">-- 20+ індексів на таблиці
+CREATE INDEX idx1 ON products(name);
+CREATE INDEX idx2 ON products(price);
+CREATE INDEX idx3 ON products(category);
+-- Більше індексів = більше запису</code></pre>
               <p style="color: var(--cyber-red); font-size: 0.85em; margin-top: 12px">
-                Сучасні компілятори (gcc -O3) генерують ідентичний Assembly
+                БД оновлює всі індекси при INSERT
               </p>
             </div>
             <div>
               <h3 style="color: #00ff00; text-align: center; font-size: 1em">✓ Правильно</h3>
               <pre
                 style="font-size: 1.15em"
-              ><code class="language-c">// Пиши на C/Rust першим
-// Оптимізуй тільки вузькі місця
-// Профілюй інструментами: perf, valgrind</code></pre>
-              <p style="color: #00ff00; font-size: 0.85em; margin-top: 12px">Правило 80/20: 80% часу у 20% коду</p>
+              ><code class="language-sql">-- 3-5 індексів на поширені запити
+CREATE INDEX idx_name_price ON products(name, price);
+CREATE INDEX idx_category ON products(category);
+-- Меньше = швидше</code></pre>
+              <p style="color: #00ff00; font-size: 0.85em; margin-top: 12px">Індексуй тільки критичне</p>
             </div>
           </div>
         </section>
-<!-- Content Slide -->
+<!-- List Slide (DB Theme) -->
 <section>
-  <h2>Модулі цього курсу</h2>
+  <h2>Стратегія індексування</h2>
+  <div style="text-align: left; margin-top: 20px">
+    <ul style="font-size: 0.85em; line-height: 1.6">
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+    </ul>
+  </div>
+</section>
+<!-- Content Slide (DB Theme) -->
+<section>
+  <h2>Partial &amp; Filtered індекси</h2>
   <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
   </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Пример: e-commerce оптимізація
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Реальний сценарій
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">-- Товари
+CREATE INDEX idx_active_category ON products(
+  category, price DESC
+) WHERE active=true;
+
+-- Замовлення
+CREATE INDEX idx_user_recent ON orders(
+  user_id, created_at DESC
+);
+
+-- Пошук
+CREATE INDEX idx_product_search ON products(
+  name COLLATE utf8_general_ci
+) USING FULLTEXT;</code></pre>
 </section>
 <!-- 12. Підсумок / Ключові висновки -->
 <section>
@@ -693,7 +778,7 @@ int c_version() { return 5 + 3; }</code></pre>
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
         </svg>
-        <span>Системне програмування — взаємодія з апаратурою</span>
+        <span>Індекси за логарифмічний час O(log n)</span>
       </li>
       <li
         class="fragment highlight-cyber"
@@ -702,7 +787,7 @@ int c_version() { return 5 + 3; }</code></pre>
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
         </svg>
-        <span>C — компроміс між контролем і переносимістю</span>
+        <span>Композитні індекси для складних запитів</span>
       </li>
       <li
         class="fragment highlight-cyber"
@@ -711,7 +796,7 @@ int c_version() { return 5 + 3; }</code></pre>
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
         </svg>
-        <span>Rust — сучасна альтернатива з гарантіями безпеки</span>
+        <span>EXPLAIN ANALYZE показує реальний план</span>
       </li>
     </ul>
   </div>
@@ -732,7 +817,7 @@ int c_version() { return 5 + 3; }</code></pre>
       <rect x="10" y="6" width="3" height="10" fill="#fcee0a" />
       <rect x="16" y="4" width="3" height="12" fill="#ff00ff" />
     </svg>
-    <em>Далі — системи числення</em>
+    <em>Вимірюй перед оптимізацією!</em>
     <svg width="24" height="24" viewBox="0 0 24 24">
       <rect x="4" y="8" width="3" height="8" fill="#ff00ff" />
       <rect x="10" y="6" width="3" height="10" fill="#fcee0a" />
@@ -753,17 +838,17 @@ int c_version() { return 5 + 3; }</code></pre>
             "
           >
             <h3 style="color: var(--cyber-yellow); margin-top: 0; font-size: 1em">Наступна лекція:</h3>
-            <p style="font-size: 1em">Лекція 2: Системи числення</p>
+            <p style="font-size: 1em">Лекція 21: Підсумки</p>
           </div>
           <div style="margin-top: 30px">
             <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
             <ul style="font-size: 0.9em; line-height: 1.7">
               <li>
-                <a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Systems_programming" style="color: var(--cyber-cyan)">The Art of Computer Systems Programming</a>
+                <a href="https:&#x2F;&#x2F;www.postgresql.org&#x2F;docs&#x2F;current&#x2F;sql-createindex.html" style="color: var(--cyber-cyan)">PostgreSQL индексы</a>
                  
               </li>
               <li>
-                <a href="https:&#x2F;&#x2F;www.rust-lang.org&#x2F;what&#x2F;why-rust&#x2F;" style="color: var(--cyber-cyan)">Why Rust?</a>
+                <a href="https:&#x2F;&#x2F;dev.mysql.com&#x2F;doc&#x2F;refman&#x2F;8.0&#x2F;en&#x2F;optimization-indexes.html" style="color: var(--cyber-cyan)">MySQL индексирование</a>
                  
               </li>
             </ul>
@@ -772,11 +857,11 @@ int c_version() { return 5 + 3; }</code></pre>
             <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
             <ul style="font-size: 0.9em; line-height: 1.7">
               <li>
-                <a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Systems_programming" style="color: var(--cyber-cyan)">The Art of Computer Systems Programming</a>
+                <a href="https:&#x2F;&#x2F;www.postgresql.org&#x2F;docs&#x2F;current&#x2F;sql-createindex.html" style="color: var(--cyber-cyan)">PostgreSQL индексы</a>
                  
               </li>
               <li>
-                <a href="https:&#x2F;&#x2F;www.rust-lang.org&#x2F;what&#x2F;why-rust&#x2F;" style="color: var(--cyber-cyan)">Why Rust?</a>
+                <a href="https:&#x2F;&#x2F;dev.mysql.com&#x2F;doc&#x2F;refman&#x2F;8.0&#x2F;en&#x2F;optimization-indexes.html" style="color: var(--cyber-cyan)">MySQL индексирование</a>
                  
               </li>
             </ul>
@@ -813,7 +898,7 @@ int c_version() { return 5 + 3; }</code></pre>
           theme: 'neutral',
           themeVariables: {
             fontSize: '18px',
-            fontFamily: 'Share Tech Mono, monospace',
+            fontFamily: 'EB Garamond, serif',
             background: 'transparent',
             mainBkg: 'transparent',
             secondBkg: 'transparent',
@@ -846,13 +931,7 @@ int c_version() { return 5 + 3; }</code></pre>
         controls: true,
         progress: true,
         center: true,
-        center: true,
         transition: 'slide',
-        width: 1200,
-        height: 700,
-        margin: 0.1,
-        minScale: 0.2,
-        maxScale: 2.0,
 
         plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
       });

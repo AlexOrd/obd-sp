@@ -4,17 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-      Лекція 1: Огляд системного програмування | Спеціалізовані мови програмування
+      Лекція 2: Системи числення | Спеціалізовані мови програмування
     </title>
 
     <!-- SEO Meta Tags -->
     <meta
       name="description"
-      content="Лекція 1: Огляд системного програмування. Курс: Спеціалізовані мови програмування. Викладач: Ординський Олександр, ВТФК Вінниця"
+      content="Лекція 2: Системи числення. Курс: Спеціалізовані мови програмування. Викладач: Ординський Олександр, ВТФК Вінниця"
     />
     <meta
       name="keywords"
-      content="Огляд системного програмування, Спеціалізовані мови програмування, бази даних, SQL, програмування, лекція, ВТФК"
+      content="Системи числення, Спеціалізовані мови програмування, бази даних, SQL, програмування, лекція, ВТФК"
     />
     <meta name="author" content="Alex Ordynski" />
     <meta name="robots" content="index, follow" />
@@ -22,7 +22,7 @@
     <!-- Open Graph Meta Tags -->
     <meta
       property="og:title"
-      content="Лекція 1: Огляд системного програмування"
+      content="Лекція 2: Системи числення"
     />
     <meta
       property="og:description"
@@ -35,7 +35,7 @@
     <meta name="twitter:card" content="summary" />
     <meta
       name="twitter:title"
-      content="Лекція 1: Огляд системного програмування"
+      content="Лекція 2: Системи числення"
     />
     <meta name="twitter:description" content="Спеціалізовані мови програмування" />
 
@@ -64,14 +64,28 @@
       <div class="slides">
 <!-- 1. Титульний слайд -->
 <section>
-  <h1 class="glitch" data-text="ЛЕКЦІЯ 1">ЛЕКЦІЯ 1</h1>
-  <h2>Огляд системного програмування</h2>
+  <h1 class="glitch" data-text="ЛЕКЦІЯ 2">ЛЕКЦІЯ 2</h1>
+  <h2>Системи числення: двійкова, шістнадцяткова, перетворення</h2>
   <p style="margin-top: 20px; color: var(--cyber-yellow)">
     <strong>Спеціалізовані мови програмування</strong>
   </p>
   <p style="color: var(--cyber-cyan)">
     <em>VTFK • 2025</em>
   </p>
+</section>
+<!-- 3. Огляд попередньої лекції -->
+<section>
+  <h2>Що вже вивчили</h2>
+  <p style="color: var(--cyber-yellow); margin-bottom: 30px">
+    <strong>Лекція 1: Огляд системного програмування</strong>
+  </p>
+  <div style="margin-top: 30px">
+    <ul style="font-size: 1.1em; line-height: 1.8">
+      <li>Три рівні абстракції</li>
+      <li>C, Rust, Assembly — порівняння</li>
+      <li>Архітектура x86-64</li>
+    </ul>
+  </div>
 </section>
 <!-- 2. Дорожня карта (План лекції) -->
 <section>
@@ -97,28 +111,28 @@
           <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
           <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
         </svg>
-        <span>Системне програмування: визначення</span>
+        <span>Десяткова система (базова)</span>
       </li>
       <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
           <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
         </svg>
-        <span>C, Rust, Assembly — порівняння</span>
+        <span>Двійкова система</span>
       </li>
       <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
           <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
         </svg>
-        <span>Архітектура комп'ютера</span>
+        <span>Шістнадцяткова система</span>
       </li>
       <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
           <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
         </svg>
-        <span>Навіщо вчити низькорівневе</span>
+        <span>Перетворення між системами</span>
       </li>
     </ul>
   </div>
@@ -133,7 +147,7 @@
       <rect x="11" y="6" width="2" height="7" fill="#00f0ff" />
       <rect x="11" y="15" width="2" height="2" fill="#00f0ff" />
     </svg>
-    <em>Фокус: від теорії до практики</em>
+    <em>Фокус: мислити як комп&#39;ютер</em>
   </p>
 </section>
 <!-- 4. Ключове поняття / Визначення -->
@@ -150,7 +164,7 @@
       <rect x="13" y="7" width="4" height="4" fill="#ff00ff" />
       <rect x="7" y="13" width="10" height="2" fill="#fcee0a" />
     </svg>
-    Системне програмування
+    Система числення
   </h2>
   <div
     style="
@@ -173,9 +187,9 @@
         <rect x="4" y="4" width="16" height="16" fill="#fcee0a" />
         <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
       </svg>
-      System Programming
+      Number System (Numeral System)
     </h3>
-    <p style="font-size: 1.1em; line-height: 1.6">Розробка програм, які взаємодіють прямо з апаратурою: операційні системи, драйвери, компілятори, базові утиліти.</p>
+    <p style="font-size: 1.1em; line-height: 1.6">Символічна система для представлення чисел, де кожна позиція має вагу, залежну від основи (radix).</p>
   </div>
   <div
     style="
@@ -195,20 +209,20 @@
     </svg>
     <p style="color: var(--cyber-cyan); margin: 0">
       <strong>Аналогія:</strong>
-      Як архітектор будівель розуміє не тільки дизайн, але й основу, фундамент, конструкцію
+      Як різні мови говорять одне й те саме, системи числення говорять однакові числа по-різному
     </p>
   </div>
 </section>
 <!-- Content Slide -->
 <section>
-  <h2>Три рівні абстракції</h2>
+  <h2>Позиційна система числення</h2>
   <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
   </div>
 </section>
 <!-- 8. Діаграма / Візуалізація (Mermaid) -->
 <section style="font-size: 1em">
-  <h2>Рівні програмування</h2>
-  <p style="margin-bottom: 25px; color: var(--cyber-cyan)">Абстракція і контроль</p>
+  <h2>Порівняння трьох систем</h2>
+  <p style="margin-bottom: 25px; color: var(--cyber-cyan)">Одне число — три представлення</p>
 
   <div class="mermaid-container" style="text-align: center; margin: 25px auto">
     <div
@@ -216,23 +230,23 @@
       style="background: transparent; border: none; display: inline-block; text-align: left"
     >
       %%{init: {"theme": "neutral", "mermaid": {"version": "11.12.2"}}}%%
-graph LR
-  App["Додатки<br/>Python, JS"] -->|calls| OS["ОС<br/>Linux/Windows<br/>C, Rust"]
-  OS -->|calls| HW["Апаратура<br/>Assembly<br/>x86-64"]
+flowchart LR
+  DEC["Десяткова<br/>255"] --> BIN["Двійкова<br/>11111111"]
+  DEC --> HEX["Шістнадцяткова<br/>FF"]
   
-  Dev1["High-level"] -.-> App
-  Dev2["System-level"] -.-> OS
-  Dev3["Low-level"] -.-> HW
+  BIN -->|8 бітів| BYTE["1 байт"]
+  HEX -->|2 цифри| BYTE
   
-  style App fill:#E5F3FF
-  style OS fill:#FFE5E5
-  style HW fill:#FFE5FF
+  style BYTE fill:#FFE5E5
+  style DEC fill:#E5F3FF
+  style BIN fill:#FFE5FF
+  style HEX fill:#E5FFE5
     </div>
   </div>
 </section>
 <!-- Table Slide -->
 <section>
-  <h2>Мови системного програмування</h2>
+  <h2>Таблиця перетворення (0-15)</h2>
   <div style="margin-top: 20px; overflow-x: auto">
     <table style="width: 100%; border-collapse: collapse; font-size: 0.7em">
       <thead>
@@ -247,7 +261,7 @@ graph LR
               text-align: left;
             "
           >
-            Мова
+            Десяткова
           </th>
           <th
             style="
@@ -259,7 +273,7 @@ graph LR
               text-align: left;
             "
           >
-            Рівень
+            Двійкова
           </th>
           <th
             style="
@@ -271,101 +285,97 @@ graph LR
               text-align: left;
             "
           >
-            Безпека
-          </th>
-          <th
-            style="
-              border: 2px solid var(--cyber-cyan);
-              padding: 10px;
-              background: rgba(0, 240, 255, 0.1);
-              color: var(--cyber-yellow);
-              text-transform: uppercase;
-              text-align: left;
-            "
-          >
-            Продуктивність
-          </th>
-          <th
-            style="
-              border: 2px solid var(--cyber-cyan);
-              padding: 10px;
-              background: rgba(0, 240, 255, 0.1);
-              color: var(--cyber-yellow);
-              text-transform: uppercase;
-              text-align: left;
-            "
-          >
-            Крива навчання
+            Шістнадцяткова
           </th>
         </tr>
       </thead>
       <tbody>
         <tr style="border-bottom: 1px solid var(--cyber-cyan)">
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            C
+            0
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Низький
+            0000
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Ручна
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Дуже висока
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Висока
+            0
           </td>
         </tr>
         <tr style="border-bottom: 1px solid var(--cyber-cyan)">
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Rust
+            1
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Низький
+            0001
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Автоматична
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Висока
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Дуже висока
+            1
           </td>
         </tr>
         <tr style="border-bottom: 1px solid var(--cyber-cyan)">
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Assembly
+            2
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Дуже низький
+            0010
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Немає
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Максимальна
-          </td>
-          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Найвища
+            2
           </td>
         </tr>
         <tr style="border-bottom: 1px solid var(--cyber-cyan)">
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Python
+            8
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Високий
+            1000
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Автоматична
+            8
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--cyber-cyan)">
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            15
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Низька
+            1111
           </td>
           <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
-            Низька
+            F
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--cyber-cyan)">
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            16
+          </td>
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            10000
+          </td>
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            10
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--cyber-cyan)">
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            255
+          </td>
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            11111111
+          </td>
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            FF
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--cyber-cyan)">
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            256
+          </td>
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            100000000
+          </td>
+          <td style="border: 1px solid var(--cyber-cyan); padding: 8px; color: var(--cyber-light)">
+            100
           </td>
         </tr>
       </tbody>
@@ -374,7 +384,7 @@ graph LR
 </section>
 <!-- Content Slide -->
 <section>
-  <h2>Який файл як вибрати?</h2>
+  <h2>Чому двійкова? Чому шістнадцяткова?</h2>
   <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
   </div>
 </section>
@@ -391,7 +401,7 @@ graph LR
       <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
       <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
     </svg>
-    Той самий код: три мови
+    Перетворення в Python
   </h2>
   <p
     style="
@@ -406,19 +416,19 @@ graph LR
       <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
       <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
     </svg>
-    Додавання двох чисел
+    Практичні функції
   </p>
-  <pre style="font-size: 1.15em"><code class="language-c">// C: контроль над всім
-#include <stdio.h>
+  <pre style="font-size: 1.15em"><code class="language-python"># Десяткова -> Двійкова
+print(bin(10))     # 0b1010
+print(int('1010', 2))  # 10
 
-int main() {
-    int a = 5, b = 3;
-    int sum = a + b;  // + в C = одна машинна інструкція
-    printf("%d\n", sum);
-    return 0;
-}
+# Десяткова -> Шістнадцяткова
+print(hex(255))    # 0xff
+print(int('FF', 16))   # 255
 
-// Результат: 8</code></pre>
+# Прямі перетворення
+print(int('1111', 2))      # 15
+print(hex(int('1111', 2))) # 0xf</code></pre>
 </section>
 <!-- 6. Приклад коду -->
 <section>
@@ -433,7 +443,7 @@ int main() {
       <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
       <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
     </svg>
-    Той самий код: Rust
+    Ручне перетворення: десяткова -&gt; двійкова
   </h2>
   <p
     style="
@@ -448,17 +458,17 @@ int main() {
       <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
       <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
     </svg>
-    Безпечніше, але більше синтаксису
+    Алгоритм поділу
   </p>
-  <pre style="font-size: 1.15em"><code class="language-rust">// Rust: безпека + контроль
-fn main() {
-    let a = 5;
-    let b = 3;
-    let sum = a + b;  // Компілятор перевіряє типи
-    println!("{}", sum);
-}
+  <pre style="font-size: 1.15em"><code class="language-text">Перетвори 13 в двійкову:
 
-// Результат: 8</code></pre>
+13 ÷ 2 = 6 залишок 1
+ 6 ÷ 2 = 3 залишок 0
+ 3 ÷ 2 = 1 залишок 1
+ 1 ÷ 2 = 0 залишок 1
+
+Читаємо залишки знизу вгору: 1101
+Перевірка: 1×8 + 1×4 + 0×2 + 1×1 = 13 ✓</code></pre>
 </section>
 <!-- 6. Приклад коду -->
 <section>
@@ -473,7 +483,7 @@ fn main() {
       <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
       <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
     </svg>
-    Той самий код: Assembly (x86-64)
+    Ручне перетворення: двійкова -&gt; десяткова
   </h2>
   <p
     style="
@@ -488,45 +498,26 @@ fn main() {
       <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
       <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
     </svg>
-    Машина говорить нам
+    Сума ваг
   </p>
-  <pre style="font-size: 1.15em"><code class="language-nasm">; Assembly: абсолютний контроль
-mov rax, 5      ; rax = 5
-mov rbx, 3      ; rbx = 3
-add rax, rbx    ; rax = rax + rbx (8)
-; Результат у rax: 8</code></pre>
-</section>
-<!-- 8. Діаграма / Візуалізація (Mermaid) -->
-<section style="font-size: 1em">
-  <h2>Як код стає бітами</h2>
-  <p style="margin-bottom: 25px; color: var(--cyber-cyan)">Шлях компіляції</p>
+  <pre style="font-size: 1.15em"><code class="language-text">Перетвори 10110 в десяткову:
 
-  <div class="mermaid-container" style="text-align: center; margin: 25px auto">
-    <div
-      class="mermaid"
-      style="background: transparent; border: none; display: inline-block; text-align: left"
-    >
-      %%{init: {"theme": "neutral", "mermaid": {"version": "11.12.2"}}}%%
-flowchart LR
-  Source["C код<br/>main.c"] --> Compiler["Компілятор<br/>gcc/clang"]
-  Compiler --> ASM["Assembly<br/>main.s"]
-  ASM --> Assembler["Асемблер<br/>as"]
-  Assembler --> OBJ["Об'єктний файл<br/>main.o"]
-  OBJ --> Linker["Лінкер<br/>ld"]
-  Linker --> BIN["Виконавець<br/>./main"]
-  BIN --> CPU["CPU<br/>виконує"]
-  
-  style Source fill:#E5F3FF
-  style BIN fill:#FFE5E5
-  style CPU fill:#FFE5FF
-    </div>
-  </div>
+Позиція:  4  3  2  1  0
+Цифра:    1  0  1  1  0
+Вага:    16  8  4  2  1
+
+= 1×16 + 0×8 + 1×4 + 1×2 + 0×1
+= 16 + 4 + 2
+= 22</code></pre>
 </section>
 <!-- List Slide -->
 <section>
-  <h2>Чому системне програмування важливо?</h2>
+  <h2>Біти та байти: терміни</h2>
   <div style="text-align: left; margin-top: 20px">
     <ul style="font-size: 0.85em; line-height: 1.6">
+      <li style="margin-bottom: 10px; color: var(--cyber-light)">
+        <span style="color: var(--cyber-cyan)"></span>
+      </li>
       <li style="margin-bottom: 10px; color: var(--cyber-light)">
         <span style="color: var(--cyber-cyan)"></span>
       </li>
@@ -542,16 +533,10 @@ flowchart LR
     </ul>
   </div>
 </section>
-<!-- Content Slide -->
-<section>
-  <h2>Архітектура: коротко</h2>
-  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
-  </div>
-</section>
 <!-- Quiz Slide (Cyberpunk Theme) -->
 <section class="quiz-slide">
   <h2>Міні-вікторина</h2>
-  <h3 style="margin-bottom: 30px; color: var(--cyber-cyan); font-size: 1.3em">Яка різниця між C та Assembly?</h3>
+  <h3 style="margin-bottom: 30px; color: var(--cyber-cyan); font-size: 1.3em">Чому 255 в шістнадцятковій це FF, а не 100?</h3>
 
   <ul style="list-style: none; font-size: 1.1em; padding: 0">
     <li
@@ -565,7 +550,7 @@ flowchart LR
         transition: all 0.3s ease;
       "
     >
-      Немає — Assembly швидше
+      F &#x3D; 15, FF &#x3D; 15×16 + 15 &#x3D; 255
     </li>
     <li
       class="fragment quiz-option"
@@ -578,7 +563,7 @@ flowchart LR
         transition: all 0.3s ease;
       "
     >
-      C — переносима, Assembly — архітектурна
+      Просто традиція
     </li>
     <li
       class="fragment quiz-option"
@@ -591,7 +576,7 @@ flowchart LR
         transition: all 0.3s ease;
       "
     >
-      Assembly безпечніший
+      100 було вже занято
     </li>
   </ul>
 
@@ -608,7 +593,7 @@ flowchart LR
       letter-spacing: 0.5px;
     "
   >
-    ✅ Правильна відповідь: C — переносима, Assembly — архітектурна
+    ✅ Правильна відповідь: F &#x3D; 15, FF &#x3D; 15×16 + 15 &#x3D; 255
   </div>
   <div
     class="fragment quiz-explanation"
@@ -621,12 +606,12 @@ flowchart LR
     "
   >
     <strong style="color: var(--cyber-yellow); font-size: 1.2em">💡 Пояснення:</strong>
-    <p style="margin-top: 10px; color: var(--cyber-text)">Assembly для x86-64 не працює на ARM. C — зв&#39;язок між логікою та машиною.</p>
+    <p style="margin-top: 10px; color: var(--cyber-text)">Шістнадцяткова має цифри 0-9 та А-F (10-15). FF &#x3D; F×16 + F &#x3D; 255.</p>
   </div>
 </section>
         <!-- 11. Часта помилка / Застереження -->
         <section style="font-size: 0.9em">
-          <h2>Помилка: мислити &#39;C &#x3D; Assembly&#39;</h2>
+          <h2>Помилка: мішати префікси</h2>
           <div
             style="
               background: rgba(255, 0, 60, 0.1);
@@ -636,7 +621,7 @@ flowchart LR
             "
           >
             <h3 style="color: var(--cyber-red); margin-top: 0">⚠️ ЗАСТЕРЕЖЕННЯ</h3>
-            <p style="font-size: 1em; line-height: 1.5">C часто простіший, ніж Assembly, та переносимий</p>
+            <p style="font-size: 1em; line-height: 1.5">0x означає шістнадцяткову, 0b означає двійкову</p>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px">
@@ -644,27 +629,28 @@ flowchart LR
               <h3 style="color: var(--cyber-red); text-align: center; font-size: 1em">❌ Неправильно</h3>
               <pre
                 style="font-size: 1.15em"
-              ><code class="language-c">// Я писатиму Assembly
-// щоб мій код був швидшим
-int c_version() { return 5 + 3; }</code></pre>
+              ><code class="language-c">// Неправильно
+int x = FF;      // Помилка: FF не визначено
+int y = 11111111;  // Це десяткова 11111111, не двійкова</code></pre>
               <p style="color: var(--cyber-red); font-size: 0.85em; margin-top: 12px">
-                Сучасні компілятори (gcc -O3) генерують ідентичний Assembly
+                Компілятор має знати систему числення
               </p>
             </div>
             <div>
               <h3 style="color: #00ff00; text-align: center; font-size: 1em">✓ Правильно</h3>
               <pre
                 style="font-size: 1.15em"
-              ><code class="language-c">// Пиши на C/Rust першим
-// Оптимізуй тільки вузькі місця
-// Профілюй інструментами: perf, valgrind</code></pre>
-              <p style="color: #00ff00; font-size: 0.85em; margin-top: 12px">Правило 80/20: 80% часу у 20% коду</p>
+              ><code class="language-c">// Правильно
+int x = 0xFF;    // 255 в шістнадцятковій
+int y = 0b11111111;  // 255 в двійковій
+int z = 255;     // 255 в десятковій</code></pre>
+              <p style="color: #00ff00; font-size: 0.85em; margin-top: 12px">Префікси: 0x = hex, 0b = binary, без = decimal</p>
             </div>
           </div>
         </section>
 <!-- Content Slide -->
 <section>
-  <h2>Модулі цього курсу</h2>
+  <h2>Адреси пам&#39;яті: чому шістнадцяткова?</h2>
   <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
   </div>
 </section>
@@ -693,7 +679,7 @@ int c_version() { return 5 + 3; }</code></pre>
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
         </svg>
-        <span>Системне програмування — взаємодія з апаратурою</span>
+        <span>Двійкова (2): як мислить CPU</span>
       </li>
       <li
         class="fragment highlight-cyber"
@@ -702,7 +688,7 @@ int c_version() { return 5 + 3; }</code></pre>
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
         </svg>
-        <span>C — компроміс між контролем і переносимістю</span>
+        <span>Шістнадцяткова (16): зручна для людини</span>
       </li>
       <li
         class="fragment highlight-cyber"
@@ -711,7 +697,7 @@ int c_version() { return 5 + 3; }</code></pre>
         <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
           <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
         </svg>
-        <span>Rust — сучасна альтернатива з гарантіями безпеки</span>
+        <span>Перетворення: поділ або сума ваг позицій</span>
       </li>
     </ul>
   </div>
@@ -732,7 +718,7 @@ int c_version() { return 5 + 3; }</code></pre>
       <rect x="10" y="6" width="3" height="10" fill="#fcee0a" />
       <rect x="16" y="4" width="3" height="12" fill="#ff00ff" />
     </svg>
-    <em>Далі — системи числення</em>
+    <em>Далі — архітектура x86-64 та регістри</em>
     <svg width="24" height="24" viewBox="0 0 24 24">
       <rect x="4" y="8" width="3" height="8" fill="#ff00ff" />
       <rect x="10" y="6" width="3" height="10" fill="#fcee0a" />
@@ -753,17 +739,17 @@ int c_version() { return 5 + 3; }</code></pre>
             "
           >
             <h3 style="color: var(--cyber-yellow); margin-top: 0; font-size: 1em">Наступна лекція:</h3>
-            <p style="font-size: 1em">Лекція 2: Системи числення</p>
+            <p style="font-size: 1em">Лекція 3: Архітектура x86-64</p>
           </div>
           <div style="margin-top: 30px">
             <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
             <ul style="font-size: 0.9em; line-height: 1.7">
               <li>
-                <a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Systems_programming" style="color: var(--cyber-cyan)">The Art of Computer Systems Programming</a>
+                <a href="https:&#x2F;&#x2F;www.rapidtables.com&#x2F;convert&#x2F;number&#x2F;base-converter.html" style="color: var(--cyber-cyan)">Number systems converter</a>
                  
               </li>
               <li>
-                <a href="https:&#x2F;&#x2F;www.rust-lang.org&#x2F;what&#x2F;why-rust&#x2F;" style="color: var(--cyber-cyan)">Why Rust?</a>
+                <a href="https:&#x2F;&#x2F;www.tutorialspoint.com&#x2F;computer_fundamentals&#x2F;number_system.htm" style="color: var(--cyber-cyan)">Binary tutorial</a>
                  
               </li>
             </ul>
@@ -772,11 +758,11 @@ int c_version() { return 5 + 3; }</code></pre>
             <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
             <ul style="font-size: 0.9em; line-height: 1.7">
               <li>
-                <a href="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Systems_programming" style="color: var(--cyber-cyan)">The Art of Computer Systems Programming</a>
+                <a href="https:&#x2F;&#x2F;www.rapidtables.com&#x2F;convert&#x2F;number&#x2F;base-converter.html" style="color: var(--cyber-cyan)">Number systems converter</a>
                  
               </li>
               <li>
-                <a href="https:&#x2F;&#x2F;www.rust-lang.org&#x2F;what&#x2F;why-rust&#x2F;" style="color: var(--cyber-cyan)">Why Rust?</a>
+                <a href="https:&#x2F;&#x2F;www.tutorialspoint.com&#x2F;computer_fundamentals&#x2F;number_system.htm" style="color: var(--cyber-cyan)">Binary tutorial</a>
                  
               </li>
             </ul>

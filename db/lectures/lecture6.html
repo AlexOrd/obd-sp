@@ -1,0 +1,1051 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Лекція 6: Вступ до SQL: декларативний підхід | Основи баз даних
+    </title>
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="Лекція 6: Вступ до SQL: декларативний підхід. Курс: Основи баз даних. Викладач: Ординський Олександр, ВТФК Вінниця"
+    />
+    <meta
+      name="keywords"
+      content="Вступ до SQL: декларативний підхід, Основи баз даних, бази даних, SQL, програмування, лекція, ВТФК"
+    />
+    <meta name="author" content="Alex Ordynski" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta
+      property="og:title"
+      content="Лекція 6: Вступ до SQL: декларативний підхід"
+    />
+    <meta
+      property="og:description"
+      content="Основи баз даних. Викладач: Ординський Олександр, ВТФК Вінниця"
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="uk_UA" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="Лекція 6: Вступ до SQL: декларативний підхід"
+    />
+    <meta name="twitter:description" content="Основи баз даних" />
+
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.css" />
+
+    <!-- Highlight.js Theme (Monokai) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css"
+    />
+
+    <!-- ШРИФТИ (HARRY POTTER + КИРИЛИЦЯ) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=EB+Garamond:wght@400;700&family=Courier+Prime:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom Harry Potter Theme -->
+    <link rel="stylesheet" href="../css/harry-potter-theme.css" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+<!-- 1. Титульний слайд -->
+<section>
+  <h1 class="glitch" data-text="ЛЕКЦІЯ 6">ЛЕКЦІЯ 6</h1>
+  <h2>Вступ до SQL: декларативний підхід</h2>
+  <p style="margin-top: 20px; color: var(--cyber-yellow)">
+    <strong>Основи баз даних</strong>
+  </p>
+  <p style="color: var(--cyber-cyan)">
+    <em>VTFK • 2025</em>
+  </p>
+</section>
+<!-- 3. Огляд попередньої лекції -->
+<section>
+  <h2>Що вже вивчили</h2>
+  <p style="color: var(--cyber-yellow); margin-bottom: 30px">
+    <strong>Лекція 5: Типи даних</strong>
+  </p>
+  <div style="margin-top: 30px">
+    <ul style="font-size: 1.1em; line-height: 1.8">
+      <li>INT, VARCHAR, DECIMAL, DATE</li>
+      <li>CREATE TABLE з обмеженнями</li>
+      <li>Вибір типу за природою даних</li>
+    </ul>
+  </div>
+</section>
+<!-- 2. Дорожня карта (План лекції) -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <path
+        d="M3,6 L3,10 L7,10 L7,6 Z M10,4 L10,12 L14,12 L14,4 Z M17,8 L17,14 L21,14 L21,8 Z"
+        fill="#fcee0a"
+      />
+      <rect x="3" y="18" width="18" height="2" fill="#00f0ff" />
+    </svg>
+    План лекції
+  </h2>
+  <div style="margin-top: 40px">
+    <ul style="list-style: none; font-size: 1.2em; line-height: 2; padding-left: 0">
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>SQL як декларативна мова</span>
+      </li>
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>Структура SELECT запиту</span>
+      </li>
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>FROM та його логіка</span>
+      </li>
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>Перший живий запит</span>
+      </li>
+    </ul>
+  </div>
+  <p style="margin-top: 40px; color: var(--cyber-cyan); font-size: 0.9em; opacity: 0.8">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 8px"
+    >
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <rect x="11" y="6" width="2" height="7" fill="#00f0ff" />
+      <rect x="11" y="15" width="2" height="2" fill="#00f0ff" />
+    </svg>
+    <em>Фокус: как розказати БД ЧТО треба, а не КАК робити</em>
+  </p>
+</section>
+<!-- Content Slide (DB Theme) -->
+<section>
+  <h2>Декларативний vs Імперативний</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  </div>
+</section>
+<!-- 4. Ключове поняття / Визначення -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="3" y="3" width="18" height="18" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="7" y="7" width="4" height="4" fill="#00f0ff" />
+      <rect x="13" y="7" width="4" height="4" fill="#ff00ff" />
+      <rect x="7" y="13" width="10" height="2" fill="#fcee0a" />
+    </svg>
+    SQL
+  </h2>
+  <div
+    style="
+      background: rgba(252, 238, 10, 0.1);
+      border-left: 4px solid var(--cyber-yellow);
+      padding: 20px;
+      margin: 30px 0;
+    "
+  >
+    <h3
+      style="
+        color: var(--cyber-yellow);
+        margin-top: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      "
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <rect x="4" y="4" width="16" height="16" fill="#fcee0a" />
+        <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+      </svg>
+      Structured Query Language
+    </h3>
+    <p style="font-size: 1.1em; line-height: 1.6">Мова запитів для отримання, вставки, оновлення та видалення даних у СУБД.</p>
+  </div>
+  <div
+    style="
+      margin-top: 30px;
+      padding: 15px;
+      background: rgba(0, 240, 255, 0.05);
+      border: 1px solid var(--cyber-cyan);
+      display: flex;
+      gap: 12px;
+      align-items: start;
+    "
+  >
+    <svg width="28" height="28" viewBox="0 0 24 24" style="flex-shrink: 0; margin-top: 2px">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <rect x="11" y="6" width="2" height="2" fill="#fcee0a" />
+      <path d="M10,10 L10,17 L14,17 L14,10 Z" fill="#00f0ff" />
+    </svg>
+    <p style="color: var(--cyber-cyan); margin: 0">
+      <strong>Аналогія:</strong>
+      Як звернення до вчителя: ви говорите, що треба, учитель виконує найоптимальнішим способом
+    </p>
+  </div>
+</section>
+<!-- 8. Діаграма / Візуалізація (Mermaid) -->
+<section style="font-size: 1em">
+  <h2>Цикл SQL запиту</h2>
+  <p style="margin-bottom: 25px; color: var(--hp-gold)">Від формулювання до результату</p>
+
+  <div class="mermaid-container" style="text-align: center; margin: 25px auto">
+    <div
+      class="mermaid"
+      style="background: transparent; border: none; display: inline-block; text-align: left"
+    >
+      %%{init: {"theme": "neutral", "mermaid": {"version": "11.12.2"}}}%%
+flowchart LR
+  Write[Напишіть запит] --> Parse[Парсинг]
+  Parse --> Plan[Query planner]
+  Plan --> Optimize[Оптимізація]
+  Optimize --> Exec[Виконання]
+  Exec --> Return[Повернення рядків]
+    </div>
+  </div>
+</section>
+<!-- 5. Розбір синтаксису -->
+<section style="font-size: 0.9em">
+  <h2>Базовий SELECT</h2>
+  <div style="margin: 30px 0">
+    <div
+      style="
+        background: rgba(10, 10, 15, 0.8);
+        border: 2px solid var(--cyber-magenta);
+        padding: 25px;
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 1.38em;
+      "
+    >
+      <code style="color: var(--cyber-yellow)">SELECT column1, column2, ...
+FROM table_name;</code>
+    </div>
+  </div>
+  <div style="margin-top: 25px">
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        SELECT
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — які колонки показати
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        FROM
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — з якої таблиці брати дані
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        ;
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — кінець запиту
+      </span>
+    </div>
+  </div>
+  <div style="margin-top: 25px">
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        SELECT
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — які колонки показати
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        FROM
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — з якої таблиці брати дані
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        ;
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — кінець запиту
+      </span>
+    </div>
+  </div>
+  <div style="margin-top: 25px">
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        SELECT
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — які колонки показати
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        FROM
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — з якої таблиці брати дані
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        ;
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — кінець запиту
+      </span>
+    </div>
+  </div>
+</section>
+<!-- Content Slide (DB Theme) -->
+<section>
+  <h2>Що робить SELECT</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  </div>
+</section>
+<!-- List Slide (DB Theme) -->
+<section>
+  <h2>Компоненти запиту</h2>
+  <div style="text-align: left; margin-top: 20px">
+    <ul style="font-size: 0.85em; line-height: 1.6">
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+    </ul>
+  </div>
+</section>
+<!-- 8. Діаграма / Візуалізація (Mermaid) -->
+<section style="font-size: 1em">
+  <h2>Рух даних крізь SELECT</h2>
+  <p style="margin-bottom: 25px; color: var(--hp-gold)">Таблиця → результат</p>
+
+  <div class="mermaid-container" style="text-align: center; margin: 25px auto">
+    <div
+      class="mermaid"
+      style="background: transparent; border: none; display: inline-block; text-align: left"
+    >
+      %%{init: {"theme": "neutral", "mermaid": {"version": "11.12.2"}}}%%
+flowchart TD
+  Table[(Таблиця<br/>100 рядків,<br/>10 колонок)]
+  Table -->|FROM| ReadAll[Прочитати все]
+  ReadAll -->|WHERE| Filter[Відфільтрувати]
+  Filter -->|SELECT| Project[Вибрати колонки]
+  Project -->|ORDER BY| Sort[Сортувати]
+  Sort -->|LIMIT| Limit[Обмежити рядки]
+  Limit -->|return| Result[Результат<br/>N рядків,<br/>M колонок]
+    </div>
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Перший запит
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Вибираємо все з таблиці users
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">SELECT * FROM users;</code></pre>
+</section>
+<!-- Content Slide (DB Theme) -->
+<section>
+  <h2>Коментарі у SQL</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Приклад з коментарями
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Вибираємо ID та ім'я користувачів
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">-- Отримуємо активних користувачів
+SELECT 
+  id,           -- унікальний ідентифікатор
+  name,         -- повне ім'я
+  email         -- контактний email
+FROM users;  -- вся таблиця користувачів</code></pre>
+</section>
+<!-- Table Slide (DB Theme) -->
+<section>
+  <h2>Клавіші SQL (키워드)</h2>
+  <div style="margin-top: 20px; overflow-x: auto">
+    <table
+      style="
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.75em;
+        background: var(--hp-parchment);
+      "
+    >
+      <thead>
+        <tr>
+          <th
+            style="
+              border: 2px solid var(--hp-gold);
+              padding: 10px;
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
+              text-transform: uppercase;
+              text-align: left;
+              letter-spacing: 0.04em;
+            "
+          >
+            Ключове слово
+          </th>
+          <th
+            style="
+              border: 2px solid var(--hp-gold);
+              padding: 10px;
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
+              text-transform: uppercase;
+              text-align: left;
+              letter-spacing: 0.04em;
+            "
+          >
+            Тип
+          </th>
+          <th
+            style="
+              border: 2px solid var(--hp-gold);
+              padding: 10px;
+              background: var(--hp-scarlet-glow);
+              color: var(--hp-ink);
+              text-transform: uppercase;
+              text-align: left;
+              letter-spacing: 0.04em;
+            "
+          >
+            Приклад
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            SELECT
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Clause
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            SELECT col1, col2
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            FROM
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Clause
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            FROM table_name
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            WHERE
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Clause
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            WHERE age > 18
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            ORDER BY
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Clause
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            ORDER BY name ASC
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            AND
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Оператор
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            col1 > 10 AND col2 < 20
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--hp-bronze)">
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            *
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            Спеціальний
+          </td>
+          <td style="border: 1px solid var(--hp-bronze); padding: 8px; color: var(--hp-ink)">
+            SELECT * (усе)
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<!-- Quiz Slide (Harry Potter Theme) -->
+<section class="quiz-slide">
+  <h2>Міні-вікторина</h2>
+  <h3 style="margin-bottom: 30px; color: var(--hp-scarlet); font-size: 1.3em">Що робить SELECT * FROM users?</h3>
+
+  <ul style="list-style: none; font-size: 1.1em; padding: 0">
+    <li
+      class="fragment quiz-option"
+      style="
+        padding: 20px;
+        margin: 15px 0;
+        border: 3px solid var(--hp-gold);
+        border-radius: 8px;
+        background: rgba(244, 228, 193, 0.3);
+        transition: all 0.3s ease;
+      "
+    >
+      Видаляє всіх користувачів
+    </li>
+    <li
+      class="fragment quiz-option"
+      style="
+        padding: 20px;
+        margin: 15px 0;
+        border: 3px solid var(--hp-gold);
+        border-radius: 8px;
+        background: rgba(244, 228, 193, 0.3);
+        transition: all 0.3s ease;
+      "
+    >
+      Читає всі колонки та рядки з users
+    </li>
+    <li
+      class="fragment quiz-option"
+      style="
+        padding: 20px;
+        margin: 15px 0;
+        border: 3px solid var(--hp-gold);
+        border-radius: 8px;
+        background: rgba(244, 228, 193, 0.3);
+        transition: all 0.3s ease;
+      "
+    >
+      Створює нову таблицю
+    </li>
+  </ul>
+
+  <div
+    class="fragment quiz-highlight"
+    style="
+      margin-top: 25px;
+      padding: 16px 20px;
+      border: 2px solid var(--hp-gold);
+      border-radius: 10px;
+      background: rgba(211, 166, 37, 0.12);
+      color: var(--hp-scarlet);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    "
+  >
+    ✅ Правильна відповідь: Читає всі колонки та рядки з users
+  </div>
+  <div
+    class="fragment quiz-explanation"
+    style="
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(211, 166, 37, 0.1);
+      border-left: 4px solid var(--hp-gold);
+      border-radius: 4px;
+    "
+  >
+    <strong style="color: var(--hp-gold); font-size: 1.2em">💡 Пояснення:</strong>
+    <p style="margin-top: 10px; color: var(--hp-ink)">SELECT читає, не модифікує. * означає всі колонки.</p>
+  </div>
+</section>
+        <!-- 11. Часта помилка / Застереження -->
+        <section style="font-size: 0.9em">
+          <h2>Помилка: забути FROM</h2>
+          <div
+            style="
+              background: rgba(255, 0, 60, 0.1);
+              border: 3px solid var(--cyber-red);
+              padding: 25px;
+              margin: 25px 0;
+            "
+          >
+            <h3 style="color: var(--cyber-red); margin-top: 0">⚠️ ЗАСТЕРЕЖЕННЯ</h3>
+            <p style="font-size: 1em; line-height: 1.5">SELECT без FROM = синтаксична помилка</p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px">
+            <div>
+              <h3 style="color: var(--cyber-red); text-align: center; font-size: 1em">❌ Неправильно</h3>
+              <pre
+                style="font-size: 1.15em"
+              ><code class="language-sql">SELECT id, name;  -- звідки взяти?</code></pre>
+              <p style="color: var(--cyber-red); font-size: 0.85em; margin-top: 12px">
+                БД не знає, з якої таблиці брати
+              </p>
+            </div>
+            <div>
+              <h3 style="color: #00ff00; text-align: center; font-size: 1em">✓ Правильно</h3>
+              <pre
+                style="font-size: 1.15em"
+              ><code class="language-sql">SELECT id, name FROM users;</code></pre>
+              <p style="color: #00ff00; font-size: 0.85em; margin-top: 12px">Явно указуємо таблицю</p>
+            </div>
+          </div>
+        </section>
+<!-- Timeline Slide (Harry Potter Theme) -->
+<section style="font-size: 0.9em">
+  <h2>Історія SQL</h2>
+  <p style="margin-bottom: 30px; color: var(--hp-gold); font-style: italic">Від 1970-х до сьогодні</p>
+
+  <div class="timeline-horizontal">
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="background: var(--hp-gold);"
+      >
+        <span class="timeline-year">1974</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">SEQUEL</h3>
+        <p class="timeline-description">Першою версія от IBM</p>
+      </div>
+    </div>
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="background: var(--hp-gold);"
+      >
+        <span class="timeline-year">1986</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">SQL-86</h3>
+        <p class="timeline-description">Стандарт ANSI&#x2F;ISO</p>
+      </div>
+    </div>
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="background: var(--hp-gold);"
+      >
+        <span class="timeline-year">1999</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">SQL:1999</h3>
+        <p class="timeline-description">Додано OOP розширення</p>
+      </div>
+    </div>
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="background: var(--hp-gold);"
+      >
+        <span class="timeline-year">2011</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">SQL:2011</h3>
+        <p class="timeline-description">JSON, віконні функції</p>
+      </div>
+    </div>
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="background: var(--hp-gold);"
+      >
+        <span class="timeline-year">2025</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">Сьогодні</h3>
+        <p class="timeline-description">SQL + AI (vector search)</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- List Slide (DB Theme) -->
+<section>
+  <h2>Best practices для SELECT</h2>
+  <div style="text-align: left; margin-top: 20px">
+    <ul style="font-size: 0.85em; line-height: 1.6">
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)"></span>
+      </li>
+    </ul>
+  </div>
+</section>
+<!-- Content Slide (DB Theme) -->
+<section>
+  <h2>Міні ТЗ: перший запит</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+  </div>
+</section>
+<!-- 8. Діаграма / Візуалізація (Mermaid) -->
+<section style="font-size: 1em">
+  <h2>Структура таблиці students</h2>
+  <p style="margin-bottom: 25px; color: var(--hp-gold)">Приклад даних</p>
+
+  <div class="mermaid-container" style="text-align: center; margin: 25px auto">
+    <div
+      class="mermaid"
+      style="background: transparent; border: none; display: inline-block; text-align: left"
+    >
+      %%{init: {"theme": "neutral", "mermaid": {"version": "11.12.2"}}}%%
+table
+  title Students Table
+  Students
+  id int
+  name varchar
+  email varchar
+  age int
+    </div>
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    Live: запит до students
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Гарна практика
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">-- Отримуємо базову інформацію про студентів
+SELECT 
+  id,
+  name,
+  email
+FROM students;
+
+-- або скорочено
+SELECT id, name, email FROM students;</code></pre>
+</section>
+<!-- 12. Підсумок / Ключові висновки -->
+<section>
+  <h2 class="glitch" data-text="Підсумки">
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="3" y="3" width="8" height="8" fill="#fcee0a" />
+      <rect x="13" y="3" width="8" height="8" fill="#00f0ff" />
+      <rect x="3" y="13" width="8" height="8" fill="#ff00ff" />
+      <rect x="13" y="13" width="8" height="8" fill="#fcee0a" />
+    </svg>
+    Підсумки
+  </h2>
+  <div style="margin-top: 50px">
+    <ul style="list-style: none; font-size: 1.15em; line-height: 2.2; padding-left: 0">
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>SQL декларативна — каже ЧТО треба, не КАК</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>SELECT указує колонки, FROM указує таблицю</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>LIMIT, WHERE, ORDER BY прилаштовують результат</span>
+      </li>
+    </ul>
+  </div>
+  <p
+    style="
+      margin-top: 50px;
+      text-align: center;
+      color: var(--cyber-cyan);
+      font-size: 1.1em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    "
+  >
+    <svg width="24" height="24" viewBox="0 0 24 24">
+      <rect x="4" y="8" width="3" height="8" fill="#00f0ff" />
+      <rect x="10" y="6" width="3" height="10" fill="#fcee0a" />
+      <rect x="16" y="4" width="3" height="12" fill="#ff00ff" />
+    </svg>
+    <em>Далі — функції та вираження у SELECT</em>
+    <svg width="24" height="24" viewBox="0 0 24 24">
+      <rect x="4" y="8" width="3" height="8" fill="#ff00ff" />
+      <rect x="10" y="6" width="3" height="10" fill="#fcee0a" />
+      <rect x="16" y="4" width="3" height="12" fill="#00f0ff" />
+    </svg>
+  </p>
+</section>
+        <!-- 13. Наступні кроки та ресурси -->
+        <section style="font-size: 0.9em">
+          <h2>Домашнє завдання</h2>
+
+          <div
+            style="
+              background: rgba(252, 238, 10, 0.1);
+              border-left: 4px solid var(--cyber-yellow);
+              padding: 18px;
+              margin: 25px 0;
+            "
+          >
+            <h3 style="color: var(--cyber-yellow); margin-top: 0; font-size: 1em">Наступна лекція:</h3>
+            <p style="font-size: 1em">Лекція 7: SELECT та вбудовані функції</p>
+          </div>
+          <div style="margin-top: 30px">
+            <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
+            <ul style="font-size: 0.9em; line-height: 1.7">
+              <li>
+                <a href="https:&#x2F;&#x2F;sqlzoo.net&#x2F;" style="color: var(--cyber-cyan)">SQL basics</a>
+                 
+              </li>
+              <li>
+                <a href="https:&#x2F;&#x2F;www.sqlite.org&#x2F;lang_select.html" style="color: var(--cyber-cyan)">SQLite SELECT</a>
+                 
+              </li>
+            </ul>
+          </div>
+          <div style="margin-top: 30px">
+            <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
+            <ul style="font-size: 0.9em; line-height: 1.7">
+              <li>
+                <a href="https:&#x2F;&#x2F;sqlzoo.net&#x2F;" style="color: var(--cyber-cyan)">SQL basics</a>
+                 
+              </li>
+              <li>
+                <a href="https:&#x2F;&#x2F;www.sqlite.org&#x2F;lang_select.html" style="color: var(--cyber-cyan)">SQLite SELECT</a>
+                 
+              </li>
+            </ul>
+          </div>
+
+          <p style="margin-top: 40px; text-align: center; color: var(--cyber-yellow); font-size: 1.2em">
+            <strong>Дякую за увагу! 💾</strong>
+          </p>
+
+          <p style="text-align: center; color: var(--cyber-cyan); margin-top: 18px; font-size: 0.95em">
+            <a href="../index.html">← Повернутися до списку лекцій</a>
+          </p>
+        </section>
+      </div>
+    </div>
+
+    <!-- Reveal.js -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.js"></script>
+
+    <!-- Reveal.js Plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/highlight/highlight.js"></script>
+
+    <!-- Mermaid.js (non-module for compatibility) -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <script>
+      const getMermaidConfig = () => {
+        const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+        const mono = prefersDark ? '#ffffff' : '#000000';
+
+        return {
+          startOnLoad: false,
+          theme: 'neutral',
+          themeVariables: {
+            fontSize: '18px',
+            fontFamily: 'EB Garamond, serif',
+            background: 'transparent',
+            mainBkg: 'transparent',
+            secondBkg: 'transparent',
+            primaryColor: 'transparent',
+            secondaryColor: 'transparent',
+            tertiaryColor: 'transparent',
+            primaryBorderColor: mono,
+            clusterBorder: mono,
+            clusterBkg: 'transparent',
+            lineColor: mono,
+            edgeLabelBackground: 'transparent',
+            primaryTextColor: mono,
+            labelTextColor: mono,
+            nodeTextColor: mono,
+            titleColor: mono,
+          },
+        };
+      };
+
+      if (window.mermaid) {
+        window.mermaid.initialize(getMermaidConfig());
+      }
+    </script>
+
+    <!-- Initialize Reveal.js -->
+    <script>
+      Reveal.initialize({
+        hash: true,
+        slideNumber: true,
+        controls: true,
+        progress: true,
+        center: true,
+        transition: 'slide',
+
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+
+      // Initialize Mermaid diagrams when Reveal is ready
+      Reveal.on('ready', () => {
+        if (window.mermaid) {
+          window.mermaid.run({
+            querySelector: '.mermaid',
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
