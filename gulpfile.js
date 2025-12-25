@@ -538,7 +538,11 @@ export const htmlMinify = () => {
   const start = Date.now();
   log('🗜️  Minifying HTML...', 'cyan');
   return gulp
-    .src(`${paths.dist.base}/**/*.html`)
+    .src([
+      `${paths.dist.base}/**/*.html`,
+      `!${paths.dist.sp.lectures}/**/*.html`,
+      `!${paths.dist.db.lectures}/**/*.html`,
+    ])
     .pipe(errorHandler('HTML Minify'))
     .pipe(
       htmlmin({
