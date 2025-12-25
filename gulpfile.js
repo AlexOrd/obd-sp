@@ -9,7 +9,7 @@ import { deleteAsync } from 'del';
 import fs from 'fs';
 import path from 'path';
 import plumber from 'gulp-plumber';
-import notify from 'gulp-notify';
+// import notify from 'gulp-notify';
 import gulpif from 'gulp-if';
 import size from 'gulp-size';
 import autoprefixer from 'gulp-autoprefixer';
@@ -89,12 +89,12 @@ const paths = {
  */
 const errorHandler = (title) => {
   return plumber({
-    // @ts-ignore - notify.onError exists at runtime
-    errorHandler: notify.onError({
-      title: `Gulp Error: ${title}`,
-      message: '<%= error.message %>',
-      sound: 'Beep',
-    }),
+    errorHandler: function (err) {
+      const msg = err && err.message ? String(err.message).replace(/\n/g, ' ') : String(err);
+      // Log a concise, ASCII-only error message and continue
+      console.error(`${colors.red}[OBD-SP] Gulp Error: ${title}${colors.reset} ${msg}`);
+      this.emit('end');
+    },
   });
 };
 
@@ -548,6 +548,13 @@ export const htmlMinify = () => {
         minifyJS: true,
         removeAttributeQuotes: false,
         removeEmptyAttributes: false,
+        // Avoid parsing/minifying code blocks and Mermaid diagrams which may include
+        // characters confusing to the HTML parser (e.g., '<' in text labels)
+        ignoreCustomFragments: [
+          /<pre[\s\S]*?<\/pre>/,
+          /<code[\s\S]*?<\/code>/,
+          /<div class=\"mermaid\">[\s\S]*?<\/div>/,
+        ],
       })
     )
     .pipe(gulp.dest(paths.dist.base))
