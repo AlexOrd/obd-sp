@@ -1,0 +1,55 @@
+<!-- Quiz Slide (Harry Potter Theme) -->
+<section class="quiz-slide">
+  <h2>{{title}}</h2>
+  <h3 style="margin-bottom: 30px; color: var(--hp-scarlet); font-size: 1.3em">{{question}}</h3>
+
+  <ul style="list-style: none; font-size: 1.1em; padding: 0">
+    {{#options}}
+    <li
+      class="fragment quiz-option"
+      style="
+        padding: 20px;
+        margin: 15px 0;
+        border: 3px solid var(--hp-gold);
+        border-radius: 8px;
+        background: rgba(244, 228, 193, 0.3);
+        transition: all 0.3s ease;
+      "
+    >
+      {{text}}
+    </li>
+    {{/options}}
+  </ul>
+
+  {{#options}} {{#correct}}
+  <div
+    class="fragment quiz-highlight"
+    style="
+      margin-top: 25px;
+      padding: 16px 20px;
+      border: 2px solid var(--hp-gold);
+      border-radius: 10px;
+      background: rgba(211, 166, 37, 0.12);
+      color: var(--hp-scarlet);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    "
+  >
+    ✅ Правильна відповідь: {{text}}
+  </div>
+  {{/correct}} {{/options}} {{#explanation}}
+  <div
+    class="fragment quiz-explanation"
+    style="
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(211, 166, 37, 0.1);
+      border-left: 4px solid var(--hp-gold);
+      border-radius: 4px;
+    "
+  >
+    <strong style="color: var(--hp-gold); font-size: 1.2em">💡 Пояснення:</strong>
+    <p style="margin-top: 10px; color: var(--hp-ink)">{{explanation}}</p>
+  </div>
+  {{/explanation}}
+</section>

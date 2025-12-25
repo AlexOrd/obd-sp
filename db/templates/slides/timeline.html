@@ -1,0 +1,24 @@
+<!-- Timeline Slide (Harry Potter Theme) -->
+<section style="font-size: 0.9em">
+  <h2>{{title}}</h2>
+  {{#description}}
+  <p style="margin-bottom: 30px; color: var(--hp-gold); font-style: italic">{{{description}}}</p>
+  {{/description}}
+
+  <div class="timeline-horizontal">
+    {{#events}}
+    <div class="timeline-event">
+      <div
+        class="timeline-marker"
+        style="{{#color}}background: {{color}};{{/color}}{{^color}}background: var(--hp-gold);{{/color}}"
+      >
+        <span class="timeline-year">{{year}}</span>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-label">{{label}}</h3>
+        <p class="timeline-description">{{description}}</p>
+      </div>
+    </div>
+    {{/events}}
+  </div>
+</section>

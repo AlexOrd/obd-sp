@@ -1,0 +1,17 @@
+<!-- Content Slide (DB Theme) -->
+<section>
+  <h2>{{title}}</h2>
+  <div style="text-align: left; font-size: 0.9em; line-height: 1.6">
+    {{#content}} {{#text}}
+    <div style="margin-bottom: 15px">
+      {{#type}} {{#isSubtitle}}
+      <h3 style="color: var(--hp-scarlet); margin-top: 20px; margin-bottom: 10px">{{{text}}}</h3>
+      {{/isSubtitle}} {{^isSubtitle}}
+      <p style="color: var(--hp-ink)">{{{text}}}</p>
+      {{/isSubtitle}} {{/type}} {{^type}}
+      <p style="color: var(--hp-ink)">{{{text}}}</p>
+      {{/type}}
+    </div>
+    {{/text}} {{/content}}
+  </div>
+</section>

@@ -77,18 +77,18 @@ Lectures are generated from JSON data files using Mustache templates. **Never ed
 ## 6. Key Documentation Files
 
 - **`README.md`**: General overview and setup.
-- **`AI_LECTURE_CREATION.md`**: Specific guide for AI agents to generate lecture content.
-- **`SLIDE_TYPES_GUIDE.md`**: JSON schemas for all 14 available slide types.
+- **`AI_LECTURE_CREATION.md`**: Guide for AI agents to generate lecture content (23-slide layout).
+- **`SLIDE_TYPES_GUIDE.md`**: JSON schemas for all 19 supported slide types.
 - **`gulpfile.js`**: The source of truth for build logic.
 
 ## 7. Development Rules for AI
 
-1.  **Content Language:** ALWAYS use **Ukrainian** for lecture titles, descriptions, and explanations.
-2.  **File Paths:** Respect the strict separation of `sp/` and `db/` directories.
-3.  **JSON Validity:** Ensure generated JSON is valid (no trailing commas).
-4.  **Slide Types:** Use only the 14 supported slide types defined in `SLIDE_TYPES_GUIDE.md`.
-5.  **Build Verification:** Always run `npm run build` (or `gulp build`) after modifying data or templates to verify integrity.
-6.  **No Ad-Hoc Styles:** Use existing CSS variables and classes defined in `[track]/css/`.
+1. **Content Language:** ALWAYS use **Ukrainian** for lecture titles, descriptions, and explanations.
+2. **File Paths:** Respect the strict separation of `sp/` and `db/` directories.
+3. **JSON Validity:** Ensure generated JSON is valid (no trailing commas).
+4. **Slide Types:** Use only the 19 supported types in `SLIDE_TYPES_GUIDE.md`.
+5. **Build Verification:** Always run `npm run build` (or `gulp build`) after modifying data or templates to verify integrity.
+6. **No Ad-Hoc Styles:** Use existing CSS variables and classes defined in `[track]/css/`.
 
 ## 8. Common Commands
 

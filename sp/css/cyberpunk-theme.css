@@ -405,3 +405,163 @@
   color: var(--cyber-yellow);
   text-shadow: 0 0 10px var(--cyber-yellow);
 }
+
+/* ============================================
+   TIMELINE STYLES (Horizontal)
+   ============================================ */
+.timeline-horizontal {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 30px;
+  padding: 30px 0;
+  position: relative;
+  overflow-x: auto;
+}
+
+.timeline-horizontal::before {
+  content: "";
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--cyber-cyan) 10%,
+    var(--cyber-cyan) 90%,
+    transparent
+  );
+  box-shadow: 0 0 10px var(--cyber-cyan);
+}
+
+.timeline-event {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+.timeline-marker {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid var(--cyber-cyan);
+  background: var(--cyber-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 2;
+  box-shadow:
+    0 0 20px var(--cyber-cyan),
+    inset 0 0 20px rgba(0, 240, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.timeline-marker:hover {
+  transform: scale(1.1);
+  box-shadow:
+    0 0 30px var(--cyber-cyan),
+    inset 0 0 30px rgba(0, 240, 255, 0.3);
+}
+
+.timeline-year {
+  font-family: "Orbitron", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--cyber-yellow);
+  text-shadow: 0 0 10px var(--cyber-yellow);
+}
+
+.timeline-content {
+  max-width: 200px;
+}
+
+.timeline-label {
+  font-family: "Orbitron", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cyber-cyan);
+  margin-bottom: 10px;
+  text-shadow: 0 0 5px var(--cyber-cyan);
+}
+
+.timeline-description {
+  font-size: 14px;
+  color: var(--cyber-light);
+  line-height: 1.4;
+}
+
+/* ============================================
+   QUIZ STYLES
+   ============================================ */
+.quiz-slide {
+  padding: 20px;
+}
+
+.quiz-option {
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.quiz-option::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.quiz-option:hover::before {
+  left: 100%;
+}
+
+.quiz-option.fragment.visible.quiz-correct {
+  border-color: #00ff00 !important;
+  background: rgba(0, 255, 0, 0.1) !important;
+  box-shadow:
+    0 0 20px rgba(0, 255, 0, 0.5),
+    inset 0 0 20px rgba(0, 255, 0, 0.2) !important;
+  animation: correctPulse 0.6s ease;
+}
+
+.quiz-option.fragment.visible:not(.quiz-correct) {
+  opacity: 0.4 !important;
+  border-color: #666 !important;
+  background: rgba(50, 50, 50, 0.3) !important;
+}
+
+@keyframes correctPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.quiz-explanation {
+  animation: slideInUp 0.5s ease;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -19,15 +19,6 @@
   "seoKeywords": "системне програмування, C, C++, memory management, курс, лекції, ВТФК, Вінниця",
   "lectures": [
     {
-      "id": "lecture0",
-      "number": "00",
-      "title": "Демонстрація всіх типів слайдів",
-      "description": "Довідник для викладачів — приклади всіх 14 типів слайдів",
-      "available": true,
-      "statusText": "DEMO",
-      "file": "lecture0.html"
-    },
-    {
       "id": "lecture1",
       "number": "01",
       "title": "Вступ до системного програмування",

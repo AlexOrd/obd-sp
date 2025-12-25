@@ -216,6 +216,8 @@ export const buildSPLectures = (done) => {
             isTable: slide.type === 'table',
             isContent: slide.type === 'content',
             isList: slide.type === 'list',
+            isTimeline: slide.type === 'timeline',
+            isQuiz: slide.type === 'quiz',
             isCodeExample: slide.type === 'code-example' || slide.type === 'code',
           };
         }
@@ -358,6 +360,8 @@ export const buildDBLectures = (done) => {
             isTable: slide.type === 'table',
             isContent: slide.type === 'content',
             isList: slide.type === 'list',
+            isTimeline: slide.type === 'timeline',
+            isQuiz: slide.type === 'quiz',
             isCodeExample: slide.type === 'code-example' || slide.type === 'code',
           };
         }

@@ -16,7 +16,7 @@
       name="keywords"
       content="{{lecture.lectureTitle}}, {{lecture.courseTitle}}, бази даних, SQL, програмування, лекція, ВТФК"
     />
-    <meta name="author" content="Alex Ordynski" />
+    <meta name="author" content="{{teacherNameEn}}" />
     <meta name="robots" content="index, follow" />
 
     <!-- Open Graph Meta Tags -->
@@ -48,7 +48,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css"
     />
 
-    <!-- ШРИФТИ (CYBERPUNK + КИРИЛИЦЯ) -->
+    <!-- ШРИФТИ (HARRY POTTER + КИРИЛИЦЯ) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -71,7 +71,10 @@
         {{/isComparison}} {{#isDebugger}} {{> slides/debugger}} {{/isDebugger}} {{#isCommonMistake}}
         {{> slides/common-mistake}} {{/isCommonMistake}} {{#isSummary}} {{> slides/summary}}
         {{/isSummary}} {{#isLiveCoding}} {{> slides/live-coding}} {{/isLiveCoding}} {{#isNextSteps}}
-        {{> slides/next-steps}} {{/isNextSteps}} {{/lecture.slides}}
+        {{> slides/next-steps}} {{/isNextSteps}} {{#isTable}} {{> slides/table}} {{/isTable}}
+        {{#isContent}} {{> slides/content}} {{/isContent}} {{#isList}} {{> slides/list}} {{/isList}}
+        {{#isTimeline}} {{> slides/timeline}} {{/isTimeline}} {{#isQuiz}} {{> slides/quiz}}
+        {{/isQuiz}} {{/lecture.slides}}
       </div>
     </div>
 
@@ -82,6 +85,43 @@
     <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/notes/notes.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/markdown/markdown.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/highlight/highlight.js"></script>
+
+    <!-- Mermaid.js (non-module for compatibility) -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <script>
+      const getMermaidConfig = () => {
+        const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+        const mono = prefersDark ? '#ffffff' : '#000000';
+
+        return {
+          startOnLoad: false,
+          theme: 'neutral',
+          themeVariables: {
+            fontSize: '18px',
+            fontFamily: 'EB Garamond, serif',
+            background: 'transparent',
+            mainBkg: 'transparent',
+            secondBkg: 'transparent',
+            primaryColor: 'transparent',
+            secondaryColor: 'transparent',
+            tertiaryColor: 'transparent',
+            primaryBorderColor: mono,
+            clusterBorder: mono,
+            clusterBkg: 'transparent',
+            lineColor: mono,
+            edgeLabelBackground: 'transparent',
+            primaryTextColor: mono,
+            labelTextColor: mono,
+            nodeTextColor: mono,
+            titleColor: mono,
+          },
+        };
+      };
+
+      if (window.mermaid) {
+        window.mermaid.initialize(getMermaidConfig());
+      }
+    </script>
 
     <!-- Initialize Reveal.js -->
     <script>
@@ -94,6 +134,15 @@
         transition: 'slide',
 
         plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+
+      // Initialize Mermaid diagrams when Reveal is ready
+      Reveal.on('ready', () => {
+        if (window.mermaid) {
+          window.mermaid.run({
+            querySelector: '.mermaid',
+          });
+        }
       });
     </script>
   </body>

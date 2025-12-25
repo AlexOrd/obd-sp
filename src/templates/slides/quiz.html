@@ -1,0 +1,39 @@
+<!-- Quiz Slide (Cyberpunk Theme) -->
+<section class="quiz-slide">
+  <h2>{{title}}</h2>
+  <h3 style="margin-bottom: 30px; color: var(--cyber-cyan); font-size: 1.3em">{{question}}</h3>
+
+  <ul style="list-style: none; font-size: 1.1em; padding: 0">
+    {{#options}}
+    <li
+      class="fragment quiz-option {{#correct}}quiz-correct{{/correct}}"
+      style="
+        padding: 20px;
+        margin: 15px 0;
+        border: 3px solid var(--cyber-cyan);
+        border-radius: 8px;
+        background: rgba(0, 240, 255, 0.05);
+        transition: all 0.3s ease;
+      "
+    >
+      {{text}}
+    </li>
+    {{/options}}
+  </ul>
+
+  {{#explanation}}
+  <div
+    class="fragment quiz-explanation"
+    style="
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(252, 238, 10, 0.1);
+      border-left: 4px solid var(--cyber-yellow);
+      border-radius: 4px;
+    "
+  >
+    <strong style="color: var(--cyber-yellow); font-size: 1.2em">💡 Пояснення:</strong>
+    <p style="margin-top: 10px; color: var(--cyber-text)">{{explanation}}</p>
+  </div>
+  {{/explanation}}
+</section>

@@ -1,0 +1,28 @@
+<!-- List Slide (DB Theme) -->
+<section>
+  <h2>{{title}}</h2>
+  <div style="text-align: left; margin-top: 20px">
+    <ul style="font-size: 0.85em; line-height: 1.6">
+      {{#items}}
+      <li style="margin-bottom: 10px; color: var(--hp-ink)">
+        <span style="color: var(--hp-scarlet)">{{{text}}}</span>
+        {{#subitems}}
+        <ul
+          style="
+            margin-top: 5px;
+            margin-left: 20px;
+            font-size: 0.9em;
+            border-left: 2px solid var(--hp-gold);
+            padding-left: 10px;
+          "
+        >
+          {{#.}}
+          <li style="margin-bottom: 5px; color: var(--hp-ink)">{{{.}}}</li>
+          {{/.}}
+        </ul>
+        {{/subitems}}
+      </li>
+      {{/items}}
+    </ul>
+  </div>
+</section>

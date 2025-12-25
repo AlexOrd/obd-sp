@@ -12,8 +12,9 @@
 ## 📚 Documentation
 
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - GitHub Actions & GitHub Pages deployment guide
-- **[AI_LECTURE_CREATION.md](AI_LECTURE_CREATION.md)** - Guide for creating new lectures (for AI agents)
-- **[SLIDE_TYPES_GUIDE.md](SLIDE_TYPES_GUIDE.md)** - Complete reference for all 14 slide types (Ukrainian)
+- **[AI_PROJECT_SUMMARY.md](AI_PROJECT_SUMMARY.md)** - Architecture and rules (read first)
+- **[AI_LECTURE_CREATION.md](AI_LECTURE_CREATION.md)** - Guide for creating new lectures (AI agents)
+- **[SLIDE_TYPES_GUIDE.md](SLIDE_TYPES_GUIDE.md)** - Complete reference for all 19 slide types
 - **[CODE_QUALITY.md](CODE_QUALITY.md)** - Code formatting, linting, and quality standards
 
 ---
@@ -68,13 +69,12 @@ The platform supports two independent lecture tracks with distinct themes:
 - Pixel art SVG icons
 - Animated terminal with Typed.js
 
-### 📚 **14 Slide Types**
+### 📚 **19 Slide Types**
 
-- Title, Roadmap, Definition, Code Examples
-- Live Coding with animated terminal
-- Step-by-step code breakdown
-- Debugger workflows, Common mistakes
-- Diagrams, Comparisons, Summaries
+- Title, Roadmap, Previous-lecture, Definition, Syntax
+- Code Example, Code Breakdown, Debugger, Common Mistake
+- Diagram (Mermaid/ASCII), Comparison, Summary, Next Steps
+- Live Coding, Content, List, Table, Timeline, Quiz
 
 ### 🛠 **Modern Build System**
 
@@ -123,6 +123,7 @@ The site will open at `http://localhost:3000` with live reload enabled.
 This project uses **GitHub Actions** for automatic deployment to GitHub Pages.
 
 **How it works:**
+
 - Push to `master` branch → Automatic build & deploy
 - Build runs `npm run build:prod`
 - Deploys to `gh-pages` branch
@@ -214,7 +215,7 @@ obd-sp/
 │   ├── templates/
 │   │   ├── index.html              # SP index page
 │   │   ├── lecture-slide.html      # SP lecture wrapper
-│   │   └── slides/                 # 14 slide templates
+│   │   └── slides/                 # 19 slide templates
 │   ├── css/
 │   │   └── cyberpunk-theme.css     # Cyberpunk theme
 │   └── images/                     # SP-specific images
@@ -226,7 +227,7 @@ obd-sp/
 │   ├── templates/
 │   │   ├── index.html              # DB index page
 │   │   ├── lecture-slide.html      # DB lecture wrapper
-│   │   └── slides/                 # 14 slide templates
+│   │   └── slides/                 # 19 slide templates
 │   ├── css/
 │   │   └── harry-potter-theme.css  # Harry Potter theme
 │   └── images/                     # DB-specific images
@@ -423,20 +424,21 @@ npm run build:prod
 
 # Output in dist/
 dist/
-├── index.html              # Minified
-├── lectures/
-│   ├── lecture0.html      # Minified
-│   └── lecture1.html      # Minified
-├── css/                    # Minified, prefixed
-└── js/                     # Minified, console removed
+├── index.html              # Landing (minified)
+├── sp/
+│   ├── index.html          # Track index
+│   └── lectures/lectureN.html
+├── db/
+│   ├── index.html          # Track index
+│   └── lectures/lectureN.html
+└── static/ ...             # Static assets
 ```
 
 **Optimizations:**
 
-- ✅ HTML minification
-- ✅ CSS minification (level 2)
-- ✅ JS minification with Terser
-- ✅ Console statements removed
+- ✅ HTML/CSS/JS minification
+- ✅ Autoprefixer
+- ✅ Console stripping
 - ✅ File size reporting
 
 ---

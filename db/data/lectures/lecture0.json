@@ -123,9 +123,51 @@
     {
       "type": "diagram",
       "title": "📊 ER-діаграма: Студенти та Курси",
-      "image": "https://via.placeholder.com/800x400/6B2D5C/FFFFFF?text=ER+Diagram:+Students+%E2%86%94+Courses",
-      "caption": "Entity-Relationship діаграма показує зв'язок багато-до-багатьох між студентами та курсами",
-      "description": "Таблиця students зв'язана з courses через проміжну таблицю enrollments. Кожен студент може записатися на багато курсів, і кожен курс може мати багато студентів."
+      "description": "Entity-Relationship діаграма показує зв'язок багато-до-багатьох між студентами та курсами через проміжну таблицю enrollments",
+      "mermaidCode": "erDiagram\n    STUDENTS ||--o{ ENROLLMENTS : записується\n    COURSES ||--o{ ENROLLMENTS : має\n    STUDENTS {\n        int id PK\n        string name\n        string email\n        date birth_date\n    }\n    COURSES {\n        int id PK\n        string title\n        int credits\n        string instructor\n    }\n    ENROLLMENTS {\n        int student_id FK\n        int course_id FK\n        date enrollment_date\n        string grade\n    }"
+    },
+    {
+      "type": "timeline",
+      "title": "📅 Еволюція баз даних",
+      "description": "Ключові віхи в історії розвитку систем управління базами даних",
+      "events": [
+        {
+          "year": "1970",
+          "label": "Реляційна модель",
+          "description": "Едгар Кодд публікує статтю про реляційну модель даних",
+          "color": "#740001"
+        },
+        {
+          "year": "1974",
+          "label": "SQL",
+          "description": "Створено мову SQL в IBM для System R",
+          "color": "#d3a625"
+        },
+        {
+          "year": "1995",
+          "label": "MySQL",
+          "description": "Випуск відкритої реляційної СУБД MySQL",
+          "color": "#6b2d5c"
+        },
+        {
+          "year": "2009",
+          "label": "NoSQL",
+          "description": "Популяризація нереляційних БД (MongoDB, Cassandra)",
+          "color": "#946b2d"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "❓ Швидка перевірка",
+      "question": "Що означає абревіатура SQL?",
+      "options": [
+        { "text": "Simple Query Language", "correct": false },
+        { "text": "Structured Query Language", "correct": true },
+        { "text": "Sequential Query Language", "correct": false },
+        { "text": "Standard Question Language", "correct": false }
+      ],
+      "explanation": "SQL розшифровується як Structured Query Language — стандартна мова запитів для реляційних баз даних, створена в IBM у 1970-х роках."
     },
     {
       "type": "comparison",
