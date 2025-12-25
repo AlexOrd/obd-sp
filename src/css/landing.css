@@ -602,3 +602,199 @@ body {
     padding: 10px 20px;
   }
 }
+
+/* ============================================
+   KNOWLEDGE BASE SECTION
+   ============================================ */
+
+.knowledge-base {
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+  min-height: 100vh;
+}
+
+.kb-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.kb-track {
+  padding: 30px;
+  border-radius: 8px;
+  background: rgba(20, 20, 35, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid;
+}
+
+.sp-kb {
+  border-color: #00f0ff;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+}
+
+.db-kb {
+  border-color: #d3a625;
+  box-shadow: 0 0 20px rgba(211, 166, 37, 0.2);
+}
+
+.kb-title {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.8em;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.sp-kb .kb-title {
+  color: #00f0ff;
+  text-shadow: 0 0 10px #00f0ff;
+}
+
+.db-kb .kb-title {
+  color: #d3a625;
+  text-shadow: 0 0 10px #d3a625;
+}
+
+.kb-icon {
+  font-size: 2em;
+}
+
+.kb-modules {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.kb-module {
+  padding: 20px;
+  border-radius: 6px;
+  border-left: 4px solid;
+  background: rgba(255, 255, 255, 0.02);
+  transition: all 0.3s ease;
+}
+
+.sp-kb .kb-module {
+  border-left-color: #00f0ff;
+}
+
+.db-kb .kb-module {
+  border-left-color: #d3a625;
+}
+
+.kb-module:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(5px);
+}
+
+.module-title {
+  font-family: "Chakra Petch", sans-serif;
+  font-size: 1.1em;
+  font-weight: 700;
+  margin-bottom: 15px;
+  letter-spacing: 0.5px;
+}
+
+.sp-kb .module-title {
+  color: #00f0ff;
+}
+
+.db-kb .module-title {
+  color: #d3a625;
+}
+
+.module-lectures {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lecture-link {
+  padding: 10px 15px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.95em;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ccc;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lecture-link:before {
+  content: "→";
+  font-weight: bold;
+  opacity: 0;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.lecture-link:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.sp-kb .lecture-link:hover {
+  color: #00f0ff;
+  background: rgba(0, 240, 255, 0.1);
+  border-color: #00f0ff;
+}
+
+.sp-kb .lecture-link:hover:before {
+  opacity: 1;
+  transform: translateX(5px);
+}
+
+.db-kb .lecture-link:hover {
+  color: #d3a625;
+  background: rgba(211, 166, 37, 0.1);
+  border-color: #d3a625;
+}
+
+.db-kb .lecture-link:hover:before {
+  opacity: 1;
+  transform: translateX(5px);
+}
+
+/* Responsive knowledge base */
+@media (max-width: 1024px) {
+  .kb-container {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .knowledge-base {
+    padding: 40px 15px;
+  }
+
+  .kb-track {
+    padding: 20px;
+  }
+
+  .kb-title {
+    font-size: 1.4em;
+    margin-bottom: 20px;
+  }
+
+  .kb-modules {
+    gap: 18px;
+  }
+
+  .kb-module {
+    padding: 15px;
+  }
+
+  .module-title {
+    font-size: 1em;
+  }
+
+  .lecture-link {
+    font-size: 0.9em;
+    padding: 8px 12px;
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "track": "db",
+  "lectureNumber": "13",
+  "lectureTitle": "Дати та час у SQL",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 13",
+      "subtitle": "Дати та час у SQL",
+      "meta": { "course": "Основи баз даних", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 12: MongoDB CRUD",
+      "items": ["Документи vs рядки", "CRUD операції", "Фільтри в MongoDB"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["Типи дат/часу", "Функції для роботи з датами", "Часові зони", "Практика: вибір діапазонів"],
+      "note": "Фокус: DATE, TIME, TIMESTAMP та операції"
+    },
+    {
+      "type": "content",
+      "title": "Навіщо дати/час важливі",
+      "text": "Часові дані критичні для бізнес-логіки.",
+      "items": [
+        "Отримувати замовлення за період",
+        "Розраховувати вік, скільки днів минуло",
+        "Сортувати по даті створення"
+      ]
+    },
+    {
+      "type": "definition",
+      "title": "Часові типи",
+      "term": "Temporal Data Types",
+      "definition": "Спеціальні типи даних для представлення дат, часу та їх комбінацій.",
+      "analogy": "Як спеціалізовані контейнери: коробка для дати, коробка для часу"
+    },
+    {
+      "type": "diagram",
+      "title": "Типи дат/часу",
+      "description": "Від простого до складного",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ngraph LR\n  TemporalTypes[Часові типи]\n  TemporalTypes --> DATE[DATE<br/>2025-12-25]\n  TemporalTypes --> TIME[TIME<br/>14:30:45]\n  TemporalTypes --> DATETIME[DATETIME<br/>2025-12-25 14:30:45]\n  TemporalTypes --> TIMESTAMP[TIMESTAMP<br/>UTC timestamp]\n  TemporalTypes --> INTERVAL[INTERVAL<br/>різниця часу]"
+    },
+    {
+      "type": "table",
+      "title": "Типи дат в SQL",
+      "headers": ["Тип", "Формат", "Розмір", "Приклад"],
+      "rows": [
+        ["DATE", "YYYY-MM-DD", "3 B", "2025-12-25"],
+        ["TIME", "HH:MM:SS", "3 B", "14:30:45"],
+        ["DATETIME", "YYYY-MM-DD HH:MM:SS", "8 B", "2025-12-25 14:30:45"],
+        ["TIMESTAMP", "epoch seconds", "4/8 B", "1640005200"],
+        ["YEAR", "YYYY", "1 B", "2025"]
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Коли використовувати кожний тип",
+      "text": "Вибір залежить від потреб.",
+      "items": [
+        "DATE: дні народження, доставка",
+        "TIME: розписання, busbetimes",
+        "TIMESTAMP: коли критичний точний момент (orders, events)"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Приклад таблиці з датами",
+      "description": "Магазин з замовленнями",
+      "language": "sql",
+      "code": "CREATE TABLE orders (\n  id BIGSERIAL PRIMARY KEY,\n  user_id INT,\n  order_date DATE,\n  order_time TIME,\n  created_at TIMESTAMP DEFAULT now(),\n  estimated_delivery DATE,\n  status VARCHAR(20)\n);\n\nINSERT INTO orders VALUES\n(1, 100, '2025-12-25', '14:30:45', now(), '2025-12-27', 'shipped');"
+    },
+    {
+      "type": "list",
+      "title": "Функції для дат",
+      "items": [
+        { "title": "NOW() / CURRENT_TIMESTAMP", "details": ["поточні дата та час"] },
+        { "title": "DATE_ADD / DATE_SUB", "details": ["додати/відняти дні"] },
+        { "title": "DATEDIFF", "details": ["різниця між датами"] },
+        { "title": "DATE_FORMAT", "details": ["форматувати дату"] },
+        { "title": "EXTRACT", "details": ["витягнути рік/місяць/день"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Функції роботи з датами",
+      "description": "Практичні приклади",
+      "language": "sql",
+      "code": "-- Поточна дата\nSELECT NOW();  -- 2025-12-25 14:35:20\n\n-- Додати 7 днів\nSELECT DATE_ADD(NOW(), INTERVAL 7 DAY);\n\n-- Різниця між датами (дні)\nSELECT DATEDIFF(expected_date, order_date) AS days_to_deliver\nFROM orders;\n\n-- Витягнути рік\nSELECT EXTRACT(YEAR FROM created_at) AS year\nFROM orders;\n\n-- Форматувати\nSELECT DATE_FORMAT(created_at, '%Y-%m-%d %H:%i') AS formatted\nFROM orders;"
+    },
+    {
+      "type": "table",
+      "title": "Інтервали для DATE_ADD",
+      "headers": ["Інтервал", "Приклад", "Результат"],
+      "rows": [
+        ["SECOND", "DATE_ADD(now(), INTERVAL 30 SECOND)", "30 сек далі"],
+        ["MINUTE", "DATE_ADD(now(), INTERVAL 10 MINUTE)", "10 хв далі"],
+        ["HOUR", "DATE_ADD(now(), INTERVAL 2 HOUR)", "2 год далі"],
+        ["DAY", "DATE_ADD(now(), INTERVAL 7 DAY)", "7 днів далі"],
+        ["MONTH", "DATE_ADD(now(), INTERVAL 1 MONTH)", "1 місяць далі"],
+        ["YEAR", "DATE_ADD(now(), INTERVAL 1 YEAR)", "1 рік далі"]
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Вибір по датам",
+      "description": "Замовлення за період",
+      "language": "sql",
+      "code": "-- Замовлення за останні 30 днів\nSELECT * FROM orders\nWHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY);\n\n-- Замовлення грудня\nSELECT * FROM orders\nWHERE EXTRACT(YEAR FROM created_at) = 2025\nAND EXTRACT(MONTH FROM created_at) = 12;\n\n-- Доставляються протягом 7 днів\nSELECT * FROM orders\nWHERE estimated_delivery BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 7 DAY);"
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Як отримати замовлення за останні 7 днів?",
+      "options": [
+        { "text": "WHERE created_at > NOW() - 7", "correct": false },
+        { "text": "WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)", "correct": true },
+        { "text": "WHERE DATEDIFF(created_at, NOW()) < 7", "correct": false }
+      ],
+      "explanation": "DATE_SUB відовує дату на 7 днів назад правильно."
+    },
+    {
+      "type": "content",
+      "title": "Часові зони",
+      "text": "Важно зберігати дати консистентно.",
+      "items": [
+        "Завжди зберігайте в UTC",
+        "Конвертуйте до локальної зони при показі",
+        "TIMESTAMP зберігає як UTC, DATE ні"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Робота з часовими зонами",
+      "description": "Конвертація на приклад",
+      "language": "sql",
+      "code": "-- Поточна дата в UTC\nSELECT NOW();  -- UTC\n\n-- Конвертіровать на конкретну зону (PostgreSQL)\nSELECT created_at AT TIME ZONE 'UTC+2' FROM orders;\n\n-- MySQL: встановіть session timezone\nSET time_zone = '+02:00';\nSELECT created_at FROM orders;"
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: STRING замість DATE",
+      "warning": "VARCHAR для дат дозволяє неправильні значення",
+      "language": "sql",
+      "wrongCode": "CREATE TABLE events (\n  event_date VARCHAR(255)  -- неправильно\n);",
+      "wrongExplanation": "Можна вставити 'invalid-date', операції з датами не працюватимуть",
+      "correctCode": "CREATE TABLE events (\n  event_date DATE  -- правильно\n);",
+      "correctExplanation": "DATE перевіряє формат і дозволяє операції"
+    },
+    {
+      "type": "timeline",
+      "title": "Історія часу у БД",
+      "description": "Від дозволу до точності",
+      "events": [
+        { "year": "1974", "label": "DATE базова", "description": "YYYY-MM-DD" },
+        { "year": "1992", "label": "TIME додано", "description": "часові операції" },
+        { "year": "2011", "label": "Часові зони", "description": "AT TIME ZONE" },
+        { "year": "2025", "label": "Nano-precision", "description": "мікросекунди" }
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Best practices датa/час",
+      "items": [
+        { "title": "Використовуйте DATE для дат", "details": ["не VARCHAR"] },
+        { "title": "Зберігайте в UTC", "details": ["конвертуйте локально"] },
+        { "title": "TIMESTAMP для created_at/updated_at", "details": ["DEFAULT now()"] },
+        { "title": "Індексуйте дати", "details": ["часто у WHERE"] },
+        { "title": "Документуйте формати", "details": ["YYYY-MM-DD зрозуміліше"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Міні ТЗ: аналіз за періодом",
+      "text": "Отримайте замовлення за конкретний місяць.",
+      "items": ["SELECT за BETWEEN date1 AND date2", "Визначте які дати потрібні", "Додайте дату доставки"]
+    },
+    {
+      "type": "code-example",
+      "title": "Комплексний запит",
+      "description": "З датами та функціями",
+      "language": "sql",
+      "code": "SELECT \n  id,\n  user_id,\n  created_at,\n  estimated_delivery,\n  DATEDIFF(estimated_delivery, created_at) AS days_to_delivery,\n  DATE_FORMAT(created_at, '%d.%m.%Y') AS formatted_date\nFROM orders\nWHERE created_at >= '2025-12-01'\nAND created_at < '2026-01-01'\nAND estimated_delivery > NOW()\nORDER BY created_at DESC;"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "DATE для дат, TIME для часу, TIMESTAMP для обох",
+        "NOW() для поточного часу",
+        "DATE_ADD/SUB, DATEDIFF для обчислень"
+      ],
+      "note": "Далі — ORDER BY та сортування"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 14: ORDER BY",
+      "resources": [
+        {
+          "title": "MySQL DATE functions",
+          "url": "https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html"
+        },
+        { "title": "PostgreSQL date/time", "url": "https://www.postgresql.org/docs/current/functions-datetime.html" }
+      ],
+      "homework": [
+        "Напишіть запит для замовлень за послідн 30 днів",
+        "Розрахуйте дні до доставки",
+        "Групуйте замовлення по місяцям"
+      ]
+    }
+  ]
+}

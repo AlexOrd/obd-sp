@@ -1,0 +1,119 @@
+{
+  "track": "sp",
+  "lectureNumber": "14",
+  "lectureTitle": "Zaemstvovanie i References",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 14",
+      "subtitle": "Заимствование (Borrowing) и References"
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Рецензія: Ownership детально",
+      "points": ["Move семантика", "Borrow immutable та mutable", "Lifetime нотація"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План",
+      "items": ["Reference типи", "Borrow checker правила", "Практичні приклади"]
+    },
+    {
+      "type": "definition",
+      "title": "Reference",
+      "term": "Reference",
+      "definition": "Pointer без risk. Вказує на дані без власництва. &T (immutable), &mut T (mutable)."
+    },
+    {
+      "type": "code-example",
+      "title": "Immutable references",
+      "language": "rust",
+      "code": "let s = String::from(\"hello\");\nlet r1 = &s;  // immutable reference\nlet r2 = &s;  // OK: можна багато\nlet r3 = &s;  // OK\n\nprintln!(\"{}, {}, {}\", r1, r2, r3);  // Все OK"
+    },
+    {
+      "type": "code-example",
+      "title": "Mutable references",
+      "language": "rust",
+      "code": "let mut s = String::from(\"hello\");\nlet r = &mut s;  // mutable reference\nr.push_str(\" world\");\nprintln!(\"{}\", r);  // OK\n\n// let r2 = &mut s;  // ERROR: можна тільки одна &mut!"
+    },
+    {
+      "type": "list",
+      "title": "Правила Reference",
+      "items": [
+        { "title": "Immutable refs", "details": ["Можна багато &одночасно", "Можна тільки читати"] },
+        { "title": "Mutable refs", "details": ["Тільки одна &mut одночасно", "Можна читати і писати"] },
+        { "title": "Mixed", "details": ["Неможна мати & і &mut водночас"] }
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "Reference Scopes",
+      "mermaid": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ntimeline\n  title Reference Lifetime Example\n  s1 active: s = String::from(\"hello\")\n    : r1 = &s\n    : r2 = &s\n    : println!(r1, r2) [r1 last use]\n    : [r2 last use]\n  r_mut active: r = &mut s\n    : r.push_str(\" world\")\n    : [r last use]"
+    },
+    {
+      "type": "code-example",
+      "title": "Dangling references",
+      "language": "rust",
+      "code": "// WRONG: функція повертає reference на local variable\n// fn dangle() -> &String {\n//   let s = String::from(\"hi\");\n//   &s  // ERROR: s видаляється по завершені функції\n// }\n\n// RIGHT: повертаємо значення\nfn no_dangle() -> String {\n  let s = String::from(\"hi\");\n  s  // Move: переносимо власність\n}"
+    },
+    {
+      "type": "definition",
+      "title": "Borrow Checker",
+      "term": "Borrow Checker",
+      "definition": "Частина компілятора, яка перевіряє правила reference на compile-time."
+    },
+    {
+      "type": "table",
+      "title": "Reference порівняння",
+      "columns": ["Тип", "読み取り", "変更", "1つだけ"],
+      "rows": [
+        { "Тип": "&T (immutable)", "読み取り": "✓", "変更": "✗", "1つだけ": "✗ many" },
+        { "Тип": "&mut T (mutable)", "読み取り": "✓", "変更": "✓", "1つだけ": "✓ one" }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 1",
+      "question": "Скільки immutable references можуть існувати одночасно?",
+      "options": [
+        { "text": "Тільки одна", "correct": false },
+        { "text": "Максимум два", "correct": false },
+        { "text": "Скільки угодно", "correct": true },
+        { "text": "Залежить від типу", "correct": false }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 2",
+      "question": "Можна ли мати &s и &mut s водночас?",
+      "options": [
+        { "text": "Так, завжди OK", "correct": false },
+        { "text": "Ні, помилка компіляції", "correct": true },
+        { "text": "Тільки якщо вони у різних scope", "correct": false }
+      ]
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: Змішані references",
+      "wrong": "let mut s = String::from(\"hi\");\nlet r1 = &s;       // immutable\nlet r2 = &mut s;   // ERROR!\nprintln!(\"{} {}\", r1, r2);",
+      "right": "let mut s = String::from(\"hi\");\nlet r1 = &s;\nprintln!(\"{}\", r1);  // r1 закінчився\n\nlet r2 = &mut s;    // OK: r1 більше не використовується\nr2.push_str(\" world\");\nprintln!(\"{}\", r2);"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "&T: immutable reference, can be many",
+        "&mut T: mutable reference, only one",
+        "Borrow Checker запобігає data races at compile-time",
+        "References гарантують memory safety"
+      ]
+    },
+    {
+      "type": "next-steps",
+      "title": "Далі",
+      "nextLecture": "Лекція 15: Structures и Enums"
+    }
+  ]
+}

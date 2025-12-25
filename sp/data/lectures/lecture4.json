@@ -1,0 +1,176 @@
+{
+  "track": "sp",
+  "lectureNumber": "4",
+  "lectureTitle": "Робота з терміналом, NASM, Makefiles",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 4",
+      "subtitle": "Робота з терміналом. Вступ до компілятора NASM та Makefiles",
+      "meta": { "course": "Спеціалізовані мови програмування", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 3: Архітектура x86-64",
+      "items": ["Регістри та їх призначення", "Пам'ять: стек та heap", "Адресування та вказівники"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["Основні команди терміналу", "Встановлення NASM", "Компіляція та лінкування", "Написання Makefile"],
+      "note": "Фокус: інструменти розробки"
+    },
+    {
+      "type": "definition",
+      "title": "Асемблер NASM",
+      "term": "NASM (Netwide Assembler)",
+      "definition": "Портативний асемблер для x86/x86-64, який перетворює Assembly код в машинний код.",
+      "analogy": "Як перекладач з англійської в китайську — Assembly для людини, машинний код для CPU"
+    },
+    {
+      "type": "content",
+      "title": "Основні команди терміналу (macOS/Linux)",
+      "text": "Навігація та файли",
+      "items": [
+        "pwd: показати поточну директорію",
+        "ls / ls -la: список файлів",
+        "cd: змінити директорію",
+        "cat: показати вміст файлу",
+        "touch: створити файл",
+        "mkdir: створити папку"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Практичні команди",
+      "description": "День на день",
+      "language": "bash",
+      "code": "# Навігація\npwd              # /Users/alex/dev\nls -la           # Список з прихованими файлами\ncd ~/projects    # Home directory\ncd ..            # Батьківська папка\n\n# Роботи з файлами\ncat main.asm     # Показати вміст\ntouch hello.asm  # Новий файл\nmkdir src        # Нова папка\ncp main.asm backup.asm  # Копіювання\nrm backup.asm    # Видалення"
+    },
+    {
+      "type": "content",
+      "title": "Встановлення NASM",
+      "text": "На різних системах",
+      "items": [
+        "macOS: brew install nasm",
+        "Ubuntu/Debian: sudo apt install nasm",
+        "Windows: завантажити з nasm.us",
+        "Перевірка: nasm -version"
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "Pipeline: код → виконавець",
+      "description": "Як Assembly стає програмою",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR\n  SOURCE[\"main.asm<br/>Assembly код\"] --> NASM[\"nasm<br/>Асемблер\"]\n  NASM --> OBJ[\"main.o<br/>Об'єктний файл<br/>(машинний код)\"]\n  OBJ --> LINKER[\"ld<br/>Лінкер\"]\n  LINKER --> EXE[\"./main<br/>Виконавець\"]\n  EXE --> RUN[\"./main<br/>Результат\"]\n  \n  style SOURCE fill:#E5F3FF\n  style EXE fill:#FFE5E5\n  style RUN fill:#E5FFE5"
+    },
+    {
+      "type": "code-example",
+      "title": "Hello World в Assembly (64-bit macOS)",
+      "description": "Мінімальна програма",
+      "language": "nasm",
+      "code": "; hello.asm - Hello World\nsection .data\n    msg db \"Hello, World!\", 0\n\nsection .text\n    global _main  ; точка входу для macOS\n\n_main:\n    mov rax, 0x2000004  ; syscall: write\n    mov rdi, 1          ; stdout\n    mov rsi, msg        ; адреса повідомлення\n    mov rdx, 13         ; довжина\n    syscall\n    \n    mov rax, 0x2000001  ; syscall: exit\n    mov rdi, 0\n    syscall"
+    },
+    {
+      "type": "content",
+      "title": "Компіляція вручну",
+      "text": "Крок за кроком",
+      "items": [
+        "1. Написати hello.asm",
+        "2. nasm -f macho64 hello.asm -o hello.o (створити об'єктний файл)",
+        "3. ld -lSystem -o hello hello.o (лінкування)",
+        "4. ./hello (запуск)"
+      ]
+    },
+    {
+      "type": "definition",
+      "title": "Makefile",
+      "term": "Makefile",
+      "definition": "Файл, що описує як компілювати проект: залежності, команди, мета (target).",
+      "analogy": "Як рецепт готування: 'якщо A змінилось, перебудувати B, потім запустити C'"
+    },
+    {
+      "type": "code-example",
+      "title": "Простий Makefile",
+      "description": "Автоматизація компіляції",
+      "language": "makefile",
+      "code": "# Makefile для Assembly проекту\nCC = nasm\nLD = ld\nFLAGS = -f macho64\n\nall: hello\n\nhello: hello.o\n\t$(LD) -lSystem -o hello hello.o\n\nhello.o: hello.asm\n\t$(CC) $(FLAGS) hello.asm -o hello.o\n\nclean:\n\trm -f hello.o hello\n\n.PHONY: all clean"
+    },
+    {
+      "type": "content",
+      "title": "Синтаксис Makefile",
+      "text": "Важливі деталь",
+      "items": [
+        "Target: залежності (файли, що потрібні)",
+        "Commands: команди для побудови (мають починатися з TAB, не пробілів!)",
+        ".PHONY: цілі, які не є файлами (clean, all)"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Запуск make",
+      "description": "Приклади команд",
+      "language": "bash",
+      "code": "# Побудувати все (за замовчуванням перший target)\nmake\n\n# Побудувати конкретна мета\nmake hello.o\n\n# Очистити побудовані файли\nmake clean\n\n# Примусова перебудова (навіть якщо файли не змінилися)\nmake -B all"
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Яка різниця між .o та виконавцем?",
+      "options": [
+        { "text": ".o — об'єктний код без адрес, exe — лінковані адреси", "correct": true },
+        { "text": ".o — більший файл", "correct": false },
+        { "text": "Немає різниці", "correct": false }
+      ],
+      "explanation": ".o — готовий машинний код, але функції мають відносні адреси. Лінкер розміщує їх в памяти і фіксує адреси."
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: пробіли замість TAB в Makefile",
+      "warning": "Makefile дуже щепетлив до форматування",
+      "language": "makefile",
+      "wrongCode": "hello.o: hello.asm\n    nasm -f macho64 hello.asm -o hello.o  # пробілами",
+      "wrongExplanation": "Помилка: make: *** missing separator.  Stop.",
+      "correctCode": "hello.o: hello.asm\n\tnasm -f macho64 hello.asm -o hello.o  # TAB символ",
+      "correctExplanation": "Команда має починатися с символу TAB (не 4 пробілів!)"
+    },
+    {
+      "type": "list",
+      "title": "Етапи розробки Assembly програми",
+      "items": [
+        { "title": "1. Написання", "details": ["Редактор: VSCode, vim, nano"] },
+        { "title": "2. Асемблювання", "details": ["nasm -f маш_формат файл.asm -o файл.o"] },
+        { "title": "3. Лінкування", "details": ["ld або gcc для з'єднання"] },
+        { "title": "4. Тестування", "details": ["./program або gdb"] },
+        { "title": "5. Отладка", "details": ["gdb, objdump, strace"] }
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "NASM: асемблер для переведення Assembly → машинний код",
+        "Makefile: автоматизує компіляцію та лінкування",
+        "Pipeline: .asm → .o (NASM) → exe (ld)"
+      ],
+      "note": "Далі — основи NASM: секції, інструкції, пам'ять"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 5: Основи NASM",
+      "resources": [
+        { "title": "NASM Manual", "url": "https://www.nasm.us/doc/" },
+        { "title": "GNU Make Manual", "url": "https://www.gnu.org/software/make/manual/" }
+      ],
+      "homework": [
+        "Встанови NASM та перевір версію",
+        "Напиши простий Makefile для своєї программи на C",
+        "Розбери Hello World Assembly для своєї платформи"
+      ]
+    }
+  ]
+}

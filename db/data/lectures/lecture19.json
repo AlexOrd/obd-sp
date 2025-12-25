@@ -1,0 +1,182 @@
+{
+  "track": "db",
+  "lectureNumber": "19",
+  "lectureTitle": "MongoDB: агрегація та індекси",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 19",
+      "subtitle": "MongoDB: агрегація та індекси",
+      "meta": { "course": "Основи баз даних", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 18: GROUP BY & Window Functions",
+      "items": ["GROUP BY для агрегації", "HAVING для фільтрування", "Віконні функції (ROW_NUMBER, LAG/LEAD)"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": [
+        "MongoDB aggregation pipeline",
+        "Етапи: $match, $group, $sort",
+        "Індекси в MongoDB",
+        "Оптимізація запитів"
+      ],
+      "note": "Фокус: аналіз даних у NoSQL"
+    },
+    {
+      "type": "content",
+      "title": "Aggregation pipeline",
+      "text": "Послідовність фільтрів для обробки даних.",
+      "items": ["Як stream обробки", "Кожен етап передає дані до наступного", "Один запит замість кількох операцій"]
+    },
+    {
+      "type": "definition",
+      "title": "Aggregation Pipeline",
+      "term": "Pipeline",
+      "definition": "Послідовність етапів, кожен з яких трансформує документи для отримання результату.",
+      "analogy": "Як конвеєр на фабриці: дані проходять через фази"
+    },
+    {
+      "type": "diagram",
+      "title": "Pipeline етапи",
+      "description": "Послідовність обробки",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR\n  Raw[Сирі документи<br/>100] --> Match[{$match}]\n  Match -->|30 документи| Group[{$group}]\n  Group -->|3 групи| Sort[{$sort}]\n  Sort -->|3| Limit[{$limit}]\n  Limit --> Result[Результат<br/>2 документи]"
+    },
+    {
+      "type": "table",
+      "title": "Основні операції pipeline",
+      "headers": ["Операція", "Назва", "Приклад"],
+      "rows": [
+        ["$match", "Фільтр", "{$match: {age: {$gt: 25}}}"],
+        ["$group", "Агрегація", "{$group: {_id: '$country', count: {$sum: 1}}}"],
+        ["$sort", "Сортування", "{$sort: {count: -1}}"],
+        ["$limit", "Обмеження", "{$limit: 10}"],
+        ["$project", "Вибір полів", "{$project: {name: 1, age: 1}}"],
+        ["$lookup", "JOIN", "{$lookup: {from: 'orders', ...}}"]
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Простий pipeline",
+      "description": "Користувачи по країнах",
+      "language": "javascript",
+      "code": "db.users.aggregate([\n  // Етап 1: Фільтр\n  { $match: { active: true } },\n  \n  // Етап 2: Групування\n  {\n    $group: {\n      _id: '$country',\n      count: { $sum: 1 },\n      avg_age: { $avg: '$age' }\n    }\n  },\n  \n  // Етап 3: Сортування\n  { $sort: { count: -1 } },\n  \n  // Етап 4: Обмеження\n  { $limit: 5 }\n]);"
+    },
+    {
+      "type": "content",
+      "title": "Індекси в MongoDB",
+      "text": "Прискорюють пошук і сортування.",
+      "items": ["За замовчуванням на _id", "Додаткові індекси на часті колонки", "B-tree структура (як у SQL)"]
+    },
+    {
+      "type": "code-example",
+      "title": "Створення індексів",
+      "description": "Додаємо індекси",
+      "language": "javascript",
+      "code": "// Простий індекс\ndb.users.createIndex({ email: 1 });\n\n// Descending\ndb.orders.createIndex({ created_at: -1 });\n\n// Композитний індекс\ndb.orders.createIndex({ user_id: 1, created_at: -1 });\n\n// Унікальний індекс\ndb.users.createIndex({ email: 1 }, { unique: true });\n\n// Текстовий індекс\ndb.posts.createIndex({ title: 'text', content: 'text' });"
+    },
+    {
+      "type": "list",
+      "title": "Типи індексів",
+      "items": [
+        { "title": "Single field", "details": ["один поле"] },
+        { "title": "Compound", "details": ["кілька полів"] },
+        { "title": "Text", "details": ["повнотекстовий пошук"] },
+        { "title": "Geospatial", "details": ["географічні координати"] },
+        { "title": "TTL", "details": ["автоудалення за часом"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "$lookup - JOIN у MongoDB",
+      "description": "Об'єднання колекцій",
+      "language": "javascript",
+      "code": "db.orders.aggregate([\n  {\n    $lookup: {\n      from: 'users',\n      localField: 'user_id',\n      foreignField: '_id',\n      as: 'user_info'\n    }\n  },\n  { $unwind: '$user_info' },  // розгорнути масив\n  {\n    $project: {\n      order_id: '$_id',\n      user_name: '$user_info.name',\n      amount: 1\n    }\n  }\n]);"
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Який порядок операцій у pipeline найефективніший?",
+      "options": [
+        { "text": "$limit → $match → $group", "correct": false },
+        { "text": "$match → $group → $limit", "correct": true },
+        { "text": "Порядок не важливий", "correct": false }
+      ],
+      "explanation": "$match спочатку зменшує документи, потім $group на менших наборах швидче."
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: без індексів",
+      "warning": "Повільні запити без індексів",
+      "language": "javascript",
+      "wrongCode": "// Повільно: без індексу\ndb.users.find({ email: 'test@example.com' });  // full table scan",
+      "wrongExplanation": "БД сканує кожний документ",
+      "correctCode": "// Швидко: з індексом\ndb.users.createIndex({ email: 1 });\ndb.users.find({ email: 'test@example.com' });  // index lookup",
+      "correctExplanation": "Індекс знаходить документ швидко"
+    },
+    {
+      "type": "timeline",
+      "title": "MongoDB еволюція",
+      "description": "Від простого до складного",
+      "events": [
+        { "year": "2009", "label": "Базові", "description": "insert/find/update/delete" },
+        { "year": "2011", "label": "Aggregation", "description": "Первa версія pipeline" },
+        { "year": "2014", "label": "Покращення", "description": "$lookup для JOIN" },
+        { "year": "2025", "label": "AI-ready", "description": "Vector search вбудований" }
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Best practices MongoDB",
+      "items": [
+        { "title": "Індексуйте query полі", "details": ["$match і $group на поліх"] },
+        { "title": "Фільтруйте рано", "details": ["$match на початку"] },
+        { "title": "Уникайте $lookup на великі", "details": ["дорого"] },
+        { "title": "Мониторьте explain()", "details": ["переглядай план"] },
+        { "title": "Батч операції", "details": ["insertMany замість циклу"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Міні ТЗ: Аналіз замовлень",
+      "text": "Знайти TOP 5 користувачів по витратам.",
+      "items": ["$match за період", "$group по user_id", "$sort спадаючим", "$limit 5"]
+    },
+    {
+      "type": "code-example",
+      "title": "Комплексний pipeline",
+      "description": "З JOIN та агрегацією",
+      "language": "javascript",
+      "code": "db.orders.aggregate([\n  { $match: { created_at: { $gte: new Date('2025-01-01') } } },\n  { $lookup: { from: 'users', localField: 'user_id', foreignField: '_id', as: 'user' } },\n  { $unwind: '$user' },\n  { $group: { _id: '$user.name', total_spent: { $sum: '$amount' }, order_count: { $sum: 1 } } },\n  { $sort: { total_spent: -1 } },\n  { $limit: 10 },\n  { $project: { _id: 1, total_spent: 1, order_count: 1 } }\n]);"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Pipeline етапи трансформують документи послідовно",
+        "Індекси критичні для продуктивності",
+        "$lookup об'єднує колекції (JOIN)"
+      ],
+      "note": "Далі — індекси у SQL"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 20: Індекси",
+      "resources": [
+        { "title": "MongoDB aggregation", "url": "https://docs.mongodb.com/manual/reference/operator/aggregation/" },
+        { "title": "Indexing strategy", "url": "https://docs.mongodb.com/manual/indexes/" }
+      ],
+      "homework": [
+        "Напишіть pipeline з 4+ етапів",
+        "Створіть індекси для часто змінюваних запитів",
+        "Порівняйте швидкість з/без індексу"
+      ]
+    }
+  ]
+}

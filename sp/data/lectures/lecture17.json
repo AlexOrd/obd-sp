@@ -1,0 +1,116 @@
+{
+  "track": "sp",
+  "lectureNumber": "17",
+  "lectureTitle": "Колекции Vec, String, HashMap",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 17",
+      "subtitle": "Колекции: Vec<T>, String, HashMap<K, V>"
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Рецензія: Error Handling",
+      "points": ["Option<T> для можливих значень", "Result<T, E> для помилок", "? operator для propagation"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План",
+      "items": ["Vec: динамічний масив", "String: динамічний текст", "HashMap: ключ-значення"]
+    },
+    {
+      "type": "definition",
+      "title": "Vec<T>",
+      "term": "Vec<T>",
+      "definition": "Динамічний масив (growable array). На heap. Можна додавати/видаляти елементи."
+    },
+    {
+      "type": "code-example",
+      "title": "Vec операції",
+      "language": "rust",
+      "code": "let mut v = Vec::new();\nv.push(1);\nv.push(2);\nv.push(3);\n\nprintln!(\"{:?}\", v);  // [1, 2, 3]\n\nlet vec = vec![1, 2, 3];  // macro\nlet first = &vec[0];  // 1\nlet opt = vec.get(10);  // None"
+    },
+    {
+      "type": "definition",
+      "title": "String",
+      "term": "String",
+      "definition": "Динамічний, growable text (UTF-8). На heap. str - fixed-size reference."
+    },
+    {
+      "type": "code-example",
+      "title": "String та &str",
+      "language": "rust",
+      "code": "let mut s = String::from(\"hello\");\ns.push_str(\" world\");  // мutable\nprintln!(\"{}\", s);  // \"hello world\"\n\nlet s2 = &s;  // &String -> &str coercion\nlet s3: &str = \"literal\";  // string literal"
+    },
+    {
+      "type": "code-example",
+      "title": "Ітерація по Vec",
+      "language": "rust",
+      "code": "let v = vec![1, 2, 3, 4, 5];\n\nfor item in &v {\n  println!(\"{}\", item);\n}\n\nfor item in v.iter() {\n  println!(\"{}\", item);\n}\n\nlet doubled: Vec<_> = v.iter().map(|x| x * 2).collect();"
+    },
+    {
+      "type": "definition",
+      "title": "HashMap<K, V>",
+      "term": "HashMap<K, V>",
+      "definition": "Хеш-таблиця для пар ключ-значення. O(1) lookup середня."
+    },
+    {
+      "type": "code-example",
+      "title": "HashMap використання",
+      "language": "rust",
+      "code": "use std::collections::HashMap;\n\nlet mut map = HashMap::new();\nmap.insert(\"key1\", \"value1\");\nmap.insert(\"key2\", \"value2\");\n\nlet val = map.get(\"key1\");  // Some(\"value1\")\nlet val_or = map.get(\"key3\").copied().unwrap_or(\"\");\n\nfor (k, v) in &map {\n  println!(\"{}: {}\", k, v);\n}"
+    },
+    {
+      "type": "list",
+      "title": "Колекции порівняння",
+      "items": [
+        { "title": "Vec<T>", "details": ["Динамічний масив, indexed access O(1)"] },
+        { "title": "String", "details": ["UTF-8 текст, growable"] },
+        { "title": "HashMap", "details": ["Key-value, O(1) average"] }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 1",
+      "question": "Як додати елемент в Vec?",
+      "options": [
+        { "text": "push()", "correct": true },
+        { "text": "append()", "correct": false },
+        { "text": "add()", "correct": false }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 2",
+      "question": "Чим відрізняється String від &str?",
+      "options": [
+        { "text": "Нічим", "correct": false },
+        { "text": "String на heap, &str - reference", "correct": true },
+        { "text": "&str на heap", "correct": false }
+      ]
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: Ownership Vec",
+      "wrong": "let v = vec![1, 2, 3];\nfor item in v {  // move\n  println!(\"{}\", item);\n}\nprintln!(\"{:?}\", v);  // ERROR: v moved",
+      "right": "let v = vec![1, 2, 3];\nfor item in &v {  // borrow\n  println!(\"{}\", item);\n}\nprintln!(\"{:?}\", v);  // OK"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Vec: динамічний масив",
+        "String: динамічний UTF-8 текст",
+        "HashMap: хеш-таблиця",
+        "Всі на heap з ownership контролем"
+      ]
+    },
+    {
+      "type": "next-steps",
+      "title": "Далі",
+      "nextLecture": "Лекція 18: Модули та Организация коду"
+    }
+  ]
+}

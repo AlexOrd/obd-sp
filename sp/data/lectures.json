@@ -19,51 +19,220 @@
   "seoKeywords": "системне програмування, C, C++, memory management, курс, лекції, ВТФК, Вінниця",
   "lectures": [
     {
-      "id": "lecture1",
-      "number": "01",
-      "title": "Вступ до системного програмування",
-      "description": "Основні поняття, архітектура процесора, пам'ять",
+      "id": "lecture0",
+      "number": "00",
+      "title": "Демонстрація всіх типів слайдів",
+      "description": "Довідник для викладача — всі типи слайдів",
       "available": true,
       "statusText": "ДОСТУПНА",
-      "file": "lecture1.html",
-      "pdfAvailable": true,
-      "pdfFile": "../static/pdfs/lecture1.pdf"
+      "file": "lecture0.html"
+    },
+    {
+      "id": "lecture1",
+      "number": "01",
+      "title": "Огляд системного програмування",
+      "description": "C, Rust, Assembly — порівняння та архітектура",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture1.html"
     },
     {
       "id": "lecture2",
       "number": "02",
-      "title": "Управління пам'яттю в C",
-      "description": "Скоро буде доступна...",
-      "locked": true,
-      "statusText": "🔒 ЗАБЛОКОВАНО",
+      "title": "Системи числення",
+      "description": "Двійкова, шістнадцяткова, перетворення",
+      "available": true,
+      "statusText": "ДОСТУПНА",
       "file": "lecture2.html"
     },
     {
       "id": "lecture3",
       "number": "03",
-      "title": "Покажчики та масиви",
-      "description": "Скоро буде доступна...",
-      "locked": true,
-      "statusText": "🔒 ЗАБЛОКОВАНО",
+      "title": "Архітектура x86-64: Регістри та пам'ять",
+      "description": "Регістри, стек, heap, адресування",
+      "available": true,
+      "statusText": "ДОСТУПНА",
       "file": "lecture3.html"
     },
     {
       "id": "lecture4",
       "number": "04",
-      "title": "Файлові операції",
-      "description": "Скоро буде доступна...",
-      "locked": true,
-      "statusText": "🔒 ЗАБЛОКОВАНО",
+      "title": "Робота з терміналом, NASM, Makefiles",
+      "description": "Інструменти розробки та компіляція",
+      "available": true,
+      "statusText": "ДОСТУПНА",
       "file": "lecture4.html"
     },
     {
       "id": "lecture5",
       "number": "05",
-      "title": "Процеси та потоки",
-      "description": "Скоро буде доступна...",
-      "locked": true,
-      "statusText": "🔒 ЗАБЛОКОВАНО",
+      "title": "Основи NASM: секції та MOV",
+      "description": "Структура, .text, .data, .bss, інструкція MOV",
+      "available": true,
+      "statusText": "ДОСТУПНА",
       "file": "lecture5.html"
+    },
+    {
+      "id": "lecture6",
+      "number": "06",
+      "title": "Арифметичні інструкції",
+      "description": "ADD, SUB, INC, DEC та прапорці",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture6.html"
+    },
+    {
+      "id": "lecture7",
+      "number": "07",
+      "title": "CMP та прапорці",
+      "description": "Порівняння, умовні переходи, ZF, CF, SF",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture7.html"
+    },
+    {
+      "id": "lecture8",
+      "number": "08",
+      "title": "Адресація пам'яті",
+      "description": "Режими адресації, масиви, структури",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture8.html"
+    },
+    {
+      "id": "lecture9",
+      "number": "09",
+      "title": "Вступ до Rust",
+      "description": "Історія, філософія, Cargo, Hello World",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture9.html"
+    },
+    {
+      "id": "lecture10",
+      "number": "10",
+      "title": "Базовий синтаксис Rust",
+      "description": "Змінні, типи, функції",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture10.html"
+    },
+    {
+      "id": "lecture11",
+      "number": "11",
+      "title": "Потік керування Rust",
+      "description": "if/else, loop, while, for",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture11.html"
+    },
+    {
+      "id": "lecture12",
+      "number": "12",
+      "title": "Основи володіння в Rust",
+      "description": "Ownership, Move, Copy",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture12.html"
+    },
+    {
+      "id": "lecture13",
+      "number": "13",
+      "title": "Ownership детально",
+      "description": "Move, Borrow, Lifetime",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture13.html"
+    },
+    {
+      "id": "lecture14",
+      "number": "14",
+      "title": "Zaemstvovanie i References",
+      "description": "Immutable и mutable references, Borrow Checker",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture14.html"
+    },
+    {
+      "id": "lecture15",
+      "number": "15",
+      "title": "Структури та Enum-и",
+      "description": "Struct, Enum, Pattern matching, impl методи",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture15.html"
+    },
+    {
+      "id": "lecture16",
+      "number": "16",
+      "title": "Обработка ошибок",
+      "description": "Result<T, E>, Option<T>, ? operator",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture16.html"
+    },
+    {
+      "id": "lecture17",
+      "number": "17",
+      "title": "Колекции",
+      "description": "Vec, String, HashMap",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture17.html"
+    },
+    {
+      "id": "lecture18",
+      "number": "18",
+      "title": "Модули та организация",
+      "description": "Модулі, pub, use імпорти",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture18.html"
+    },
+    {
+      "id": "lecture19",
+      "number": "19",
+      "title": "Traits и Generics",
+      "description": "Поліморфізм, інтерфейси, trait bounds",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture19.html"
+    },
+    {
+      "id": "lecture20",
+      "number": "20",
+      "title": "Многопотоковість",
+      "description": "Threads, channels, Mutex, Arc",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture20.html"
+    },
+    {
+      "id": "lecture21",
+      "number": "21",
+      "title": "Docker и Контейнери",
+      "description": "Контейнери концепція, Docker основи",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture21.html"
+    },
+    {
+      "id": "lecture22",
+      "number": "22",
+      "title": "Dockerfile та створення образів",
+      "description": "Dockerfile синтаксис, шари, best practices",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture22.html"
+    },
+    {
+      "id": "lecture23",
+      "number": "23",
+      "title": "Docker Compose для оркестрації",
+      "description": "Multi-container, networking, persistence",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture23.html"
     }
   ]
 }

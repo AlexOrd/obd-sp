@@ -1,0 +1,208 @@
+{
+  "track": "db",
+  "lectureNumber": "9",
+  "lectureTitle": "Логічні оператори AND/OR/NOT",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 9",
+      "subtitle": "Логічні оператори AND/OR/NOT",
+      "meta": { "course": "Основи баз даних", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 8: WHERE фільтрація",
+      "items": ["Оператори порівняння", "BETWEEN, IN, LIKE", "Базові умови"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["AND для перетину умов", "OR для об'єднання", "NOT для заперечення", "Комбінування та дужки"],
+      "note": "Фокус: складні умови у WHERE"
+    },
+    {
+      "type": "content",
+      "title": "Логічні оператори",
+      "text": "Комбінують умови для точніших фільтрів.",
+      "items": ["AND = обидві умови TRUE", "OR = хоча б одна TRUE", "NOT = заперечення умови"]
+    },
+    {
+      "type": "definition",
+      "title": "Логічні оператори",
+      "term": "Logical Operators",
+      "definition": "Слова AND, OR, NOT які комбінують або негують умови у WHERE.",
+      "analogy": "Як в математиці: AND=множення, OR=додавання, NOT=інверс"
+    },
+    {
+      "type": "diagram",
+      "title": "Таблиця істинності AND",
+      "description": "Обидві умови мають бути TRUE",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ntable\n  A | B | AND\n  T | T | T\n  T | F | F\n  F | T | F\n  F | F | F"
+    },
+    {
+      "type": "table",
+      "title": "Таблиці істинності",
+      "headers": ["A", "B", "A AND B", "A OR B", "NOT A"],
+      "rows": [
+        ["TRUE", "TRUE", "TRUE", "TRUE", "FALSE"],
+        ["TRUE", "FALSE", "FALSE", "TRUE", "FALSE"],
+        ["FALSE", "TRUE", "FALSE", "TRUE", "TRUE"],
+        ["FALSE", "FALSE", "FALSE", "FALSE", "TRUE"]
+      ]
+    },
+    {
+      "type": "syntax",
+      "title": "Синтаксис логічних операторів",
+      "syntax": "SELECT * FROM table\nWHERE condition1 AND condition2;\nSELECT * FROM table\nWHERE condition1 OR condition2;\nSELECT * FROM table\nWHERE NOT condition;",
+      "parts": [
+        { "part": "AND", "description": "обидві умови TRUE" },
+        { "part": "OR", "description": "хоча б одна TRUE" },
+        { "part": "NOT", "description": "навпаки умови" }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "AND — перетин умов",
+      "text": "AND вимагає обох умов одночасно.",
+      "items": ["age > 18 AND status = 'active'", "Результат: активні дорослі користувачі", "Як AND звужує результати"]
+    },
+    {
+      "type": "code-example",
+      "title": "AND приклади",
+      "description": "Дві умови разом",
+      "language": "sql",
+      "code": "-- Активні дорослі користувачи\nSELECT * FROM users\nWHERE age >= 18 AND status = 'active';\n\n-- Дорогі товари на складі\nSELECT * FROM products\nWHERE price > 100 AND stock > 0;\n\n-- Замовлення за період з мінімальною сумою\nSELECT * FROM orders\nWHERE created_at >= '2025-01-01'\nAND created_at <= '2025-12-31'\nAND amount >= 100;"
+    },
+    {
+      "type": "content",
+      "title": "OR — об'єднання умов",
+      "text": "OR приймає хоча б одну TRUE умову.",
+      "items": ["age < 13 OR age > 65", "Результат: дітей та пенсіонерів", "OR розширює результати"]
+    },
+    {
+      "type": "code-example",
+      "title": "OR приклади",
+      "description": "Одна з умов",
+      "language": "sql",
+      "code": "-- Дітей або пенсіонерів\nSELECT * FROM users\nWHERE age < 13 OR age >= 65;\n\n-- Замовлення у статусі 'pending' або 'processing'\nSELECT * FROM orders\nWHERE status = 'pending' OR status = 'processing';\n-- або скорочено: WHERE status IN ('pending', 'processing')\n\n-- Gmail або Yahoo почта\nSELECT * FROM users\nWHERE email LIKE '%@gmail.com' OR email LIKE '%@yahoo.com';"
+    },
+    {
+      "type": "list",
+      "title": "NOT - заперечення",
+      "items": [
+        { "title": "NOT status = 'deleted'", "details": ["те саме що status != 'deleted'"] },
+        { "title": "NOT age BETWEEN 18 AND 65", "details": ["вік поза діапазоном"] },
+        { "title": "NOT email LIKE '%@gmail.com'", "details": ["не Gmail адреса"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "NOT приклади",
+      "description": "Заперечення умови",
+      "language": "sql",
+      "code": "-- Активні користувачи (не видалені)\nSELECT * FROM users\nWHERE NOT status = 'deleted';\n-- Або: WHERE status != 'deleted'\n\n-- Не у діапазоні\nSELECT * FROM products\nWHERE NOT (price BETWEEN 50 AND 100);\n\n-- Не NULL\nSELECT * FROM users\nWHERE NOT phone IS NULL;\n-- Або: WHERE phone IS NOT NULL"
+    },
+    {
+      "type": "diagram",
+      "title": "Комбінування AND/OR з дужками",
+      "description": "Порядок важливий",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR\n  A[age > 18]\n  B[status='active']\n  C[country='USA']\n  Q1[AND без дужок:<br/>A AND B OR C]\n  Q2[З дужками:<br/>A AND B) OR C]\n  Q3[З дужками:<br/>A AND (B OR C)]\n  A --> Q1\n  B --> Q1\n  C --> Q1"
+    },
+    {
+      "type": "content",
+      "title": "Порядок операцій",
+      "text": "AND та OR мають різні пріоритети.",
+      "items": [
+        "AND виконується раніше OR",
+        "Дужки () змінюють порядок",
+        "age > 18 AND status='active' OR country='USA'"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Приклад порядку",
+      "description": "Одна діяння вимагає дужок",
+      "language": "sql",
+      "code": "-- БЕЗ дужок: AND першим\nSELECT * FROM users\nWHERE age > 18 AND status = 'active' OR country = 'USA';\n-- Розуміється як: (age > 18 AND status = 'active') OR country = 'USA'\n\n-- З ДУЖКАМИ для ясності\nSELECT * FROM users\nWHERE age > 18 AND (status = 'active' OR country = 'USA');\n-- Розуміється як: age > 18 AND (status = 'active' OR country = 'USA')"
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Яка умова виконується першою?",
+      "options": [
+        { "text": "OR завжди першим", "correct": false },
+        { "text": "AND має вищий пріоритет", "correct": true },
+        { "text": "Залежить від БД", "correct": false }
+      ],
+      "explanation": "AND завжди виконується перед OR у SQL."
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: забути дужки",
+      "warning": "Неправильна логіка без дужок",
+      "language": "sql",
+      "wrongCode": "-- Потрібні дорослих з USA або активних з будь-якого місця\nSELECT * FROM users\nWHERE age > 18 AND country = 'USA' OR status = 'active';\n-- Це дає: (18+ AND USA) ИЛИ active (активних отовсюду!)",
+      "wrongExplanation": "OR поширює фільтр на активних користувачів всіх країн",
+      "correctCode": "SELECT * FROM users\nWHERE (age > 18 AND country = 'USA') OR status = 'active';",
+      "correctExplanation": "Дужки роблять намір явним"
+    },
+    {
+      "type": "timeline",
+      "title": "Логіка у SQL історія",
+      "description": "Від 1970-х",
+      "events": [
+        { "year": "1974", "label": "Boole", "description": "AND/OR/NOT" },
+        { "year": "1986", "label": "SQL-86", "description": "Стандарт AND/OR" },
+        { "year": "2003", "label": "SQL:2003", "description": "CASE для складної логіки" },
+        { "year": "2025", "label": "Сьогодні", "description": "JSON та вкладені логіки" }
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Best practices AND/OR/NOT",
+      "items": [
+        { "title": "Використовуйте дужки для ясності", "details": ["(A AND B) OR C явніше"] },
+        { "title": "Коментуйте складні умови", "details": ["-- активні дорослі з США"] },
+        { "title": "Уникайте глибоких вкладень", "details": ["більше 3 рівнів = нечитаемо"] },
+        { "title": "NOT замість != коли можливо", "details": ["NOT status IN (1,2) vs != 1 AND != 2"] },
+        { "title": "Тестуйте граничні випадки", "details": ["NULL, порожні значення"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Міні ТЗ: складна фільтрація",
+      "text": "Отримайте дорослих активних користувачів з преміум підпискою.",
+      "items": ["age >= 18", "status = 'active'", "subscription = 'premium'"]
+    },
+    {
+      "type": "code-example",
+      "title": "Комплексний WHERE",
+      "description": "Кілька логічних операторів",
+      "language": "sql",
+      "code": "-- Дорослі активні преміум-користувачи або адміністратори\nSELECT id, name, email, subscription\nFROM users\nWHERE \n  (age >= 18 AND status = 'active' AND subscription = 'premium')\n  OR role = 'admin';\n\n-- Замовлення за період, активні, або завдання VIP\nSELECT *\nFROM orders\nWHERE\n  (created_at >= '2025-01-01' AND created_at <= '2025-12-31')\n  AND (status IN ('processing', 'shipped') OR vip_customer = true);"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": ["AND скорочує результати", "OR розширює результати", "NOT запиває умови", "Дужки змінюють пріоритет"],
+      "note": "Далі — NULL та його особливості"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 10: NULL Handling",
+      "resources": [
+        { "title": "Boolean logic", "url": "https://en.wikipedia.org/wiki/Boolean_algebra" },
+        { "title": "SQL AND/OR/NOT", "url": "https://www.w3schools.com/sql/sql_and_or_not.asp" }
+      ],
+      "homework": [
+        "Написати 3 запити с AND, 3 с OR, 2 с NOT",
+        "Використати дужки для змін пріоритету",
+        "Запит для вибору користувачів віком 18-65 активних з дохідною країною"
+      ]
+    }
+  ]
+}

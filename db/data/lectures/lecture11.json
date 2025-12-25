@@ -1,0 +1,185 @@
+{
+  "track": "db",
+  "lectureNumber": "11",
+  "lectureTitle": "Пріоритет операторів та коментарі",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 11",
+      "subtitle": "Пріоритет операторів та коментарі",
+      "meta": { "course": "Основи баз даних", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 10: NULL обробка",
+      "items": ["IS NULL, COALESCE, NULLIF", "NULL у логічних операціях", "Безпека дилема NULL"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": [
+        "Порядок операцій (BODMAS для SQL)",
+        "Дужки змінюють порядок",
+        "Коментарі для читабельності",
+        "Практика з прикладами"
+      ],
+      "note": "Фокус: чітко сформулювати складні запити"
+    },
+    {
+      "type": "content",
+      "title": "Пріоритет операторів",
+      "text": "Без явного порядку, SQL виконує операції у визначеній послідовності.",
+      "items": ["1. Дужки ()", "2. NOT", "3. AND", "4. OR", "5. Функції/порівняння"]
+    },
+    {
+      "type": "definition",
+      "title": "Operator Precedence",
+      "term": "Precedence",
+      "definition": "Порядок у якому SQL виконує операції, якщо немає дужок.",
+      "analogy": "Як математика: спочатку дужки, потім * і /, потім + та -"
+    },
+    {
+      "type": "diagram",
+      "title": "Дерево пріоритету",
+      "description": "Від найвищого до найнижчого",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ngraph TB\n  Root[Порядок операцій]\n  Root --> L1[Рівень 1: Дужки ()]\n  Root --> L2[Рівень 2: NOT]\n  Root --> L3[Рівень 3: Порівняння]\n  Root --> L4[Рівень 4: AND]\n  Root --> L5[Рівень 5: OR]\n  L1 --> Ex1[A OR B AND C<br/>= A OR (B AND C)]\n  L5 --> Ex2[(A AND B) OR C<br/>виконується спочатку AND]"
+    },
+    {
+      "type": "table",
+      "title": "Повна таблиця пріоритету",
+      "headers": ["Рівень", "Оператор", "Приклад"],
+      "rows": [
+        ["1", "Дужки ()", "(a OR b) AND c"],
+        ["2", "Функції ROUND(), UPPER()", "ROUND(price, 2)"],
+        ["3", "NOT", "NOT (status = 'deleted')"],
+        ["4", "Арифметика *, /", "price * quantity"],
+        ["5", "Арифметика +, -", "100 + 50 - 25"],
+        ["6", "Порівняння =, <, >", "age > 18"],
+        ["7", "AND", "a > 10 AND b < 20"],
+        ["8", "OR", "a = 1 OR b = 2"]
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Навіщо пріоритет важливий",
+      "text": "Неправильний порядок дає неправильні результати.",
+      "items": [
+        "age > 18 AND status = 'active' OR country = 'USA'",
+        "Розуміється як: (age > 18 AND status = 'active') OR country = 'USA'",
+        "Чи ви мали на увазі: age > 18 AND (status = 'active' OR country = 'USA')?"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Приклади пріоритету",
+      "description": "Як читається запит",
+      "language": "sql",
+      "code": "-- Це виконується як: (age > 18 AND status = 'active') OR country = 'USA'\nSELECT * FROM users\nWHERE age > 18 AND status = 'active' OR country = 'USA';\n\n-- Явні дужки роблять намір явним\nSELECT * FROM users\nWHERE (age > 18 AND status = 'active') OR country = 'USA';\n\n-- Або альтернативна логіка\nSELECT * FROM users\nWHERE age > 18 AND (status = 'active' OR country = 'USA');"
+    },
+    {
+      "type": "list",
+      "title": "Типи коментарів",
+      "items": [
+        { "title": "Однорядкові --", "details": ["-- це коментар", "до кінця рядка"] },
+        { "title": "Багаторядкові /* */", "details": ["/* коментар", "  на кілька\n  рядків */"] },
+        { "title": "У коді", "details": ["SELECT id, -- ID користувача", "       name -- Ім'я"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Приклади коментарів",
+      "description": "Документуємо запити",
+      "language": "sql",
+      "code": "-- Отримуємо активних дорослих користувачів\nSELECT \n  id,         -- унікальний ID\n  name,       -- повне ім'я\n  email       -- контактна пошта\nFROM users\nWHERE \n  age >= 18           -- дорослі\n  AND status = 'active'  -- активні\n  /* та без бану */\n  AND banned_at IS NULL;"
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Який порядок виконання: A OR B AND C?",
+      "options": [
+        { "text": "(A OR B) AND C", "correct": false },
+        { "text": "A OR (B AND C)", "correct": true },
+        { "text": "Залежить від БД", "correct": false }
+      ],
+      "explanation": "AND має більший пріоритет, тому B AND C обчислюється першим."
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: забути дужки",
+      "warning": "Неправильний пріоритет - неправильні результати",
+      "language": "sql",
+      "wrongCode": "-- Хочу активних дорослих з Франції або деактивованих (будь-якого віку)\nSELECT * FROM users\nWHERE age >= 18 AND status = 'active' AND country = 'France'\nOR status = 'inactive';",
+      "wrongExplanation": "Це дає: (18+ AND active AND France) OR inactive - деактивовані всіх віків!",
+      "correctCode": "SELECT * FROM users\nWHERE (age >= 18 AND status = 'active' AND country = 'France')\nOR status = 'inactive';",
+      "correctExplanation": "Дужки роблять логіку явною"
+    },
+    {
+      "type": "timeline",
+      "title": "Історія пріоритету",
+      "description": "Від математики до SQL",
+      "events": [
+        { "year": "1600s", "label": "Математика", "description": "BODMAS встановлена" },
+        { "year": "1974", "label": "SQL-74", "description": "Впровадження пріоритету" },
+        { "year": "1992", "label": "SQL-92", "description": "Стандартизація" },
+        { "year": "2025", "label": "Сьогодні", "description": "Єдиний стандарт" }
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Best practices для пріоритету",
+      "items": [
+        { "title": "ЗАВЖДИ використовуйте дужки", "details": ["explicit > implicit"] },
+        { "title": "Документуйте складні умови", "details": ["коментарями"] },
+        { "title": "Тестуйте на МАЛИХ наборах", "details": ["перевіряйте результати"] },
+        { "title": "Групуйте однакові типи", "details": ["(A OR B) AND (C OR D)"] },
+        { "title": "Форматуйте для читабельності", "details": ["новий рядок для AND/OR"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Міні ТЗ: складна фільтрація",
+      "text": "Отримайте активних дорослих з преміум або адміністраторів.",
+      "items": ["(age >= 18 AND status = 'active' AND subscription = 'premium')", "OR role = 'admin'"]
+    },
+    {
+      "type": "diagram",
+      "title": "Блок-схема логіки",
+      "description": "Представлення умови",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart TD\n  Check{age >= 18 AND<br/>status='active' AND<br/>subscription='premium'<br/>OR role='admin'?}\n  Check -->|Yes| Include[Include user]\n  Check -->|No| Exclude[Exclude user]"
+    },
+    {
+      "type": "code-example",
+      "title": "Комплексний запит з коментарями",
+      "description": "Докладна документація",
+      "language": "sql",
+      "code": "-- ТЗ: отримати активних преміум-користувачів або адміністраторів\nSELECT \n  id,\n  name,\n  email,\n  subscription,\n  role\nFROM users\nWHERE \n  -- Перша група: активні дорослі з преміум\n  (\n    age >= 18\n    AND status = 'active'\n    AND subscription = 'premium'\n  )\n  -- ІЛИ адміністратори (будь-якого статусу)\n  OR role = 'admin';"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Пріоритет: дужки > NOT > AND > OR",
+        "Дужки змінюють порядок операцій",
+        "Коментарі роблять запити зрозумілішими"
+      ],
+      "note": "Далі — NoSQL и MongoDB"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 12: NoSQL MongoDB CRUD",
+      "resources": [
+        { "title": "SQL operator precedence", "url": "https://en.wikipedia.org/wiki/Order_of_operations" },
+        { "title": "Writing clear SQL", "url": "https://sqlstyle.guide/" }
+      ],
+      "homework": [
+        "Переписати 3 складні запити з явними дужками",
+        "Добавити коментарі до кожного запиту",
+        "Тестувати запити на малих наборах даних"
+      ]
+    }
+  ]
+}

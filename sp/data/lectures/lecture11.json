@@ -1,0 +1,42 @@
+{
+  "track": "sp",
+  "lectureNumber": "11",
+  "lectureTitle": "Потік керування в Rust",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 11",
+      "subtitle": "Потік керування в Rust (if/else, loop, while, for)"
+    },
+    {
+      "type": "roadmap",
+      "title": "План",
+      "items": ["if/else: умови", "loop: нескінченний цикл", "while: цикл з умовою", "for: цикл по діапазону"]
+    },
+    {
+      "type": "code-example",
+      "title": "if/else",
+      "language": "rust",
+      "code": "let x = 5;\nif x > 3 {\n    println!(\"x більше 3\");\n} else if x == 3 {\n    println!(\"x дорівнює 3\");\n} else {\n    println!(\"x менше 3\");\n}"
+    },
+    {
+      "type": "code-example",
+      "title": "Цикли",
+      "language": "rust",
+      "code": "// loop: нескінченний\nlet mut i = 0;\nloop {\n    println!(\"i = {}\", i);\n    i += 1;\n    if i >= 3 { break; }\n}\n\n// while\nlet mut j = 0;\nwhile j < 5 {\n    println!(\"j = {}\", j);\n    j += 1;\n}\n\n// for\nfor k in 0..5 {\n    println!(\"k = {}\", k);\n}"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": ["if/else як в C", "loop: break для виходу", "for: безпечніше than while"]
+    },
+    {
+      "type": "next-steps",
+      "title": "Далі",
+      "nextLecture": "Лекція 12: Ownership",
+      "homework": ["Напиши програму з усіма типами циклів"]
+    }
+  ]
+}

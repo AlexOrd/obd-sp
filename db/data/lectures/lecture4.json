@@ -1,0 +1,219 @@
+{
+  "track": "db",
+  "lectureNumber": "4",
+  "lectureTitle": "Реляційна модель: таблиці та ключі",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 4",
+      "subtitle": "Реляційна модель: таблиці та ключі",
+      "meta": { "course": "Основи баз даних", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 3: Векторні БД та AI",
+      "items": ["Типи/моделі БД", "Особливості векторних індексів", "Нормалізація ембеддингів"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": [
+        "Що таке реляційна модель",
+        "Первинні та зовнішні ключі",
+        "Обмеження цілісності",
+        "Практика CREATE TABLE"
+      ],
+      "note": "Фокус: як таблиці зв'язуються між собою"
+    },
+    {
+      "type": "content",
+      "title": "Навіщо реляційна модель",
+      "text": "Формальна основа, що дозволяє узгоджено зберігати структуровані дані та працювати з ними через SQL.",
+      "items": ["Таблиці = відношення", "Строгі типи та схеми", "Цілісність даних через обмеження"]
+    },
+    {
+      "type": "definition",
+      "title": "Базові терміни",
+      "term": "Реляційна модель",
+      "definition": "Математична модель представлення даних у вигляді відношень (таблиць) з кортежами та атрибутами.",
+      "analogy": "Як Excel-таблиця з чіткими правилами для унікальності та зв'язків"
+    },
+    {
+      "type": "diagram",
+      "title": "Схема двох таблиць",
+      "description": "Зв'язок PK → FK",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nerDiagram\n  Users ||--o{ Orders : PK->FK\n  Users {\n    int id PK\n    string name\n    string email\n  }\n  Orders {\n    int id PK\n    int user_id FK\n    string item\n  }"
+    },
+    {
+      "type": "syntax",
+      "title": "CREATE TABLE (узагальнено)",
+      "syntax": "CREATE TABLE table_name (\n  column data_type constraints,\n  ...\n);",
+      "parts": [
+        { "part": "data_type", "description": "INT, VARCHAR, DATE тощо" },
+        { "part": "constraints", "description": "PRIMARY KEY, NOT NULL, UNIQUE, CHECK" },
+        { "part": ")", "description": "схема фіксує форму даних" }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Ключі в таблицях",
+      "text": "Ключі забезпечують ідентифікацію рядків та зв'язки між таблицями.",
+      "items": [
+        "PK (primary key) — унікальний і NOT NULL",
+        "FK (foreign key) — посилається на PK іншої таблиці",
+        "UNIQUE — забороняє дублікати значень"
+      ]
+    },
+    {
+      "type": "table",
+      "title": "Види ключів",
+      "headers": ["Тип", "Призначення"],
+      "rows": [
+        ["PRIMARY KEY", "Єдиний ідентифікатор рядка"],
+        ["FOREIGN KEY", "Зв'язує таблиці, захищає посилання"],
+        ["COMPOSITE KEY", "PK з кількох колонок"],
+        ["CANDIDATE KEY", "Можливий PK, відповідає унікальності"],
+        ["SURROGATE KEY", "Штучний PK (наприклад, SERIAL)"]
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Обмеження цілісності",
+      "items": [
+        { "title": "Entity integrity", "details": ["PK не NULL і унікальний"] },
+        { "title": "Referential integrity", "details": ["FK посилається на наявний PK"] },
+        { "title": "Domain integrity", "details": ["Типи, CHECK, DEFAULT"] }
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "Поводження FK",
+      "description": "Що робити при видаленні/оновленні батьківського рядка",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR; Parent[Батьківський рядок]-->Action{DELETE/UPDATE}; Action-->|CASCADE| Child[Дитячі рядки видаляються/оновлюються]; Action-->|RESTRICT| Stop[Блок операції]; Action-->|SET NULL| Nullify[FK стає NULL];"
+    },
+    {
+      "type": "code-example",
+      "title": "Приклад схеми (PostgreSQL)",
+      "description": "PK, FK, UNIQUE, CHECK",
+      "language": "sql",
+      "code": "CREATE TABLE users (\n  id SERIAL PRIMARY KEY,\n  email TEXT NOT NULL UNIQUE,\n  name TEXT NOT NULL,\n  role TEXT CHECK (role IN ('student','teacher'))\n);\n\nCREATE TABLE orders (\n  id SERIAL PRIMARY KEY,\n  user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,\n  item TEXT NOT NULL,\n  created_at TIMESTAMP DEFAULT now()\n);"
+    },
+    {
+      "type": "debugger",
+      "title": "Перевірка цілісності",
+      "description": "Як упевнитися, що FK спрацьовує",
+      "items": [
+        "Спробуйте видалити користувача з дочірніми замовленнями",
+        "Очікування: CASCADE видалить orders або RESTRICT заблокує"
+      ],
+      "note": "Тестуйте обмеження одразу після створення таблиць"
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: таблиця без PK",
+      "warning": "Немає унікального ідентифікатора — важко посилатися",
+      "language": "sql",
+      "wrongCode": "CREATE TABLE products (name TEXT, price NUMERIC);",
+      "wrongExplanation": "Немає стабільного ключа для FK та оновлень",
+      "correctCode": "CREATE TABLE products (\n  id SERIAL PRIMARY KEY,\n  name TEXT NOT NULL,\n  price NUMERIC NOT NULL\n);",
+      "correctExplanation": "PK забезпечує унікальність і дозволяє референси"
+    },
+    {
+      "type": "timeline",
+      "title": "Дизайн таблиць (кроки)",
+      "description": "Від вимог до схеми",
+      "events": [
+        { "year": "T0", "label": "Вимоги", "description": "Зібрати сутності та атрибути" },
+        { "year": "T1", "label": "Ключі", "description": "Обрати PK та можливі candidate keys" },
+        { "year": "T2", "label": "Зв'язки", "description": "Визначити FK та cardinality" },
+        { "year": "T3", "label": "Норми", "description": "Перевірити 1NF/2NF/3NF" },
+        { "year": "T4", "label": "Тести", "description": "Створити таблиці та прогнати обмеження" }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Нормальні форми (коротко)",
+      "text": "Норми мінімізують дублювання та аномалії оновлень.",
+      "items": [
+        "1NF: атомарні значення, без повторюваних груп",
+        "2NF: немає часткової залежності від частини PK",
+        "3NF: немає транзитивних залежностей від PK"
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Best practices",
+      "items": [
+        { "title": "Ставте PK всюди", "details": ["навіть для зв'язувальних таблиць"] },
+        { "title": "FK з діями", "details": ["CASCADE/RESTRICT явно"] },
+        { "title": "CHECK для доменів", "details": ["валідація значень на вході"] },
+        { "title": "UNIQUE для бізнес-ідентифікаторів", "details": ["email, code"] },
+        { "title": "Іменуйте ключі", "details": ["pk_users, fk_orders_user_id"] }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Для чого зовнішній ключ?",
+      "options": [
+        { "text": "Зберігати JSON у колонці", "correct": false },
+        { "text": "Зв'язати таблиці та гарантувати існування посилань", "correct": true },
+        { "text": "Зашифрувати чутливі дані", "correct": false }
+      ],
+      "explanation": "FK перевіряє, що посилання веде на наявний PK."
+    },
+    {
+      "type": "content",
+      "title": "Міні ТЗ: блог",
+      "text": "Спроєктуйте схему блогу з PK/FK та обмеженнями.",
+      "items": [
+        "Таблиці: users, posts, comments",
+        "PK скрізь SERIAL/BIGSERIAL",
+        "FK з CASCADE на comments при видаленні posts"
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "Скелет ERD блогу",
+      "description": "Сутності та ключі",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nerDiagram\n  Users ||--o{ Posts : PK->FK\n  Posts ||--o{ Comments : PK->FK\n  Users { int id PK; string email; string name }\n  Posts { int id PK; int user_id FK; string title; text body }\n  Comments { int id PK; int post_id FK; int user_id FK; text body }"
+    },
+    {
+      "type": "live-coding",
+      "title": "Live coding: створюємо схему",
+      "description": "Демо створення таблиць та перевірки обмежень",
+      "actionItems": [
+        "CREATE TABLE users/posts/comments",
+        "Додати FK з CASCADE/RESTRICT",
+        "Спробувати видалити батьківський рядок"
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Реляційна модель = таблиці + ключі",
+        "PK/FK забезпечують ідентифікацію та зв'язки",
+        "Обмеження тримають цілісність і спрощують логіку"
+      ],
+      "note": "Далі — типи даних у SQL"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 5: Типи даних у SQL",
+      "resources": [
+        { "title": "PostgreSQL constraints", "url": "https://www.postgresql.org/docs/current/ddl-constraints.html" },
+        { "title": "SQLite foreign keys", "url": "https://www.sqlite.org/foreignkeys.html" }
+      ],
+      "homework": [
+        "Намалювати ERD блогу з cardinality",
+        "Написати CREATE TABLE для трьох таблиць",
+        "Перевірити поведінку FK при DELETE/UPDATE"
+      ]
+    }
+  ]
+}

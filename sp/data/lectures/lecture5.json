@@ -1,0 +1,165 @@
+{
+  "track": "sp",
+  "lectureNumber": "5",
+  "lectureTitle": "Основи NASM: секції та інструкція MOV",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 5",
+      "subtitle": "Основи NASM: секції (.data, .bss, .text) та інструкція MOV",
+      "meta": { "course": "Спеціалізовані мови програмування", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 4: Робота з терміналом та NASM",
+      "items": ["Основні команди терміналу", "Компіляція та лінкування", "Makefile синтаксис"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["Структура Assembly програми", "Секції: .text, .data, .bss", "Інструкція MOV", "Типи даних"],
+      "note": "Фокус: перша робоча програма"
+    },
+    {
+      "type": "definition",
+      "title": "Секція (Section)",
+      "term": "Section",
+      "definition": "Частина програми з однією призначеністю: код (.text), ініціалізовані дані (.data), неініціалізовані дані (.bss).",
+      "analogy": "Як розділи книги: «Вступ» (код), «Додаток» (дані)"
+    },
+    {
+      "type": "diagram",
+      "title": "Структура Assembly програми",
+      "description": "Три основні секції",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart TB\n  TEXT[\"section .text<br/>Код програми<br/>Інструкції<br/>main: mov...\"] \n  DATA[\"section .data<br/>Глобальні змінні<br/>З значеннями<br/>x: dd 42\"]\n  BSS[\"section .bss<br/>Буфери<br/>Без значень<br/>buffer: resb 1024\"]\n  \n  TEXT --> EXEC[\"Виконавець<br/>.text має точку входу\"]\n  DATA --> EXEC\n  BSS --> EXEC\n  \n  style TEXT fill:#E5F3FF\n  style DATA fill:#FFE5E5\n  style BSS fill:#E5FFE5"
+    },
+    {
+      "type": "content",
+      "title": "Три секції NASM",
+      "text": "Де що зберігається",
+      "items": [
+        ".text: Інструкції процесора (MOV, ADD, JMP). Тільки читання (RO) в пам'яті.",
+        ".data: Глобальні дані з початковими значеннями (рядки, константи). Читання+запис.",
+        ".bss: Неініціалізовані дані (буфери, великі масиви). Займає тільки місце, не в файлі."
+      ]
+    },
+    {
+      "type": "table",
+      "title": "Порівняння секцій",
+      "headers": ["Секція", "Визначення", "Приклад", "Розмір у файлі"],
+      "rows": [
+        [".text", "Код (read-only)", "mov rax, rbx", "Так, займає місце"],
+        [".data", "Дані (read-write)", "x: dd 42", "Так, займає місце"],
+        [".bss", "Буфер (read-write)", "buf: resb 1000", "Ні, тільки позначка"],
+        [".rodata", "Константи", "PI: dq 3.14", "Так, read-only"]
+      ]
+    },
+    {
+      "type": "definition",
+      "title": "Інструкція MOV",
+      "term": "MOV (Move)",
+      "definition": "Базова інструкція: копіює дані з источника в призначення. Не стирає источник (копіює, не переміщує).",
+      "analogy": "Як скопіювати текст: оригіналу залишається, копія з'являється в місці вставки"
+    },
+    {
+      "type": "code-example",
+      "title": "MOV: синтаксис та приклади",
+      "description": "Переміщення даних",
+      "language": "nasm",
+      "code": "mov rax, 42         ; rax = 42 (негайна константа)\nmov rbx, rax        ; rbx = rax (регістр→регістр)\nmov rcx, [rax]      ; rcx = значення за адресою rax (пам'ять→регістр)\nmov [rbx], rdx      ; Адреса rbx = rdx (регістр→пам'ять)\nmov r8, [rel msg]   ; r8 = адреса msg відносно RIP (RIP-relative)"
+    },
+    {
+      "type": "content",
+      "title": "Синтаксис NASM",
+      "text": "Важливі мнемоніки",
+      "items": [
+        "dd: 32-bit (4 байти)",
+        "dq: 64-bit (8 байтів)",
+        "db: 8-bit (1 байт)",
+        "resb: зарезервувати байти",
+        "resq: зарезервувати 64-bit слова"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Приклад: інініціалізація змінних",
+      "description": "Як визначити дані",
+      "language": "nasm",
+      "code": "section .data\n    num1    dd      10          ; 32-bit: 10\n    num2    dq      20          ; 64-bit: 20\n    message db      'Hello', 0  ; Рядок з нулем\n    pi      dq      3.14        ; Float\n\nsection .bss\n    buffer  resb    1024        ; Буфер 1024 байти\n    array   resq    100         ; Масив 100 64-bit слів\n\nsection .text\n    global main\nmain:\n    mov rax, [rel num1]  ; rax = 10\n    mov rbx, [rel num2]  ; rbx = 20\n    ret"
+    },
+    {
+      "type": "list",
+      "title": "MOV обмеження",
+      "items": [
+        { "title": "Обидва операнди не можуть бути пам'яттю", "details": ["mov [rax], [rbx] - помилка!"] },
+        { "title": "Має бути проміжний регістр", "details": ["mov rax, [rbx]; mov [rcx], rax"] },
+        { "title": "64-bit constantin вимагає RAX", "details": ["mov rax, 0x1234567890ABCDEF"] }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Яка різниця між .data та .bss?",
+      "options": [
+        { "text": ".data має початкові значення, .bss — ні", "correct": true },
+        { "text": ".bss швидше", "correct": false },
+        { "text": "Немає різниці", "correct": false }
+      ],
+      "explanation": ".data займає місце в виконавчому файлі. .bss — тільки позначка (виділяється при запуску)."
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: забути [дужки] для пам'яті",
+      "warning": "Дужки означають адресацію пам'яті",
+      "language": "nasm",
+      "wrongCode": "section .data\n    x dd 42\n\nsection .text\n    mov rax, x      ; Помилка: x без дужок = адреса, а не значення",
+      "wrongExplanation": "NASM дає помилку або неправильну адресу",
+      "correctCode": "section .data\n    x dd 42\n\nsection .text\n    mov rax, [rel x]  ; rax = 42 (значення з адреси x)",
+      "correctExplanation": "[rel x] = значення за адресою x (RIP-relative)"
+    },
+    {
+      "type": "content",
+      "title": "Режим адресації: RIP-relative",
+      "text": "В 64-бітній архітектурі",
+      "items": [
+        "[rel x]: адреса відносно RIP (зараз)",
+        "[abs x]: абсолютна адреса (рідко)",
+        "На macOS: [rel msg] обов'язкова для PIC (Position Independent Code)"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Перша робоча програма на Assembly",
+      "description": "Hello World (простіша версія)",
+      "language": "nasm",
+      "code": "section .data\n    msg db 'Hello', 0\n    len equ $ - msg\n\nsection .text\n    global main\nmain:\n    ; Читаємо адресу повідомлення\n    mov rsi, [rel msg_ptr]\n    \n    ; Стандартна процедура виводу\n    mov rax, 0x2000004   ; write syscall (macOS)\n    mov rdi, 1           ; stdout\n    mov rdx, 5           ; довжина\n    syscall\n    ret"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        ".text: код, .data: дані з значеннями, .bss: буфери без значень",
+        "MOV: базова інструкція для копіювання даних",
+        "[rel адреса]: RIP-relative адресація у 64-біт"
+      ],
+      "note": "Далі — арифметичні інструкції: ADD, SUB, INC, DEC"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 6: Арифметичні інструкції",
+      "resources": [
+        { "title": "NASM Manual: Preprocessor", "url": "https://www.nasm.us/doc/nasmdoc4.html" },
+        { "title": "x86-64 ABI", "url": "https://refspecs.linuxbase.org/elf/x86-64-abi-0.99.pdf" }
+      ],
+      "homework": [
+        "Напиши программу з трьома секціями (.text, .data, .bss)",
+        "Ініціалізуй змінні в .data та скопіюй в регістри через MOV",
+        "Перевір через gdb: дивись значення регістрів"
+      ]
+    }
+  ]
+}

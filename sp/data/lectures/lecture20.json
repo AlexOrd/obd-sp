@@ -1,0 +1,116 @@
+{
+  "track": "sp",
+  "lectureNumber": "20",
+  "lectureTitle": "Многопотоковість (Multithreading)",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 20",
+      "subtitle": "Многопотоковість (Multithreading) в Rust"
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Рецензія: Traits и Generics",
+      "points": ["Generics для поліморфізму", "Traits як інтерфейси", "Trait bounds для обмежень"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План",
+      "items": ["Threads на OS", "Message passing", "Shared state з Mutex"]
+    },
+    {
+      "type": "definition",
+      "title": "Thread",
+      "term": "Thread",
+      "definition": "Легка одиниця паралельного виконання. На OS-рівні."
+    },
+    {
+      "type": "code-example",
+      "title": "Створення потока",
+      "language": "rust",
+      "code": "use std::thread;\nuse std::time::Duration;\n\nlet handle = thread::spawn(|| {\n  for i in 1..5 {\n    println!(\"Thread: {}\", i);\n    thread::sleep(Duration::from_millis(100));\n  }\n});\n\nhandle.join().unwrap();  // Чекаємо завершення"
+    },
+    {
+      "type": "definition",
+      "title": "Message Passing",
+      "term": "Message Passing",
+      "definition": "Безпечна передача даних між потоками через channels (як Go)."
+    },
+    {
+      "type": "code-example",
+      "title": "MPSC Channel (Multi-Producer, Single-Consumer)",
+      "language": "rust",
+      "code": "use std::sync::mpsc;\nuse std::thread;\n\nlet (tx, rx) = mpsc::channel();\n\nthread::spawn(move || {\n  tx.send(\"hello\").unwrap();\n});\n\nlet msg = rx.recv().unwrap();\nprintln!(\"Received: {}\", msg);"
+    },
+    {
+      "type": "definition",
+      "title": "Mutex",
+      "term": "Mutex",
+      "definition": "Mutual exclusion - синхронізація доступу до спільних даних."
+    },
+    {
+      "type": "code-example",
+      "title": "Mutex для спільного стану",
+      "language": "rust",
+      "code": "use std::sync::Mutex;\nuse std::sync::Arc;\nuse std::thread;\n\nlet counter = Arc::new(Mutex::new(0));\nlet mut handles = vec![];\n\nfor _ in 0..10 {\n  let counter = Arc::clone(&counter);\n  let handle = thread::spawn(move || {\n    let mut num = counter.lock().unwrap();\n    *num += 1;\n  });\n  handles.push(handle);\n}\n\nfor handle in handles {\n  handle.join().unwrap();\n}\n\nprintln!(\"Counter: {}\", *counter.lock().unwrap());"
+    },
+    {
+      "type": "definition",
+      "title": "Arc<T>",
+      "term": "Arc",
+      "definition": "Atomic Reference Counting. Дозволяє кільком потокам мати власність."
+    },
+    {
+      "type": "list",
+      "title": "Многопотоковість в Rust",
+      "items": [
+        { "title": "Потокова безпека", "details": ["Send/Sync traits забезпечують безпеку"] },
+        { "title": "Відсутність data races", "details": ["Compiler запобігає на compile-time"] },
+        { "title": "Примітивні типи", "details": ["Send + Sync за замовчуванням"] }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 1",
+      "question": "Якої структури потрібна для спільного доступу?",
+      "options": [
+        { "text": "Arc<Mutex<T>>", "correct": true },
+        { "text": "&T", "correct": false },
+        { "text": "Box<T>", "correct": false }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 2",
+      "question": "Що забезпечує Message Passing?",
+      "options": [
+        { "text": "Безпечна комунікація без共享状態", "correct": true },
+        { "text": "Швидкість", "correct": false },
+        { "text": "Автоматичну синхронізацію", "correct": false }
+      ]
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: Забув Arc",
+      "wrong": "let mutex = Mutex::new(0);\nthread::spawn(move || {\n  let mut x = mutex.lock().unwrap();  // ERROR: move!\n});",
+      "right": "let mutex = Arc::new(Mutex::new(0));\nlet m = Arc::clone(&mutex);\nthread::spawn(move || {\n  let mut x = m.lock().unwrap();  // OK\n});"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Потоки для паралельності",
+        "Channels для message passing",
+        "Mutex для спільного стану",
+        "Arc для кількох власників"
+      ]
+    },
+    {
+      "type": "next-steps",
+      "title": "Далі",
+      "nextLecture": "Лекція 21: Docker и Контейнери"
+    }
+  ]
+}

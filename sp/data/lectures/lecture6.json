@@ -1,0 +1,147 @@
+{
+  "track": "sp",
+  "lectureNumber": "6",
+  "lectureTitle": "Арифметичні інструкції",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 6",
+      "subtitle": "Арифметичні інструкції (ADD, SUB, INC, DEC)",
+      "meta": { "course": "Спеціалізовані мови програмування", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 5: Основи NASM",
+      "items": ["Секції: .text, .data, .bss", "Інструкція MOV", "RIP-relative адресація"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["ADD: додавання", "SUB: віднімання", "INC/DEC: збільшення/зменшення", "Прапорці (flags)"],
+      "note": "Фокус: перша математика в Assembly"
+    },
+    {
+      "type": "definition",
+      "title": "Арифметичні інструкції",
+      "term": "Arithmetic Instructions",
+      "definition": "Набір інструкцій для математичних операцій: додавання, віднімання, множення. Встановлюють прапорці ZF, CF, OF.",
+      "analogy": "Як калькулятор: операція + результат + индикатори (overflow, zero)"
+    },
+    {
+      "type": "content",
+      "title": "Основні арифметичні операції",
+      "text": "Сім інструкцій",
+      "items": [
+        "ADD rax, rbx: rax += rbx",
+        "SUB rax, rbx: rax -= rbx",
+        "INC rax: rax += 1",
+        "DEC rax: rax -= 1",
+        "NEG rax: rax = -rax (від'ємне)",
+        "MUL, IMUL, DIV: складніше (потім)"
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "Арифметичні операції та прапорці",
+      "description": "Результат впливає на ZF, CF",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR\n  ADD[\"ADD rax, 5\"] --> EXEC[\"rax += 5\"]\n  EXEC --> FLAGS[\"Встановлюються прапорці\"]\n  FLAGS --> ZF{\"ZF=1?<br/>Result=0?\"}\n  FLAGS --> CF{\"CF=1?<br/>Overflow?\"}\n  FLAGS --> SF{\"SF=1?<br/>Negative?\"}\n  \n  ZF -->|Так| ZERO[\"Результат нуль\"]\n  ZF -->|Ні| NONZERO[\"Результат ≠ нуль\"]\n  \n  style ADD fill:#E5F3FF\n  style FLAGS fill:#FFE5E5"
+    },
+    {
+      "type": "table",
+      "title": "Арифметичні інструкції",
+      "headers": ["Інструкція", "Операція", "Приклад", "Прапорці?"],
+      "rows": [
+        ["ADD", "rax += src", "add rax, 5", "Так (ZF, CF, OF)"],
+        ["SUB", "rax -= src", "sub rbx, rcx", "Так (ZF, CF, OF)"],
+        ["INC", "rax += 1", "inc r8", "Так (крім CF)"],
+        ["DEC", "rax -= 1", "dec rdx", "Так (крім CF)"],
+        ["NEG", "rax = -rax", "neg rax", "Так (ZF, CF, OF)"],
+        ["IMUL", "rax *= src (signed)", "imul rax, 3", "Так (CF, OF)"]
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Приклади: базові операції",
+      "description": "Від просто до складного",
+      "language": "nasm",
+      "code": "mov rax, 10\nadd rax, 5      ; rax = 15\n\nmov rbx, 20\nsub rbx, 3      ; rbx = 17\n\ninc rcx         ; rcx += 1\ninc rcx         ; rcx += 1\n\ndec rdx         ; rdx -= 1\n\nneg r8          ; r8 = -r8 (якщо r8 був 5, тепер -5)"
+    },
+    {
+      "type": "content",
+      "title": "Прапорці: стан після операції",
+      "text": "Важливі для умовного переходу (JZ, JNZ, JC...)",
+      "items": [
+        "ZF (Zero Flag): встановиться якщо результат = 0",
+        "CF (Carry Flag): встановиться якщо переповнення (для беззнакових)",
+        "OF (Overflow Flag): встановиться якщо переповнення (для зі знаком)",
+        "SF (Sign Flag): встановиться якщо результат від'ємний"
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Яке значення ZF після: add rax, 0 (коли rax=5)?",
+      "options": [
+        { "text": "ZF=0 (результат 5, не нуль)", "correct": true },
+        { "text": "ZF=1 (додавання зробило 0)", "correct": false },
+        { "text": "ZF не змінюється", "correct": false }
+      ],
+      "explanation": "ZF встановлюється залежно від результату. 5+0=5, тому ZF=0."
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: забути про CF та OF",
+      "warning": "ADD/SUB мають побічні ефекти (встановлюють прапорці)",
+      "language": "nasm",
+      "wrongCode": "mov rax, 0xFFFFFFFFFFFFFFFF\nadd rax, 1      ; rax = 0, CF = 1 (переповнення!)\njz end          ; JZ перевіряє ZF, не помічає переповнення",
+      "wrongExplanation": "CF (переповнення) і ZF (нуль) — різні прапорці",
+      "correctCode": "mov rax, 0xFFFFFFFFFFFFFFFF\nadd rax, 1      ; rax = 0, CF = 1, ZF = 1\njc overflow     ; JC перевіряє CF (переповнення)\njz is_zero      ; JZ перевіряє ZF (результат нуль)",
+      "correctExplanation": "Кожний прапорець для своєї мети"
+    },
+    {
+      "type": "code-example",
+      "title": "Програма: Сума чисел",
+      "description": "ADD в дії",
+      "language": "nasm",
+      "code": "section .data\n    x dd 42\n    y dd 8\n\nsection .text\n    global main\nmain:\n    mov rax, [rel x]    ; rax = 42\n    add rax, [rel y]    ; rax += 8 → 50\n    ; rax тепер має 50\n    ; Виходимо (вже с системою, вихід буде в rax)\n    ret"
+    },
+    {
+      "type": "list",
+      "title": "Прапорці та умовні переходи",
+      "items": [
+        { "title": "JZ (Jump if Zero)", "details": ["Перейти якщо ZF=1"] },
+        { "title": "JNZ (Jump if Not Zero)", "details": ["Перейти якщо ZF=0"] },
+        { "title": "JC (Jump if Carry)", "details": ["Перейти якщо CF=1 (переповнення)"] },
+        { "title": "JNC (Jump if Not Carry)", "details": ["Перейти якщо CF=0"] },
+        { "title": "JS (Jump if Sign)", "details": ["Перейти якщо SF=1 (від'ємне)"] }
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "ADD/SUB: додавання та віднімання з встановленням прапорців",
+        "INC/DEC: збільшення/зменшення на 1",
+        "Прапорці ZF, CF, OF критичні для умовного коду"
+      ],
+      "note": "Далі — CMP та прапорці детально"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 7: CMP та прапорці",
+      "resources": [
+        { "title": "x86-64 Instruction Set", "url": "https://www.felixcloutier.com/x86/" },
+        { "title": "Flags Register", "url": "https://en.wikipedia.org/wiki/FLAGS_register" }
+      ],
+      "homework": [
+        "Напиши програму: додай три числа з .data",
+        "Перевір результат в gdb: mov до регістра та дивись значення",
+        "Докладно дослідж ADD та прапорці через: rflags у gdb"
+      ]
+    }
+  ]
+}

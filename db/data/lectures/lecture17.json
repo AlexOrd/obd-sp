@@ -1,0 +1,174 @@
+{
+  "track": "db",
+  "lectureNumber": "17",
+  "lectureTitle": "MLOps: моделі та бази даних",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 17",
+      "subtitle": "MLOps: моделі та бази даних",
+      "meta": { "course": "Основи баз даних", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 16: Типи JOIN",
+      "items": ["INNER, LEFT, RIGHT JOIN", "SELF JOIN для ієрархій", "Аналіз даних с JOIN"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["Що таке MLOps", "Дані → модель → передбачення", "Інтеграція БД з ML", "Майбутнє AI у даних"],
+      "note": "Фокус: як БД і ML працюють разом"
+    },
+    {
+      "type": "content",
+      "title": "ML цикл життя",
+      "text": "Дані - центр машинного навчання.",
+      "items": ["Зібрати дані з БД", "Очистити та підготувати", "Тренувати модель", "Передбачувати на нових даних"]
+    },
+    {
+      "type": "definition",
+      "title": "MLOps",
+      "term": "Machine Learning Operations",
+      "definition": "Практики які об'єднують розробку ML моделей з операціями (вибір даних, мониторинг, масштабування).",
+      "analogy": "Як конвеєр: дані → обробка → модель → передбачення"
+    },
+    {
+      "type": "diagram",
+      "title": "ML цикл: Дані → Модель → Передбачення",
+      "description": "Інтеграція з БД",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR\n  DB[(БД<br/>користувачи,<br/>замовлення)]\n  Extract[Вибір даних<br/>SELECT]\n  Clean[Очистка<br/>NULL, дублікати]\n  Feature[Feature Engineering<br/>нові колонки]\n  Train[Тренування<br/>моделі]\n  Model[Модель ML]\n  Predict[Передбачення]\n  Store[(Зберігання<br/>результатів)]\n  DB --> Extract\n  Extract --> Clean\n  Clean --> Feature\n  Feature --> Train\n  Train --> Model\n  Model --> Predict\n  Predict --> Store"
+    },
+    {
+      "type": "content",
+      "title": "Роль БД у ML",
+      "text": "БД забезпечує дані для тренування та передбачень.",
+      "items": [
+        "Зберігання історичних даних",
+        "Часто SELECT запити для batches",
+        "Vectorization: текст → вектори",
+        "Real-time predictions з live data"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Приклад: Рекомендаційна система",
+      "description": "Від БД до передбачення",
+      "language": "python",
+      "code": "# Крок 1: Вибрати дані з БД\nquery = \"\"\"\n  SELECT user_id, item_id, rating\n  FROM ratings\n  WHERE created_at > DATE_SUB(NOW(), INTERVAL 1 YEAR)\n\"\"\"\ndf = pd.read_sql(query, conn)\n\n# Крок 2: Підготувати\ndf = df.fillna(0)  # NULL → 0\n\n# Крок 3: Тренувати модель\nmodel = CollaborativeFiltering()\nmodel.fit(df)\n\n# Крок 4: Передбачити для користувача\nrecommendations = model.predict(user_id=123, n=5)\n\n# Крок 5: Зберегти результати\nsave_to_db(recommendations)"
+    },
+    {
+      "type": "list",
+      "title": "SQL для ML: вибір даних",
+      "items": [
+        { "title": "Балансування класів", "details": ["SELECT * WHERE balanced"] },
+        { "title": "샘플링", "details": ["LIMIT 10000 для швидкого тренування"] },
+        { "title": "Временные вікна", "details": ["WHERE date > X для часових рядів"] },
+        { "title": "Feature generation", "details": ["SELECT col1*col2 AS feature"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Feature engineering через SQL",
+      "description": "Створюємо ознаки у БД",
+      "language": "sql",
+      "code": "-- Готуємо дані прямо у SQL\nSELECT \n  user_id,\n  (total_spent / order_count) AS avg_order_value,\n  DATEDIFF(NOW(), last_order_date) AS days_since_purchase,\n  CASE \n    WHEN total_spent > 1000 THEN 'VIP'\n    WHEN total_spent > 500 THEN 'Regular'\n    ELSE 'New'\n  END AS customer_segment\nFROM users\nWHERE active = true;"
+    },
+    {
+      "type": "content",
+      "title": "Вектори та Embedding DBs",
+      "text": "ML часто працює с векторами (з лекції 3).",
+      "items": [
+        "Текст → вектор через модель BERT/GPT",
+        "Зберігання у Postgres/MongoDB JSONB",
+        "Пошук найближчих сусідів (kNN)"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Зберігання векторів у БД",
+      "description": "PostgreSQL + pgvector",
+      "language": "sql",
+      "code": "-- Таблиця для зберігання ембеддингів\nCREATE TABLE documents (\n  id BIGSERIAL PRIMARY KEY,\n  title VARCHAR(255),\n  content TEXT,\n  embedding vector(384)  -- 384-вимірний вектор\n);\n\n-- Пошук найближчих текстів\nSELECT title\nFROM documents\nORDER BY embedding <-> query_embedding\nLIMIT 5;"
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Для чого ML моделі потребують БД?",
+      "options": [
+        { "text": "Тільки для зберігання результатів", "correct": false },
+        { "text": "Для вибору даних тренування і real-time предиктів", "correct": true },
+        { "text": "ML не потребує БД", "correct": false }
+      ],
+      "explanation": "БД критична для тренування (历史 дані) та інференції (нові дані)."
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: ML без обробки даних",
+      "warning": "«грязні» дані = поганий модель",
+      "language": "python",
+      "wrongCode": "# НЕПРАВИЛЬНО: прямо у модель\ndata = db.query('SELECT * FROM users')\nmodel.fit(data)  # дані можуть мати NULL, дублікати",
+      "wrongExplanation": "NULL та дублікати спотворюють результати",
+      "correctCode": "# ПРАВИЛЬНО: очистити спочатку\ndata = db.query('SELECT * FROM users')\ndata = data.fillna(0).drop_duplicates()\nmodel.fit(data)",
+      "correctExplanation": "Data preparation критична"
+    },
+    {
+      "type": "timeline",
+      "title": "Еволюція ML + DB",
+      "description": "Від окремих до інтегрованих",
+      "events": [
+        { "year": "2010", "label": "Hadoop/MapReduce", "description": "BigData вперше" },
+        { "year": "2015", "label": "TensorFlow", "description": "ML framework" },
+        { "year": "2020", "label": "Vector DBs", "description": "MongoDB, Postgres" },
+        { "year": "2025", "label": "AI-Native DB", "description": "ML вбудована" }
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Best practices ML + DB",
+      "items": [
+        { "title": "Вибирайте достатньо даних", "details": ["但 не перебільшуйте"] },
+        { "title": "Версіонуйте дані", "details": ["track dataset version"] },
+        { "title": "Мониторьте data drift", "details": ["дані змінюються"] },
+        { "title": "Індексуйте для швидкості", "details": ["SELECT маг бути повільний"] },
+        { "title": "Конвертуйте на лету", "details": ["NULL → 0, категорії → числа"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Міні ТЗ: простий ML pipeline",
+      "text": "Тренувати модель передбачення рейтингу.",
+      "items": ["SELECT дані з БД", "Очистити NULL", "Тренувати LinearRegression", "Передбачити для нового користувача"]
+    },
+    {
+      "type": "code-example",
+      "title": "Комплетний pipeline приклад",
+      "description": "End-to-end ML workflow",
+      "language": "python",
+      "code": "import pandas as pd\nfrom sklearn.linear_model import LinearRegression\n\n# Крок 1: Вибір\nquery = \"SELECT user_id, age, spending FROM users WHERE active=true\"\ndf = pd.read_sql(query, db_conn)\n\n# Крок 2: Очистка\ndf = df.dropna()\n\n# Крок 3: Тренування\nX = df[['age']]\ny = df['spending']\nmodel = LinearRegression()\nmodel.fit(X, y)\n\n# Крок 4: Предикт\nnew_age = 30\npredicted_spending = model.predict([[new_age]])\n\n# Крок 5: Зберігання\ndb_conn.execute(\n  'INSERT INTO predictions VALUES (?, ?)',\n  (new_age, predicted_spending)\n)"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": ["ML потребує даних з БД", "Очистка та підготовка критичні", "Вектори все більше використовуються"],
+      "note": "Далі — GROUP BY та аналіз даних"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 18: GROUP BY & Window Functions",
+      "resources": [
+        { "title": "MLOps guide", "url": "https://ml-ops.systems/" },
+        { "title": "Feature engineering", "url": "https://www.featuretools.com/" }
+      ],
+      "homework": [
+        "Написати SQL для вибору даних тренування",
+        "Очистити NULL та дублікати",
+        "Тренувати просту модель (sklearn)"
+      ]
+    }
+  ]
+}

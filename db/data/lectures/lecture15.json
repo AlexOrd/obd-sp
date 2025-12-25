@@ -1,0 +1,217 @@
+{
+  "track": "db",
+  "lectureNumber": "15",
+  "lectureTitle": "JOIN: логіка об'єднань",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 15",
+      "subtitle": "JOIN: логіка об'єднань",
+      "meta": { "course": "Основи баз даних", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 14: ORDER BY",
+      "items": ["ASC/DESC сортування", "LIMIT та OFFSET", "Багатоколоночне сортування"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["Навіщо JOIN потрібен", "Реляційна логіка", "ON умови", "Cardinality та типи"],
+      "note": "Фокус: об'єднання даних з кількох таблиць"
+    },
+    {
+      "type": "content",
+      "title": "Проблема без JOIN",
+      "text": "Без JOIN не можемо пов'язати дані з різних таблиць.",
+      "items": [
+        "Хто замовив товар? Потрібно дані з users та orders",
+        "Яке ім'я користувача в замовленні? Потрібен JOIN",
+        "Поєднати 2+ таблиці через FK"
+      ]
+    },
+    {
+      "type": "definition",
+      "title": "JOIN",
+      "term": "Join Operation",
+      "definition": "Поєднання рядків з двох або більш таблиць за спільним умовам (зазвичай FK/PK).",
+      "analogy": "Як скріпити два документи разом по номеру посилання"
+    },
+    {
+      "type": "diagram",
+      "title": "Концепція JOIN",
+      "description": "Як поєднуються таблиці",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nerDiagram\n  Users ||--o{ Orders : PK->FK\n  Users { int id; string name }\n  Orders { int id; int user_id; string item }\n  note\"JOIN orders ON orders.user_id = users.id\""
+    },
+    {
+      "type": "content",
+      "title": "Чому реляційні БД використовують JOIN",
+      "text": "Уникаємо дублювання даних.",
+      "items": [
+        "Одна таблиця users, багато таблиць orders",
+        "Змінити ім'я - змінити один раз, не 1000",
+        "Економія простору та консистентність"
+      ]
+    },
+    {
+      "type": "syntax",
+      "title": "Базовий JOIN синтаксис",
+      "syntax": "SELECT columns\nFROM table1\nJOIN table2 ON table1.id = table2.table1_id;",
+      "parts": [
+        { "part": "table1", "description": "ліва таблиця" },
+        { "part": "table2", "description": "права таблиця" },
+        { "part": "ON", "description": "умова об'єднання (зазвичай FK = PK)" }
+      ]
+    },
+    {
+      "type": "table",
+      "title": "Tipos de JOIN (скорочено)",
+      "headers": ["Тип", "Завдання"],
+      "rows": [
+        ["INNER JOIN", "Тільки спільні рядки"],
+        ["LEFT JOIN", "Все з лівої + спільні"],
+        ["RIGHT JOIN", "Все з правої + спільні"],
+        ["FULL OUTER JOIN", "Все з обох"],
+        ["CROSS JOIN", "Декартів добуток"]
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "Типи JOIN - Venn діаграми",
+      "description": "Інтерпретація результатів",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR\n  A[Users] \n  B[Orders]\n  A --> Inner[INNER JOIN<br/>спільні]\n  A --> Left[LEFT JOIN<br/>users +<br/>спільні orders]\n  A --> Right[RIGHT JOIN<br/>orders +<br/>спільні users]\n  A --> Full[FULL OUTER<br/>все з обох]"
+    },
+    {
+      "type": "content",
+      "title": "ON умова у JOIN",
+      "text": "ON вказує як об'єднувати таблиці.",
+      "items": [
+        "ON orders.user_id = users.id",
+        "Зазвичай FK = PK",
+        "Можуть бути складні умови: ON a.col1 = b.col1 AND a.col2 = b.col2"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Перший JOIN запит",
+      "description": "Користувачі та їх замовлення",
+      "language": "sql",
+      "code": "SELECT \n  users.id,\n  users.name,\n  orders.id AS order_id,\n  orders.item\nFROM users\nINNER JOIN orders ON users.id = orders.user_id;\n\n-- Результат:\n-- id | name  | order_id | item\n-- 1  | Alice | 101      | Laptop\n-- 1  | Alice | 102      | Mouse\n-- 2  | Bob   | 103      | Keyboard"
+    },
+    {
+      "type": "list",
+      "title": "Aliasing для читабельності",
+      "items": [
+        { "title": "Коротко таблиці", "details": ["FROM users u"] },
+        { "title": "Дати через AS", "details": ["users.name AS user_name"] },
+        { "title": "Зрозумілі жерна", "details": ["ON u.id = o.user_id"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "JOIN з alias",
+      "description": "Коротко та читабельно",
+      "language": "sql",
+      "code": "SELECT \n  u.id AS user_id,\n  u.name AS user_name,\n  o.id AS order_id,\n  o.item\nFROM users u\nINNER JOIN orders o ON u.id = o.user_id\nWHERE u.active = true\nORDER BY u.name;"
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Що означає INNER JOIN?",
+      "options": [
+        { "text": "Усі рядки з лівої таблиці", "correct": false },
+        { "text": "Тільки рядки, які зустрічаються в обох таблицях", "correct": true },
+        { "text": "Усі рядки з обох таблиць", "correct": false }
+      ],
+      "explanation": "INNER JOIN дає перетин: рядки які існують в обох таблицях."
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: забути ON",
+      "warning": "Без ON отримуємо CROSS JOIN - Декартів добуток",
+      "language": "sql",
+      "wrongCode": "SELECT * FROM users, orders;  -- 1000 × 500 = 500,000 рядків!",
+      "wrongExplanation": "Без ON кожен рядок користувача поєднується з кожним замовленням",
+      "correctCode": "SELECT * FROM users\nINNER JOIN orders ON users.id = orders.user_id;",
+      "correctExplanation": "ON вказує спільну колонку для об'єднання"
+    },
+    {
+      "type": "content",
+      "title": "Cardinality відносин",
+      "text": "Як часто з'являються записи в JOIN.",
+      "items": [
+        "1:1 (один користувач - один профіль)",
+        "1:N (один користувач - багато замовлень)",
+        "M:N (студенти - курси, через таблицю-зв'язку)"
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "1:N відношення (найпоширеніше)",
+      "description": "Один користувач, багато замовлень",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nerDiagram\n  Users ||--o{ Orders : \"1:N\"\n  Users { int id; string name }\n  Orders { int id; int user_id; string item }\n  note \"Один користувач может мати 0, 1, або більше замовлень\""
+    },
+    {
+      "type": "timeline",
+      "title": "Історія JOIN",
+      "description": "Від реляційної логіки",
+      "events": [
+        { "year": "1974", "label": "SQL JOIN", "description": "Перша реалізація" },
+        { "year": "1992", "label": "SQL-92", "description": "LEFT/RIGHT JOIN стандартизація" },
+        { "year": "2003", "label": "FULL OUTER", "description": "Додано FULL OUTER JOIN" },
+        { "year": "2025", "label": "Query optimizer", "description": "Розумний вибір порядку" }
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Best practices для JOIN",
+      "items": [
+        { "title": "Використовуйте alias", "details": ["u.id, o.id, не users.id"] },
+        { "title": "Індексуйте FK колонки", "details": ["JOIN швидше"] },
+        { "title": "INNER за замовчуванням", "details": ["явніше LEFT якщо потребується"] },
+        { "title": "ON замість WHERE", "details": ["фільтрування ж JOIN умова"] },
+        { "title": "Обмежуйте CROSS JOIN", "details": ["дорого для великих наборів"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Міні ТЗ: користувачі та замовлення",
+      "text": "Отримайте користувачів з кількістю замовлень.",
+      "items": ["SELECT users.name, COUNT(orders.id)", "FROM users LEFT JOIN orders", "GROUP BY users.id"]
+    },
+    {
+      "type": "code-example",
+      "title": "Комплексний JOIN",
+      "description": "Кілька таблиць разом",
+      "language": "sql",
+      "code": "SELECT \n  u.name AS user_name,\n  COUNT(o.id) AS order_count,\n  SUM(p.price) AS total_spent\nFROM users u\nLEFT JOIN orders o ON u.id = o.user_id\nLEFT JOIN products p ON o.product_id = p.id\nWHERE u.active = true\nGROUP BY u.id\nORDER BY total_spent DESC;"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "JOIN поєднує дані з кількох таблиць",
+        "ON вказує умову об'єднання",
+        "INNER, LEFT, RIGHT, FULL - різні типи"
+      ],
+      "note": "Далі — конкретні типи JOIN"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 16: Типи JOIN",
+      "resources": [
+        { "title": "SQL JOIN visualization", "url": "https://sql-joins.leopard.in.ua/" },
+        { "title": "JOIN examples", "url": "https://www.w3schools.com/sql/sql_join.asp" }
+      ],
+      "homework": [
+        "Напишіть INNER JOIN для користувачів та замовлень",
+        "Створіть JOIN з 3 таблицями",
+        "Порівняйте результати INNER vs LEFT JOIN"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,208 @@
+{
+  "track": "db",
+  "lectureNumber": "7",
+  "lectureTitle": "SELECT та вбудовані функції",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 7",
+      "subtitle": "SELECT та вбудовані функції",
+      "meta": { "course": "Основи баз даних", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 6: Вступ до SQL",
+      "items": ["SELECT та FROM", "Декларативний підхід", "Коментарі та синтаксис"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["Функції у SELECT", "Рядкові та математичні функції", "Агрегатні функції", "Перейменування (AS)"],
+      "note": "Фокус: трансформувати дані прямо у запиті"
+    },
+    {
+      "type": "content",
+      "title": "Функції в SQL",
+      "text": "Функції обчислюють нові значення на основі існуючих колонок.",
+      "items": [
+        "Рядкові: UPPER, LOWER, SUBSTR, LENGTH",
+        "Математичні: ABS, ROUND, CEIL, FLOOR",
+        "Агрегатні: COUNT, SUM, AVG, MAX, MIN"
+      ]
+    },
+    {
+      "type": "definition",
+      "title": "Функція у SQL",
+      "term": "SQL Function",
+      "definition": "Вбудована процедура, яка приймає вхідні параметри та повертає результат.",
+      "analogy": "Як функція у математиці: f(x) = 2*x, але в базах даних"
+    },
+    {
+      "type": "diagram",
+      "title": "Категорії функцій",
+      "description": "Три основні групи",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ngraph TB\n  Functions[SQL Functions]\n  Functions --> Scalar[Скалярні]\n  Functions --> Aggregate[Агрегатні]\n  Functions --> Window[Віконні]\n  Scalar --> String[Рядкові]\n  Scalar --> Math[Математичні]\n  Scalar --> Date[Часові]\n  Aggregate --> COUNT\n  Aggregate --> SUM\n  Aggregate --> AVG"
+    },
+    {
+      "type": "table",
+      "title": "Рядкові функції",
+      "headers": ["Функція", "Приклад", "Результат"],
+      "rows": [
+        ["UPPER(str)", "UPPER('hello')", "HELLO"],
+        ["LOWER(str)", "LOWER('WORLD')", "world"],
+        ["LENGTH(str)", "LENGTH('SQL')", "3"],
+        ["SUBSTR(str,pos,len)", "SUBSTR('Database', 1, 4)", "Data"],
+        ["CONCAT(s1,s2)", "CONCAT('Hello',' World')", "Hello World"],
+        ["TRIM(str)", "TRIM('  text  ')", "text"]
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Рядкові функції у SELECT",
+      "description": "Трансформуємо імена",
+      "language": "sql",
+      "code": "SELECT \n  id,\n  UPPER(name) AS upper_name,\n  LOWER(name) AS lower_name,\n  LENGTH(name) AS name_length,\n  SUBSTR(email, 1, 5) AS email_prefix\nFROM users;"
+    },
+    {
+      "type": "list",
+      "title": "Математичні функції",
+      "items": [
+        { "title": "ABS(x)", "details": ["Абсолютне значення", "ABS(-5) → 5"] },
+        { "title": "ROUND(x, decimals)", "details": ["Округлення", "ROUND(3.14159, 2) → 3.14"] },
+        { "title": "CEIL(x)", "details": ["Округлення вгору", "CEIL(3.1) → 4"] },
+        { "title": "FLOOR(x)", "details": ["Округлення вниз", "FLOOR(3.9) → 3"] },
+        { "title": "POWER(x, y)", "details": ["Степінь", "POWER(2, 3) → 8"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Математичні обчислення",
+      "description": "З прайсом та знижками",
+      "language": "sql",
+      "code": "SELECT \n  id,\n  product_name,\n  price,\n  quantity,\n  price * quantity AS total,\n  ROUND(price * 0.9, 2) AS discounted_price,\n  ROUND(ABS(price - 100), 2) AS diff_from_100\nFROM products;"
+    },
+    {
+      "type": "table",
+      "title": "Агрегатні функції",
+      "headers": ["Функція", "Назва", "Приклад"],
+      "rows": [
+        ["COUNT(*)", "Кількість рядків", "COUNT(*) FROM users"],
+        ["COUNT(col)", "Неоткл значення", "COUNT(email) FROM users"],
+        ["SUM(col)", "Сума", "SUM(amount) FROM orders"],
+        ["AVG(col)", "Середнє", "AVG(price) FROM products"],
+        ["MAX(col)", "Максимум", "MAX(salary) FROM employees"],
+        ["MIN(col)", "Мінімум", "MIN(created_at) FROM posts"]
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Важне про агрегатні функції",
+      "text": "Агрегатні функції повертають ОДИН рядок з результатом.",
+      "items": ["COUNT(*) = всі рядки", "COUNT(column) = тільки не-NULL значення", "SUM, AVG пропускають NULL"]
+    },
+    {
+      "type": "code-example",
+      "title": "Агрегатні запити",
+      "description": "Аналіз даних",
+      "language": "sql",
+      "code": "-- Статистика по всій таблиці\nSELECT \n  COUNT(*) AS total_orders,\n  SUM(amount) AS total_revenue,\n  AVG(amount) AS avg_order,\n  MAX(amount) AS biggest_order,\n  MIN(amount) AS smallest_order\nFROM orders;"
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Що повертає COUNT(*)?",
+      "options": [
+        { "text": "Кількість колонок", "correct": false },
+        { "text": "Кількість рядків у таблиці", "correct": true },
+        { "text": "Кількість NULL значень", "correct": false }
+      ],
+      "explanation": "COUNT(*) лічить всі рядки, включаючи NULL."
+    },
+    {
+      "type": "definition",
+      "title": "Перейменування з AS",
+      "term": "Column Alias",
+      "definition": "Тимчасова назва для колонки у SELECT результатах.",
+      "analogy": "Як прізвисько: реальне ім'я = колонка, прізвисько = AS"
+    },
+    {
+      "type": "code-example",
+      "title": "Використання AS",
+      "description": "Зробляємо результати зрозумілішими",
+      "language": "sql",
+      "code": "SELECT \n  id AS user_id,\n  first_name || ' ' || last_name AS full_name,\n  email AS contact_email,\n  price * quantity AS total_spent\nFROM users;"
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: неправильна функція",
+      "warning": "Функція без правильного синтаксису",
+      "language": "sql",
+      "wrongCode": "SELECT name, length(name) FROM users;  -- lowercase",
+      "wrongExplanation": "Деякі БД чутливі до регістру функцій",
+      "correctCode": "SELECT name, LENGTH(name) FROM users;  -- UPPERCASE",
+      "correctExplanation": "Явно UPPERCASE для портативності"
+    },
+    {
+      "type": "timeline",
+      "title": "Еволюція функцій у SQL",
+      "description": "Від простих до складних",
+      "events": [
+        { "year": "1974", "label": "SQL-86", "description": "Базові COUNT, SUM, AVG" },
+        { "year": "1992", "label": "SQL-92", "description": "Рядкові та математичні" },
+        { "year": "2003", "label": "SQL:2003", "description": "Віконні функції" },
+        { "year": "2025", "label": "Сьогодні", "description": "JSON, XML, AI функції" }
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Best practices для функцій",
+      "items": [
+        { "title": "Документуйте складні функції", "details": ["AS з описанням"] },
+        { "title": "Уникайте функцій на PK", "details": ["замість LENGTH(id)"] },
+        { "title": "Зберігайте обчислення результати", "details": ["якщо часто вживаються"] },
+        { "title": "CASE для умовної логіки", "details": ["замість кількох запитів"] },
+        { "title": "Тестуйте на NULL", "details": ["функції можуть повертати NULL"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Міні ТЗ: аналіз продажів",
+      "text": "З таблиці orders порахуйте статистику.",
+      "items": ["SELECT COUNT(*), SUM(amount), AVG(amount)", "Перейменуйте колонки AS"]
+    },
+    {
+      "type": "code-example",
+      "title": "Комплексний приклад",
+      "description": "Кілька функцій разом",
+      "language": "sql",
+      "code": "SELECT \n  COUNT(*) AS total_users,\n  ROUND(AVG(age), 1) AS avg_age,\n  MAX(created_at) AS newest_user,\n  MIN(created_at) AS oldest_user,\n  UPPER(SUBSTR(country, 1, 2)) AS country_code\nFROM users\nWHERE active = true;"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Функції трансформують дані у SELECT",
+        "AS робить результати зрозумілішими",
+        "Агрегатні функції звужують результати"
+      ],
+      "note": "Далі — WHERE для фільтрації"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 8: WHERE Filtering",
+      "resources": [
+        { "title": "SQLite functions", "url": "https://www.sqlite.org/lang_aggfunc.html" },
+        { "title": "PostgreSQL functions", "url": "https://www.postgresql.org/docs/current/functions.html" }
+      ],
+      "homework": [
+        "Написати запит з 3+ рядковими функціями",
+        "Порахувати COUNT, SUM, AVG для числової колонки",
+        "Перейменувати 5 колонок AS для читабельності"
+      ]
+    }
+  ]
+}

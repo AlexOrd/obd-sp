@@ -1,0 +1,213 @@
+{
+  "track": "db",
+  "lectureNumber": "12",
+  "lectureTitle": "Вступ до NoSQL: MongoDB CRUD",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 12",
+      "subtitle": "Вступ до NoSQL: MongoDB CRUD",
+      "meta": { "course": "Основи баз даних", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 11: Пріоритет операторів",
+      "items": ["SQL запити та фільтрація", "AND/OR/NOT логіка", "Комментарии та документація"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["Що таке NoSQL та MongoDB", "Документи vs таблиці", "Операції CRUD", "Індекси та запити"],
+      "note": "Фокус: гнучка схема, JSON-подібні дані"
+    },
+    {
+      "type": "content",
+      "title": "Навіщо NoSQL",
+      "text": "NoSQL дозволяє швидко розвиватись без фіксованої схеми.",
+      "items": [
+        "Динамічні дані (API, логи, кеш)",
+        "Горизонтальне масштабування",
+        "Гнучкі структури (кожен документ унікальний)"
+      ]
+    },
+    {
+      "type": "definition",
+      "title": "MongoDB",
+      "term": "Document Database",
+      "definition": "СУБД, яка зберігає дані як JSON документи в колекціях, без фіксованої схеми.",
+      "analogy": "Як папка файлів, де кожен файл = JSON, а не рядки таблиці"
+    },
+    {
+      "type": "diagram",
+      "title": "SQL vs MongoDB",
+      "description": "Структура данных",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR\n  SQL[(SQL Database<br/>Таблиці<br/>Рядки & Колонки<br/>Схема обов'язкова)]\n  NoSQL[(MongoDB<br/>Колекції<br/>Документи JSON<br/>Гнучка схема)]\n  SQL -->|SELECT FROM| Rows[Рядки]\n  NoSQL -->|find()| Docs[Документи]"
+    },
+    {
+      "type": "table",
+      "title": "Термінологія",
+      "headers": ["SQL", "MongoDB", "Опис"],
+      "rows": [
+        ["Database", "Database", "Контейнер"],
+        ["Table", "Collection", "Набір даних"],
+        ["Row", "Document", "Запис"],
+        ["Column", "Field", "Атрибут"],
+        ["Index", "Index", "Прискорення пошуку"],
+        ["Primary Key", "_id", "Унікальний ідентифікатор"]
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Структура документа",
+      "text": "Документ = JSON об'єкт з полями та значеннями.",
+      "items": [
+        "{ _id: ObjectId(...), name: 'John', age: 30 }",
+        "_id завжди генерується автоматично",
+        "Поля можуть бути вкладені: address: { city: 'Kyiv' }"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Документ MongoDB",
+      "description": "Типовий структура",
+      "language": "javascript",
+      "code": "{\n  _id: ObjectId(\"507f1f77bcf86cd799439011\"),\n  name: \"Alice\",\n  email: \"alice@example.com\",\n  age: 28,\n  active: true,\n  address: {\n    city: \"Kyiv\",\n    zipcode: \"01001\"\n  },\n  hobbies: [\"reading\", \"coding\", \"travel\"]\n}"
+    },
+    {
+      "type": "list",
+      "title": "CRUD операції",
+      "items": [
+        { "title": "Create (C)", "details": ["insertOne(), insertMany()"] },
+        { "title": "Read (R)", "details": ["find(), findOne()"] },
+        { "title": "Update (U)", "details": ["updateOne(), updateMany()"] },
+        { "title": "Delete (D)", "details": ["deleteOne(), deleteMany()"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "CREATE: Додаємо документ",
+      "description": "insertOne та insertMany",
+      "language": "javascript",
+      "code": "// Додаємо одного користувача\ndb.users.insertOne({\n  name: \"Bob\",\n  email: \"bob@example.com\",\n  age: 25\n});\n\n// Додаємо кількох за раз\ndb.users.insertMany([\n  { name: \"Carol\", age: 30 },\n  { name: \"David\", age: 35 }\n]);"
+    },
+    {
+      "type": "code-example",
+      "title": "READ: Отримуємо документи",
+      "description": "find та findOne",
+      "language": "javascript",
+      "code": "// Отримуємо всіх користувачів\ndb.users.find();\n\n// Отримуємо першого відповідного\ndb.users.findOne({ name: \"Bob\" });\n\n// З фільтром\ndb.users.find({ age: { $gt: 25 } });  // вік > 25\n\n// З проекцією (вибір колонок)\ndb.users.find({}, { name: 1, email: 1 });"
+    },
+    {
+      "type": "table",
+      "title": "Оператори запиту",
+      "headers": ["Оператор", "Значення", "Приклад"],
+      "rows": [
+        ["$gt", "більше", "{ age: { $gt: 25 } }"],
+        ["$lt", "менше", "{ age: { $lt: 65 } }"],
+        ["$gte", "≥", "{ age: { $gte: 18 } }"],
+        ["$lte", "≤", "{ age: { $lte: 100 } }"],
+        ["$eq", "дорівнює", "{ status: { $eq: 'active' } }"],
+        ["$ne", "не дорівнює", "{ role: { $ne: 'admin' } }"],
+        ["$in", "у списку", "{ status: { $in: ['active','pending'] } }"]
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "UPDATE: Оновлюємо дані",
+      "description": "updateOne та updateMany",
+      "language": "javascript",
+      "code": "// Оновляємо одного користувача\ndb.users.updateOne(\n  { name: \"Bob\" },\n  { $set: { age: 26, updated_at: new Date() } }\n);\n\n// Оновляємо кількох\ndb.users.updateMany(\n  { age: { $lt: 18 } },\n  { $set: { status: \"minor\" } }\n);\n\n// Інкремент\ndb.users.updateOne(\n  { _id: 123 },\n  { $inc: { login_count: 1 } }\n);"
+    },
+    {
+      "type": "code-example",
+      "title": "DELETE: Видаляємо документи",
+      "description": "deleteOne та deleteMany",
+      "language": "javascript",
+      "code": "// Видаляємо одного\ndb.users.deleteOne({ _id: ObjectId(\"...\") });\n\n// Видаляємо кількох\ndb.users.deleteMany({ age: { $lt: 18 } });\n\n// Видаляємо всіх (ОБЕРЕЖНО!)\ndb.users.deleteMany({});"
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Як отримати користувачів віком > 25?",
+      "options": [
+        { "text": "db.users.find(age > 25)", "correct": false },
+        { "text": "db.users.find({ age: { $gt: 25 } })", "correct": true },
+        { "text": "db.users.select(age) WHERE age > 25", "correct": false }
+      ],
+      "explanation": "MongoDB використовує оператори $gt, $lt итак далі"
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: забути $set",
+      "warning": "Без $set весь документ заміниться",
+      "language": "javascript",
+      "wrongCode": "db.users.updateOne(\n  { _id: 123 },\n  { age: 26 }  // НЕПРАВИЛЬНО! замінить весь документ\n);",
+      "wrongExplanation": "Документ буде мати тільки поле age",
+      "correctCode": "db.users.updateOne(\n  { _id: 123 },\n  { $set: { age: 26 } }  // оновити тільки age\n);",
+      "correctExplanation": "$set оновлює конкретні поля"
+    },
+    {
+      "type": "timeline",
+      "title": "Еволюція NoSQL",
+      "description": "Від документів до AI",
+      "events": [
+        { "year": "2009", "label": "MongoDB", "description": "Перша версія" },
+        { "year": "2012", "label": "Atlas", "description": "Cloud MongoDB" },
+        { "year": "2020", "label": "Aggregation", "description": "Pipeline для аналізу" },
+        { "year": "2025", "label": "AI Search", "description": "Векторний пошук" }
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Best practices MongoDB",
+      "items": [
+        { "title": "Завжди мають _id", "details": ["генерується автоматично"] },
+        { "title": "Індексуйте часті поля", "details": ["find() по name, email"] },
+        { "title": "Обережно з великими масивами", "details": ["можуть уповільнити"] },
+        { "title": "Валідація на рівні БД", "details": ["schema validation"] },
+        { "title": "Транзакції для критичного", "details": ["atomicity"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Міні ТЗ: MongoDB блог",
+      "text": "Створіть колекцію posts з CRUD.",
+      "items": ["Додайте 3 пости", "Знайдіть пости автора", "Оновіть лайки", "Видаліть старий пост"]
+    },
+    {
+      "type": "code-example",
+      "title": "Комплексний приклад",
+      "description": "Схема блога",
+      "language": "javascript",
+      "code": "// Додаємо пост\ndb.posts.insertOne({\n  title: \"MongoDB вступ\",\n  content: \"Документоорієнтована база\",\n  author: \"alice@example.com\",\n  likes: 5,\n  created_at: new Date(),\n  tags: [\"database\", \"nosql\"]\n});\n\n// Шукаємо посты автора\ndb.posts.find({ author: \"alice@example.com\" });\n\n// Додаємо лайк\ndb.posts.updateOne(\n  { _id: ObjectId(\"...\") },\n  { $inc: { likes: 1 } }\n);"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "MongoDB = документна БД без фіксованої схеми",
+        "CRUD операції: insert, find, update, delete",
+        "$gt, $lt, $in для складних запитів"
+      ],
+      "note": "Далі — роботав з датами та часом"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 13: Дати та час у SQL",
+      "resources": [
+        { "title": "MongoDB docs", "url": "https://docs.mongodb.com/" },
+        { "title": "MongoDB shell", "url": "https://www.mongodb.com/docs/mongodb-shell/" }
+      ],
+      "homework": [
+        "Встановити MongoDB локально або використати Atlas",
+        "Створити колекцію з 10 документами",
+        "Написати 5 find запитів з фільтрами",
+        "Оновити та видалити документи"
+      ]
+    }
+  ]
+}

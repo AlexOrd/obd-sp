@@ -1,0 +1,211 @@
+{
+  "track": "db",
+  "lectureNumber": "5",
+  "lectureTitle": "Типи даних у SQL",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 5",
+      "subtitle": "Типи даних у SQL",
+      "meta": { "course": "Основи баз даних", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 4: Реляційна модель",
+      "items": ["PK/FK та обмеження", "CREATE TABLE", "Цілісність даних"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": [
+        "Числові типи (INT, DECIMAL)",
+        "Рядкові типи (VARCHAR, TEXT)",
+        "Дата/час та булеві",
+        "Обираємо правильний тип"
+      ],
+      "note": "Фокус: як вибрати тип для колонки"
+    },
+    {
+      "type": "content",
+      "title": "Навіщо типи даних",
+      "text": "Типи гарантують коректність, мінімізують пам'ять та дозволяють специфічні операції.",
+      "items": ["Перевірка на вставці", "Оптимізація розміру записів", "Спеціальні функції для кожного типу"]
+    },
+    {
+      "type": "definition",
+      "title": "Тип даних",
+      "term": "Data Type",
+      "definition": "Категорія значення в колонці, яка визначає допустимі операції, формати та обсяг пам'яті.",
+      "analogy": "Як контейнер: INT вмішує число, VARCHAR вмішує текст з обмеженням довжини"
+    },
+    {
+      "type": "diagram",
+      "title": "Дерево типів",
+      "description": "Головні групи",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ngraph TB\n  Root[SQL Types]\n  Root --> Numeric[Numeric]\n  Root --> String[String]\n  Root --> Temporal[Temporal]\n  Root --> Boolean[Boolean]\n  Numeric --> INT[INT/BIGINT]\n  Numeric --> DECIMAL[DECIMAL/FLOAT]\n  String --> VARCHAR[VARCHAR]\n  String --> TEXT[TEXT]\n  Temporal --> DATE[DATE]\n  Temporal --> TIME[TIME]\n  Temporal --> TIMESTAMP[TIMESTAMP]"
+    },
+    {
+      "type": "table",
+      "title": "Числові типи",
+      "headers": ["Тип", "Розмір", "Діапазон", "Використання"],
+      "rows": [
+        ["TINYINT", "1 B", "0–255", "флаги"],
+        ["INT/INTEGER", "4 B", "±2.1B", "ID, кількості"],
+        ["BIGINT", "8 B", "±9.2e18", "великі суми"],
+        ["DECIMAL(p,s)", "змінна", "точно", "гроші, ставки"],
+        ["FLOAT/DOUBLE", "4/8 B", "наблиз.", "вимірювання, AI"]
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Коли вибирати DECIMAL vs FLOAT",
+      "text": "DECIMAL = точно, FLOAT = швидко но наближено.",
+      "items": ["DECIMAL: гроші, відсотки, юридичні дані", "FLOAT: фізичні величини, результати обчислень, ML"]
+    },
+    {
+      "type": "list",
+      "title": "Рядкові типи",
+      "items": [
+        { "title": "CHAR(n)", "details": ["Фіксована довжина, padding", "email, коди"] },
+        { "title": "VARCHAR(n)", "details": ["Змінна довжина з лімітом", "імена, описи"] },
+        { "title": "TEXT", "details": ["Необмежена довжина", "статті, коментарі"] }
+      ]
+    },
+    {
+      "type": "table",
+      "title": "Рядкові типи: порівняння",
+      "headers": ["Тип", "Розмір", "Пошук", "Сортування"],
+      "rows": [
+        ["CHAR(10)", "10 B завжди", "швидкий", "ОК"],
+        ["VARCHAR(255)", "до 255 B", "нормальний", "ОК"],
+        ["TEXT", "необмежено", "повільний", "потребує індексу"]
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Кодування та колейції",
+      "text": "Важлива для міжнародних текстів та сортування.",
+      "items": [
+        "UTF-8 = універсальна, підтримує всі мови",
+        "COLLATION = порядок сортування (наприклад, uk_UA для українського)"
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "Типи дат/часу",
+      "description": "Для часових даних",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ngraph LR\n  TemporalTypes[Часові типи]\n  TemporalTypes --> DATE[DATE<br/>YYYY-MM-DD]\n  TemporalTypes --> TIME[TIME<br/>HH:MM:SS]\n  TemporalTypes --> TIMESTAMP[TIMESTAMP<br/>YYYY-MM-DD HH:MM:SS]\n  TemporalTypes --> INTERVAL[INTERVAL<br/>між двома точками]"
+    },
+    {
+      "type": "code-example",
+      "title": "Приклади типів (PostgreSQL)",
+      "description": "Різні колонки, різні типи",
+      "language": "sql",
+      "code": "CREATE TABLE products (\n  id BIGSERIAL PRIMARY KEY,\n  name VARCHAR(255) NOT NULL,\n  description TEXT,\n  price DECIMAL(10, 2),\n  quantity INT DEFAULT 0,\n  is_available BOOLEAN DEFAULT true,\n  created_at TIMESTAMP DEFAULT now(),\n  last_updated DATE\n);"
+    },
+    {
+      "type": "list",
+      "title": "Best practices для типів",
+      "items": [
+        { "title": "Не перейменовуйте типи", "details": ["INT для ID, TEXT для опису"] },
+        { "title": "Величина = точність", "details": ["INT для кількостей < 2B, BIGINT для UNIX timestamp"] },
+        { "title": "DECIMAL для грошей", "details": ["ніколи не FLOAT"] },
+        { "title": "DEFAULT = ознака очікуваного", "details": ["created_at DEFAULT now()"] },
+        { "title": "Не переполюйте VARCHAR", "details": ["VARCHAR(50) для імена, не (255)"] }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Яким типом зберігати ціну товару?",
+      "options": [
+        { "text": "FLOAT — простіше", "correct": false },
+        { "text": "DECIMAL(10,2) — точна грошева сума", "correct": true },
+        { "text": "INT копійки — обхід", "correct": false }
+      ],
+      "explanation": "DECIMAL зберігає точно, избігаючи помилок округлення."
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: VARCHAR без обмеження",
+      "warning": "VARCHAR(65535) або просто VARCHAR губить оптимізацію",
+      "language": "sql",
+      "wrongCode": "CREATE TABLE users (email VARCHAR);  -- невизначений розмір",
+      "wrongExplanation": "БД не може правильно розподілити сторінки",
+      "correctCode": "CREATE TABLE users (email VARCHAR(255) NOT NULL UNIQUE);",
+      "correctExplanation": "Явна довжина дозволяє оптимізувати індекси"
+    },
+    {
+      "type": "timeline",
+      "title": "Вибір типу (алгоритм)",
+      "description": "Як систематично вибрати",
+      "events": [
+        { "year": "T0", "label": "Природа", "description": "Число, текст, час, логіка?" },
+        { "year": "T1", "label": "Діапазон", "description": "INT, BIGINT, DECIMAL?" },
+        { "year": "T2", "label": "Обмеження", "description": "VARCHAR(n) чи TEXT?" },
+        { "year": "T3", "label": "Точність", "description": "FLOAT чи DECIMAL?" },
+        { "year": "T4", "label": "DEFAULT", "description": "NULL, значення або now()?" }
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "Занули та BOOLEAN",
+      "description": "Окремі типи",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ngraph LR\n  Boolean[BOOLEAN]\n  Boolean --> True[true/TRUE]\n  Boolean --> False[false/FALSE]\n  Boolean --> Null[NULL=невідомо]\n  Note[Багато БД не мають BOOLEAN,<br/>вживають INT 0/1 або ENUM]"
+    },
+    {
+      "type": "list",
+      "title": "Спеціальні типи",
+      "items": [
+        { "title": "ENUM", "details": ["обмежена множина значень ('M','F')"] },
+        { "title": "JSON/JSONB", "details": ["структуровані дані у полі (PostgreSQL)"] },
+        { "title": "UUID", "details": ["унікальний ідентифікатор, незалежний від БД"] },
+        { "title": "ARRAY", "details": ["масиви (PostgreSQL, SQLite не підтримує)"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Міні ТЗ: схема інтернет-магазину",
+      "text": "Проєктуємо типи для типового магазину.",
+      "items": [
+        "users (email, password, name, birth_date)",
+        "products (id, name, price, stock)",
+        "orders (id, user_id, created_at, status)"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Повна схема магазину",
+      "description": "З урахуванням типів",
+      "language": "sql",
+      "code": "CREATE TABLE users (\n  id BIGSERIAL PRIMARY KEY,\n  email VARCHAR(255) UNIQUE NOT NULL,\n  password_hash VARCHAR(255),\n  name VARCHAR(100),\n  birth_date DATE,\n  created_at TIMESTAMP DEFAULT now()\n);\n\nCREATE TABLE products (\n  id BIGSERIAL PRIMARY KEY,\n  name VARCHAR(200) NOT NULL,\n  price DECIMAL(10,2) NOT NULL CHECK (price > 0),\n  stock INT DEFAULT 0\n);\n\nCREATE TABLE orders (\n  id BIGSERIAL PRIMARY KEY,\n  user_id BIGINT REFERENCES users(id),\n  product_id BIGINT REFERENCES products(id),\n  quantity INT NOT NULL CHECK (quantity > 0),\n  created_at TIMESTAMP DEFAULT now(),\n  status VARCHAR(20) DEFAULT 'pending'\n);"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Типи гарантують дані та оптимізують простір",
+        "INT/BIGINT для чисел, DECIMAL для грошей",
+        "VARCHAR(n) для текстів з лімітом, TEXT для більших"
+      ],
+      "note": "Далі — базові SELECT запити"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 6: Вступ до SQL",
+      "resources": [
+        { "title": "PostgreSQL data types", "url": "https://www.postgresql.org/docs/current/datatype.html" },
+        { "title": "SQLite affinity", "url": "https://www.sqlite.org/datatype3.html" }
+      ],
+      "homework": [
+        "Намалювати таблиці магазину з типами",
+        "Визначити CHECK для ціни, кількості",
+        "Порівняти розміри CHAR(100) vs VARCHAR(100) на 1M записів"
+      ]
+    }
+  ]
+}

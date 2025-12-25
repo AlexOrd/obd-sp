@@ -1,0 +1,155 @@
+{
+  "track": "sp",
+  "lectureNumber": "8",
+  "lectureTitle": "Адресація пам'яті в NASM",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 8",
+      "subtitle": "Базова адресація пам'яті в NASM",
+      "meta": { "course": "Спеціалізовані мови програмування", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 7: CMP та прапорці",
+      "items": ["CMP: порівняння", "Умовні переходи: JE, JA, JG", "Прапорці ZF, CF, SF"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["Режими адресації", "[базис]", "[базис + зміщення]", "[базис + індекс * масштаб + зміщення]"],
+      "note": "Фокус: робота з масивами та структурами"
+    },
+    {
+      "type": "definition",
+      "title": "Адресація пам'яті",
+      "term": "Addressing Modes",
+      "definition": "Способи визначення, яку адресу в пам'яті використати для операції: безпосередня, регістр, пам'ять з обчисленням адреси.",
+      "analogy": "Як знайти човома на столі: скажи номер, або 'ліворуч від X', або 'X плюс 3 см нижче'"
+    },
+    {
+      "type": "diagram",
+      "title": "Режими адресації (x86-64)",
+      "description": "Формула для адреси",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR\n  ADDR[\"Адреса =\"] --> BASE[\"базис +\"]\n  BASE --> INDEX[\"індекс*масштаб +\"]\n  INDEX --> DISP[\"зміщення\"]\n  \n  DISP --> EX1[\"[rax] = адреса в rax\"]\n  DISP --> EX2[\"[rax + 8] = rax + 8\"]\n  DISP --> EX3[\"[rax + rbx*4 + 16] = rax + rbx*4 + 16\"]\n  \n  style ADDR fill:#FFE5E5\n  style EX1 fill:#E5F3FF\n  style EX2 fill:#E5FFE5\n  style EX3 fill:#FFE5FF"
+    },
+    {
+      "type": "table",
+      "title": "Основні режими адресації",
+      "headers": ["Режим", "Синтаксис", "Адреса", "Приклад"],
+      "rows": [
+        ["Регістр", "rax", "значення rax", "mov rbx, [rax]"],
+        ["Базис + зміщення", "[rax + 8]", "rax + 8", "mov rcx, [rsp + 16]"],
+        ["Індекс масив", "[rax + rbx*4]", "rax + rbx*4", "mov rdx, [base + i*4]"],
+        ["Комплексна", "[rax + rbx*8 + 10]", "rax + rbx*8 + 10", "структури, масиви"],
+        ["RIP-relative", "[rel label]", "label", "mov rax, [rel data]"]
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Правила адресації",
+      "text": "Обмеження NASM",
+      "items": [
+        "Масштаб може бути: 1, 2, 4, або 8 (розмір данных)",
+        "Індекс НЕ може бути: RSP або RBP (базис так)",
+        "База + індекс + зміщення: [база + індекс*масштаб + зміщення]",
+        "RIP-relative для Position Independent Code (PIC) на x86-64"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Приклади адресації",
+      "description": "Від простих до складних",
+      "language": "nasm",
+      "code": "mov rax, [rbx]              ; базис\nmov rax, [rbx + 8]          ; базис + зміщення\nmov rax, [rbx + rcx*4]      ; базис + індекс*масштаб\nmov rax, [rbx + rcx*4 + 16] ; повна формула\nmov rax, [rel data]         ; RIP-relative"
+    },
+    {
+      "type": "content",
+      "title": "Масив: доступ до елементів",
+      "text": "Типова використання",
+      "items": [
+        "Масив: адреса_базу + індекс * розмір_елементу",
+        "int arr[100]: arr[i] = адреса_arr + i*4 (4 байта на int)",
+        "long arr[100]: arr[i] = адреса_arr + i*8 (8 байтів на long)"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Програма: доступ до масиву",
+      "description": "Читаємо другий елемент массива",
+      "language": "nasm",
+      "code": "section .data\n    arr dd 10, 20, 30, 40, 50    ; Масив з п'яти чисел\n\nsection .text\n    global main\nmain:\n    lea rax, [rel arr]           ; rax = адреса масиву\n    mov rbx, [rax + 4]           ; rbx = arr[1] (другой элемент, +4 байты)\n    mov rcx, [rax + 8]           ; rcx = arr[2] (третий, +8 байтів)\n    ret"
+    },
+    {
+      "type": "list",
+      "title": "LEA: Load Effective Address",
+      "items": [
+        { "title": "lea rax, [rbx + 8]", "details": ["rax = rbx + 8 (адреса, не значення)"] },
+        { "title": "На відміну від mov rax, [rbx + 8]", "details": ["mov читає значення за адресою"] },
+        { "title": "Корисна для: обчисленя адрес", "details": ["в циклах, структурах"] }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Яка різниця між [rax] та rax?",
+      "options": [
+        { "text": "[rax] = значення за адресою, rax = сама адреса", "correct": true },
+        { "text": "Немає різниці", "correct": false },
+        { "text": "[rax] швидше", "correct": false }
+      ],
+      "explanation": "mov rbx, [rax] читає пам'ять. mov rbx, rax копіює адресу."
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: забути масштаб для індексу",
+      "warning": "Індекс треба помножити на розмір елементу",
+      "language": "nasm",
+      "wrongCode": "mov rax, [base + i]      ; ПОМИЛКА: i должен быть *4 для int\n                         ; правильно: [base + i*4]",
+      "wrongExplanation": "Без масштабу отримаємо неправильну адресу",
+      "correctCode": "mov rax, [base + i*4]    ; base + i*4 для массива int\nmov rax, [base + i*8]    ; base + i*8 для массива long",
+      "correctExplanation": "Масштаб залежить від типу елементу"
+    },
+    {
+      "type": "content",
+      "title": "Структури в Assembly",
+      "text": "Доступ до полів",
+      "items": [
+        "struct Point { int x, y; } = 8 байтів (2 * 4)",
+        "[base + 0] = x",
+        "[base + 4] = y",
+        "struct Person { long id; char[32] name; } = 40 байтів"
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Адреса = базис + індекс*масштаб + зміщення",
+        "[rax] — значення в пам'яті; rax — адреса",
+        "LEA для обчисленя адрес без доступу до пам'яті"
+      ],
+      "note": "Далі — Rust: переходимо від низькорівневого до безпечного"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 9: Вступ до Rust",
+      "resources": [
+        { "title": "x86-64 Addressing Modes", "url": "https://www.felixcloutier.com/x86/mov" },
+        {
+          "title": "Array Indexing in Assembly",
+          "url": "https://stackoverflow.com/questions/33749362/how-does-array-indexing-in-assembly-language-work"
+        }
+      ],
+      "homework": [
+        "Напиши масив з 10 чисел в .data",
+        "Обчисли адресу 3-го та 7-го елементів через [базис + індекс*масштаб]",
+        "Спроби доступу до структури з двома полями (8 + 16 байтів)"
+      ]
+    }
+  ]
+}

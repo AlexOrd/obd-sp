@@ -1,0 +1,224 @@
+{
+  "track": "db",
+  "lectureNumber": "3",
+  "lectureTitle": "Векторні бази даних та AI",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 3",
+      "subtitle": "Векторні бази даних та AI",
+      "meta": {
+        "course": "Основи баз даних",
+        "institution": "VTFK • 2025"
+      }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 2: Типи та моделі БД",
+      "items": ["Коли обираємо реляційні vs NoSQL", "Базовий CRUD у реляційних БД", "Перший погляд на гнучкі схеми"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": [
+        "Навіщо векторні БД",
+        "Як працює пошук за схожістю",
+        "Архітектура та індекси (HNSW, IVF)",
+        "Демо та домашнє завдання"
+      ],
+      "note": "Фокус: пошук по ембеддингах та інтеграція з ML"
+    },
+    {
+      "type": "content",
+      "title": "Проблематика",
+      "text": "Класичні БД не оптимізовані для пошуку за схожістю у високих вимірах.",
+      "items": [
+        "Ключові слова не розуміють контекст",
+        "Косинусна схожість дорожча за точний пошук",
+        "Потрібні індекси, які працюють із векторами"
+      ]
+    },
+    {
+      "type": "definition",
+      "title": "Що таке векторна БД?",
+      "term": "Vector Database",
+      "definition": "СУБД, оптимізована для зберігання та швидкого пошуку ембеддингів (векторів ознак) за метриками схожості.",
+      "analogy": "Як бібліотека, де книги відсортовані не за назвою, а за змістовною близькістю."
+    },
+    {
+      "type": "diagram",
+      "title": "Потік даних у векторній БД",
+      "description": "Від сирих даних до відповіді",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR; Data[Текст/зображення]-->Embedder[Модель ембеддингів]; Embedder-->Vec[(Вектори)]; Vec-->Index[Індекс HNSW/IVF]; Query[Запит користувача]-->EmbedQ[Ембеддинг запиту]; EmbedQ-->Index; Index-->TopK[Top-K найближчих]; TopK-->App[Відповідь/рекомендації];"
+    },
+    {
+      "type": "syntax",
+      "title": "Запит схожості (узагальнено)",
+      "syntax": "SELECT id, distance(vector, :query_vec) AS score\nFROM vectors\nORDER BY score ASC\nLIMIT k;",
+      "parts": [
+        { "part": "distance", "description": "метрика (cosine/L2)" },
+        { "part": "ORDER BY score", "description": "найближчі вектори першими" },
+        { "part": "LIMIT k", "description": "Top-K результатів" }
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "Індекс HNSW (спрощено)",
+      "description": "Граф наближеного пошуку",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ngraph TB; L3[Шар 3: грубий граф]-->L2[Шар 2]; L2-->L1[Шар 1: щільний граф]; L1-->Entry[Вставка/пошук]; Entry-->Neighbors[Обхід сусідів];"
+    },
+    {
+      "type": "code-example",
+      "title": "Мінімальний запит з FAISS (Python)",
+      "description": "Створюємо індекс і робимо пошук",
+      "language": "python",
+      "code": "import faiss, numpy as np\n\n# 3 вектори по 4 ознаки\nxb = np.array([[0.1, 0.2, 0.0, 0.3],\n               [0.9, 0.1, 0.2, 0.0],\n               [0.0, 0.3, 0.4, 0.2]], dtype='float32')\nindex = faiss.IndexFlatL2(4)  # L2-метрика\nindex.add(xb)\n\nquery = np.array([[0.05, 0.25, 0.05, 0.35]], dtype='float32')\nscore, ids = index.search(query, k=2)\nprint(ids, score)  # два найближчих вектори",
+      "note": "Для продакшн використовують HNSW/IVF для швидкості"
+    },
+    {
+      "type": "table",
+      "title": "Основні операції",
+      "headers": ["Операція", "Призначення"],
+      "rows": [
+        ["INSERT", "Додати вектор + метадані"],
+        ["UPDATE", "Перезаписати вектор або payload"],
+        ["DELETE", "Видалити вектор з індексу"],
+        ["SEARCH kNN", "Top-K найближчих"],
+        ["FILTER + SEARCH", "Пошук з фільтрами по метаданих"]
+      ]
+    },
+    {
+      "type": "timeline",
+      "title": "Життєвий цикл даних",
+      "description": "Векторизація → індексація → пошук",
+      "events": [
+        { "year": "T0", "label": "Інгест", "description": "Отримуємо сирі документи" },
+        { "year": "T1", "label": "Ембеддинг", "description": "Обчислюємо вектори" },
+        { "year": "T2", "label": "Індекс", "description": "Додаємо у HNSW/IVF" },
+        { "year": "T3", "label": "Пошук", "description": "kNN з фільтрами" },
+        { "year": "T4", "label": "Оновлення", "description": "Ребілд/реплікація за потреби" }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Продуктивність та обмеження",
+      "text": "Точний пошук дорогий при великих d та N, тому застосовують ANN (approximate nearest neighbors).",
+      "items": [
+        "Баланс точність/швидкість: recall проти latency",
+        "Пам'ять: великі індекси → шардінг і компресія",
+        "Оновлення: деякі індекси повільно приймають апдейти"
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Best practices",
+      "items": [
+        { "title": "Нормалізуйте вектори", "details": ["для cosine/L2 стабільності"] },
+        { "title": "Валідуйте якість ембеддингів", "details": ["A/B на прикладах"] },
+        { "title": "Ставте фільтри по метаданих", "details": ["звужує пошук"] },
+        { "title": "Тримайте окремо payload", "details": ["вектор + метадані"] },
+        { "title": "Плануйте ребілд індексу", "details": ["батчі або offline"] }
+      ]
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: пошук без нормалізації",
+      "warning": "Вектори різної довжини спотворюють cosine",
+      "language": "python",
+      "wrongCode": "index.add(raw_vectors)  # без нормалізації",
+      "wrongExplanation": "Довгі вектори домінують у відстані",
+      "correctCode": "norm = raw_vectors / np.linalg.norm(raw_vectors, axis=1, keepdims=True)\nindex.add(norm)",
+      "correctExplanation": "Нормалізація робить cosine коректним"
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Що робить HNSW у пошуку?",
+      "options": [
+        { "text": "Точний перебір усіх векторів", "correct": false },
+        { "text": "Швидкий наближений пошук через граф шарів", "correct": true },
+        { "text": "Компресує текст у токени", "correct": false }
+      ],
+      "explanation": "HNSW будує багаторівневий граф для швидкого наближеного kNN."
+    },
+    {
+      "type": "content",
+      "title": "Міні ТЗ: пошук по знаньбазі",
+      "text": "Зробіть простий пошук по FAQ з ембеддингами.",
+      "items": [
+        "Векторизуйте 20 питань/відповідей",
+        "Побудуйте індекс (HNSW/Flat)",
+        "Запит: питання користувача → top-3 схожих"
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "Проєктування рішення",
+      "description": "Кроки для ТЗ",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart TB; Prep[Збір FAQ]-->Embed[Обчислити ембеддинги]; Embed-->Index[Побудувати індекс]; Index-->Query[Запит користувача]; Query-->Retrieve[Top-3 відповіді]; Retrieve-->Review[Оцінити якість];"
+    },
+    {
+      "type": "code-example",
+      "title": "Налаштування середовища",
+      "description": "Встановлення FAISS та sentence-transformers",
+      "language": "bash",
+      "code": "pip install faiss-cpu sentence-transformers\npython - <<'PY'\nfrom sentence_transformers import SentenceTransformer\nmodel = SentenceTransformer('all-MiniLM-L6-v2')\nprint(model.encode(['hi']).shape)\nPY",
+      "note": "На mac M1/M2 можна ставити faiss-cpu; для GPU потрібен інший пакет"
+    },
+    {
+      "type": "live-coding",
+      "title": "Live coding: збірка pipeline",
+      "description": "Показати: ембеддинг → індекс → запит",
+      "actionItems": ["encode текстів", "index.add(vectors)", "index.search(query, k=3)"]
+    },
+    {
+      "type": "table",
+      "title": "Аналіз результатів",
+      "headers": ["Крок", "Очікування", "Перевірка"],
+      "rows": [
+        ["Ембеддинг", "Форма (N, d)", "print(shape)"],
+        ["Індекс", "Розмір = N", "index.ntotal"],
+        ["Запит", "Top-3 релевантні", "ручна валідація"],
+        ["Latency", "< 100 мс", "time search"]
+      ]
+    },
+    {
+      "type": "code-breakdown",
+      "title": "Підсумковий код демо",
+      "language": "python",
+      "code": "from sentence_transformers import SentenceTransformer\nimport faiss, numpy as np\n\ndocs = ['Що таке SQL?', 'Як працює JOIN?', 'Що таке векторна БД?']\nmodel = SentenceTransformer('all-MiniLM-L6-v2')\nvecs = model.encode(docs, normalize_embeddings=True).astype('float32')\nindex = faiss.IndexFlatIP(vecs.shape[1])\nindex.add(vecs)\nquery = model.encode(['поясни векторні бази'], normalize_embeddings=True).astype('float32')\nscores, ids = index.search(query, k=2)\nprint([docs[i] for i in ids[0]])",
+      "steps": [
+        "Ембедимо документи та нормалізуємо",
+        "Створюємо індекс dot-product (cosine)",
+        "Шукаємо top-2 відповіді"
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Векторні БД = швидкий пошук за схожістю",
+        "Індекси (HNSW/IVF) дають баланс швидкість/точність",
+        "Нормалізація та якісні ембеддинги критичні"
+      ],
+      "note": "Далі — реляційна модель та ключі"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 4: Реляційна модель",
+      "resources": [
+        { "title": "FAISS docs", "url": "https://faiss.ai/" },
+        { "title": "Pinecone intro", "url": "https://docs.pinecone.io/docs/overview" }
+      ],
+      "homework": [
+        "Побудувати mini-FAQ індекс на 20 запитань",
+        "Порівняти Flat vs HNSW (latency/recall)",
+        "Підготувати 3 питання про PK/FK для наступної лекції"
+      ]
+    }
+  ]
+}

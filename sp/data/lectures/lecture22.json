@@ -1,0 +1,117 @@
+{
+  "track": "sp",
+  "lectureNumber": "22",
+  "lectureTitle": "Dockerfile та створення образів",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 22",
+      "subtitle": "Dockerfile и создание образов"
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Рецензія: Docker основи",
+      "points": ["Контейнери ізолюють додатки", "Image vs Container", "Docker команди pull/run/ps"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План",
+      "items": ["Dockerfile синтаксис", "Шари (layers) та кеш", "Best practices"]
+    },
+    {
+      "type": "definition",
+      "title": "Dockerfile",
+      "term": "Dockerfile",
+      "definition": "Текстовий файл з інструкціями побудови образу. Кожна лінія - шар."
+    },
+    {
+      "type": "code-example",
+      "title": "Простий Dockerfile",
+      "language": "dockerfile",
+      "code": "FROM ubuntu:22.04\n\nRUN apt-get update && apt-get install -y python3\n\nWORKDIR /app\n\nCOPY . /app\n\nRUN pip install -r requirements.txt\n\nEXPOSE 8000\n\nCMD [\"python3\", \"app.py\"]"
+    },
+    {
+      "type": "list",
+      "title": "Dockerfile інструкції",
+      "items": [
+        { "title": "FROM", "details": ["Базовий образ (обов'язкова)"] },
+        { "title": "RUN", "details": ["Виконати команду"] },
+        { "title": "COPY/ADD", "details": ["Копіювати файли"] },
+        { "title": "WORKDIR", "details": ["Робочий каталог"] },
+        { "title": "EXPOSE", "details": ["Порти для слухання"] },
+        { "title": "CMD/ENTRYPOINT", "details": ["Команда за замовчуванням"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Dockerfile для Rust",
+      "language": "dockerfile",
+      "code": "FROM rust:latest as builder\n\nWORKDIR /app\nCOPY . .\n\nRUN cargo build --release\n\nFROM ubuntu:22.04\n\nCOPY --from=builder /app/target/release/myapp /usr/bin/\n\nCMD [\"myapp\"]"
+    },
+    {
+      "type": "definition",
+      "title": "Шари (Layers)",
+      "term": "Layers",
+      "definition": "Кожна інструкція створює шар. Docker використовує кеш для прискорення побудови."
+    },
+    {
+      "type": "code-example",
+      "title": "Побудова образу",
+      "language": "bash",
+      "code": "# Побудувати образ\ndocker build -t myapp:1.0 .\n\n# З іншого Dockerfile\ndocker build -f Dockerfile.prod -t myapp:prod .\n\n# З аргументами\ndocker build --build-arg NODE_ENV=production -t app ."
+    },
+    {
+      "type": "list",
+      "title": "Best Practices",
+      "items": [
+        { "title": "Мінімальний базовий образ", "details": ["alpine замість ubuntu"] },
+        { "title": "Multi-stage builds", "details": ["Зменшити розмір final образу"] },
+        { "title": ".dockerignore", "details": ["Не копіювати непотрібні файли"] },
+        { "title": "Кеш шарів", "details": ["Розташування RUN мудро"] }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 1",
+      "question": "Яка перша інструкція в Dockerfile?",
+      "options": [
+        { "text": "FROM", "correct": true },
+        { "text": "RUN", "correct": false },
+        { "text": "COPY", "correct": false }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 2",
+      "question": "Чому multi-stage build корисна?",
+      "options": [
+        { "text": "Зменшує розмір образу", "correct": true },
+        { "text": "Прискорює побудову", "correct": false },
+        { "text": "Покращує безпеку", "correct": false }
+      ]
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: Великий образ",
+      "wrong": "FROM ubuntu:22.04\nRUN apt-get install -y gcc g++ make python3 nodejs\nCOPY . /app\nCMD [\"python3\", \"app.py\"]\n# Образ > 1GB",
+      "right": "FROM python:3.11-alpine\nWORKDIR /app\nCOPY . .\nRUN pip install -r requirements.txt\nCMD [\"python3\", \"app.py\"]\n# Образ < 100MB"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Dockerfile - рецепт образу",
+        "FROM, RUN, COPY, CMD - основні",
+        "Шари та кеш для ефективності",
+        "Best practices для меншого розміру"
+      ]
+    },
+    {
+      "type": "next-steps",
+      "title": "Далі",
+      "nextLecture": "Лекція 23: Docker Compose для оркестрації"
+    }
+  ]
+}

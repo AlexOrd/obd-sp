@@ -1,0 +1,123 @@
+{
+  "track": "sp",
+  "lectureNumber": "16",
+  "lectureTitle": "Обработка ошибок: Result и Option",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 16",
+      "subtitle": "Обработка ошибок: Result<T, E> и Option<T>"
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Рецензія: Struct и Enum",
+      "points": ["Struct для групування даних", "Enum для варіантів", "Pattern matching для розпакування"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План",
+      "items": ["Option<T> для можливих значень", "Result<T, E> для помилок", "Обработка з match та unwrap"]
+    },
+    {
+      "type": "definition",
+      "title": "Option<T>",
+      "term": "Option<T>",
+      "definition": "Enum з двома варіантами: Some(T) або None. Замість null на C/Java."
+    },
+    {
+      "type": "code-example",
+      "title": "Option використання",
+      "language": "rust",
+      "code": "let x = Some(5);\nlet y: Option<i32> = None;\n\nmatch x {\n  Some(n) => println!(\"Value: {}\", n),\n  None => println!(\"No value\"),\n}\n\n// unwrap() - небезпечно!\nlet val = x.unwrap();  // паніка якщо None!"
+    },
+    {
+      "type": "definition",
+      "title": "Result<T, E>",
+      "term": "Result<T, E>",
+      "definition": "Enum для Ok(T) або Err(E).標準для функцій, які можуть помилитися."
+    },
+    {
+      "type": "code-example",
+      "title": "Result визначення та використання",
+      "language": "rust",
+      "code": "fn parse_int(s: &str) -> Result<i32, String> {\n  match s.parse() {\n    Ok(n) => Ok(n),\n    Err(_) => Err(String::from(\"Failed to parse\")),\n  }\n}\n\nlet result = parse_int(\"42\");\nmatch result {\n  Ok(n) => println!(\"Parsed: {}\", n),\n  Err(e) => println!(\"Error: {}\", e),\n}"
+    },
+    {
+      "type": "list",
+      "title": "Option методи",
+      "items": [
+        { "title": "is_some()", "details": ["Перевіряє наявність значення"] },
+        { "title": "is_none()", "details": ["Перевіряє відсутність"] },
+        { "title": "unwrap()", "details": ["Видобути значення або panic"] },
+        { "title": "map()", "details": ["Трансформувати значення"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Зручні методи Option",
+      "language": "rust",
+      "code": "let x = Some(5);\n\nlet doubled = x.map(|n| n * 2);  // Some(10)\n\nlet val = x.unwrap_or(0);  // 5 або 0 якщо None\n\nif x.is_some() {\n  println!(\"Some value\");\n}"
+    },
+    {
+      "type": "code-example",
+      "title": "Result методи",
+      "language": "rust",
+      "code": "let result: Result<i32, String> = Ok(42);\n\nlet val = result.unwrap_or(-1);  // 42 або -1 якщо Err\n\nlet mapped = result.map(|n| n * 2);  // Ok(84)\n\nlet msg = result.unwrap_or_else(|_| String::from(\"Default\"));"
+    },
+    {
+      "type": "definition",
+      "title": "? operator (the Question Mark)",
+      "term": "?",
+      "definition": "Скорочення для Error propagation. Повертає значення з Ok або завершує функцію з Err."
+    },
+    {
+      "type": "code-example",
+      "title": "? operator для Result",
+      "language": "rust",
+      "code": "fn read_file(path: &str) -> Result<String, Box<dyn std::error::Error>> {\n  let mut file = std::fs::File::open(path)?;  // Err закінчує функцію\n  let mut contents = String::new();\n  std::io::Read::read_to_string(&mut file, &mut contents)?;\n  Ok(contents)\n}"
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 1",
+      "question": "Як перевірити наявність значення в Option без unwrap?",
+      "options": [
+        { "text": "is_some() та match", "correct": true },
+        { "text": "Тільки unwrap()", "correct": false },
+        { "text": "if None", "correct": false }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 2",
+      "question": "Що робить ? operator?",
+      "options": [
+        { "text": "Ділить число", "correct": false },
+        { "text": "Пропагує помилки в Result", "correct": true },
+        { "text": "Позначає вибір", "correct": false }
+      ]
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: Завжди unwrap()",
+      "wrong": "let file = std::fs::File::open(\"data.txt\").unwrap();\n// Паніка якщо файл не існує!",
+      "right": "match std::fs::File::open(\"data.txt\") {\n  Ok(f) => { /* use f */ },\n  Err(e) => { eprintln!(\"Error: {}\", e); }\n}"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Option<T>: Some або None замість null",
+        "Result<T, E>: Ok або Err для помилок",
+        "match для безпечної обработки",
+        "? operator для error propagation"
+      ]
+    },
+    {
+      "type": "next-steps",
+      "title": "Далі",
+      "nextLecture": "Лекція 17: Колекции Vec, String, HashMap"
+    }
+  ]
+}

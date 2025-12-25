@@ -1,0 +1,210 @@
+{
+  "track": "db",
+  "lectureNumber": "21",
+  "lectureTitle": "Підсумки та професійні шляхи",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 21",
+      "subtitle": "Підсумки та професійні шляхи",
+      "meta": { "course": "Основи баз даних", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 20: Індекси та оптимізація",
+      "items": ["B-tree індекси", "EXPLAIN ANALYZE", "Стратегія індексування"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План заключної лекції",
+      "items": ["Огляд всіх 20 лекцій", "Професійні шляхи розвитку", "Сертифікації", "Наступні кроки"],
+      "note": "Фокус: від теорії до практики"
+    },
+    {
+      "type": "diagram",
+      "title": "Структура курсу",
+      "description": "Від бази до майстерності",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ngraph TB\n  I[\"Основи БД\"] --> T[\"Типи БД\"]\n  T --> M[\"Модель даних\"]\n  M --> SQL[\"SQL мова\"]\n  SQL --> Adv[\"Продвинуті запити\"]\n  Adv --> NoSQL[\"NoSQL системи\"]\n  NoSQL --> Opt[\"Оптимізація\"]\n  Opt --> Job[\"Реальні проекти\"]\n  \n  style I fill:#FFE5E5\n  style Job fill:#E5FFE5"
+    },
+    {
+      "type": "content",
+      "title": "Частина 1: Основи (Лекції 1-3)",
+      "text": "Підвалина всього знання",
+      "items": [
+        "Лекція 1: Що таке база даних",
+        "Лекція 2: Види БД (реляційні, NoSQL, Graph)",
+        "Лекція 3: Vector DBs і AI"
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Частина 2: Реляційна модель (Лекції 4-5)",
+      "text": "Ядро SQL-сумісних систем",
+      "items": [
+        "Лекція 4: Таблиці, первинні ключі, зовнішні ключі",
+        "Лекція 5: Data types (INT, VARCHAR, DATE, DECIMAL)"
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Частина 3: SQL основи (Лекції 6-10)",
+      "items": [
+        { "title": "Лекція 6", "details": ["Декларативний синтаксис SELECT FROM WHERE"] },
+        { "title": "Лекція 7", "details": ["Функції: STRING, MATH, AGGREGATE"] },
+        { "title": "Лекція 8", "details": ["Фільтрування: оператори, BETWEEN, IN, LIKE"] },
+        { "title": "Лекція 9", "details": ["Логіка: AND, OR, NOT, дужки"] },
+        { "title": "Лекція 10", "details": ["NULL обробка: IS NULL, COALESCE"] }
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Частина 4: SQL продвинуті (Лекції 11-18)",
+      "items": [
+        { "title": "Лекція 11", "details": ["Приоритет операторів"] },
+        { "title": "Лекція 12", "details": ["MongoDB CRUD базовий"] },
+        { "title": "Лекція 13", "details": ["Дата/час функції"] },
+        { "title": "Лекція 14", "details": ["ORDER BY, LIMIT, OFFSET"] },
+        { "title": "Лекція 15", "details": ["JOIN логіка та концепція"] },
+        { "title": "Лекція 16", "details": ["JOIN типи: INNER, LEFT, RIGHT, SELF"] },
+        { "title": "Лекція 17", "details": ["MLOps та vector embeddings"] },
+        { "title": "Лекція 18", "details": ["GROUP BY, HAVING, Window Functions"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Частина 5: NoSQL & Оптимізація (Лекції 19-20)",
+      "text": "Масштабування та продуктивність",
+      "items": ["Лекція 19: MongoDB aggregation pipeline, індекси", "Лекція 20: B-tree, EXPLAIN ANALYZE, стратегія"]
+    },
+    {
+      "type": "diagram",
+      "title": "Три ролі розробника",
+      "description": "Вибирай свій шлях",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR\n  DB[\"Основи БД\"] --> FE[\"Frontend Dev\"]\n  DB --> DA[\"Data Analyst\"]\n  DB --> DE[\"DevOps/Backend\"]\n  \n  FE -->|REST API| FE_Stack[\"React + SQL\"]\n  DA -->|Analytics| DA_Stack[\"Python + Pandas\"]\n  DE -->|Infrastructure| DE_Stack[\"Docker + Postgres\"]\n  \n  style FE fill:#FFE5E5\n  style DA fill:#FFE5FF\n  style DE fill:#E5FFFF"
+    },
+    {
+      "type": "list",
+      "title": "Шлях 1: Frontend + Databases",
+      "items": [
+        { "title": "Що знати", "details": ["REST API", "SQL queries from Node.js", "ORM (Prisma/SQLAlchemy)"] },
+        { "title": "Навички", "details": ["SELECT/INSERT/UPDATE/DELETE", "JOIN", "indexes"] },
+        { "title": "Роботи", "details": ["Full-stack dev, Web startup", "Medium зарплата, high demand"] },
+        { "title": "Ресурси", "details": ["Express.js docs", "Prisma tutorials", "LeetCode SQL"] }
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Шлях 2: Data Science & Analytics",
+      "items": [
+        { "title": "Що знати", "details": ["SQL для data extraction", "Python pandas", "BI tools (Power BI/Tableau)"] },
+        { "title": "Навички", "details": ["Complex queries", "GROUP BY/aggregation", "window functions"] },
+        { "title": "Роботи", "details": ["Data Analyst, Business Analyst", "High зарплата, growth trend"] },
+        { "title": "Ресурси", "details": ["Mode SQL tutorial", "DataCamp", "Kaggle competitions"] }
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Шлях 3: Backend & DevOps",
+      "items": [
+        { "title": "Що знати", "details": ["Advanced SQL", "Database architecture", "Replication, sharding"] },
+        { "title": "Навички", "details": ["Optimization", "Scaling", "Monitoring", "Backup strategies"] },
+        { "title": "Роботи", "details": ["Backend engineer, DBA", "Highest зарплата, lower demand"] },
+        { "title": "Ресурси", "details": ["PostgreSQL docs", "Mongo university", "Linux Academy"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Сертифікації для розвитку",
+      "text": "Визнаних в індустрії",
+      "items": [
+        "Oracle SQL & PL/SQL",
+        "MongoDB Developer Associate",
+        "AWS Certified Database Specialist",
+        "Google Cloud SQL Engineer",
+        "Microsoft Azure Database Administrator"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Репетиційна SQL сесія",
+      "description": "Перевір знання",
+      "language": "sql",
+      "code": "-- 1. Напиши запит: топ-10 користувачів по замовленнях\nSELECT u.id, u.name, COUNT(o.id) as order_count\nFROM users u\nLEFT JOIN orders o ON u.id = o.user_id\nGROUP BY u.id, u.name\nORDER BY order_count DESC\nLIMIT 10;\n\n-- 2. Добавь INDEX\nCREATE INDEX idx_user_orders ON orders(user_id);\n\n-- 3. Перевір план\nEXPLAIN ANALYZE [запит сверху];"
+    },
+    {
+      "type": "quiz",
+      "title": "Заключна вікторина",
+      "question": "Який найважливіший крок в оптимізації?",
+      "options": [
+        { "text": "Додати мільйон індексів", "correct": false },
+        { "text": "Вимірити (EXPLAIN) перед оптимізацією", "correct": true },
+        { "text": "Переписати все на NoSQL", "correct": false }
+      ],
+      "explanation": "Вимір показує реальні вузькі місця"
+    },
+    {
+      "type": "list",
+      "title": "Топ-5 навичок лікарських",
+      "items": [
+        { "title": "SELECT + WHERE", "details": ["70% всіх запитів", "базова грамота"] },
+        { "title": "JOIN + GROUP BY", "details": ["20% запитів", "аналіз даних"] },
+        { "title": "Window Functions", "details": ["5% запитів", "advanced"] },
+        { "title": "EXPLAIN ANALYZE", "details": ["1% запитів", "критично для продакшену"] },
+        { "title": "Нормалізація даних", "details": ["0.5% запитів", "дизайн"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Наступні кроки (6-12 місяців)",
+      "text": "Як будувати портфоліо",
+      "items": [
+        "1. LeetCode: 50 SQL завдань",
+        "2. Реальний проект: e-commerce або SAAS",
+        "3. Сертифікація: Oracle або MongoDB",
+        "4. Open source: PostgreSQL, MySQL",
+        "5. Співбесіда: перейди до професіоналу"
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Ресурси для вивчення",
+      "items": [
+        { "title": "LeetCode Database", "details": ["1000+ SQL задач"] },
+        { "title": "Mode SQL Tutorial", "details": ["практичні запити"] },
+        { "title": "PostgreSQL Docs", "details": ["найповніша документація"] },
+        { "title": "MongoDB University", "details": ["вільні курси"] },
+        { "title": "GeeksforGeeks SQL", "details": ["основи + приклади"] }
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "Що ти тепер вмієш",
+      "items": [
+        "Писати SQL запити: SELECT, JOIN, GROUP BY, Window Functions",
+        "Оптимізувати за допомогою EXPLAIN та індексів",
+        "Розуміти базовий NoSQL (MongoDB) та Vector DBs",
+        "Проектувати реляційні моделі з правильною нормалізацією",
+        "Вирішувати реальні завдання обробки даних"
+      ]
+    },
+    {
+      "type": "next-steps",
+      "title": "Дякуємо за увагу!",
+      "nextLecture": "Кінець курсу ✓",
+      "resources": [
+        { "title": "Наш GitHub", "url": "https://github.com" },
+        { "title": "VTFK community", "url": "https://vtfk.no" },
+        { "title": "SQL cheat sheet", "url": "https://sql.sh" }
+      ],
+      "homework": [
+        "Підготуйся до співбесід: 50 LeetCode завдань",
+        "Побудуй портфоліо: особистий проект БД",
+        "Спілкуйся: з Senior-и у Telegram/Discord",
+        "Не забувай: практикуйся щодня!"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "track": "sp",
+  "lectureNumber": "12",
+  "lectureTitle": "Основи володіння в Rust",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 12",
+      "subtitle": "Основи володіння (Ownership) в Rust"
+    },
+    {
+      "type": "roadmap",
+      "title": "План",
+      "items": ["Ownership правило", "Move semitika", "Копіювання примітивних типів"]
+    },
+    {
+      "type": "definition",
+      "title": "Ownership",
+      "term": "Ownership",
+      "definition": "Тільки один власник змінної. Коли власник зникає, пам'ять звільняється."
+    },
+    {
+      "type": "code-example",
+      "title": "Move: передача власництва",
+      "language": "rust",
+      "code": "let s1 = String::from(\"hello\");\nlet s2 = s1;  // s1 більше недоступна (MOVE)\n// println!(\"{}\", s1);  // Помилка!\nprintln!(\"{}\", s2);  // OK: s2 тепер власник\n\n// Для примітивних типів: copy\nlet x = 5;\nlet y = x;  // x ВСЕ ЕЩЕ доступна (i32 — Copy type)\nprintln!(\"{}\", x);  // OK"
+    },
+    {
+      "type": "list",
+      "title": "Copy vs Move",
+      "items": [
+        { "title": "Copy (примітивні)", "details": ["i32, bool, char — копіюються"] },
+        { "title": "Move (складні)", "details": ["String, Vec — переміщуються"] }
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": ["Move: передача власництва", "Copy: примітивні типи копіюються", "Compiler запобігає use-after-free"]
+    },
+    {
+      "type": "next-steps",
+      "title": "Далі",
+      "nextLecture": "Лекція 13: Ownership детально"
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "track": "sp",
+  "lectureNumber": "15",
+  "lectureTitle": "Структури та Enum-и",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 15",
+      "subtitle": "Структури (Structs) та Перерахування (Enums)"
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Рецензія: Borrowing",
+      "points": ["&T immutable references", "&mut T mutable references", "Borrow Checker правила"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План",
+      "items": ["Struct визначення", "Enum та pattern matching", "Methods і impl"]
+    },
+    {
+      "type": "definition",
+      "title": "Struct",
+      "term": "Struct",
+      "definition": "Комбінація полів (як в C), але з методами. Типи структур: named fields, tuple-like, unit structs."
+    },
+    {
+      "type": "code-example",
+      "title": "Struct визначення та використання",
+      "language": "rust",
+      "code": "struct Person {\n  name: String,\n  age: u32,\n  email: String,\n}\n\nlet p = Person {\n  name: String::from(\"Alice\"),\n  age: 30,\n  email: String::from(\"alice@example.com\"),\n};\n\nprintln!(\"{}, {}\", p.name, p.age);"
+    },
+    {
+      "type": "code-example",
+      "title": "Methods з impl",
+      "language": "rust",
+      "code": "impl Person {\n  fn new(name: String, age: u32) -> Person {\n    Person { name, age, email: String::new() }\n  }\n  \n  fn greet(&self) {  // immutable borrow\n    println!(\"Hello, {}\", self.name);\n  }\n  \n  fn set_email(&mut self, email: String) {  // mutable borrow\n    self.email = email;\n  }\n}"
+    },
+    {
+      "type": "definition",
+      "title": "Enum",
+      "term": "Enum",
+      "definition": "Перерахування значень. На відміну від C, варіанти можуть містити дані."
+    },
+    {
+      "type": "code-example",
+      "title": "Enum визначення",
+      "language": "rust",
+      "code": "enum Color {\n  Red,\n  Green,\n  Blue,\n}\n\nenum Message {\n  Quit,\n  Move { x: i32, y: i32 },\n  Write(String),\n  ChangeColor(u8, u8, u8),\n}\n\nlet msg = Message::Write(String::from(\"hello\"));"
+    },
+    {
+      "type": "definition",
+      "title": "Pattern Matching",
+      "term": "Pattern Matching",
+      "definition": "Розпізнавання та розпакування значень enum за допомогою match."
+    },
+    {
+      "type": "code-example",
+      "title": "Match для enum",
+      "language": "rust",
+      "code": "match msg {\n  Message::Quit => println!(\"Quit\"),\n  Message::Move { x, y } => println!(\"Move to {}, {}\", x, y),\n  Message::Write(s) => println!(\"Write: {}\", s),\n  Message::ChangeColor(r, g, b) => println!(\"Color: {}, {}, {}\", r, g, b),\n}"
+    },
+    {
+      "type": "list",
+      "title": "Struct типи",
+      "items": [
+        { "title": "Named struct", "details": ["struct Point { x: i32, y: i32 }"] },
+        { "title": "Tuple struct", "details": ["struct Point(i32, i32)"] },
+        { "title": "Unit struct", "details": ["struct Marker;"] }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 1",
+      "question": "Що повертає match для enum?",
+      "options": [
+        { "text": "Завжди значення", "correct": false },
+        { "text": "Значення або вираз у відповідній гілці", "correct": true },
+        { "text": "Завжди String", "correct": false }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 2",
+      "question": "Чому Enum краще за integer flags?",
+      "options": [
+        { "text": "Невідомо", "correct": false },
+        { "text": "Type-safe, можна перевізти дані", "correct": true },
+        { "text": "Швидше", "correct": false }
+      ]
+    },
+    {
+      "type": "table",
+      "title": "Struct vs Enum",
+      "columns": ["Особливість", "Struct", "Enum"],
+      "rows": [
+        { "Особливість": "Передназначення", "Struct": "Група даних", "Enum": "Варіанти вибору" },
+        { "Особливість": "Поля", "Struct": "Всі поля", "Enum": "Залежить від варіанту" },
+        { "Особливість": "Безпека", "Struct": "Компіляція", "Enum": "Pattern matching" }
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Struct: групування даних з методами",
+        "Enum: варіанти з можливістю даних",
+        "Pattern matching: безпечна розпакування enum",
+        "impl блоки: асоціовані функції і методи"
+      ]
+    },
+    {
+      "type": "next-steps",
+      "title": "Далі",
+      "nextLecture": "Лекція 16: Обработка ошибок с Result и Option"
+    }
+  ]
+}

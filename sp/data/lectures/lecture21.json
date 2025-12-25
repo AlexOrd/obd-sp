@@ -1,0 +1,102 @@
+{
+  "track": "sp",
+  "lectureNumber": "21",
+  "lectureTitle": "Docker и Контейнери",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 21",
+      "subtitle": "Docker и Контейнери"
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Рецензія: Многопотоковість",
+      "points": ["Threads для паралельності", "Channels для безпечної комунікації", "Mutex для синхронізації"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План",
+      "items": ["Контейнери концепція", "Docker основи", "Advantage Docker vs VMs"]
+    },
+    {
+      "type": "definition",
+      "title": "Контейнер",
+      "term": "Контейнер",
+      "definition": "Ізольована окремо виконавча середовище. Легче за VM. Одна OS, багато контейнерів."
+    },
+    {
+      "type": "diagram",
+      "title": "Контейнер vs VM",
+      "mermaid": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ngraph TB\n  subgraph VM[\"VM архітектура\"]\n    Host1[\"Host OS<br/>(Linux)\"]\n    Hyper[\"Hypervisor\"]\n    VM1[\"Guest OS 1\"] \n    VM2[\"Guest OS 2\"]\n    App1[\"App 1\"]\n    App2[\"App 2\"]\n  end\n  \n  subgraph Container[\"Контейнер архітектура\"]\n    Host2[\"Host OS<br/>(Linux)\"]\n    Docker[\"Docker Engine\"]\n    C1[\"Container 1<br/>(App + libs)\"]\n    C2[\"Container 2<br/>(App + libs)\"]\n  end\n  \n  Host1 --> Hyper\n  Hyper --> VM1\n  Hyper --> VM2\n  VM1 --> App1\n  VM2 --> App2\n  \n  Host2 --> Docker\n  Docker --> C1\n  Docker --> C2"
+    },
+    {
+      "type": "list",
+      "title": "Docker основи",
+      "items": [
+        { "title": "Image", "details": ["Шаблон контейнера (blueprint)"] },
+        { "title": "Container", "details": ["Запущений instance image"] },
+        { "title": "Registry", "details": ["Сховище образів (Docker Hub)"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Docker команди основні",
+      "language": "bash",
+      "code": "# Завантажити образ\ndocker pull ubuntu:22.04\n\n# Запустити контейнер\ndocker run -it ubuntu:22.04\n\n# Список контейнерів\ndocker ps -a\n\n# Зупинити контейнер\ndocker stop <container_id>"
+    },
+    {
+      "type": "definition",
+      "title": "Image",
+      "term": "Image",
+      "definition": "Незмінний шаблон, складений з шарів (layers). Read-only."
+    },
+    {
+      "type": "table",
+      "title": "VM vs Контейнер",
+      "columns": ["Аспект", "VM", "Контейнер"],
+      "rows": [
+        { "Аспект": "OS", "VM": "Своя копія", "Контейнер": "Спільна" },
+        { "Аспект": "Розмір", "VM": "Гігабайти", "Контейнер": "Мегабайти" },
+        { "Аспект": "Запуск", "VM": "Хвилини", "Контейнер": "Секунди" },
+        { "Аспект": "Ресурси", "VM": "Більше", "Контейнер": "Менше" }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 1",
+      "question": "Чим контейнер відрізняється від VM?",
+      "options": [
+        { "text": "Контейнер ділить ОС", "correct": true },
+        { "text": "VM швидше", "correct": false },
+        { "text": "Нічим", "correct": false }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 2",
+      "question": "Що таке Docker image?",
+      "options": [
+        { "text": "Запущений контейнер", "correct": false },
+        { "text": "Шаблон контейнера", "correct": true },
+        { "text": "Образ диску", "correct": false }
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Контейнери ізолюють додатки",
+        "Легше та швидше за VMs",
+        "Docker основний інструмент",
+        "Image vs Container розрізняння"
+      ]
+    },
+    {
+      "type": "next-steps",
+      "title": "Далі",
+      "nextLecture": "Лекція 22: Dockerfile та створення образів"
+    }
+  ]
+}

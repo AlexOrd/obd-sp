@@ -1,0 +1,214 @@
+{
+  "track": "db",
+  "lectureNumber": "18",
+  "lectureTitle": "GROUP BY, HAVING та віконні функції",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 18",
+      "subtitle": "GROUP BY, HAVING та віконні функції",
+      "meta": { "course": "Основи баз даних", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 17: MLOps & Databases",
+      "items": ["ML pipeline з БД", "Feature engineering", "Вектори та пошук"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": [
+        "GROUP BY для агрегації",
+        "HAVING для фільтрування груп",
+        "Віконні функції (ROW_NUMBER, LAG/LEAD)",
+        "Практика аналізу"
+      ],
+      "note": "Фокус: розрахунки по групам та послідовностях"
+    },
+    {
+      "type": "content",
+      "title": "GROUP BY - групування даних",
+      "text": "Об'єднує рядки в групи та обчислює агрегати.",
+      "items": ["Продажи по країні", "Кількість користувачів по статусу", "Середній рейтинг по категорії"]
+    },
+    {
+      "type": "definition",
+      "title": "GROUP BY",
+      "term": "Grouping",
+      "definition": "Розбиває результати на групи за значенням колонок, дозволяє агрегатні функції на групах.",
+      "analogy": "Як розділити рахунок на сумах по гостях"
+    },
+    {
+      "type": "diagram",
+      "title": "GROUP BY логіка",
+      "description": "Групування і агрегація",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR\n  Raw[Raw data<br/>100 рядків] --> Group[GROUP BY country]\n  Group --> USA[USA: 30 рядків]\n  Group --> UK[UK: 40 рядків]\n  Group --> DE[Germany: 30 рядків]\n  USA --> Agg[COUNT/SUM/AVG]\n  UK --> Agg\n  DE --> Agg\n  Agg --> Result[3 рядки результату]"
+    },
+    {
+      "type": "syntax",
+      "title": "Базовий GROUP BY",
+      "syntax": "SELECT column1, COUNT(*), SUM(column2)\nFROM table\nGROUP BY column1;",
+      "parts": [
+        { "part": "GROUP BY", "description": "список колонок для групування" },
+        { "part": "SELECT", "description": "групова колонка + агрегати" },
+        { "part": "COUNT/SUM", "description": "функції по групі" }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "GROUP BY приклад",
+      "description": "Продажи по країнах",
+      "language": "sql",
+      "code": "SELECT \n  country,\n  COUNT(*) AS order_count,\n  SUM(amount) AS total_revenue,\n  AVG(amount) AS avg_order\nFROM orders\nGROUP BY country\nORDER BY total_revenue DESC;"
+    },
+    {
+      "type": "content",
+      "title": "HAVING - фільтрування груп",
+      "text": "HAVING працює НА групах, як WHERE на рядках.",
+      "items": [
+        "WHERE фільтрує рядки до групування",
+        "HAVING фільтрує групи після групування",
+        "Може містити агрегатні функції"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "HAVING приклад",
+      "description": "Країни з 10+ замовленнями",
+      "language": "sql",
+      "code": "SELECT \n  country,\n  COUNT(*) AS order_count,\n  SUM(amount) AS total\nFROM orders\nGROUP BY country\nHAVING COUNT(*) >= 10  -- фільтр груп\nORDER BY order_count DESC;"
+    },
+    {
+      "type": "table",
+      "title": "WHERE vs HAVING",
+      "headers": ["Аспект", "WHERE", "HAVING"],
+      "rows": [
+        ["Застосовується", "Рядки", "Групи"],
+        ["Коли", "До GROUP BY", "Після GROUP BY"],
+        ["Функції", "Базові", "Агрегатні"],
+        ["Приклад", "age > 18", "COUNT(*) > 10"]
+      ]
+    },
+    {
+      "type": "definition",
+      "title": "Віконні функції",
+      "term": "Window Functions",
+      "definition": "Функції які працюють на наборах рядків (вікна), можуть обчислювати без групування.",
+      "analogy": "Як слайдерне вікно через дані, обчислює на кожний рядок у контексті"
+    },
+    {
+      "type": "list",
+      "title": "Типи віконних функцій",
+      "items": [
+        { "title": "Ранжування", "details": ["ROW_NUMBER, RANK, DENSE_RANK"] },
+        { "title": "Зміщення", "details": ["LAG, LEAD для попередніх/наступних"] },
+        { "title": "Агрегати з вікнами", "details": ["SUM OVER, AVG OVER"] },
+        { "title": "Розрахунки", "details": ["NTILE для квартилів"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "ROW_NUMBER - нумерація",
+      "description": "Ранжирование рядків",
+      "language": "sql",
+      "code": "SELECT \n  user_id,\n  amount,\n  ROW_NUMBER() OVER (ORDER BY amount DESC) AS rank\nFROM orders;\n\n-- Результат:\n-- user_id | amount | rank\n-- 1       | 1000   | 1\n-- 2       | 950    | 2\n-- 3       | 900    | 3"
+    },
+    {
+      "type": "code-example",
+      "title": "LAG/LEAD - порівняння з сусідами",
+      "description": "Попередній та наступний рядок",
+      "language": "sql",
+      "code": "SELECT \n  user_id,\n  created_at,\n  amount,\n  LAG(amount) OVER (ORDER BY created_at) AS prev_amount,\n  LEAD(amount) OVER (ORDER BY created_at) AS next_amount\nFROM orders;\n\n-- Результат: видимо тренд замовлень"
+    },
+    {
+      "type": "code-example",
+      "title": "SUM OVER - накопичування",
+      "description": "Поточна сума",
+      "language": "sql",
+      "code": "SELECT \n  user_id,\n  amount,\n  SUM(amount) OVER (ORDER BY created_at) AS cumulative_sum\nFROM orders\nORDER BY created_at;"
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Яка різниця GROUP BY та віконних функцій?",
+      "options": [
+        { "text": "GROUP BY = групи, вікно = кожний рядок контексті", "correct": true },
+        { "text": "Вони робять одне й те саме", "correct": false },
+        { "text": "Вікна швидше", "correct": false }
+      ],
+      "explanation": "GROUP BY колапсує до груп, вікна зберігають кожний рядок."
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: колонка у GROUP BY",
+      "warning": "Всі SELECT колонки мають бути у GROUP BY або агрегати",
+      "language": "sql",
+      "wrongCode": "SELECT country, user_id, COUNT(*)\nFROM orders\nGROUP BY country;  -- ПОМИЛКА: user_id не у GROUP BY",
+      "wrongExplanation": "БД не знає яке user_id показувати (багато в групі)",
+      "correctCode": "SELECT country, COUNT(DISTINCT user_id) AS users\nFROM orders\nGROUP BY country;",
+      "correctExplanation": "Агрегат DISTINCT user_id коректний"
+    },
+    {
+      "type": "timeline",
+      "title": "История GROUP BY та вікон",
+      "description": "Від простого к складному",
+      "events": [
+        { "year": "1974", "label": "GROUP BY", "description": "Базова агрегація" },
+        { "year": "1992", "label": "HAVING", "description": "Фільтрування груп" },
+        { "year": "2003", "label": "Window functions", "description": "ROW_NUMBER, RANK" },
+        { "year": "2025", "label": "Advanced analytics", "description": "Складні вікна" }
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Best practices GROUP BY/HAVING",
+      "items": [
+        { "title": "GROUP BY перед SELECT", "details": ["планування запиту"] },
+        { "title": "HAVING після GROUP BY", "details": ["не в WHERE"] },
+        { "title": "Вікна для трендів", "details": ["LAG/LEAD vs JOIN"] },
+        { "title": "INDEX групові колонки", "details": ["GROUP BY швидче"] },
+        { "title": "Тестуйте GROUP BY NULL", "details": ["NULL групується разом"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Міні ТЗ: аналіз продажів по місяцям",
+      "text": "Знайти місяць з максимальним доходом.",
+      "items": ["GROUP BY EXTRACT(MONTH FROM date)", "SUM(amount) для доходу", "HAVING для фільтрування"]
+    },
+    {
+      "type": "code-example",
+      "title": "Комплексна аналіз",
+      "description": "GROUP BY + HAVING + Window",
+      "language": "sql",
+      "code": "SELECT \n  EXTRACT(MONTH FROM created_at) AS month,\n  COUNT(*) AS orders,\n  SUM(amount) AS revenue,\n  ROW_NUMBER() OVER (ORDER BY SUM(amount) DESC) AS rank,\n  LAG(SUM(amount)) OVER (ORDER BY created_at) AS prev_month_revenue\nFROM orders\nGROUP BY month\nHAVING COUNT(*) > 5\nORDER BY month;"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "GROUP BY агрегує дані по групах",
+        "HAVING фільтрує після групування",
+        "Вікна обчислюють по послідовностях рядків"
+      ],
+      "note": "Далі — MongoDB агрегація"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 19: MongoDB Aggregation",
+      "resources": [
+        { "title": "Window functions", "url": "https://mode.com/sql-tutorial/sql-window-functions/" },
+        { "title": "GROUP BY examples", "url": "https://www.sqlshack.com/en/sql-server-group-by-clause-examples/" }
+      ],
+      "homework": [
+        "Напишіть GROUP BY з COUNT, SUM, AVG",
+        "Додайте HAVING для фільтрування груп",
+        "Використайте LAG для порівняння з попередніми даними"
+      ]
+    }
+  ]
+}

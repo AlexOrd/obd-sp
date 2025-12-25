@@ -1,0 +1,204 @@
+{
+  "track": "db",
+  "lectureNumber": "14",
+  "lectureTitle": "ORDER BY та сортування",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 14",
+      "subtitle": "ORDER BY та сортування",
+      "meta": { "course": "Основи баз даних", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 13: Дати та час",
+      "items": ["DATE, TIME, TIMESTAMP типи", "Функції DATE_ADD, DATEDIFF", "Вибір по датам"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["ORDER BY ASC/DESC", "Сортування по кількох колонках", "Вплив NULL на сортування", "Продуктивність"],
+      "note": "Фокус: упорядкування результатів"
+    },
+    {
+      "type": "content",
+      "title": "Навіщо ORDER BY",
+      "text": "Організує результати для легшого аналізу.",
+      "items": ["Ранжування продажів від найбільшого", "Найновіші пости першими", "Алфавітне упорядкування імен"]
+    },
+    {
+      "type": "definition",
+      "title": "ORDER BY",
+      "term": "Sorting",
+      "definition": "Упорядкування рядків за значенням колонок у зростаючому або спадаючому порядку.",
+      "analogy": "Як сортування книг по назві, числа від меншого до більшого"
+    },
+    {
+      "type": "diagram",
+      "title": "Хід виконання запиту з ORDER BY",
+      "description": "Де сортує БД",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart TD\n  All[(Таблиця)]\n  All -->|FROM| Read[Прочитай]\n  Read -->|WHERE| Filter[Фільтруй]\n  Filter -->|SELECT| Project[Проектуй]\n  Project -->|ORDER BY| Sort[Сортуй]\n  Sort -->|LIMIT| Limit[Обмежи]\n  Limit --> Result[Результат]"
+    },
+    {
+      "type": "syntax",
+      "title": "Базовий ORDER BY",
+      "syntax": "SELECT column1, column2\nFROM table\nWHERE condition\nORDER BY column1 ASC, column2 DESC;",
+      "parts": [
+        { "part": "ASC", "description": "зростаючий порядок (за замовчуванням)" },
+        { "part": "DESC", "description": "спадаючий порядок" },
+        { "part": "кілька колонок", "description": "сортування по пріоритету" }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "ASC vs DESC",
+      "text": "Напрямок впорядкування критичний.",
+      "items": [
+        "ASC: A→Z, 0→9, old→new",
+        "DESC: Z→A, 9→0, new→old",
+        "NULL завжди в кінці або на початку (залежить від БД)"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Приклади ORDER BY",
+      "description": "Різні варіанти сортування",
+      "language": "sql",
+      "code": "-- Сортування по імені від А до Я\nSELECT * FROM users\nORDER BY name ASC;\n\n-- Новіші замовлення першими\nSELECT * FROM orders\nORDER BY created_at DESC;\n\n-- По ціні від дорожчих\nSELECT * FROM products\nORDER BY price DESC;\n\n-- По кількох колонках\nSELECT * FROM users\nORDER BY country ASC, name ASC;"
+    },
+    {
+      "type": "list",
+      "title": "Сортування по кількох колонках",
+      "items": [
+        { "title": "Первинне", "details": ["перша колонка у ORDER BY"] },
+        { "title": "Вторинне", "details": ["друга колонка, якщо першої рівні"] },
+        { "title": "Третичне", "details": ["і так далі"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Багатоколоночне сортування",
+      "description": "Пріоритет важливий",
+      "language": "sql",
+      "code": "-- Сортуємо країну спочатку, потім імя\nSELECT country, name, email\nFROM users\nORDER BY country ASC, name ASC;\n-- Результат: Франція А...Я, Німеччина А...Я\n\n-- Дерівні умови по статусу, потім давніші відповіді\nSELECT * FROM orders\nORDER BY status DESC, created_at DESC;"
+    },
+    {
+      "type": "table",
+      "title": "Поведінка NULL при сортуванні",
+      "headers": ["БД", "ASC", "DESC"],
+      "rows": [
+        ["MySQL", "NULL спочатку", "NULL в кінці"],
+        ["PostgreSQL", "NULL в кінці", "NULL спочатку"],
+        ["SQLite", "NULL спочатку", "NULL в кінці"],
+        ["SQL Server", "NULL спочатку", "NULL в кінці"]
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "ORDER BY з NULL",
+      "description": "Контроль роботи з NULL",
+      "language": "sql",
+      "code": "-- Поставити NULL в кінець (MySQL)\nSELECT * FROM users\nORDER BY phone IS NULL, phone ASC;\n\n-- Поставити NULL на початок (PostgreSQL)\nSELECT * FROM users\nORDER BY phone DESC NULLS FIRST;\n\n-- Стандартне сортування\nSELECT * FROM products\nWHERE stock IS NOT NULL  -- виключити NULL\nORDER BY stock DESC;"
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Як отримати TOP 10 продажів (найбільші першими)?",
+      "options": [
+        { "text": "ORDER BY amount ASC LIMIT 10", "correct": false },
+        { "text": "ORDER BY amount DESC LIMIT 10", "correct": true },
+        { "text": "TOP 10 SELECT amount", "correct": false }
+      ],
+      "explanation": "DESC = спадаючий = найбільші першими, LIMIT 10 = перші 10"
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: сортування по функції",
+      "warning": "Функції на колонці можуть уповільнити запит",
+      "language": "sql",
+      "wrongCode": "SELECT * FROM users\nORDER BY LENGTH(name) DESC;  -- повільно",
+      "wrongExplanation": "БД має обчислити LENGTH для кожного рядка, потім сортувати",
+      "correctCode": "SELECT * FROM users\nORDER BY name DESC;  -- швидко",
+      "correctExplanation": "Прямо по колонці краще, використовуйте індекси"
+    },
+    {
+      "type": "content",
+      "title": "LIMIT для TOP N запитів",
+      "text": "Часто ORDER BY йде з LIMIT.",
+      "items": [
+        "TOP 10 продажів: ORDER BY amount DESC LIMIT 10",
+        "Останніх 5 постів: ORDER BY created_at DESC LIMIT 5",
+        "OFFSET для пагінації: LIMIT 10 OFFSET 20"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "ORDER BY + LIMIT",
+      "description": "Отримувати Top-N результатів",
+      "language": "sql",
+      "code": "-- TOP 5 найдорожчих товарів\nSELECT name, price\nFROM products\nORDER BY price DESC\nLIMIT 5;\n\n-- Останні 3 замовлення\nSELECT *\nFROM orders\nORDER BY created_at DESC\nLIMIT 3;\n\n-- Сторінка 2 (10 елементів на сторінку)\nSELECT *\nFROM posts\nORDER BY created_at DESC\nLIMIT 10 OFFSET 10;  -- пропустити перші 10"
+    },
+    {
+      "type": "timeline",
+      "title": "Алгоритми сортування",
+      "description": "Як БД сортує",
+      "events": [
+        { "year": "1970s", "label": "Quicksort", "description": "Базовий алгоритм" },
+        { "year": "1980s", "label": "Mergesort", "description": "Для великих наборів" },
+        { "year": "2000s", "label": "Index-based", "description": "Сортування по індексу" },
+        { "year": "2025", "label": "Adaptive", "description": "Гібридні алгоритми" }
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Best practices ORDER BY",
+      "items": [
+        { "title": "Індексуйте колонки у ORDER BY", "details": ["прискорює сортування"] },
+        { "title": "Уникайте функцій на колонках", "details": ["ORDER BY column, не LENGTH(column)"] },
+        { "title": "Використовуйте LIMIT", "details": ["не отримуйте всі рядки"] },
+        { "title": "Явно ASC чи DESC", "details": ["зрозуміліше"] },
+        { "title": "Пам'ятайте про NULL", "details": ["можуть вплинути на результат"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Міні ТЗ: рейтинг продажів",
+      "text": "Отримайте TOP 10 найпопулярніших товарів.",
+      "items": ["ORDER BY sales_count DESC", "LIMIT 10 для топ-10"]
+    },
+    {
+      "type": "code-example",
+      "title": "Комплексний запит",
+      "description": "З множествоми сортування",
+      "language": "sql",
+      "code": "SELECT \n  product_name,\n  category,\n  sales_count,\n  revenue\nFROM sales_summary\nWHERE category IN ('Electronics', 'Books')\nAND sales_count > 50\nORDER BY \n  category ASC,      -- групи по категоріям\n  revenue DESC,      -- дорожчі товари першими\n  product_name ASC   -- виконати назву\nLIMIT 20;"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "ORDER BY упорядковує результати",
+        "ASC = зростаючий, DESC = спадаючий",
+        "LIMIT N отримує Top-N результатів"
+      ],
+      "note": "Далі — JOIN для об'єднання таблиць"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 15: JOIN Logic",
+      "resources": [
+        { "title": "SQL ORDER BY", "url": "https://www.w3schools.com/sql/sql_orderby.asp" },
+        { "title": "Performance tuning", "url": "https://use-the-index-luke.com/" }
+      ],
+      "homework": [
+        "Напишіть запит для TOP 5 продажів",
+        "Сортування по 3 колонкам з різними напрямками",
+        "Отримайте сторінку 2 з результатів"
+      ]
+    }
+  ]
+}

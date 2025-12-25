@@ -1,0 +1,110 @@
+{
+  "track": "sp",
+  "lectureNumber": "18",
+  "lectureTitle": "Модули та организация кода",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 18",
+      "subtitle": "Модули и организация кода"
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Рецензія: Колекции",
+      "points": ["Vec<T> динамічний масив", "String динамічний текст", "HashMap ключ-значення"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План",
+      "items": ["Модулі та файли", "pub для видимості", "use для імпортів"]
+    },
+    {
+      "type": "definition",
+      "title": "Модулі",
+      "term": "Модулі",
+      "definition": "Механізм организації коду в Rust. Контролюють видимість (публічна/приватна)."
+    },
+    {
+      "type": "code-example",
+      "title": "Модуль в одному файлі",
+      "language": "rust",
+      "code": "mod math {\n  pub fn add(a: i32, b: i32) -> i32 {\n    a + b\n  }\n  \n  fn multiply(a: i32, b: i32) -> i32 {  // приватна\n    a * b\n  }\n}\n\nfn main() {\n  println!(\"{}\", math::add(2, 3));  // OK\n  // println!(\"{}\", math::multiply(2, 3));  // ERROR\n}"
+    },
+    {
+      "type": "definition",
+      "title": "Видимість: pub та приватна",
+      "term": "pub",
+      "definition": "pub: видимо зовні модулю. Без pub - приватна."
+    },
+    {
+      "type": "code-example",
+      "title": "pub структур та полів",
+      "language": "rust",
+      "code": "pub struct Config {\n  pub name: String,        // публічне поле\n  private_key: String,     // приватне поле\n}\n\nimpl Config {\n  pub fn new(name: String) -> Self {\n    Config { name, private_key: String::new() }\n  }\n  \n  pub fn get_key(&self) -> &str {\n    &self.private_key\n  }\n}"
+    },
+    {
+      "type": "code-example",
+      "title": "use для імпортів",
+      "language": "rust",
+      "code": "use std::collections::HashMap;\nuse crate::math::add;  // з власного крейта\nuse super::config::Config;  // з батьківського модулю\n\nlet mut map = HashMap::new();\nlet result = add(2, 3);"
+    },
+    {
+      "type": "list",
+      "title": "Модульні структури",
+      "items": [
+        { "title": "Inline", "details": ["mod name { ... } в одному файлі"] },
+        { "title": "Окремий файл", "details": ["Файл name.rs або folder/mod.rs"] },
+        { "title": "Cratě", "details": ["Окремий проект в Cargo.toml"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Модулі в окремих файлах",
+      "language": "rust",
+      "code": "// main.rs\nmod math;  // підвантажує math.rs\nuse math::add;\n\nfn main() {\n  println!(\"{}\", add(2, 3));\n}\n\n// math.rs\npub fn add(a: i32, b: i32) -> i32 {\n  a + b\n}"
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 1",
+      "question": "Як зробити функцію видимою?",
+      "options": [
+        { "text": "pub fn", "correct": true },
+        { "text": "export fn", "correct": false },
+        { "text": "global fn", "correct": false }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 2",
+      "question": "Що зробить use std::collections::HashMap?",
+      "options": [
+        { "text": "Імпортує HashMap в scope", "correct": true },
+        { "text": "Завантажує весь std", "correct": false },
+        { "text": "Помилка", "correct": false }
+      ]
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: Забув pub",
+      "wrong": "mod utils {\n  fn helper() { }  // приватна!\n}\n\nfn main() {\n  utils::helper();  // ERROR: приватна функція\n}",
+      "right": "mod utils {\n  pub fn helper() { }  // публічна\n}\n\nfn main() {\n  utils::helper();  // OK\n}"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Модулі организовують код",
+        "pub контролює видимість",
+        "use імпортує в scope",
+        "Файлова структура паралельна модульній"
+      ]
+    },
+    {
+      "type": "next-steps",
+      "title": "Далі",
+      "nextLecture": "Лекція 19: Traits і Generics"
+    }
+  ]
+}

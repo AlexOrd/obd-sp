@@ -1,0 +1,194 @@
+{
+  "track": "db",
+  "lectureNumber": "20",
+  "lectureTitle": "Індекси та оптимізація",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 20",
+      "subtitle": "Індекси та оптимізація",
+      "meta": { "course": "Основи баз даних", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 19: MongoDB Aggregation",
+      "items": ["Aggregation pipeline етапи", "$match, $group, $sort", "JOIN у MongoDB"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["Як працюють індекси", "B-tree структура", "Коли індексувати", "EXPLAIN ANALYZE"],
+      "note": "Фокус: продуктивність запитів"
+    },
+    {
+      "type": "definition",
+      "title": "Індекс",
+      "term": "Index",
+      "definition": "Окрема структура даних, яка зберігає відсортовані значення поля з посиланням на рядки.",
+      "analogy": "Як алфавітний покажчик у кінці книги — швидко знайти потрібне"
+    },
+    {
+      "type": "content",
+      "title": "Без індексу: full table scan",
+      "text": "БД перевіряє кожний рядок.",
+      "items": [
+        "SELECT * FROM users WHERE email='a@b.com'",
+        "Перевіряє всіх користувачів",
+        "1,000,000 рядків = 1M порівнянь"
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "B-tree індекс",
+      "description": "Структура під капотом",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ngraph TD\n  Root[\"Root<br/>(a-m)\"] --> L1[\"Left<br/>(a-d)\"] \n  Root --> L2[\"Middle<br/>(e-l)\"]\n  Root --> L3[\"Right<br/>(m-z)\"]\n  L1 --> Data1[\"Rows:<br/>aa, ab, ad\"]\n  L2 --> Data2[\"Rows:<br/>ee, kg, ll\"]\n  L3 --> Data3[\"Rows:<br/>mm, qw, zz\"]\n  \n  style Root fill:#FFE5E5\n  style L1 fill:#FFE5E5\n  style L2 fill:#FFE5E5\n  style L3 fill:#FFE5E5"
+    },
+    {
+      "type": "content",
+      "title": "З індексом: быстрий пошук",
+      "text": "БД шукає через індекс (binary search).",
+      "items": [
+        "SELECT * FROM users WHERE email='a@b.com'",
+        "Індекс: log(n) операцій",
+        "1,000,000 рядків ≈ 20 операцій"
+      ]
+    },
+    {
+      "type": "table",
+      "title": "Порівняння: scan vs index",
+      "headers": ["Операція", "Full Scan", "З індексом", "Прискорення"],
+      "rows": [
+        ["10K рядків", "10,000", "~14", "714x"],
+        ["100K рядків", "100,000", "~17", "5,882x"],
+        ["1M рядків", "1,000,000", "~20", "50,000x"],
+        ["10M рядків", "10,000,000", "~24", "416,666x"]
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Створення індексів (SQL)",
+      "description": "Базові синтаксиси",
+      "language": "sql",
+      "code": "-- Простий індекс\nCREATE INDEX idx_email ON users(email);\n\n-- Композитний (на кількох полях)\nCREATE INDEX idx_user_created ON orders(user_id, created_at);\n\n-- Унікальний\nCREATE UNIQUE INDEX idx_email_unique ON users(email);\n\n-- DESC індекс (для сортування)\nCREATE INDEX idx_recent_orders ON orders(created_at DESC);\n\n-- Видалення\nDROP INDEX idx_email ON users;"
+    },
+    {
+      "type": "list",
+      "title": "Коли індексувати",
+      "items": [
+        { "title": "WHERE умови", "details": ["Часто фільтруються", "email, user_id, status"] },
+        { "title": "JOIN ON", "details": ["Поля об'єднання", "foreign key"] },
+        { "title": "ORDER BY", "details": ["Сортування", "created_at DESC"] },
+        { "title": "GROUP BY", "details": ["Агрегація", "можна пропустити"] },
+        { "title": "DISTINCT", "details": ["Унікальні", "unique ON"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "EXPLAIN ANALYZE",
+      "description": "Перегляд плану виконання",
+      "language": "sql",
+      "code": "-- Без індексу\nEXPLAIN ANALYZE\nSELECT * FROM users WHERE email='test@example.com';\n-- Seq Scan on users (cost=0.00..35.50, rows=1)\n\n-- З індексом\nCREATE INDEX idx_email ON users(email);\nEXPLAIN ANALYZE\nSELECT * FROM users WHERE email='test@example.com';\n-- Index Scan using idx_email (cost=0.29..8.30, rows=1)"
+    },
+    {
+      "type": "diagram",
+      "title": "査план выполнення",
+      "description": "Порівняння стратегій",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR\n  Query[SELECT WHERE] --> Choose{Індекс<br/>існує?}\n  Choose -->|Немає| Seq[Sequential Scan<br/>O(n)]\n  Choose -->|Так| Idx[Index Lookup<br/>O(log n)]\n  Seq --> Result1[\"Повільно:<br/>1M шукань\"]\n  Idx --> Result2[\"Швидко:<br/>20 шукань\"]\n  \n  style Result1 fill:#FFE5E5\n  style Result2 fill:#E5FFE5"
+    },
+    {
+      "type": "content",
+      "title": "Типи індексів",
+      "text": "Для різних завдань.",
+      "items": [
+        "B-tree: універсальний (SQL, MongoDB)",
+        "Hash: точна рівність",
+        "Full-text: пошук текст",
+        "Spatial: координати",
+        "JSON: для JSON полів"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Композитний індекс",
+      "description": "Оптимізація сложних запитів",
+      "language": "sql",
+      "code": "-- Поширений запит\nSELECT * FROM orders \nWHERE user_id=123 AND created_at>'2025-01-01'\nORDER BY created_at DESC\nLIMIT 10;\n\n-- Оптимальний індекс\nCREATE INDEX idx_user_created ON orders(\n  user_id,      -- перше (більш селективне)\n  created_at DESC -- друге (для ORDER BY)\n);\n\n-- Тепер БД використовує один індекс"
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "На скільки полів потрібен індекс для запиту: WHERE a=1 AND b=2 AND c=3?",
+      "options": [
+        { "text": "Потрібно 3 індекси", "correct": false },
+        { "text": "Можна 1 композитний", "correct": true },
+        { "text": "Індекси не потрібні", "correct": false }
+      ],
+      "explanation": "Композитний індекс (a, b, c) покриває всі три умови за один lookup"
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: забагато індексів",
+      "warning": "Індекси сповільнюють INSERT/UPDATE/DELETE",
+      "language": "sql",
+      "wrongCode": "-- 20+ індексів на таблиці\nCREATE INDEX idx1 ON products(name);\nCREATE INDEX idx2 ON products(price);\nCREATE INDEX idx3 ON products(category);\n-- Більше індексів = більше запису",
+      "wrongExplanation": "БД оновлює всі індекси при INSERT",
+      "correctCode": "-- 3-5 індексів на поширені запити\nCREATE INDEX idx_name_price ON products(name, price);\nCREATE INDEX idx_category ON products(category);\n-- Меньше = швидше",
+      "correctExplanation": "Індексуй тільки критичне"
+    },
+    {
+      "type": "list",
+      "title": "Стратегія індексування",
+      "items": [
+        { "title": "Вимір", "details": ["EXPLAIN ANALYZE перед індексом"] },
+        { "title": "Тест", "details": ["Порівняй: з/без"] },
+        { "title": "Моніторинг", "details": ["slow_query_log"] },
+        { "title": "Батч", "details": ["Додавай індекси під час нічі"] },
+        { "title": "Чищення", "details": ["Видаляй невживані"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Partial & Filtered індекси",
+      "text": "Індекс не для всіх рядків.",
+      "items": [
+        "CREATE INDEX idx_active ON users(id) WHERE active=true",
+        "Менше індекс = менше пам'яті",
+        "Швидше пошук у підмножині"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Пример: e-commerce оптимізація",
+      "description": "Реальний сценарій",
+      "language": "sql",
+      "code": "-- Товари\nCREATE INDEX idx_active_category ON products(\n  category, price DESC\n) WHERE active=true;\n\n-- Замовлення\nCREATE INDEX idx_user_recent ON orders(\n  user_id, created_at DESC\n);\n\n-- Пошук\nCREATE INDEX idx_product_search ON products(\n  name COLLATE utf8_general_ci\n) USING FULLTEXT;"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Індекси за логарифмічний час O(log n)",
+        "Композитні індекси для складних запитів",
+        "EXPLAIN ANALYZE показує реальний план"
+      ],
+      "note": "Вимірюй перед оптимізацією!"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 21: Підсумки",
+      "resources": [
+        { "title": "PostgreSQL индексы", "url": "https://www.postgresql.org/docs/current/sql-createindex.html" },
+        { "title": "MySQL индексирование", "url": "https://dev.mysql.com/doc/refman/8.0/en/optimization-indexes.html" }
+      ],
+      "homework": [
+        "Напишіть EXPLAIN ANALYZE для 3 запитів",
+        "Додайте індекси, порівняйте час",
+        "Знайдіть невживані індекси в DB"
+      ]
+    }
+  ]
+}

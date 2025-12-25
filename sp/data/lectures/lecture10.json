@@ -1,0 +1,84 @@
+{
+  "track": "sp",
+  "lectureNumber": "10",
+  "lectureTitle": "Базовий синтаксис Rust",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 10",
+      "subtitle": "Базовий синтаксис Rust: змінні, типи даних, функції"
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 9: Вступ до Rust",
+      "items": ["Rust філософія", "Встановлення та Cargo", "Hello World"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["Змінні: let, const, mut", "Типи даних: числа, рядки", "Функції: fn, параметри, return"],
+      "note": "Фокус: основний синтаксис"
+    },
+    {
+      "type": "code-example",
+      "title": "Змінні в Rust",
+      "description": "Іммутабельність за замовчуванням",
+      "language": "rust",
+      "code": "// Іммутабельна змінна\nlet x = 5;\n// x = 10;  // Помилка: неможливо змінити\n\n// Мутабельна змінна\nlet mut y = 5;\ny = 10;  // OK\n\n// Константа: компіляції\nconst MAX: i32 = 1000;"
+    },
+    {
+      "type": "table",
+      "title": "Базові типи данних",
+      "headers": ["Тип", "Діапазон", "Приклад"],
+      "rows": [
+        ["i8 / i16 / i32 / i64", "Зі знаком", "-5"],
+        ["u8 / u16 / u32 / u64", "Без знаку", "5"],
+        ["f32 / f64", "Плаваюча точка", "3.14"],
+        ["bool", "true / false", "true"],
+        ["char", "Один символ", "'a'"],
+        ["String", "Динамічний рядок", "String::from(\"hello\")"]
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Функції в Rust",
+      "description": "Синтаксис fn",
+      "language": "rust",
+      "code": "// Без параметрів\nfn greet() {\n    println!(\"Hello!\");\n}\n\n// З параметрами\nfn add(a: i32, b: i32) -> i32 {\n    a + b  // Без return, останній вираз = результат\n}\n\n// Використання\nfn main() {\n    greet();\n    let result = add(5, 3);\n    println!(\"Result: {}\", result);\n}"
+    },
+    {
+      "type": "content",
+      "title": "Особливості синтаксису",
+      "text": "Відмінності від C",
+      "items": [
+        "Функції повертають останній вираз (без return для простих випадків)",
+        "Типи ЗАВЖДИ після імені змінної: let x: i32 = 5",
+        "!= замість != як в деяких; : точка з комою ОБОВ'ЯЗКОВА"
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Яка різниця між let та const?",
+      "options": [
+        { "text": "const обчислюється на compile-time", "correct": true },
+        { "text": "Немає різниці", "correct": false },
+        { "text": "const швидше", "correct": false }
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": ["let: іммутабельна змінна", "let mut: мутабельна", "fn: визначення функції"]
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 11: Потік керування",
+      "homework": ["Напиши функцію, яка повертає максимум двох чисел", "Експериментуй з типами"]
+    }
+  ]
+}

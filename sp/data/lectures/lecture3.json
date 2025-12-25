@@ -1,0 +1,169 @@
+{
+  "track": "sp",
+  "lectureNumber": "3",
+  "lectureTitle": "Архітектура x86-64: Регістри та пам'ять",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 3",
+      "subtitle": "Архітектура x86-64: Регістри та базове представлення пам'яті",
+      "meta": { "course": "Спеціалізовані мови програмування", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 2: Системи числення",
+      "items": ["Двійкова та шістнадцяткова системи", "Перетворення між системами", "Байти та біти"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["Архітектура x86-64 огляд", "Регістри: призначення та розміри", "Пам'ять: стек та heap", "Адресування"],
+      "note": "Фокус: як CPU бачить дані"
+    },
+    {
+      "type": "definition",
+      "title": "x86-64 архітектура",
+      "term": "x86-64",
+      "definition": "64-розрядна архітектура Intel/AMD, основна в ПК та серверах. Розвиток 32-розрядної x86 системи.",
+      "analogy": "Як модернізація доміння: більше вікон (регістрів), більше кімнат (пам'ять)"
+    },
+    {
+      "type": "content",
+      "title": "Регістри: велика пам'ять процесора",
+      "text": "Надшвидкий доступ (~1 цикл)",
+      "items": [
+        "64-розрядні (1 слово): rax, rbx, rcx, rdx, rsi, rdi, rbp, rsp",
+        "Спеціальні: rip (instruction pointer), rflags (flags)",
+        "Використання залежить від системи ABI (Application Binary Interface)"
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "Основні регістри (x86-64)",
+      "description": "Обривки, їх призначення",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ngraph LR\n  RAX[\"RAX: акумулятор<br/>(результати операцій)\"] \n  RBX[\"RBX: база<br/>(базова адреса)\"]\n  RCX[\"RCX: лічильник<br/>(цикли)\"] \n  RDX[\"RDX: дані<br/>(частина операцій)\"]\n  RSP[\"RSP: вказівник стеку<br/>(поточна позиція)\"]\n  RBP[\"RBP: база стеку<br/>(початок фрейму)\"]\n  \n  style RAX fill:#FFE5E5\n  style RCX fill:#FFE5E5\n  style RSP fill:#E5FFE5"
+    },
+    {
+      "type": "table",
+      "title": "Розміри регістрів",
+      "headers": ["Назва", "Біти", "Байти", "Приклад (рах = 0xFF)"],
+      "rows": [
+        ["RAX", "64", "8", "0x00000000000000FF"],
+        ["EAX", "32", "4", "0x000000FF (заповнює нулями RAX)"],
+        ["AX", "16", "2", "0x00FF"],
+        ["AL", "8", "1", "0xFF (низький байт)"],
+        ["AH", "8", "1", "0x00 (вищий байт)"]
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Пам'ять: організація",
+      "text": "Ієрархія швидкості",
+      "items": [
+        "Регістри: 8-64 байти, час доступу ~1 цикл",
+        "L1 cache: 32-64 КБ, час доступу ~4 цикли",
+        "L2 cache: 256 КБ-1 МБ, час доступу ~10 циклів",
+        "L3 cache: 8-20 МБ, час доступу ~40 циклів",
+        "RAM: гігабайти, час доступу ~200-400 циклів"
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "Пам'ять програми: layout",
+      "description": "Організація адресного простору",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart TB\n  HIGH[\"0xFFFFFFFF<br/>High<br/>Kernel space\"]\n  HEAP1[\"Heap<br/>(malloc, new)\"]\n  UNMAP[\"Unmapped\"]\n  STACK[\"Stack<br/>(локальні змінні, return addr)\"]\n  BSS[\"BSS<br/>(глобальні, инициализовані)\"]\n  DATA[\"Data<br/>(дані програми)\"]\n  TEXT[\"Text<br/>(код, інструкції)\"]\n  LOW[\"0x00000000\"]\n  \n  HIGH --> HEAP1 --> UNMAP --> STACK --> BSS --> DATA --> TEXT --> LOW\n  \n  style STACK fill:#FFE5E5\n  style HEAP1 fill:#E5F3FF\n  style TEXT fill:#E5FFE5"
+    },
+    {
+      "type": "content",
+      "title": "Стек (Stack)",
+      "text": "Останній прийшов — перший вийшов (LIFO)",
+      "items": [
+        "Локальні змінні функції",
+        "Адреси повернення (return address)",
+        "Параметри функції",
+        "Растет донизу (від вищих адрес до нижчих)"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Стек в C",
+      "description": "Як змінні зберігаються",
+      "language": "c",
+      "code": "void func() {\n    int a = 5;      // На стеку: RSP - 8\n    int b = 10;     // На стеку: RSP - 16\n    char c = 'x';   // На стеку: RSP - 24\n    // Локальні змінні зникають при return\n}  // RSP повертається до попередного значення"
+    },
+    {
+      "type": "content",
+      "title": "Heap (Динамічна пам'ять)",
+      "text": "Керована вручну (у C) або автоматично (Rust)",
+      "items": [
+        "malloc/free у C: програміст контролює",
+        "new/delete у C++: більше контролю",
+        "Rust ownership: автоматичне звільнення"
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Чому стек швидше за heap?",
+      "options": [
+        { "text": "Стек у регістрах, heap у RAM", "correct": true },
+        { "text": "Стек менший", "correct": false },
+        { "text": "Немає різниці", "correct": false }
+      ],
+      "explanation": "Стек близько до CPU, просто збільшується/зменшується RSP. Heap потребує malloc/free операцій."
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: путати адресу та значення",
+      "warning": "Адреса змінної ≠ значення змінної",
+      "language": "c",
+      "wrongCode": "int x = 42;\nprintf(\"%d\\n\", x);      // 42 (значення)\nprintf(\"%d\\n\", &x);     // Помилка: адреса — це не int!",
+      "wrongExplanation": "&x — це адреса, формат %p (pointer)",
+      "correctCode": "int x = 42;\nprintf(\"Значення: %d\\n\", x);      // 42\nprintf(\"Адреса: %p\\n\", (void*)&x);  // 0x7fff5fbff8c0",
+      "correctExplanation": "&x дає адресу (unsigned long), потрібен %p"
+    },
+    {
+      "type": "list",
+      "title": "Основні поняття",
+      "items": [
+        { "title": "Адреса", "details": ["Місцезнаходження у пам'яті, зазвичай в hex"] },
+        { "title": "Значення", "details": ["Те, що зберігається за адресою"] },
+        { "title": "Вказівник", "details": ["Змінна, яка зберігає адресу іншої змінної"] },
+        { "title": "Дереференціювання", "details": ["Отримання значення за адресою: *ptr"] }
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "x86-64: 64-розрядна архітектура з 16 основними регістрами",
+        "Стек: швидкий, локальні змінні, растет донизу",
+        "Heap: повільний, динамічний, керується вручну"
+      ],
+      "note": "Далі — інструменти: NASM, компілятор, Makefile"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 4: Робота з терміналом",
+      "resources": [
+        {
+          "title": "x86-64 ISA manual",
+          "url": "https://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-instruction-set-reference-manual-325462.pdf"
+        },
+        {
+          "title": "Memory layout tutorial",
+          "url": "https://gabrieletolomei.wordpress.com/miscellanea/the-elf-format-part-ii/"
+        }
+      ],
+      "homework": [
+        "Напиши програму на C, яка показує адреси локальних змінних",
+        "Порівняй адреси в стеку: вони зменшуються?",
+        "Дослідж malloc на heap: адреси збільшуються чи зменшуються?"
+      ]
+    }
+  ]
+}

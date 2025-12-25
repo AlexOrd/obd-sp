@@ -1,0 +1,195 @@
+{
+  "track": "db",
+  "lectureNumber": "8",
+  "lectureTitle": "Фільтрація даних: WHERE",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 8",
+      "subtitle": "Фільтрація даних: WHERE",
+      "meta": { "course": "Основи баз даних", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 7: SELECT та функції",
+      "items": ["Рядкові та математичні функції", "COUNT, SUM, AVG", "Перейменування AS"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["WHERE для фільтрації", "Оператори порівняння", "Різні типи фільтрів", "Практика комбінування умов"],
+      "note": "Фокус: отримувати тільки потрібні рядки"
+    },
+    {
+      "type": "content",
+      "title": "Навіщо WHERE",
+      "text": "WHERE скорочує кількість рядків перед тим як їх вибирати.",
+      "items": [
+        "Вибираємо користувачів віком > 18",
+        "Отримуємо замовлення з останнього місяця",
+        "Фільтруємо деактивовані записи"
+      ]
+    },
+    {
+      "type": "definition",
+      "title": "WHERE clause",
+      "term": "WHERE",
+      "definition": "Умова, яка фільтрує рядки перед SELECT; повертаються тільки рядки де умова TRUE.",
+      "analogy": "Як сито: більшість падає, залишається тільки релевантне"
+    },
+    {
+      "type": "diagram",
+      "title": "Хід WHERE у запиті",
+      "description": "Виконання кроків",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR\n  All[(Таблиця<br/>100 рядків)]\n  All -->|1: FROM| Read[Прочитай всі]\n  Read -->|2: WHERE| Filter[Перевір умову]\n  Filter -->|TRUE| Keep[Залишити]\n  Filter -->|FALSE| Drop[Вилучити]\n  Keep -->|3: SELECT| Project[Вибери колонки]\n  Project --> Result[Результат<br/>20 рядків]"
+    },
+    {
+      "type": "syntax",
+      "title": "Базовий WHERE",
+      "syntax": "SELECT column1, column2\nFROM table\nWHERE condition;",
+      "parts": [
+        { "part": "condition", "description": "вираз TRUE/FALSE" },
+        { "part": "=", "description": "дорівнює" },
+        { "part": ">", "description": "більше" },
+        { "part": "<", "description": "менше" }
+      ]
+    },
+    {
+      "type": "table",
+      "title": "Оператори порівняння",
+      "headers": ["Оператор", "Назва", "Приклад"],
+      "rows": [
+        ["=", "дорівнює", "age = 25"],
+        ["!=", "не дорівнює", "status != 'inactive'"],
+        [">", "більше", "price > 100"],
+        ["<", "менше", "age < 65"],
+        [">=", "більше або рівно", "salary >= 50000"],
+        ["<=", "менше або рівно", "quantity <= 10"]
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Приклади WHERE",
+      "description": "Різні умови",
+      "language": "sql",
+      "code": "-- Точна вибір\nSELECT * FROM users WHERE age = 25;\n\n-- Діапазон\nSELECT * FROM products WHERE price > 100;\n\n-- Рядкова умова\nSELECT * FROM users WHERE status != 'inactive';\n\n-- Дата\nSELECT * FROM orders WHERE created_at > '2025-01-01';"
+    },
+    {
+      "type": "content",
+      "title": "Типи значень у WHERE",
+      "text": "WHERE працює з числами, текстом та датами.",
+      "items": [
+        "Числа: age > 18, price <= 100",
+        "Текст: name = 'Alex', email LIKE '%@gmail.com'",
+        "Дати: created_at >= '2025-01-01', age <= now()"
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Спеціальні оператори",
+      "items": [
+        { "title": "BETWEEN", "details": ["Діапазон", "age BETWEEN 18 AND 65"] },
+        { "title": "IN", "details": ["Один з варіантів", "status IN ('active','pending')"] },
+        { "title": "LIKE", "details": ["Патерн тексту", "email LIKE '%@gmail.com'"] },
+        { "title": "IS NULL", "details": ["Перевірка NULL", "phone IS NULL"] },
+        { "title": "IS NOT NULL", "details": ["Не NULL", "email IS NOT NULL"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "BETWEEN, IN, LIKE",
+      "description": "Розширені фільтри",
+      "language": "sql",
+      "code": "-- Діапазон\nSELECT * FROM users WHERE age BETWEEN 18 AND 65;\n\n-- Один з варіантів\nSELECT * FROM orders WHERE status IN ('shipped', 'delivered');\n\n-- Патерн тексту\nSELECT * FROM users WHERE email LIKE '%gmail.com';\nSELECT * FROM products WHERE name LIKE 'Product%';"
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Як вибрати користувачів від 18 до 65 років?",
+      "options": [
+        { "text": "WHERE age = 18 AND age = 65", "correct": false },
+        { "text": "WHERE age BETWEEN 18 AND 65", "correct": true },
+        { "text": "WHERE age > 18 OR age < 65", "correct": false }
+      ],
+      "explanation": "BETWEEN включає обидва краї (18 і 65)."
+    },
+    {
+      "type": "diagram",
+      "title": "Логіка BETWEEN",
+      "description": "Включена або виключена границя",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR\n  Age[age значення]\n  Age -->|18 ≤ age ≤ 65| Yes[BETWEEN TRUE]\n  Age -->|інакше| No[BETWEEN FALSE]\n  Yes --> Include[Включити рядок]\n  No --> Exclude[Виключити рядок]"
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: неправильна логіка",
+      "warning": "AND vs OR змінюють результат",
+      "language": "sql",
+      "wrongCode": "SELECT * FROM users\nWHERE age > 18 OR age < 65;\n-- це включить ВСІХ!",
+      "wrongExplanation": "OR означає 'будь-яке з двох'. Тут всі вікові значення задовольняють",
+      "correctCode": "SELECT * FROM users\nWHERE age >= 18 AND age <= 65;\n-- Правильний діапазон",
+      "correctExplanation": "AND означає обидві умови мають бути TRUE"
+    },
+    {
+      "type": "timeline",
+      "title": "Еволюція фільтрації",
+      "description": "Від простих до складних",
+      "events": [
+        { "year": "1974", "label": "WHERE básico", "description": "= > < only" },
+        { "year": "1992", "label": "SQL-92", "description": "BETWEEN, IN, LIKE" },
+        { "year": "2003", "label": "SQL:2003", "description": "CASE для складної логіки" },
+        { "year": "2025", "label": "JSON filtering", "description": "WHERE на JSON полях" }
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Best practices WHERE",
+      "items": [
+        { "title": "Фільтруйте рано", "details": ["WHERE перед SELECT для швидкості"] },
+        { "title": "Індексуйте колонки у WHERE", "details": ["age, status часто у фільтрах"] },
+        { "title": "Уникайте функцій на лівій частині", "details": ["WHERE LENGTH(name) > 5 = повільно"] },
+        { "title": "Використовуйте BETWEEN для діапазонів", "details": ["замість age > X AND age < Y"] },
+        { "title": "Документуйте складні умови", "details": ["WHERE (a > 10 AND b < 20) -- діапазон A"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Міні ТЗ: фільтрація замовлень",
+      "text": "Отримайте замовлення від останніх 30 днів сумою > 50.",
+      "items": ["SELECT з WHERE", "Дата + сума", "BETWEEN або AND/OR"]
+    },
+    {
+      "type": "code-example",
+      "title": "Комплексний WHERE",
+      "description": "Кілька умов разом",
+      "language": "sql",
+      "code": "SELECT id, user_id, amount, created_at\nFROM orders\nWHERE \n  amount > 50\n  AND created_at >= DATE_SUB(now(), INTERVAL 30 DAY)\n  AND status IN ('shipped', 'delivered')\n  AND user_id IS NOT NULL;"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "WHERE скорочує результати перед SELECT",
+        "Оператори: =, >, <, >=, <=, !=",
+        "BETWEEN, IN, LIKE для складних умов"
+      ],
+      "note": "Далі — AND/OR/NOT для комбінування умов"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 9: AND/OR/NOT",
+      "resources": [
+        { "title": "SQLite WHERE", "url": "https://www.sqlite.org/lang_select.html#whereclause" },
+        { "title": "SQL operators", "url": "https://www.w3schools.com/sql/sql_operators.asp" }
+      ],
+      "homework": [
+        "Написати 5 WHERE з різними операторами",
+        "Використати BETWEEN для діапазону",
+        "Використати IN для вибору зі списку"
+      ]
+    }
+  ]
+}

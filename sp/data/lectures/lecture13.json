@@ -1,0 +1,134 @@
+{
+  "track": "sp",
+  "lectureNumber": "13",
+  "lectureTitle": "Ownership детально",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 13",
+      "subtitle": "Ownership детально: Move, Borrow, Lifetime"
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Рецензія: Основи володіння",
+      "points": ["Move передає власництво", "Copy для примітивних типів", "Compiler запобігає use-after-free"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План",
+      "items": ["Move семантика докладно", "Borrow (借用) зміст", "Lifetime як розв'язання"]
+    },
+    {
+      "type": "definition",
+      "title": "Move семантика",
+      "term": "Move",
+      "definition": "Передача власництва від s1 до s2. s1 тепер invalid."
+    },
+    {
+      "type": "code-example",
+      "title": "Move в функціях",
+      "language": "rust",
+      "code": "fn takes_ownership(s: String) {\n  println!(\"{}\", s);\n  // s видаляється тут\n}\n\nlet s1 = String::from(\"hello\");\ntakes_ownership(s1);  // s1 move в функцію\n// println!(\"{}\", s1);  // ERROR!"
+    },
+    {
+      "type": "definition",
+      "title": "Borrow (заимствование)",
+      "term": "Borrow",
+      "definition": "Тимчасово дати доступ без передачі власництва. &T (immutable borrow), &mut T (mutable borrow)."
+    },
+    {
+      "type": "code-example",
+      "title": "Borrow: Immutable & Mutable",
+      "language": "rust",
+      "code": "let mut s = String::from(\"hello\");\nlet r1 = &s;      // immutable borrow\nlet r2 = &s;      // OK: кілька immutable\nprintln!(\"{}\", r1);  // OK\n\nlet r3 = &mut s;  // mutable borrow\nr3.push_str(\" world\");\nprintln!(\"{}\", r3);  // OK"
+    },
+    {
+      "type": "list",
+      "title": "Правила Borrow Checker",
+      "items": [
+        { "title": "Rule 1", "details": ["Одна &mut або багато & одночасно"] },
+        { "title": "Rule 2", "details": ["Borrow мають жити < оригіналу"] },
+        { "title": "Rule 3", "details": ["Не можна повернути reference на local variable"] }
+      ]
+    },
+    {
+      "type": "definition",
+      "title": "Lifetime",
+      "term": "Lifetime",
+      "definition": "Синтаксис для визначення scope reference. Позначається 'a, 'b і т.д."
+    },
+    {
+      "type": "code-example",
+      "title": "Lifetime в функціях",
+      "language": "rust",
+      "code": "fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {\n  if x.len() > y.len() { x } else { y }\n}\n\nlet s1 = String::from(\"long\");\nlet s2 = \"short\";\nlet result = longest(&s1, &s2);\nprintln!(\"{}\", result);"
+    },
+    {
+      "type": "diagram",
+      "title": "Ownership Flow",
+      "mermaid": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ngraph LR\n  A[\"s1: String<br/>владелец\"] -->|Move| B[\"s2: String<br/>владелец\"]\n  A --> X[\"invalid<br/>no access\"]\n  C[\"s: String\"] -->|&| D[\"r: &String<br/>borrow\"]\n  C -->|&mut| E[\"r_mut: &mut String<br/>mutable borrow\"]\n  D --> F[\"read only\"]\n  E --> G[\"read + write\"]\n  style A fill:#ff6b6b\n  style B fill:#51cf66\n  style X fill:#868e96"
+    },
+    {
+      "type": "table",
+      "title": "Move vs Borrow vs Copy",
+      "columns": ["Операція", "Безопасность", "Предназначение"],
+      "rows": [
+        { "Операція": "Move", "Безопасность": "✓ Garantue", "Предназначение": "Передача власність" },
+        { "Операція": "Borrow &", "Безопасность": "✓ Garantue", "Предназначение": "Читання" },
+        { "Операція": "Borrow &mut", "Безопасность": "✓ Garantue", "Предназначение": "Читання + запис" },
+        { "Операція": "Copy", "Безопасность": "✓ Garantue", "Предназначение": "Примітиви" }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 1",
+      "question": "Що буває з s1 після let s2 = s1 для String?",
+      "options": [
+        { "text": "s1 все ще доступна", "correct": false },
+        { "text": "s1 становиться невалідною (move)", "correct": true },
+        { "text": "s1 копіюється", "correct": false },
+        { "text": "Помилка компіляції", "correct": false }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 2",
+      "question": "Скільки &mut borow можуть існувати одночасно?",
+      "options": [
+        { "text": "Скільки угодно", "correct": false },
+        { "text": "Тільки одна", "correct": true },
+        { "text": "Три максимум", "correct": false },
+        { "text": "Залежить від компілятора", "correct": false }
+      ]
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка 1: Повернення reference на local",
+      "wrong": "fn bad<'a>() -> &'a String {\n  let s = String::from(\"hi\");\n  &s  // ERROR: s видаляється!\n}",
+      "right": "fn good() -> String {\n  let s = String::from(\"hi\");\n  s  // OK: Move видає power"
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка 2: Два &mut одночасно",
+      "wrong": "let mut s = String::from(\"hi\");\nlet r1 = &mut s;\nlet r2 = &mut s;  // ERROR!\nprintln!(\"{} {}\", r1, r2);",
+      "right": "let mut s = String::from(\"hi\");\nlet r1 = &mut s;\nr1.push_str(\" world\");\nprintln!(\"{}\", r1);  // OK"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Move: передача власництва",
+        "Borrow: тимчасовий доступ (&, &mut)",
+        "Lifetime: контроль scope reference",
+        "Borrow Checker гарантує memory safety"
+      ]
+    },
+    {
+      "type": "next-steps",
+      "title": "Далі",
+      "nextLecture": "Лекція 14: Заимствование і References"
+    }
+  ]
+}

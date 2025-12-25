@@ -19,10 +19,19 @@
   "seoKeywords": "бази даних, SQL, NoSQL, програмування, курс, лекції, ВТФК, Вінниця",
   "lectures": [
     {
+      "id": "lecture0",
+      "number": "00",
+      "title": "Демонстрація всіх типів слайдів",
+      "description": "Довідник для викладача — всі типи слайдів",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture0.html"
+    },
+    {
       "id": "lecture1",
       "number": "01",
-      "title": "Вступ до баз даних",
-      "description": "Основні поняття, типи баз даних, історія розвитку",
+      "title": "Огляд курсу та мотивація",
+      "description": "Навіщо БД, як вчитимемось, перший SQL-запит",
       "available": true,
       "statusText": "ДОСТУПНА",
       "file": "lecture1.html"
@@ -30,38 +39,74 @@
     {
       "id": "lecture2",
       "number": "02",
-      "title": "Реляційні бази даних",
-      "description": "Скоро буде доступна...",
-      "locked": true,
-      "statusText": "🔒 ЗАБЛОКОВАНО",
+      "title": "Що таке база даних? Типи та моделі",
+      "description": "Реляційні, NoSQL, об'єктні та інші моделі",
+      "available": true,
+      "statusText": "ДОСТУПНА",
       "file": "lecture2.html"
     },
     {
       "id": "lecture3",
       "number": "03",
-      "title": "SQL - мова запитів",
-      "description": "Скоро буде доступна...",
-      "locked": true,
-      "statusText": "🔒 ЗАБЛОКОВАНО",
+      "title": "Векторні бази даних та AI",
+      "description": "Архітектура, пошук, рекомендації",
+      "available": true,
+      "statusText": "ДОСТУПНА",
       "file": "lecture3.html"
     },
     {
       "id": "lecture4",
       "number": "04",
-      "title": "Проєктування баз даних",
-      "description": "Скоро буде доступна...",
-      "locked": true,
-      "statusText": "🔒 ЗАБЛОКОВАНО",
+      "title": "Реляційна модель: таблиці, ключі",
+      "description": "PK/FK, кортежі, обмеження цілісності",
+      "available": true,
+      "statusText": "ДОСТУПНА",
       "file": "lecture4.html"
     },
     {
       "id": "lecture5",
       "number": "05",
-      "title": "NoSQL бази даних",
-      "description": "Скоро буде доступна...",
-      "locked": true,
-      "statusText": "🔒 ЗАБЛОКОВАНО",
+      "title": "Типи даних у SQL",
+      "description": "Числові, рядкові, дати/час, булеві — як обирати",
+      "available": true,
+      "statusText": "ДОСТУПНА",
       "file": "lecture5.html"
+    },
+    {
+      "id": "lecture6",
+      "number": "06",
+      "title": "Вступ до SQL: декларативний підхід",
+      "description": "Базові запити та синтаксис",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture6.html"
+    },
+    {
+      "id": "lecture7",
+      "number": "07",
+      "title": "SELECT та вбудовані функції",
+      "description": "Перейменування, рядкові/математичні/агрегатні функції",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture7.html"
+    },
+    {
+      "id": "lecture8",
+      "number": "08",
+      "title": "Фільтрація даних: WHERE",
+      "description": "Оператори порівняння (=, !=, <, >, <=, >=)",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture8.html"
+    },
+    {
+      "id": "lecture9",
+      "number": "09",
+      "title": "Логічні оператори AND/OR/NOT",
+      "description": "Комбінування умов у запитах",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture9.html"
     },
     {
       "id": "lecture10",
@@ -71,6 +116,105 @@
       "available": true,
       "statusText": "ДОСТУПНА",
       "file": "lecture10.html"
+    },
+    {
+      "id": "lecture11",
+      "number": "11",
+      "title": "Пріоритет операторів та коментарі",
+      "description": "Дужки, правила написання коментарів",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture11.html"
+    },
+    {
+      "id": "lecture12",
+      "number": "12",
+      "title": "Пріоритет операторів та коментарі",
+      "description": "Дужки, правила написання коментарів",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture12.html"
+    },
+    {
+      "id": "lecture13",
+      "number": "13",
+      "title": "Вступ до NoSQL: MongoDB CRUD",
+      "description": "Документи, колекції, базові операції",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture13.html"
+    },
+    {
+      "id": "lecture14",
+      "number": "14",
+      "title": "Дати та час у SQL",
+      "description": "Формати, часові зони, функції",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture14.html"
+    },
+    {
+      "id": "lecture15",
+      "number": "15",
+      "title": "ORDER BY і сортування",
+      "description": "Сортування за зростанням/спаданням, кілька колонок",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture15.html"
+    },
+    {
+      "id": "lecture16",
+      "number": "16",
+      "title": "JOIN: логіка об'єднань",
+      "description": "Чому JOIN потрібен для аналізу",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture16.html"
+    },
+    {
+      "id": "lecture17",
+      "number": "17",
+      "title": "Типи JOIN: INNER/LEFT/RIGHT/SELF",
+      "description": "Вплив типів JOIN на результат",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture17.html"
+    },
+    {
+      "id": "lecture18",
+      "number": "18",
+      "title": "MLOps: моделі + бази даних",
+      "description": "Інтеграція ML з БД, майбутнє AI в даних",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture18.html"
+    },
+    {
+      "id": "lecture19",
+      "number": "19",
+      "title": "GROUP BY, HAVING, віконні функції",
+      "description": "ROW_NUMBER, RANK, LAG/LEAD, SUM/AVG",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture19.html"
+    },
+    {
+      "id": "lecture20",
+      "number": "20",
+      "title": "MongoDB: агрегація та індекси",
+      "description": "Aggregation framework, оптимізація NoSQL",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture20.html"
+    },
+    {
+      "id": "lecture21",
+      "number": "21",
+      "title": "Індекси: типи та вибір",
+      "description": "B-дерево, хеш-таблиці, стратегії створення",
+      "available": true,
+      "statusText": "ДОСТУПНА",
+      "file": "lecture21.html"
     }
   ]
 }

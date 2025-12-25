@@ -1,0 +1,214 @@
+{
+  "track": "db",
+  "lectureNumber": "16",
+  "lectureTitle": "Типи JOIN: INNER/LEFT/RIGHT/SELF",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 16",
+      "subtitle": "Типи JOIN: INNER/LEFT/RIGHT/SELF",
+      "meta": { "course": "Основи баз даних", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 15: JOIN логіка",
+      "items": ["Навіщо JOIN потрібен", "ON умови", "Cardinality відносин"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": [
+        "INNER JOIN (перетин)",
+        "LEFT JOIN (все з лівої)",
+        "RIGHT JOIN (все з правої)",
+        "SELF JOIN (таблиця з собою)"
+      ],
+      "note": "Фокус: 4 основні типи та їх практика"
+    },
+    {
+      "type": "content",
+      "title": "Чотири основні типи JOIN",
+      "text": "Кожен повертає різні результати.",
+      "items": [
+        "INNER: тільки спільні рядки",
+        "LEFT: всі з лівої + спільні",
+        "RIGHT: всі з правої + спільні",
+        "SELF: таблиця з собою"
+      ]
+    },
+    {
+      "type": "definition",
+      "title": "INNER JOIN",
+      "term": "Inner Join",
+      "definition": "Повертає тільки рядки де умова ON істинна у обох таблицях.",
+      "analogy": "Перетин множин: результат = що є в обох"
+    },
+    {
+      "type": "diagram",
+      "title": "INNER JOIN - Venn діаграма",
+      "description": "Спільна частина",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ngraph TB\n  A[Users<br/>4 записи]\n  B[Orders<br/>5 записів]\n  C[INNER JOIN<br/>2 спільні]\n  A -->|overlap| C\n  B --> |overlap| C"
+    },
+    {
+      "type": "code-example",
+      "title": "INNER JOIN приклад",
+      "description": "Тільки користувачі з замовленнями",
+      "language": "sql",
+      "code": "SELECT u.name, o.item\nFROM users u\nINNER JOIN orders o ON u.id = o.user_id;\n\n-- Результат:\n-- name  | item\n-- Alice | Laptop\n-- Alice | Mouse\n-- Bob   | Keyboard\n-- (користувачі без замовлень виключені)"
+    },
+    {
+      "type": "definition",
+      "title": "LEFT JOIN",
+      "term": "Left Join",
+      "definition": "Повертає все з лівої таблиці + спільні рядки з правої. NULL для неспівпадаючих.",
+      "analogy": "Всі з лівої щоб які порівні, з NULL замість даних правої"
+    },
+    {
+      "type": "diagram",
+      "title": "LEFT JOIN - Venn діаграма",
+      "description": "Все з лівої + спільне",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ngraph TB\n  A[Users<br/>4 записи]\n  B[Orders<br/>5 записів]\n  C[LEFT JOIN<br/>4 (усі users)<br/>+ спільні orders]\n  A --> |all + overlap| C"
+    },
+    {
+      "type": "code-example",
+      "title": "LEFT JOIN приклад",
+      "description": "Усі користувачи з замовленнями (якщо є)",
+      "language": "sql",
+      "code": "SELECT u.name, o.item\nFROM users u\nLEFT JOIN orders o ON u.id = o.user_id;\n\n-- Результат:\n-- name  | item\n-- Alice | Laptop\n-- Alice | Mouse\n-- Bob   | Keyboard\n-- Carol | NULL  (без замовлень)\n-- (всі користувачи включені)"
+    },
+    {
+      "type": "definition",
+      "title": "RIGHT JOIN",
+      "term": "Right Join",
+      "definition": "Повертає все з правої таблиці + спільні рядки з лівої. NULL для неспівпадаючих.",
+      "analogy": "Протилежність LEFT: все з правої, NULL з лівої"
+    },
+    {
+      "type": "code-example",
+      "title": "RIGHT JOIN приклад",
+      "description": "Усі замовлення з користувачами (якщо потрібні)",
+      "language": "sql",
+      "code": "SELECT u.name, o.item\nFROM users u\nRIGHT JOIN orders o ON u.id = o.user_id;\n\n-- Результат:\n-- name   | item\n-- Alice  | Laptop\n-- Alice  | Mouse\n-- Bob    | Keyboard\n-- NULL   | Monitor  (замовлення без користувача!)"
+    },
+    {
+      "type": "list",
+      "title": "Коли використовувати кожен тип",
+      "items": [
+        { "title": "INNER JOIN", "details": ["тільки спільні", "користувачи З замовленнями"] },
+        { "title": "LEFT JOIN", "details": ["все з лівої", "користувачи з/БЕЗ замовлень"] },
+        { "title": "RIGHT JOIN", "details": ["все з правої", "замовлення і користувачи"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "SELF JOIN - таблиця з собою",
+      "text": "Приєднуємо таблицю до неї самої через alias.",
+      "items": [
+        "Ієрархії: босс-підлеглий",
+        "Порівняння: який продукт дешевше за який",
+        "Послідовності: попередня/наступна запис"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "SELF JOIN приклад",
+      "description": "Співробітники та їх босси",
+      "language": "sql",
+      "code": "-- Таблиця employees з manager_id посилання на себе\nSELECT \n  e.name AS employee,\n  m.name AS manager\nFROM employees e\nLEFT JOIN employees m ON e.manager_id = m.id;\n\n-- Результат:\n-- employee | manager\n-- Alice    | Bob\n-- Bob      | Charlie\n-- Charlie  | NULL (CEO)"
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Як отримати користувачів БЕЗ замовлень?",
+      "options": [
+        { "text": "INNER JOIN", "correct": false },
+        { "text": "LEFT JOIN де orders.id IS NULL", "correct": true },
+        { "text": "RIGHT JOIN", "correct": false }
+      ],
+      "explanation": "LEFT JOIN дає всі користувачи, потім WHERE IS NULL фільтрує без замовлень."
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: плутанина RIGHT/LEFT",
+      "warning": "RIGHT часто замініують з LEFT по помилці",
+      "language": "sql",
+      "wrongCode": "-- Хочемо всі користувачи з замовленнями (якщо є)\nSELECT * FROM orders o\nLEFT JOIN users u ON o.user_id = u.id;  -- НЕПРАВИЛЬНО!",
+      "wrongExplanation": "Це дає всі замовлення (з лівої), не користувачів",
+      "correctCode": "SELECT * FROM users u\nLEFT JOIN orders o ON u.id = o.user_id;",
+      "correctExplanation": "users з лівої = всі користувачи"
+    },
+    {
+      "type": "timeline",
+      "title": "JOIN типи історія",
+      "description": "Від простого до складного",
+      "events": [
+        { "year": "1974", "label": "JOIN базова", "description": "Перша реалізація" },
+        { "year": "1986", "label": "INNER JOIN", "description": "Явна синтаксис" },
+        { "year": "1992", "label": "LEFT/RIGHT", "description": "Зовнішні JOIN" },
+        { "year": "2025", "label": "LATERAL JOIN", "description": "Складні JOIN" }
+      ]
+    },
+    {
+      "type": "table",
+      "title": "Порівняння типів JOIN",
+      "headers": ["Тип", "Результати", "NULL", "Приклад"],
+      "rows": [
+        ["INNER", "Спільні", "Ні", "Користувачи З замовленнями"],
+        ["LEFT", "Все з лівої", "Так (права)", "Користувачи ± замовлення"],
+        ["RIGHT", "Все з правої", "Так (ліва)", "Замовлення ± користувачи"],
+        ["SELF", "Таблиця до себе", "Залежить", "Ієрархія"]
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Best practices JOIN типи",
+      "items": [
+        { "title": "Явно указуйте тип", "details": ["INNER, не просто JOIN"] },
+        { "title": "LEFT = найчастіше", "details": ["більшість аналітики"] },
+        { "title": "Уникайте RIGHT", "details": ["перепишіть як LEFT"] },
+        { "title": "SELF для ієрархій", "details": ["alias e та m"] },
+        { "title": "Тестуйте NULL результати", "details": ["LEFT може дати NULL"] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Міні ТЗ: знайти без замовлень",
+      "text": "Користувачи які так і не замовили.",
+      "items": ["LEFT JOIN orders", "WHERE orders.id IS NULL"]
+    },
+    {
+      "type": "code-example",
+      "title": "Комплексна анализа",
+      "description": "Розраховуємо середні рядка",
+      "language": "sql",
+      "code": "SELECT \n  u.name,\n  COUNT(o.id) AS order_count,\n  AVG(o.amount) AS avg_order\nFROM users u\nLEFT JOIN orders o ON u.id = o.user_id\nGROUP BY u.id\nHAVING COUNT(o.id) > 0\nORDER BY order_count DESC;"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "INNER: спільні, LEFT: все з лівої, RIGHT: все з правої",
+        "SELF: таблиця з собою для ієрархій",
+        "LEFT найпопулярніший у аналітиці"
+      ],
+      "note": "Далі — MLOps та інтеграція ML з БД"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 17: MLOps & Databases",
+      "resources": [
+        { "title": "SQL JOIN cheat sheet", "url": "https://blog.codinghorror.com/a-visual-explanation-of-sql-joins/" },
+        { "title": "JOIN performance tips", "url": "https://use-the-index-luke.com/sql/join" }
+      ],
+      "homework": [
+        "Напишіть INNER, LEFT, RIGHT JOIN на одних даних",
+        "Порівняйте результати",
+        "Знайдіть користувачів БЕЗ замовлень (LEFT + WHERE NULL)"
+      ]
+    }
+  ]
+}

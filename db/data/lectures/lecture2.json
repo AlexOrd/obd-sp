@@ -1,0 +1,228 @@
+{
+  "track": "db",
+  "lectureNumber": "2",
+  "lectureTitle": "Що таке база даних? Типи та моделі",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 2",
+      "subtitle": "Типи та моделі баз даних",
+      "meta": {
+        "course": "Основи баз даних",
+        "institution": "VTFK • 2025"
+      }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що ми вже знаємо",
+      "previousLecture": "Лекція 1: Огляд курсу",
+      "items": [
+        "Навіщо потрібні СУБД замість файлів",
+        "Перший SELECT та компоненти СУБД",
+        "Практика: створення простої таблиці students"
+      ]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": [
+        "Визначення БД та роль СУБД",
+        "Класифікація моделей: реляційні, NoSQL, об'єктні",
+        "Коли яку модель обирати",
+        "Міні-демо та домашнє завдання"
+      ],
+      "note": "Фокус: зрозуміти різні моделі зберігання"
+    },
+    {
+      "type": "content",
+      "title": "Проблематика",
+      "text": "Один формат не підходить для всіх задач: різні обсяги, структури та вимоги до консистентності.",
+      "items": [
+        "Excel/CSV не дають транзакцій та масштабування",
+        "Реляційні БД сильні в структурованих даних",
+        "Документні/ключ-значення простіші для гнучких схем"
+      ]
+    },
+    {
+      "type": "definition",
+      "title": "Що таке база даних?",
+      "term": "Database",
+      "definition": "Організована колекція даних, якою керує СУБД для збереження, пошуку, оновлення та захисту інформації за правилами моделі даних.",
+      "analogy": "Як склад із полицями: модель визначає, як розкладені коробки (рядки/документи), та як ми їх знаходимо."
+    },
+    {
+      "type": "diagram",
+      "title": "Класифікація моделей",
+      "description": "Основні типи баз даних",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart TB; DB[Бази даних]-->R[Реляційні (SQL)]; DB-->D[Документні]; DB-->KV[Ключ-значення]; DB-->C[Колонкові]; DB-->G[Графові]; DB-->O[Об'єктні];"
+    },
+    {
+      "type": "syntax",
+      "title": "Базовий CRUD у реляційній БД",
+      "syntax": "CREATE TABLE products (...);\nINSERT INTO products (...) VALUES (...);\nSELECT * FROM products WHERE ...;\nUPDATE products SET ... WHERE ...;\nDELETE FROM products WHERE ...;",
+      "parts": [
+        { "part": "CREATE", "description": "створюємо схему" },
+        { "part": "INSERT", "description": "додаємо дані" },
+        { "part": "SELECT", "description": "читаємо дані" },
+        { "part": "UPDATE", "description": "оновлюємо" },
+        { "part": "DELETE", "description": "видаляємо" }
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "Реляційна модель (ER)",
+      "description": "Таблиці, ключі та зв'язки",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nerDiagram\n  PRODUCTS ||--o{ ORDERS : містить\n  CUSTOMERS ||--o{ ORDERS : робить\n  PRODUCTS {\n    int id PK\n    string name\n    decimal price\n  }\n  CUSTOMERS {\n    int id PK\n    string full_name\n    string email\n  }\n  ORDERS {\n    int id PK\n    int customer_id FK\n    int product_id FK\n    int qty\n  }"
+    },
+    {
+      "type": "code-example",
+      "title": "Приклад: реляційна вставка та вибірка",
+      "description": "Створюємо таблиці та читаємо замовлення",
+      "language": "sql",
+      "code": "CREATE TABLE customers (id INT PRIMARY KEY, full_name TEXT, email TEXT);\nCREATE TABLE products (id INT PRIMARY KEY, name TEXT, price NUMERIC);\nCREATE TABLE orders (id INT PRIMARY KEY, customer_id INT, product_id INT, qty INT);\n\nINSERT INTO customers VALUES (1, 'Олена', 'olena@shop.com');\nINSERT INTO products VALUES (1, 'Ноутбук', 32000);\nINSERT INTO orders VALUES (1, 1, 1, 2);\n\nSELECT c.full_name, p.name, o.qty\nFROM orders o\nJOIN customers c ON o.customer_id = c.id\nJOIN products p ON o.product_id = p.id;"
+    },
+    {
+      "type": "table",
+      "title": "Моделі та коли їх обирати",
+      "headers": ["Модель", "Коли доречна"],
+      "rows": [
+        ["Реляційна", "Структуровані дані, чіткі зв'язки, транзакції"],
+        ["Документна", "Гнучка схема, швидкі ітерації, JSON об'єкти"],
+        ["Ключ-значення", "Кеш, сесії, наднизька латентність"],
+        ["Графова", "Соцмережі, рекомендації, складні зв'язки"],
+        ["Колонкова", "Аналітика, великі агрегації, OLAP"],
+        ["Об'єктна", "Тісна інтеграція з ООП-моделлю додатка"]
+      ]
+    },
+    {
+      "type": "timeline",
+      "title": "Еволюція моделей",
+      "description": "Як змінювалися підходи",
+      "events": [
+        { "year": "1970", "label": "Реляційні", "description": "SQL та реляційна модель" },
+        { "year": "1998", "label": "Об'єктні", "description": "Спроба зблизити БД та ООП" },
+        { "year": "2007", "label": "NoSQL", "description": "Документні, ключ-значення, колонки" },
+        { "year": "2015", "label": "Графові/векторні", "description": "Запити по зв'язках та ембеддингах" }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Продуктивність та обмеження",
+      "text": "Моделі оптимізовані під різні trade-off: консистентність, доступність, масштабування.",
+      "items": [
+        "ACID vs BASE: строгі транзакції проти eventual consistency",
+        "Вертикальне vs горизонтальне масштабування",
+        "Схемність: статична схема проти гнучкої"
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Best practices вибору моделі",
+      "items": [
+        { "title": "Починай з реляційної", "details": ["якщо сумніваєшся"] },
+        { "title": "Міряй складність запитів", "details": ["JOIN/агрегації → реляційні"] },
+        { "title": "Швидкі ітерації схеми", "details": ["JSON-документи для MVP"] },
+        { "title": "Рекомендації/графи", "details": ["графові БД для зв'язків"] },
+        { "title": "Кеш/сесії", "details": ["key-value (Redis)"] }
+      ]
+    },
+    {
+      "type": "common-mistake",
+      "title": "Хибний вибір: NoSQL заради моди",
+      "warning": "Перехід на NoSQL без потреби у гнучкій схемі чи горизонтальному масштабі",
+      "language": "bash",
+      "wrongCode": "# Викидаємо SQL, бо \"модно\"\ndrop database shop;",
+      "wrongExplanation": "Втрачаємо транзакції, валідацію схеми і потрапляємо у хаос даних",
+      "correctCode": "# Спершу вимірюємо потребу\n# Якщо потрібен JSON, але важливі транзакції\n-- PostgreSQL з JSONB може закрити гнучкість без втрати ACID",
+      "correctExplanation": "Обираємо модель під задачу, а не під хайп"
+    },
+    {
+      "type": "quiz",
+      "title": "Перевірка розуміння",
+      "question": "Яку модель обрати для соцмережі з багатьма зв'язками між користувачами?",
+      "options": [
+        { "text": "Реляційну таблицю без індексів", "correct": false },
+        { "text": "Графову базу даних", "correct": true },
+        { "text": "Тільки key-value", "correct": false }
+      ],
+      "explanation": "Графові БД добре обходять зв'язки та короткі шляхи."
+    },
+    {
+      "type": "content",
+      "title": "Міні ТЗ: одна модель не вистачає",
+      "text": "Побудуйте каталог товарів у двох підходах: реляційному та документному.",
+      "items": [
+        "SQL: products, categories, product_categories",
+        "Doc: один документ product з масивом category_ids",
+        "Порівняти витяги списку продуктів за категорією"
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "Проєктування рішення",
+      "description": "Кроки для ТЗ",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart TB; Design[Моделювання SQL/JSON]-->Create[Створення таблиць/колекцій]; Create-->Insert[Завантаження даних]; Insert-->Query[Запити SQL та find()]; Query-->Compare[Порівняння швидкості/зручності];"
+    },
+    {
+      "type": "code-example",
+      "title": "Налаштування середовища",
+      "description": "SQLite + MongoDB (Docker)",
+      "language": "bash",
+      "code": "# SQLite (локально)\nbrew install sqlite\nsqlite3 catalog.db \".databases\"\n\n# MongoDB у Docker\ndocker run -d --name mongo -p 27017:27017 mongo:7\n\n# Перевірка клієнтом\nmongo --eval 'db.runCommand({ ping: 1 })'"
+    },
+    {
+      "type": "live-coding",
+      "title": "Live coding: дві моделі",
+      "description": "Створюємо products у SQL та в Mongo, виконуємо запити",
+      "actionItems": [
+        "CREATE TABLE products ...;",
+        "INSERT декілька рядків",
+        "db.products.insertMany([...])",
+        "db.products.find({ category: 'laptops' })"
+      ]
+    },
+    {
+      "type": "code-breakdown",
+      "title": "Приклад JSON-документа",
+      "language": "javascript",
+      "code": "{\n  \"_id\": 1,\n  \"name\": \"Ноутбук\",\n  \"price\": 32000,\n  \"categories\": [\"electronics\", \"laptops\"],\n  \"specs\": { \"ram\": \"16GB\", \"ssd\": \"512GB\" }\n}",
+      "steps": [
+        "Гнучка схема: можна додати specs без ALTER TABLE",
+        "Категорії в одному документі → швидке читання",
+        "Цілісність лежить на застосунку/валідації"
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Реляційні БД = структура, транзакції, складні запити",
+        "NoSQL моделі = гнучкість і масштабування під конкретні патерни",
+        "Обираємо модель під задачу, а не під тренд"
+      ],
+      "note": "Далі — глибше у реляційну модель"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 3: Векторні бази даних",
+      "resources": [
+        { "title": "PostgreSQL vs MongoDB", "url": "https://www.mongodb.com/compare/mongodb-postgresql" },
+        { "title": "Redis data types", "url": "https://redis.io/docs/latest/develop/data-types/" }
+      ],
+      "homework": [
+        "Зробіть два запити до SQL та Mongo варіантів каталогу",
+        "Порівняйте JSON-документ із результатом JOIN у SQL",
+        "Підготуйте питання до векторних БД"
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Документація та Q&A",
+      "text": "Пишіть питання у спільний документ та канал курсу.",
+      "items": ["Чат: #db-course", "Док: нотатки по моделях", "Issue tracker: фіксуємо проблеми та ідеї"]
+    }
+  ]
+}

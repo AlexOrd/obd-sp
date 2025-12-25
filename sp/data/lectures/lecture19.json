@@ -1,0 +1,111 @@
+{
+  "track": "sp",
+  "lectureNumber": "19",
+  "lectureTitle": "Traits и Generics",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 19",
+      "subtitle": "Traits и Generics"
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Рецензія: Модули",
+      "points": ["Модулі для организації", "pub для видимості", "use для імпортів"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План",
+      "items": ["Generics для поліморфізму", "Traits як інтерфейси", "Trait bounds"]
+    },
+    {
+      "type": "definition",
+      "title": "Generics<T>",
+      "term": "Generics",
+      "definition": "Поліморфні типи. Работают на compile-time з monomorphization."
+    },
+    {
+      "type": "code-example",
+      "title": "Generic функція",
+      "language": "rust",
+      "code": "fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {\n  let mut largest = list[0];\n  for &item in list {\n    if item > largest {\n      largest = item;\n    }\n  }\n  largest\n}\n\nlet numbers = vec![34, 50, 25, 100, 65];\nprintln!(\"{}\", largest(&numbers));  // 100"
+    },
+    {
+      "type": "definition",
+      "title": "Trait",
+      "term": "Trait",
+      "definition": "Інтерфейс, який визначає набір методів. Як interface у Java/Go."
+    },
+    {
+      "type": "code-example",
+      "title": "Trait визначення",
+      "language": "rust",
+      "code": "trait Summary {\n  fn summarize(&self) -> String;\n  fn author(&self) -> String;  // без реалізації\n}\n\nstruct Article {\n  title: String,\n  author: String,\n}\n\nimpl Summary for Article {\n  fn summarize(&self) -> String {\n    format!(\"{} by {}\", self.title, self.author)\n  }\n  fn author(&self) -> String {\n    self.author.clone()\n  }\n}"
+    },
+    {
+      "type": "code-example",
+      "title": "Trait bounds",
+      "language": "rust",
+      "code": "fn print_summary<T: Summary>(item: &T) {\n  println!(\"Breaking news: {}\", item.summarize());\n}\n\nfn print_summaries<T: Summary + Display>(item: &T) {\n  // T мусить мати як Summary так і Display\n}\n\n// Альтернативна синтаксис\nfn print_it(item: &impl Summary) {\n  println!(\"{}\", item.summarize());\n}"
+    },
+    {
+      "type": "list",
+      "title": "Стандартні Traits",
+      "items": [
+        { "title": "Clone", "details": ["Cloning значення"] },
+        { "title": "Copy", "details": ["Trivial copy"] },
+        { "title": "Display", "details": ["String representation"] },
+        { "title": "Debug", "details": ["Debug output {:?}"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Derive для traits",
+      "language": "rust",
+      "code": "#[derive(Debug, Clone, PartialEq)]\nstruct Person {\n  name: String,\n  age: u32,\n}\n\nlet p1 = Person { name: \"Alice\".into(), age: 30 };\nlet p2 = p1.clone();\n\nprintln!(\"{:?}\", p2);  // Debug output"
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 1",
+      "question": "Чим Trait відрізняється від Struct?",
+      "options": [
+        { "text": "Trait це інтерфейс, Struct - дані", "correct": true },
+        { "text": "Нічим не відрізняються", "correct": false },
+        { "text": "Trait швидше", "correct": false }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 2",
+      "question": "Що означає <T: Summary>?",
+      "options": [
+        { "text": "T мусить реалізовувати Summary", "correct": true },
+        { "text": "T є Summary", "correct": false },
+        { "text": "T наслідує Summary", "correct": false }
+      ]
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: Забув trait bound",
+      "wrong": "fn print_it<T>(item: T) {\n  println!(\"{}\", item);  // ERROR: T не реалізує Display\n}",
+      "right": "fn print_it<T: Display>(item: T) {\n  println!(\"{}\", item);  // OK: T має Display\n}\n\nuse std::fmt::Display;"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Generics: поліморфізм типів",
+        "Traits: інтерфейси для контрактів",
+        "Trait bounds: обмеження generics",
+        "Zero-cost abstraction на compile-time"
+      ]
+    },
+    {
+      "type": "next-steps",
+      "title": "Далі",
+      "nextLecture": "Лекція 20: Многопотоковість (Multithreading)"
+    }
+  ]
+}

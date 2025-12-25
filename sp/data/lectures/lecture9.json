@@ -1,0 +1,154 @@
+{
+  "track": "sp",
+  "lectureNumber": "9",
+  "lectureTitle": "Вступ до Rust",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 9",
+      "subtitle": "Вступ до Rust: Переваги, філософія, Cargo та Codespaces",
+      "meta": { "course": "Спеціалізовані мови програмування", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 8: Адресація пам'яті",
+      "items": ["Assembly бази: MOV, ADD, CMP", "Прапорці та умовні переходи", "Робота з пам'яттю та регістрами"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": [
+        "Rust: історія та філософія",
+        "Порівняння C vs Rust",
+        "Cargo: менеджер проектів",
+        "Встановлення та Hello World"
+      ],
+      "note": "Фокус: вивчати мову вищого рівня з безпекою"
+    },
+    {
+      "type": "definition",
+      "title": "Rust",
+      "term": "Rust Programming Language",
+      "definition": "Системна мова з гарантіями безпеки пам'яті без垃圾 збирача. Компілюється в машинний код як C, але з більшою безпекою.",
+      "analogy": "Як C++ , але без UB (Undefined Behavior) — 'Безпечніший C без втрати швидкості'"
+    },
+    {
+      "type": "diagram",
+      "title": "Rust в ландшафті мов",
+      "description": "Безпека vs Контроль",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR\n  SAFE[\"Безпечні<br/>Python, Java\"] \n  RUST[\"Rust<br/>Системна<br/>Безпечна\"]\n  FAST[\"Швидкі<br/>C, C++\"] \n  \n  SAFE -->|Потрібна<br/>швидкість| RUST\n  FAST -->|Потрібна<br/>безпека| RUST\n  \n  style RUST fill:#FFE5E5\n  style SAFE fill:#E5F3FF\n  style FAST fill:#E5FFE5"
+    },
+    {
+      "type": "table",
+      "title": "Rust vs C: порівняння",
+      "headers": ["Аспект", "C", "Rust"],
+      "rows": [
+        ["Швидкість", "Найшвидша", "Рівна C"],
+        ["Безпека пам'яті", "Ручна", "Автоматична (ownership)"],
+        ["Buffer overflow", "Можливий", "Неможливий"],
+        ["Null pointer", "Можливий", "Не існує null"],
+        ["Потоки", "Race conditions", "Type-safe (Send/Sync)"],
+        ["Крива навчання", "Середня", "Висока"]
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Філософія Rust",
+      "text": "Три стовпи",
+      "items": [
+        "Безпека (Safety): запобігання помилкам на этапі компіляції",
+        "Швидкість (Speed): як C, без垃圾 збирача",
+        "Паралелізм (Concurrency): безпечна багатопоточність"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Rust vs C: простий приклад",
+      "description": "Hello World",
+      "language": "rust",
+      "code": "// Rust\nfn main() {\n    let name = \"World\";\n    println!(\"Hello, {}!\", name);\n}\n\n// Компілюється в machine code, як C\n// Але типи перевіряються на compile-time"
+    },
+    {
+      "type": "content",
+      "title": "Встановлення Rust",
+      "text": "Три кроки",
+      "items": [
+        "1. Перейти на https://www.rust-lang.org",
+        "2. Запустити: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh",
+        "3. Перевірити: rustc --version"
+      ]
+    },
+    {
+      "type": "definition",
+      "title": "Cargo",
+      "term": "Cargo",
+      "definition": "Менеджер пакетів та система збірки для Rust. Як npm для JavaScript, pip для Python.",
+      "analogy": "Як Makefile на стероїдах: керує залежностями, версіями, тестами"
+    },
+    {
+      "type": "code-example",
+      "title": "Cargo: основні команди",
+      "description": "Щодня використовується",
+      "language": "bash",
+      "code": "# Створити проект\ncargo new hello_rust\ncd hello_rust\n\n# Збудувати\ncargo build\n\n# Запустити\ncargo run\n\n# Релізну версію (оптимізована)\ncargo build --release\n\n# Тестувати\ncargo test"
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Що таке 'ownership' в Rust?",
+      "options": [
+        { "text": "Гарантія, що тільки один власник змінної в раз", "correct": true },
+        { "text": "Як GC в Python", "correct": false },
+        { "text": "Object-oriented концепція", "correct": false }
+      ],
+      "explanation": "Ownership — це система, яка гарантує, що пам'ять звільняється правильно, без垃圾 збирача."
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: очікувати C синтаксис",
+      "warning": "Rust вимагає перевірок на compile-time",
+      "language": "rust",
+      "wrongCode": "fn main() {\n    let x = 5;\n    println!(\"{}\", x);\n    println!(\"{}\", x);  // Скопіює int\n    // x.clone() непотрібна для чисел\n}",
+      "wrongExplanation": "Rust копіює примітивні типи автоматично",
+      "correctCode": "fn main() {\n    let x = 5;\n    println!(\"{}\", x);\n    println!(\"{}\", x);  // Все працює\n    \n    // Для String: потрібне клонування\n    let s = String::from(\"hello\");\n    let s2 = s.clone();  // Явне клонування\n}",
+      "correctExplanation": "Copy types (int, bool) копіюються; String переміщується"
+    },
+    {
+      "type": "list",
+      "title": "Переваги Rust над C",
+      "items": [
+        { "title": "Buffer overflow", "details": ["Неможливий за умови компіляції"] },
+        { "title": "Null pointer dereference", "details": ["Запобіжено Option<T>"] },
+        { "title": "Race conditions", "details": ["Тип-система запобігає"] },
+        { "title": "Memory leaks", "details": ["Ownership гарантує звільнення"] }
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Rust: C-рівень швидкості + безпека",
+        "Cargo: повне управління залежностями",
+        "Ownership: гарантія правильної пам'яті"
+      ],
+      "note": "Далі — базовий синтаксис: змінні, типи, функції"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 10: Базовий синтаксис Rust",
+      "resources": [
+        { "title": "The Rust Book", "url": "https://doc.rust-lang.org/book/" },
+        { "title": "Cargo Manual", "url": "https://doc.rust-lang.org/cargo/" }
+      ],
+      "homework": [
+        "Встанови Rust (rustup)",
+        "Створи проект: cargo new my_first_rust",
+        "Напиши Hello World та запусти: cargo run"
+      ]
+    }
+  ]
+}

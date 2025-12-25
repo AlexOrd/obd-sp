@@ -1,0 +1,154 @@
+{
+  "track": "sp",
+  "lectureNumber": "7",
+  "lectureTitle": "Інструкція CMP та прапорці",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 7",
+      "subtitle": "Інструкція CMP та основи прапорців (ZF, SF)",
+      "meta": { "course": "Спеціалізовані мови програмування", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 6: Арифметичні інструкції",
+      "items": ["ADD, SUB, INC, DEC операції", "Прапорці: ZF, CF, OF, SF", "Встановлення прапорців"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["CMP: порівняння двох чисел", "Прапорці ZF, SF, CF детально", "Умовні переходи", "Таблиця мнемоніків"],
+      "note": "Фокус: умовна логіка в Assembly"
+    },
+    {
+      "type": "definition",
+      "title": "Інструкція CMP",
+      "term": "CMP (Compare)",
+      "definition": "Порівняння: обчислює (rax - rbx), встановлює прапорці, але не зберігає результат. Як SUB, але без зміни операндів.",
+      "analogy": "Як шкала для вимірювання: знаємо результат, але не змінюємо предмет"
+    },
+    {
+      "type": "content",
+      "title": "CMP: синтаксис",
+      "text": "Не змінює операнди, тільки прапорці",
+      "items": [
+        "cmp rax, rbx: якщо rax > rbx → ZF=0, CF=0",
+        "cmp rax, rbx: якщо rax = rbx → ZF=1, CF=0",
+        "cmp rax, rbx: якщо rax < rbx → ZF=0, CF=1"
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "CMP та прапорці",
+      "description": "Таблиця результатів",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR\n  CMP[\"cmp rax, rbx\"] --> COMPUTE[\"(rax - rbx)\"]\n  COMPUTE --> GT{\"rax > rbx?\"}\n  GT -->|Так| ZF0CF0[\"ZF=0, CF=0\"]\n  GT -->|Ні| EQUAL{\"rax = rbx?\"}\n  EQUAL -->|Так| ZF1[\"ZF=1\"]\n  EQUAL -->|Ні| LT[\"rax < rbx\"]\n  LT --> ZF0CF1[\"ZF=0, CF=1\"]\n  \n  style ZF0CF0 fill:#E5FFE5\n  style ZF1 fill:#FFE5E5\n  style ZF0CF1 fill:#FFE5E5"
+    },
+    {
+      "type": "table",
+      "title": "CMP результати та прапорці",
+      "headers": ["Умова", "ZF", "CF", "SF", "Умовний перехід"],
+      "rows": [
+        ["rax = rbx", "1", "0", "0", "JE (Jump if Equal)"],
+        ["rax ≠ rbx", "0", "0", "-", "JNE (Jump if Not Equal)"],
+        ["rax > rbx (unsigned)", "0", "0", "-", "JA (Jump if Above)"],
+        ["rax < rbx (unsigned)", "0", "1", "-", "JB (Jump if Below)"],
+        ["rax >= rbx (signed)", "0 або 1", "-", "0", "JGE (Jump if Greater Equal)"],
+        ["rax < rbx (signed)", "-", "-", "1", "JL (Jump if Less)"]
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "CMP: приклад 1 — рівність",
+      "description": "Перевіря чи два числа рівні",
+      "language": "nasm",
+      "code": "mov rax, 10\nmov rbx, 10\ncmp rax, rbx        ; 10 - 10 = 0, ZF = 1\nje equal_label      ; Перейти, бо ZF = 1\nmov rcx, 0\njmp done\nequal_label:\nmov rcx, 1\ndone:\n; rcx = 1 (числа рівні)"
+    },
+    {
+      "type": "code-example",
+      "title": "CMP: приклад 2 — більше/менше",
+      "description": "Порівняння без знаку",
+      "language": "nasm",
+      "code": "mov rax, 50\nmov rbx, 30\ncmp rax, rbx        ; 50 - 30 = 20 > 0, ZF=0, CF=0\nja greater_label    ; JA (Jump if Above, unsigned)\njmp not_greater\ngreater_label:\nmov rcx, 1          ; rax > rbx\njmp done\nnot_greater:\nmov rcx, 0\ndone:"
+    },
+    {
+      "type": "list",
+      "title": "Умовні переходи (після CMP)",
+      "items": [
+        { "title": "JE / JZ", "details": ["Перейти якщо рівне / якщо ZF=1"] },
+        { "title": "JNE / JNZ", "details": ["Перейти якщо не рівне / якщо ZF=0"] },
+        { "title": "JA / JNBE", "details": ["Перейти якщо більше (без знаку)"] },
+        { "title": "JB / JNAE", "details": ["Перейти якщо менше (без знаку)"] },
+        { "title": "JG / JNLE", "details": ["Перейти якщо більше (зі знаком)"] },
+        { "title": "JL / JNGE", "details": ["Перейти якщо менше (зі знаком)"] }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Яка різниця між JA і JG?",
+      "options": [
+        { "text": "JA для беззнакових, JG для зі знаком", "correct": true },
+        { "text": "Немає різниці", "correct": false },
+        { "text": "JG швидше", "correct": false }
+      ],
+      "explanation": "JA: рай боюн, -1 > 2 якщо беззнакові. JG: звичайна математика, -1 < 2."
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: мішати JA та JG",
+      "warning": "Вибір неправильного флага дає неправильний результат",
+      "language": "nasm",
+      "wrongCode": "mov rax, -5    ; -5 як беззнакове = 0xFFFFFFFFFFFFFFFB (велике число)\nmov rbx, 3\ncmp rax, rbx\nja greater     ; ПОМИЛКА: -5 як беззнакове > 3",
+      "wrongExplanation": "JA порівнює як беззнакові, тому -5 сприймається як величезне число",
+      "correctCode": "mov rax, -5\nmov rbx, 3\ncmp rax, rbx\njl less        ; JL правильно: -5 < 3 (зі знаком)",
+      "correctExplanation": "JL перевіряє SF (знак бітів), дає правильний результат"
+    },
+    {
+      "type": "code-example",
+      "title": "Програма: максимум двох чисел",
+      "description": "CMP + условний перехід",
+      "language": "nasm",
+      "code": "section .data\n    a dd 42\n    b dd 17\n\nsection .text\n    global main\nmain:\n    mov rax, [rel a]    ; rax = 42\n    mov rbx, [rel b]    ; rbx = 17\n    cmp rax, rbx\n    jg a_greater        ; a > b?\na_greater:\n    ; rax уже максимум\n    ret"
+    },
+    {
+      "type": "content",
+      "title": "Три режими порівняння",
+      "text": "Залежно від типу даних",
+      "items": [
+        "Беззнакові (unsigned): JA, JB, JAE, JBE (більше/менше базові)",
+        "Зі знаком (signed): JG, JL, JGE, JLE (більше/менше математичні)",
+        "Рівність: JE, JNE (без різниці)"
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "CMP: порівняння без зміни операндів",
+        "ZF=1: рівність, ZF=0: нерівність",
+        "JA vs JG: вибір залежить від знаку чисел"
+      ],
+      "note": "Далі — адресація пам'яті: [базис + індекс + зміщення]"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 8: Адресація пам'яті",
+      "resources": [
+        { "title": "x86-64 Jump Instructions", "url": "https://www.felixcloutier.com/x86/jcc" },
+        {
+          "title": "FLAGS Register Deep Dive",
+          "url": "https://stackoverflow.com/questions/13514064/what-do-flags-do-in-assembly"
+        }
+      ],
+      "homework": [
+        "Напиши програму: порівняй два числа з .data, встанови результат в регістр",
+        "Експериментуй з JA та JG для від'ємних чисел",
+        "Дослідж прапорці у gdb: рах af cf of sf zf пф"
+      ]
+    }
+  ]
+}

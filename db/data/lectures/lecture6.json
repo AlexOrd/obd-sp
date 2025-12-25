@@ -1,0 +1,211 @@
+{
+  "track": "db",
+  "lectureNumber": "6",
+  "lectureTitle": "Вступ до SQL: декларативний підхід",
+  "courseTitle": "Основи баз даних",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 6",
+      "subtitle": "Вступ до SQL: декларативний підхід",
+      "meta": { "course": "Основи баз даних", "institution": "VTFK • 2025" }
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Що вже вивчили",
+      "previousLecture": "Лекція 5: Типи даних",
+      "items": ["INT, VARCHAR, DECIMAL, DATE", "CREATE TABLE з обмеженнями", "Вибір типу за природою даних"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План лекції",
+      "items": ["SQL як декларативна мова", "Структура SELECT запиту", "FROM та його логіка", "Перший живий запит"],
+      "note": "Фокус: как розказати БД ЧТО треба, а не КАК робити"
+    },
+    {
+      "type": "content",
+      "title": "Декларативний vs Імперативний",
+      "text": "SQL каже ЧТО ви хочете, а не як це знайти.",
+      "items": [
+        "Імперативно (Python): напишіть цикл, порівняйте кожний рядок",
+        "Декларативно (SQL): 'дай мне рядки де age > 18'",
+        "БД сама оптимізує виконання"
+      ]
+    },
+    {
+      "type": "definition",
+      "title": "SQL",
+      "term": "Structured Query Language",
+      "definition": "Мова запитів для отримання, вставки, оновлення та видалення даних у СУБД.",
+      "analogy": "Як звернення до вчителя: ви говорите, що треба, учитель виконує найоптимальнішим способом"
+    },
+    {
+      "type": "diagram",
+      "title": "Цикл SQL запиту",
+      "description": "Від формулювання до результату",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart LR\n  Write[Напишіть запит] --> Parse[Парсинг]\n  Parse --> Plan[Query planner]\n  Plan --> Optimize[Оптимізація]\n  Optimize --> Exec[Виконання]\n  Exec --> Return[Повернення рядків]"
+    },
+    {
+      "type": "syntax",
+      "title": "Базовий SELECT",
+      "syntax": "SELECT column1, column2, ...\nFROM table_name;",
+      "parts": [
+        { "part": "SELECT", "description": "які колонки показати" },
+        { "part": "FROM", "description": "з якої таблиці брати дані" },
+        { "part": ";", "description": "кінець запиту" }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Що робить SELECT",
+      "text": "Читає дані з таблиці та повертає підмножину колонок.",
+      "items": [
+        "SELECT * = усі колонки",
+        "SELECT column1, column3 = вибір специфічних колонок",
+        "Порядок колонок у результаті = порядок у SELECT"
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Компоненти запиту",
+      "items": [
+        { "title": "SELECT", "details": ["повинна бути", "проектування даних"] },
+        { "title": "FROM", "details": ["потрібна для читання", "указує таблицю"] },
+        { "title": "WHERE", "details": ["опціональна", "фільтрація рядків"] },
+        { "title": "ORDER BY", "details": ["опціональна", "сортування результатів"] },
+        { "title": "LIMIT", "details": ["опціональна", "обмеження рядків"] }
+      ]
+    },
+    {
+      "type": "diagram",
+      "title": "Рух даних крізь SELECT",
+      "description": "Таблиця → результат",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\nflowchart TD\n  Table[(Таблиця<br/>100 рядків,<br/>10 колонок)]\n  Table -->|FROM| ReadAll[Прочитати все]\n  ReadAll -->|WHERE| Filter[Відфільтрувати]\n  Filter -->|SELECT| Project[Вибрати колонки]\n  Project -->|ORDER BY| Sort[Сортувати]\n  Sort -->|LIMIT| Limit[Обмежити рядки]\n  Limit -->|return| Result[Результат<br/>N рядків,<br/>M колонок]"
+    },
+    {
+      "type": "code-example",
+      "title": "Перший запит",
+      "description": "Вибираємо все з таблиці users",
+      "language": "sql",
+      "code": "SELECT * FROM users;"
+    },
+    {
+      "type": "content",
+      "title": "Коментарі у SQL",
+      "text": "Важливо документувати складні запити.",
+      "items": [
+        "-- однорядковий коментар",
+        "/* багаторядковий\n   коментар */",
+        "Коментарі не виконуються, тільки запит"
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Приклад з коментарями",
+      "description": "Вибираємо ID та ім'я користувачів",
+      "language": "sql",
+      "code": "-- Отримуємо активних користувачів\nSELECT \n  id,           -- унікальний ідентифікатор\n  name,         -- повне ім'я\n  email         -- контактний email\nFROM users;  -- вся таблиця користувачів"
+    },
+    {
+      "type": "table",
+      "title": "Клавіші SQL (키워드)",
+      "headers": ["Ключове слово", "Тип", "Приклад"],
+      "rows": [
+        ["SELECT", "Clause", "SELECT col1, col2"],
+        ["FROM", "Clause", "FROM table_name"],
+        ["WHERE", "Clause", "WHERE age > 18"],
+        ["ORDER BY", "Clause", "ORDER BY name ASC"],
+        ["AND", "Оператор", "col1 > 10 AND col2 < 20"],
+        ["*", "Спеціальний", "SELECT * (усе)"]
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Міні-вікторина",
+      "question": "Що робить SELECT * FROM users?",
+      "options": [
+        { "text": "Видаляє всіх користувачів", "correct": false },
+        { "text": "Читає всі колонки та рядки з users", "correct": true },
+        { "text": "Створює нову таблицю", "correct": false }
+      ],
+      "explanation": "SELECT читає, не модифікує. * означає всі колонки."
+    },
+    {
+      "type": "common-mistake",
+      "title": "Помилка: забути FROM",
+      "warning": "SELECT без FROM = синтаксична помилка",
+      "language": "sql",
+      "wrongCode": "SELECT id, name;  -- звідки взяти?",
+      "wrongExplanation": "БД не знає, з якої таблиці брати",
+      "correctCode": "SELECT id, name FROM users;",
+      "correctExplanation": "Явно указуємо таблицю"
+    },
+    {
+      "type": "timeline",
+      "title": "Історія SQL",
+      "description": "Від 1970-х до сьогодні",
+      "events": [
+        { "year": "1974", "label": "SEQUEL", "description": "Першою версія от IBM" },
+        { "year": "1986", "label": "SQL-86", "description": "Стандарт ANSI/ISO" },
+        { "year": "1999", "label": "SQL:1999", "description": "Додано OOP розширення" },
+        { "year": "2011", "label": "SQL:2011", "description": "JSON, віконні функції" },
+        { "year": "2025", "label": "Сьогодні", "description": "SQL + AI (vector search)" }
+      ]
+    },
+    {
+      "type": "list",
+      "title": "Best practices для SELECT",
+      "items": [
+        { "title": "Указуйте конкретні колонки", "details": ["SELECT id, name, не SELECT *"] },
+        { "title": "Форматуйте запити", "details": ["новий рядок для кожного блока"] },
+        { "title": "Коментуйте складні фільтри", "details": ["WHERE (a > 10 AND b < 20) -- діапазон"] },
+        { "title": "Тестуйте малими даними", "details": ["LIMIT 10 спочатку"] },
+        { "title": "Вивчайте EXPLAIN план", "details": ["EXPLAIN SELECT ..."] }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Міні ТЗ: перший запит",
+      "text": "З таблиці students отримайте ID та name.",
+      "items": ["Формулюємо SELECT від FROM", "Вибираємо конкретні колонки", "Виконуємо та бачимо результат"]
+    },
+    {
+      "type": "diagram",
+      "title": "Структура таблиці students",
+      "description": "Приклад даних",
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ntable\n  title Students Table\n  Students\n  id int\n  name varchar\n  email varchar\n  age int"
+    },
+    {
+      "type": "code-example",
+      "title": "Live: запит до students",
+      "description": "Гарна практика",
+      "language": "sql",
+      "code": "-- Отримуємо базову інформацію про студентів\nSELECT \n  id,\n  name,\n  email\nFROM students;\n\n-- або скорочено\nSELECT id, name, email FROM students;"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "SQL декларативна — каже ЧТО треба, не КАК",
+        "SELECT указує колонки, FROM указує таблицю",
+        "LIMIT, WHERE, ORDER BY прилаштовують результат"
+      ],
+      "note": "Далі — функції та вираження у SELECT"
+    },
+    {
+      "type": "next-steps",
+      "title": "Домашнє завдання",
+      "nextLecture": "Лекція 7: SELECT та вбудовані функції",
+      "resources": [
+        { "title": "SQL basics", "url": "https://sqlzoo.net/" },
+        { "title": "SQLite SELECT", "url": "https://www.sqlite.org/lang_select.html" }
+      ],
+      "homework": [
+        "Написати 5 простих SELECT запитів",
+        "Спробувати SELECT * та SELECT col1, col2",
+        "Додати коментарі до кожного запиту"
+      ]
+    }
+  ]
+}

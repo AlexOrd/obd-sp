@@ -1,0 +1,115 @@
+{
+  "track": "sp",
+  "lectureNumber": "23",
+  "lectureTitle": "Docker Compose для оркестрації",
+  "courseTitle": "Спеціалізовані мови програмування",
+  "year": "2025",
+  "slides": [
+    {
+      "type": "title",
+      "title": "ЛЕКЦІЯ 23",
+      "subtitle": "Docker Compose для оркестрації"
+    },
+    {
+      "type": "previous-lecture",
+      "title": "Рецензія: Dockerfile",
+      "points": ["Dockerfile синтаксис", "Шари та кеш", "Best practices для розміру"]
+    },
+    {
+      "type": "roadmap",
+      "title": "План",
+      "items": ["Docker Compose основи", "Services та networking", "Практичні приклади"]
+    },
+    {
+      "type": "definition",
+      "title": "Docker Compose",
+      "term": "Docker Compose",
+      "definition": "Інструмент для визначення й запуску багатоконтейнерних додатків (YAML файл)."
+    },
+    {
+      "type": "code-example",
+      "title": "docker-compose.yml приклад",
+      "language": "yaml",
+      "code": "version: '3.8'\n\nservices:\n  web:\n    build: .\n    ports:\n      - \"8000:8000\"\n    depends_on:\n      - db\n    environment:\n      - DB_HOST=db\n\n  db:\n    image: postgres:15\n    volumes:\n      - db_data:/var/lib/postgresql/data\n    environment:\n      - POSTGRES_DB=mydb\n\nvolumes:\n  db_data:"
+    },
+    {
+      "type": "definition",
+      "title": "Service",
+      "term": "Service",
+      "definition": "Контейнер у Compose файлі. Має своє ім'я, конфігурацію, порти."
+    },
+    {
+      "type": "list",
+      "title": "Основні команди",
+      "items": [
+        { "title": "docker-compose up", "details": ["Запустити всі сервіси"] },
+        { "title": "docker-compose down", "details": ["Зупинити та видалити"] },
+        { "title": "docker-compose logs", "details": ["Переглянути логи"] },
+        { "title": "docker-compose exec", "details": ["Виконати команду в контейнері"] }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Networking у Compose",
+      "language": "yaml",
+      "code": "version: '3.8'\n\nservices:\n  app:\n    image: myapp:latest\n    networks:\n      - mynet\n    depends_on:\n      - redis\n\n  redis:\n    image: redis:7\n    networks:\n      - mynet\n\nnetworks:\n  mynet:\n    driver: bridge"
+    },
+    {
+      "type": "code-example",
+      "title": "Volumes для персистенції",
+      "language": "yaml",
+      "code": "services:\n  db:\n    image: postgres:15\n    volumes:\n      # Named volume\n      - db_data:/var/lib/postgresql/data\n      # Bind mount\n      - ./sql_init:/docker-entrypoint-initdb.d\n\nvolumes:\n  db_data:"
+    },
+    {
+      "type": "list",
+      "title": "Compose файл секції",
+      "items": [
+        { "title": "version", "details": ["Версія синтаксису"] },
+        { "title": "services", "details": ["Контейнери"] },
+        { "title": "volumes", "details": ["Персистентні дані"] },
+        { "title": "networks", "details": ["Мережева комунікація"] }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 1",
+      "question": "Який файл потрібен для Docker Compose?",
+      "options": [
+        { "text": "docker-compose.yml", "correct": true },
+        { "text": "Dockerfile", "correct": false },
+        { "text": "docker.conf", "correct": false }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "Запитання 2",
+      "question": "Як контейнери спілкуються в Compose?",
+      "options": [
+        { "text": "По імені сервісу", "correct": true },
+        { "text": "По IP адресі", "correct": false },
+        { "text": "Не можуть", "correct": false }
+      ]
+    },
+    {
+      "type": "code-example",
+      "title": "Dockerfile + Compose",
+      "language": "bash",
+      "code": "# Структура проекту\nproject/\n  Dockerfile\n  docker-compose.yml\n  app.py\n  requirements.txt\n\n# Запустити\ndocker-compose up --build\n\n# Перевірити логи\ndocker-compose logs -f app"
+    },
+    {
+      "type": "summary",
+      "title": "Підсумки",
+      "items": [
+        "Compose для многоконтейнерних додатків",
+        "YAML файл визначає архітектуру",
+        "Services, volumes, networks",
+        "Локальна розробка та production"
+      ]
+    },
+    {
+      "type": "next-steps",
+      "title": "Курс завершено!",
+      "nextLecture": "Всі 23 лекції засвоєні. Чудово!"
+    }
+  ]
+}
