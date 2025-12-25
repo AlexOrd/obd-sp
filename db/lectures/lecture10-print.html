@@ -1,4 +1,297 @@
-<!doctype html><html lang="uk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Лекція 10: Магія Порожнечі! Як приборкати NULL у SQL | Основи баз даних</title><meta name="description" content="Лекція 10: Магія Порожнечі! Як приборкати NULL у SQL. Курс: Основи баз даних. Викладач: Ординський Олександр, ВТФК Вінниця"><meta name="keywords" content="Магія Порожнечі! Як приборкати NULL у SQL, Основи баз даних, бази даних, SQL, програмування, лекція, ВТФК"><meta name="author" content="Alex Ordynski"><meta name="robots" content="index, follow"><meta property="og:title" content="Лекція 10: Магія Порожнечі! Як приборкати NULL у SQL"><meta property="og:description" content="Основи баз даних. Викладач: Ординський Олександр, ВТФК Вінниця"><meta property="og:type" content="article"><meta property="og:locale" content="uk_UA"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Лекція 10: Магія Порожнечі! Як приборкати NULL у SQL"><meta name="twitter:description" content="Основи баз даних"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=EB+Garamond:wght@400;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="../css/harry-potter-theme.css"></head><body><div class="reveal"><div class="slides"><section><h1 class="glitch" data-text="ЛЕКЦІЯ 10">ЛЕКЦІЯ 10</h1><h2>Магія Порожнечі! 🌌</h2><p style="margin-top:30px;color:var(--cyber-magenta)"><strong>Як приборкати NULL у SQL</strong></p><p style="margin-top:20px;color:var(--cyber-yellow)"><strong>Основи баз даних та спеціалізовані мови програмування</strong></p><p style="color:var(--cyber-cyan);margin-top:15px"><em>Ординський Олександр • викладач</em></p><p style="color:var(--cyber-cyan)"><em>ВТФК • Вінниця • 2025</em></p><p style="color:var(--cyber-light);opacity:.7;margin-top:15px">2025</p></section><section><h2><svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:12px"><path d="M3,6 L3,10 L7,10 L7,6 Z M10,4 L10,12 L14,12 L14,4 Z M17,8 L17,14 L21,14 L21,8 Z" fill="#fcee0a"/><rect x="3" y="18" width="18" height="2" fill="#00f0ff"/></svg> 🎯 Наша мета сьогодні</h2><div style="margin-top:40px"><ul style="list-style:none;font-size:1.2em;line-height:2;padding-left:0"><li style="display:flex;align-items:center;gap:15px;margin-bottom:10px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2"/><polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2"/></svg> <span>🔮 Зрозуміти фундаментальну концепцію NULL</span></li><li style="display:flex;align-items:center;gap:15px;margin-bottom:10px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2"/><polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2"/></svg> <span>🪄 Опанувати закляття IS NULL для пошуку</span></li><li style="display:flex;align-items:center;gap:15px;margin-bottom:10px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2"/><polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2"/></svg> <span>✨ Опанувати закляття COALESCE для заміни</span></li><li style="display:flex;align-items:center;gap:15px;margin-bottom:10px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2"/><polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2"/></svg> <span>🛡️ Опанувати закляття NULLIF для захисту</span></li></ul></div></section><section><h2><svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:12px"><rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2"/><path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2"/><rect x="13" y="15" width="6" height="2" fill="#fcee0a"/></svg> 🧠 Чари-розминка (1&#x2F;2)</h2><p style="margin-bottom:20px;color:var(--cyber-cyan);display:flex;align-items:center;gap:10px"><svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink:0"><rect x="4" y="4" width="16" height="16" fill="#00f0ff"/><rect x="8" y="8" width="8" height="8" fill="#0a0a0f"/></svg> Питання: Яким закляттям (командою) ми відфільтруємо всіх студентів з факультету 'Gryffindor' (де house_id = 1)?</p><pre style="font-size:1.15em"><code class="language-sql">SELECT * FROM students WHERE ... ? ...;</code></pre></section><section><h2><svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:12px"><rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2"/><path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2"/><rect x="13" y="15" width="6" height="2" fill="#fcee0a"/></svg> 🧠 Чари-розминка (2&#x2F;2)</h2><p style="margin-bottom:20px;color:var(--cyber-cyan);display:flex;align-items:center;gap:10px"><svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink:0"><rect x="4" y="4" width="16" height="16" fill="#00f0ff"/><rect x="8" y="8" width="8" height="8" fill="#0a0a0f"/></svg> Питання: Як порахувати загальну кількість студентів у таблиці students?</p><pre style="font-size:1.15em"><code class="language-sql">SELECT ... ? ... FROM students;</code></pre></section><section><h2><svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:12px"><rect x="3" y="3" width="18" height="18" fill="none" stroke="#fcee0a" stroke-width="2"/><rect x="7" y="7" width="4" height="4" fill="#00f0ff"/><rect x="13" y="7" width="4" height="4" fill="#ff00ff"/><rect x="7" y="13" width="10" height="2" fill="#fcee0a"/></svg> 🤷 Що таке NULL?</h2><div style="background:rgba(252,238,10,.1);border-left:4px solid var(--cyber-yellow);padding:20px;margin:30px 0"><h3 style="color:var(--cyber-yellow);margin-top:0;display:flex;align-items:center;gap:10px"><svg width="24" height="24" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="#fcee0a"/><rect x="8" y="8" width="8" height="8" fill="#0a0a0f"/></svg> NULL</h3><p style="font-size:1.1em;line-height:1.6">NULL — це не число 0 і не порожній рядок ''. NULL — це "НЕВІДОМЕ" або "ВІДСУТНЄ" значення. Це пустка, відсутність інформації в базі даних.</p></div><div style="margin-top:30px;padding:15px;background:rgba(0,240,255,.05);border:1px solid var(--cyber-cyan);display:flex;gap:12px;align-items:start"><svg width="28" height="28" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="9" fill="none" stroke="#00f0ff" stroke-width="2"/><rect x="11" y="6" width="2" height="2" fill="#fcee0a"/><path d="M10,10 L10,17 L14,17 L14,10 Z" fill="#00f0ff"/></svg><p style="color:var(--cyber-cyan);margin:0"><strong>Аналогія:</strong> Концепція NULL: • NULL — це не 0 (Число "нуль") • NULL — це не '' (Порожній рядок) • NULL — це "НЕВІДОМЕ" або "ВІДСУТНЄ" значення • Це пустка</p></div></section><section><h2><svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:12px"><rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2"/><path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2"/><rect x="13" y="15" width="6" height="2" fill="#fcee0a"/></svg> ⚠️ Пастки NULL: &quot;Отруйні&quot; операції</h2><p style="margin-bottom:20px;color:var(--cyber-cyan);display:flex;align-items:center;gap:10px"><svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink:0"><rect x="4" y="4" width="16" height="16" fill="#00f0ff"/><rect x="8" y="8" width="8" height="8" fill="#0a0a0f"/></svg> NULL "отруює" (poisons) будь-які операції, в яких бере участь</p><pre style="font-size:1.15em"><code class="language-sql">-- Приклад 1: Арифметика 🧮
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Лекція 10: Магія Порожнечі! Як приборкати NULL у SQL | Основи баз даних
+    </title>
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="Лекція 10: Магія Порожнечі! Як приборкати NULL у SQL. Курс: Основи баз даних. Викладач: Ординський Олександр, ВТФК Вінниця"
+    />
+    <meta
+      name="keywords"
+      content="Магія Порожнечі! Як приборкати NULL у SQL, Основи баз даних, бази даних, SQL, програмування, лекція, ВТФК"
+    />
+    <meta name="author" content="Alex Ordynski" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta
+      property="og:title"
+      content="Лекція 10: Магія Порожнечі! Як приборкати NULL у SQL"
+    />
+    <meta
+      property="og:description"
+      content="Основи баз даних. Викладач: Ординський Олександр, ВТФК Вінниця"
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="uk_UA" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="Лекція 10: Магія Порожнечі! Як приборкати NULL у SQL"
+    />
+    <meta name="twitter:description" content="Основи баз даних" />
+
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.css" />
+
+    <!-- Highlight.js Theme (Monokai) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css"
+    />
+
+    <!-- ШРИФТИ (HARRY POTTER + КИРИЛИЦЯ) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=EB+Garamond:wght@400;700&family=Courier+Prime:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom Harry Potter Theme -->
+    <link rel="stylesheet" href="../css/harry-potter-theme.css" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+<!-- 1. Титульний слайд -->
+<section>
+  <h1 class="glitch" data-text="ЛЕКЦІЯ 10">ЛЕКЦІЯ 10</h1>
+  <h2>Магія Порожнечі! 🌌</h2>
+  <p style="margin-top: 30px; color: var(--cyber-magenta)">
+    <strong>Як приборкати NULL у SQL</strong>
+  </p>
+  <p style="margin-top: 20px; color: var(--cyber-yellow)">
+    <strong>Основи баз даних та спеціалізовані мови програмування</strong>
+  </p>
+  <p style="color: var(--cyber-cyan); margin-top: 15px">
+    <em>Ординський Олександр • викладач</em>
+  </p>
+  <p style="color: var(--cyber-cyan)">
+    <em>ВТФК • Вінниця • 2025</em>
+  </p>
+  <p style="color: var(--cyber-light); opacity: 0.7; margin-top: 15px">2025</p>
+</section>
+<!-- 2. Дорожня карта (План лекції) -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <path
+        d="M3,6 L3,10 L7,10 L7,6 Z M10,4 L10,12 L14,12 L14,4 Z M17,8 L17,14 L21,14 L21,8 Z"
+        fill="#fcee0a"
+      />
+      <rect x="3" y="18" width="18" height="2" fill="#00f0ff" />
+    </svg>
+    🎯 Наша мета сьогодні
+  </h2>
+  <div style="margin-top: 40px">
+    <ul style="list-style: none; font-size: 1.2em; line-height: 2; padding-left: 0">
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>🔮 Зрозуміти фундаментальну концепцію NULL</span>
+      </li>
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>🪄 Опанувати закляття IS NULL для пошуку</span>
+      </li>
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>✨ Опанувати закляття COALESCE для заміни</span>
+      </li>
+      <li style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <rect x="4" y="4" width="16" height="16" fill="none" stroke="#00f0ff" stroke-width="2" />
+          <polygon points="8,12 11,15 16,9" fill="#fcee0a" stroke="#fcee0a" stroke-width="2" />
+        </svg>
+        <span>🛡️ Опанувати закляття NULLIF для захисту</span>
+      </li>
+    </ul>
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    🧠 Чари-розминка (1&#x2F;2)
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Питання: Яким закляттям (командою) ми відфільтруємо всіх студентів з факультету 'Gryffindor' (де house_id = 1)?
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">SELECT * FROM students WHERE ... ? ...;</code></pre>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    🧠 Чари-розминка (2&#x2F;2)
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Питання: Як порахувати загальну кількість студентів у таблиці students?
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">SELECT ... ? ... FROM students;</code></pre>
+</section>
+<!-- 4. Ключове поняття / Визначення -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="3" y="3" width="18" height="18" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="7" y="7" width="4" height="4" fill="#00f0ff" />
+      <rect x="13" y="7" width="4" height="4" fill="#ff00ff" />
+      <rect x="7" y="13" width="10" height="2" fill="#fcee0a" />
+    </svg>
+    🤷 Що таке NULL?
+  </h2>
+  <div
+    style="
+      background: rgba(252, 238, 10, 0.1);
+      border-left: 4px solid var(--cyber-yellow);
+      padding: 20px;
+      margin: 30px 0;
+    "
+  >
+    <h3
+      style="
+        color: var(--cyber-yellow);
+        margin-top: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      "
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <rect x="4" y="4" width="16" height="16" fill="#fcee0a" />
+        <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+      </svg>
+      NULL
+    </h3>
+    <p style="font-size: 1.1em; line-height: 1.6">NULL — це не число 0 і не порожній рядок ''. NULL — це "НЕВІДОМЕ" або "ВІДСУТНЄ" значення. Це пустка, відсутність інформації в базі даних.</p>
+  </div>
+  <div
+    style="
+      margin-top: 30px;
+      padding: 15px;
+      background: rgba(0, 240, 255, 0.05);
+      border: 1px solid var(--cyber-cyan);
+      display: flex;
+      gap: 12px;
+      align-items: start;
+    "
+  >
+    <svg width="28" height="28" viewBox="0 0 24 24" style="flex-shrink: 0; margin-top: 2px">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <rect x="11" y="6" width="2" height="2" fill="#fcee0a" />
+      <path d="M10,10 L10,17 L14,17 L14,10 Z" fill="#00f0ff" />
+    </svg>
+    <p style="color: var(--cyber-cyan); margin: 0">
+      <strong>Аналогія:</strong>
+      Концепція NULL:
+• NULL — це не 0 (Число "нуль")
+• NULL — це не '' (Порожній рядок)
+• NULL — це "НЕВІДОМЕ" або "ВІДСУТНЄ" значення
+• Це пустка
+    </p>
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    ⚠️ Пастки NULL: &quot;Отруйні&quot; операції
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    NULL "отруює" (poisons) будь-які операції, в яких бере участь
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">-- Приклад 1: Арифметика 🧮
 SELECT 100 + NULL AS result;
 -- Результат: NULL
 
@@ -8,7 +301,169 @@ SELECT 'Luna' || ' ' || NULL AS full_name;
 
 -- Приклад 3: Порівняння ⚖️
 SELECT NULL = NULL AS comparison;
--- Результат: NULL (або FALSE)</code></pre></section><section style="font-size:.9em" data-auto-animate><h2>🔴 Live Coding: Демонстрація пасток</h2><div style="display:grid;grid-template-columns:280px 1fr;gap:40px;align-items:start;margin-top:30px"><div style="position:relative"><style>@keyframes screen-glow{0%,100%{box-shadow:0 0 15px rgba(0,240,255,.4),inset 0 0 10px rgba(0,240,255,.1)}50%{box-shadow:0 0 30px rgba(0,240,255,.7),inset 0 0 15px rgba(0,240,255,.2)}}@keyframes pixel-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}@keyframes key-press{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(.95);opacity:1}}.live-coding-terminal{width:280px;background:linear-gradient(135deg,#0a0a0f 0,#1a1a2e 100%);border:3px solid var(--cyber-cyan);border-radius:12px;position:relative;animation:screen-glow 3s ease-in-out infinite,pixel-float 4s ease-in-out infinite;box-shadow:0 10px 30px rgba(0,240,255,.3)}.terminal-header{background:linear-gradient(90deg,var(--cyber-cyan) 0,var(--cyber-magenta) 100%);padding:8px 12px;border-radius:9px 9px 0 0;display:flex;align-items:center;gap:6px}.terminal-dot{width:10px;height:10px;border-radius:50%;background:var(--cyber-yellow)}.terminal-dot:nth-child(2){background:var(--cyber-magenta)}.terminal-dot:nth-child(3){background:var(--cyber-red)}.terminal-screen{padding:15px;min-height:180px;background:#0a0a0f;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyber-cyan);line-height:1.6}.terminal-prompt{color:var(--cyber-yellow)}.terminal-output{color:var(--cyber-cyan);margin:3px 0}.terminal-success{color:#00ff41}.typed-cursor{color:var(--cyber-cyan);animation:blink 1s infinite}@keyframes blink{0%,49%{opacity:1}100%,50%{opacity:0}}.pixel-keys{display:flex;gap:4px;padding:10px;justify-content:center}.pixel-key{width:22px;height:18px;background:linear-gradient(180deg,var(--cyber-yellow) 0,#b8a408 100%);border-radius:3px;border:2px solid rgba(252,238,10,.3);animation:key-press 2s ease-in-out infinite}.pixel-key:nth-child(2){animation-delay:.2s}.pixel-key:nth-child(3){animation-delay:.4s}.pixel-key:nth-child(4){animation-delay:.6s}</style><div class="live-coding-terminal"><div class="terminal-header"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div><div class="terminal-screen" id="typed-terminal-"><div class="terminal-prompt">$ <span class="typed-text"></span></div></div><div class="pixel-keys"><div class="pixel-key"></div><div class="pixel-key"></div><div class="pixel-key"></div><div class="pixel-key"></div></div></div><script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"></script><script>// Initialize Typed.js for terminal animation
+-- Результат: NULL (або FALSE)</code></pre>
+</section>
+<!-- 14. Практика Live Coding -->
+<section style="font-size: 0.9em" data-auto-animate>
+  <h2>🔴 Live Coding: Демонстрація пасток</h2>
+
+  <div
+    style="
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 40px;
+      align-items: start;
+      margin-top: 30px;
+    "
+  >
+    <!-- Animated Terminal with Typed.js -->
+    <div style="position: relative">
+      <style>
+        @keyframes screen-glow {
+          0%,
+          100% {
+            box-shadow:
+              0 0 15px rgba(0, 240, 255, 0.4),
+              inset 0 0 10px rgba(0, 240, 255, 0.1);
+          }
+          50% {
+            box-shadow:
+              0 0 30px rgba(0, 240, 255, 0.7),
+              inset 0 0 15px rgba(0, 240, 255, 0.2);
+          }
+        }
+        @keyframes pixel-float {
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-5px);
+          }
+        }
+        @keyframes key-press {
+          0%,
+          100% {
+            transform: scale(1);
+            opacity: 0.7;
+          }
+          50% {
+            transform: scale(0.95);
+            opacity: 1;
+          }
+        }
+        .live-coding-terminal {
+          width: 280px;
+          background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+          border: 3px solid var(--cyber-cyan);
+          border-radius: 12px;
+          position: relative;
+          animation:
+            screen-glow 3s ease-in-out infinite,
+            pixel-float 4s ease-in-out infinite;
+          box-shadow: 0 10px 30px rgba(0, 240, 255, 0.3);
+        }
+        .terminal-header {
+          background: linear-gradient(90deg, var(--cyber-cyan) 0%, var(--cyber-magenta) 100%);
+          padding: 8px 12px;
+          border-radius: 9px 9px 0 0;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .terminal-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: var(--cyber-yellow);
+        }
+        .terminal-dot:nth-child(2) {
+          background: var(--cyber-magenta);
+        }
+        .terminal-dot:nth-child(3) {
+          background: var(--cyber-red);
+        }
+        .terminal-screen {
+          padding: 15px;
+          min-height: 180px;
+          background: #0a0a0f;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 11px;
+          color: var(--cyber-cyan);
+          line-height: 1.6;
+        }
+        .terminal-prompt {
+          color: var(--cyber-yellow);
+        }
+        .terminal-output {
+          color: var(--cyber-cyan);
+          margin: 3px 0;
+        }
+        .terminal-success {
+          color: #00ff41;
+        }
+        .typed-cursor {
+          color: var(--cyber-cyan);
+          animation: blink 1s infinite;
+        }
+        @keyframes blink {
+          0%,
+          49% {
+            opacity: 1;
+          }
+          50%,
+          100% {
+            opacity: 0;
+          }
+        }
+        .pixel-keys {
+          display: flex;
+          gap: 4px;
+          padding: 10px;
+          justify-content: center;
+        }
+        .pixel-key {
+          width: 22px;
+          height: 18px;
+          background: linear-gradient(180deg, var(--cyber-yellow) 0%, #b8a408 100%);
+          border-radius: 3px;
+          border: 2px solid rgba(252, 238, 10, 0.3);
+          animation: key-press 2s ease-in-out infinite;
+        }
+        .pixel-key:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+        .pixel-key:nth-child(3) {
+          animation-delay: 0.4s;
+        }
+        .pixel-key:nth-child(4) {
+          animation-delay: 0.6s;
+        }
+      </style>
+
+      <div class="live-coding-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+        </div>
+        <div class="terminal-screen" id="typed-terminal-">
+          <div class="terminal-prompt">
+            $
+            <span class="typed-text"></span>
+          </div>
+        </div>
+        <div class="pixel-keys">
+          <div class="pixel-key"></div>
+          <div class="pixel-key"></div>
+          <div class="pixel-key"></div>
+          <div class="pixel-key"></div>
+        </div>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"></script>
+      <script>
+        // Initialize Typed.js for terminal animation
         document.addEventListener('DOMContentLoaded', function () {
           const terminalEl = document.querySelector(
             '#typed-terminal- .typed-text'
@@ -31,13 +486,338 @@ SELECT NULL = NULL AS comparison;
               cursorChar: '▋',
             });
           }
-        });</script></div><div><div style="background:rgba(252,238,10,.1);border-left:4px solid var(--cyber-yellow);padding:20px;margin-bottom:25px"><h3 style="color:var(--cyber-yellow);margin-top:0;font-size:1.1em"><svg width="24" height="24" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px"><rect x="4" y="4" width="6" height="6" fill="#fcee0a"/><rect x="12" y="4" width="6" height="6" fill="#00f0ff"/><rect x="4" y="12" width="6" height="6" fill="#ff00ff"/><rect x="12" y="12" width="6" height="6" fill="#fcee0a"/></svg> Що будемо робити:</h3><p style="font-size:1em;line-height:1.6;margin:0"></p></div><div style="margin-top:20px"><h3 style="color:var(--cyber-cyan);font-size:1em;margin-bottom:15px;display:flex;align-items:center;gap:10px"><svg width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="3" fill="#00f0ff"/><rect x="3" y="11" width="18" height="3" fill="#00f0ff"/><rect x="3" y="17" width="18" height="3" fill="#00f0ff"/></svg> Action Items:</h3><div style="display:grid;gap:12px"></div></div></div></div><p style="text-align:center;margin-top:30px;font-size:1.15em;color:var(--cyber-magenta)"><svg width="28" height="28" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px"><polygon points="8,5 8,19 18,12" fill="#ff00ff"/><rect x="6" y="3" width="14" height="2" fill="#ff00ff"/><rect x="6" y="19" width="14" height="2" fill="#ff00ff"/></svg> <strong>Готові? Почали кодити!</strong> <svg width="28" height="28" viewBox="0 0 24 24" style="vertical-align:middle;margin-left:8px"><rect x="4" y="8" width="4" height="8" fill="#fcee0a"/><rect x="10" y="6" width="4" height="10" fill="#00f0ff"/><rect x="16" y="4" width="4" height="12" fill="#ff00ff"/></svg></p></section><section style="font-size:.9em"><h2>🪄 Закляття №1: IS NULL &#x2F; IS NOT NULL</h2><div style="margin:30px 0"><div style="background:rgba(10,10,15,.8);border:2px solid var(--cyber-magenta);padding:25px;font-family:'Share Tech Mono',monospace;font-size:1.38em"><code style="color:var(--cyber-yellow)">WHERE<колонка>IS NULL; WHERE<колонка>IS NOT NULL;</колонка></колонка></code></div></div><div style="margin-top:25px"><div style="margin-bottom:12px"><span style="font-family:'Share Tech Mono',monospace;font-size:1em">IS NULL </span><span style="color:var(--cyber-light);margin-left:15px;font-size:.95em">—</span></div><div style="margin-bottom:12px"><span style="font-family:'Share Tech Mono',monospace;font-size:1em">IS NOT NULL </span><span style="color:var(--cyber-light);margin-left:15px;font-size:.95em">—</span></div></div><div style="margin-top:25px"><div style="margin-bottom:12px"><span style="font-family:'Share Tech Mono',monospace;font-size:1em">IS NULL </span><span style="color:var(--cyber-light);margin-left:15px;font-size:.95em">—</span></div><div style="margin-bottom:12px"><span style="font-family:'Share Tech Mono',monospace;font-size:1em">IS NOT NULL </span><span style="color:var(--cyber-light);margin-left:15px;font-size:.95em">—</span></div></div></section><section><h2><svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:12px"><rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2"/><path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2"/><rect x="13" y="15" width="6" height="2" fill="#fcee0a"/></svg> 🎯 IS NULL: Які задачі вирішує?</h2><p style="margin-bottom:20px;color:var(--cyber-cyan);display:flex;align-items:center;gap:10px"><svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink:0"><rect x="4" y="4" width="16" height="16" fill="#00f0ff"/><rect x="8" y="8" width="8" height="8" fill="#0a0a0f"/></svg> Задача: Фільтрація та пошук на основі наявності або відсутності даних</p><pre style="font-size:1.15em"><code class="language-sql">-- Проблема, яку ми бачили:
+        });
+      </script>
+    </div>
+
+    <!-- Action Items -->
+    <div>
+      <div
+        style="
+          background: rgba(252, 238, 10, 0.1);
+          border-left: 4px solid var(--cyber-yellow);
+          padding: 20px;
+          margin-bottom: 25px;
+        "
+      >
+        <h3 style="color: var(--cyber-yellow); margin-top: 0; font-size: 1.1em">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            style="vertical-align: middle; margin-right: 8px"
+          >
+            <rect x="4" y="4" width="6" height="6" fill="#fcee0a" />
+            <rect x="12" y="4" width="6" height="6" fill="#00f0ff" />
+            <rect x="4" y="12" width="6" height="6" fill="#ff00ff" />
+            <rect x="12" y="12" width="6" height="6" fill="#fcee0a" />
+          </svg>
+          Що будемо робити:
+        </h3>
+        <p style="font-size: 1em; line-height: 1.6; margin: 0"></p>
+      </div>
+
+      <div style="margin-top: 20px">
+        <h3
+          style="
+            color: var(--cyber-cyan);
+            font-size: 1em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+          "
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <rect x="3" y="5" width="18" height="3" fill="#00f0ff" />
+            <rect x="3" y="11" width="18" height="3" fill="#00f0ff" />
+            <rect x="3" y="17" width="18" height="3" fill="#00f0ff" />
+          </svg>
+          Action Items:
+        </h3>
+        <div style="display: grid; gap: 12px">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p style="text-align: center; margin-top: 30px; font-size: 1.15em; color: var(--cyber-magenta)">
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 8px"
+    >
+      <polygon points="8,5 8,19 18,12" fill="#ff00ff" />
+      <rect x="6" y="3" width="14" height="2" fill="#ff00ff" />
+      <rect x="6" y="19" width="14" height="2" fill="#ff00ff" />
+    </svg>
+    <strong>Готові? Почали кодити!</strong>
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-left: 8px"
+    >
+      <rect x="4" y="8" width="4" height="8" fill="#fcee0a" />
+      <rect x="10" y="6" width="4" height="10" fill="#00f0ff" />
+      <rect x="16" y="4" width="4" height="12" fill="#ff00ff" />
+    </svg>
+  </p>
+</section>
+<!-- 5. Розбір синтаксису -->
+<section style="font-size: 0.9em">
+  <h2>🪄 Закляття №1: IS NULL &#x2F; IS NOT NULL</h2>
+  <div style="margin: 30px 0">
+    <div
+      style="
+        background: rgba(10, 10, 15, 0.8);
+        border: 2px solid var(--cyber-magenta);
+        padding: 25px;
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 1.38em;
+      "
+    >
+      <code style="color: var(--cyber-yellow)">WHERE <колонка> IS NULL;
+WHERE <колонка> IS NOT NULL;</code>
+    </div>
+  </div>
+  <div style="margin-top: 25px">
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        IS NULL
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — 
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        IS NOT NULL
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — 
+      </span>
+    </div>
+  </div>
+  <div style="margin-top: 25px">
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        IS NULL
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — 
+      </span>
+    </div>
+    <div style="margin-bottom: 12px">
+      <span style="color: ; font-family: 'Share Tech Mono', monospace; font-size: 1em;">
+        IS NOT NULL
+      </span>
+      <span style="color: var(--cyber-light); margin-left: 15px; font-size: 0.95em">
+        — 
+      </span>
+    </div>
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    🎯 IS NULL: Які задачі вирішує?
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Задача: Фільтрація та пошук на основі наявності або відсутності даних
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">-- Проблема, яку ми бачили:
 SELECT * FROM students WHERE patronus = NULL;
 -- Результат: (порожньо) — нічого не знаходить!
 
 -- Рішення:
 SELECT * FROM students WHERE patronus IS NULL;
--- Результат: знаходить Draco, Neville та інших</code></pre></section><section style="font-size:.9em" data-auto-animate><h2>🟢 Live Coding: IS NULL в дії</h2><div style="display:grid;grid-template-columns:280px 1fr;gap:40px;align-items:start;margin-top:30px"><div style="position:relative"><style>@keyframes screen-glow{0%,100%{box-shadow:0 0 15px rgba(0,240,255,.4),inset 0 0 10px rgba(0,240,255,.1)}50%{box-shadow:0 0 30px rgba(0,240,255,.7),inset 0 0 15px rgba(0,240,255,.2)}}@keyframes pixel-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}@keyframes key-press{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(.95);opacity:1}}.live-coding-terminal{width:280px;background:linear-gradient(135deg,#0a0a0f 0,#1a1a2e 100%);border:3px solid var(--cyber-cyan);border-radius:12px;position:relative;animation:screen-glow 3s ease-in-out infinite,pixel-float 4s ease-in-out infinite;box-shadow:0 10px 30px rgba(0,240,255,.3)}.terminal-header{background:linear-gradient(90deg,var(--cyber-cyan) 0,var(--cyber-magenta) 100%);padding:8px 12px;border-radius:9px 9px 0 0;display:flex;align-items:center;gap:6px}.terminal-dot{width:10px;height:10px;border-radius:50%;background:var(--cyber-yellow)}.terminal-dot:nth-child(2){background:var(--cyber-magenta)}.terminal-dot:nth-child(3){background:var(--cyber-red)}.terminal-screen{padding:15px;min-height:180px;background:#0a0a0f;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyber-cyan);line-height:1.6}.terminal-prompt{color:var(--cyber-yellow)}.terminal-output{color:var(--cyber-cyan);margin:3px 0}.terminal-success{color:#00ff41}.typed-cursor{color:var(--cyber-cyan);animation:blink 1s infinite}@keyframes blink{0%,49%{opacity:1}100%,50%{opacity:0}}.pixel-keys{display:flex;gap:4px;padding:10px;justify-content:center}.pixel-key{width:22px;height:18px;background:linear-gradient(180deg,var(--cyber-yellow) 0,#b8a408 100%);border-radius:3px;border:2px solid rgba(252,238,10,.3);animation:key-press 2s ease-in-out infinite}.pixel-key:nth-child(2){animation-delay:.2s}.pixel-key:nth-child(3){animation-delay:.4s}.pixel-key:nth-child(4){animation-delay:.6s}</style><div class="live-coding-terminal"><div class="terminal-header"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div><div class="terminal-screen" id="typed-terminal-"><div class="terminal-prompt">$ <span class="typed-text"></span></div></div><div class="pixel-keys"><div class="pixel-key"></div><div class="pixel-key"></div><div class="pixel-key"></div><div class="pixel-key"></div></div></div><script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"></script><script>// Initialize Typed.js for terminal animation
+-- Результат: знаходить Draco, Neville та інших</code></pre>
+</section>
+<!-- 14. Практика Live Coding -->
+<section style="font-size: 0.9em" data-auto-animate>
+  <h2>🟢 Live Coding: IS NULL в дії</h2>
+
+  <div
+    style="
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 40px;
+      align-items: start;
+      margin-top: 30px;
+    "
+  >
+    <!-- Animated Terminal with Typed.js -->
+    <div style="position: relative">
+      <style>
+        @keyframes screen-glow {
+          0%,
+          100% {
+            box-shadow:
+              0 0 15px rgba(0, 240, 255, 0.4),
+              inset 0 0 10px rgba(0, 240, 255, 0.1);
+          }
+          50% {
+            box-shadow:
+              0 0 30px rgba(0, 240, 255, 0.7),
+              inset 0 0 15px rgba(0, 240, 255, 0.2);
+          }
+        }
+        @keyframes pixel-float {
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-5px);
+          }
+        }
+        @keyframes key-press {
+          0%,
+          100% {
+            transform: scale(1);
+            opacity: 0.7;
+          }
+          50% {
+            transform: scale(0.95);
+            opacity: 1;
+          }
+        }
+        .live-coding-terminal {
+          width: 280px;
+          background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+          border: 3px solid var(--cyber-cyan);
+          border-radius: 12px;
+          position: relative;
+          animation:
+            screen-glow 3s ease-in-out infinite,
+            pixel-float 4s ease-in-out infinite;
+          box-shadow: 0 10px 30px rgba(0, 240, 255, 0.3);
+        }
+        .terminal-header {
+          background: linear-gradient(90deg, var(--cyber-cyan) 0%, var(--cyber-magenta) 100%);
+          padding: 8px 12px;
+          border-radius: 9px 9px 0 0;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .terminal-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: var(--cyber-yellow);
+        }
+        .terminal-dot:nth-child(2) {
+          background: var(--cyber-magenta);
+        }
+        .terminal-dot:nth-child(3) {
+          background: var(--cyber-red);
+        }
+        .terminal-screen {
+          padding: 15px;
+          min-height: 180px;
+          background: #0a0a0f;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 11px;
+          color: var(--cyber-cyan);
+          line-height: 1.6;
+        }
+        .terminal-prompt {
+          color: var(--cyber-yellow);
+        }
+        .terminal-output {
+          color: var(--cyber-cyan);
+          margin: 3px 0;
+        }
+        .terminal-success {
+          color: #00ff41;
+        }
+        .typed-cursor {
+          color: var(--cyber-cyan);
+          animation: blink 1s infinite;
+        }
+        @keyframes blink {
+          0%,
+          49% {
+            opacity: 1;
+          }
+          50%,
+          100% {
+            opacity: 0;
+          }
+        }
+        .pixel-keys {
+          display: flex;
+          gap: 4px;
+          padding: 10px;
+          justify-content: center;
+        }
+        .pixel-key {
+          width: 22px;
+          height: 18px;
+          background: linear-gradient(180deg, var(--cyber-yellow) 0%, #b8a408 100%);
+          border-radius: 3px;
+          border: 2px solid rgba(252, 238, 10, 0.3);
+          animation: key-press 2s ease-in-out infinite;
+        }
+        .pixel-key:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+        .pixel-key:nth-child(3) {
+          animation-delay: 0.4s;
+        }
+        .pixel-key:nth-child(4) {
+          animation-delay: 0.6s;
+        }
+      </style>
+
+      <div class="live-coding-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+        </div>
+        <div class="terminal-screen" id="typed-terminal-">
+          <div class="terminal-prompt">
+            $
+            <span class="typed-text"></span>
+          </div>
+        </div>
+        <div class="pixel-keys">
+          <div class="pixel-key"></div>
+          <div class="pixel-key"></div>
+          <div class="pixel-key"></div>
+          <div class="pixel-key"></div>
+        </div>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"></script>
+      <script>
+        // Initialize Typed.js for terminal animation
         document.addEventListener('DOMContentLoaded', function () {
           const terminalEl = document.querySelector(
             '#typed-terminal- .typed-text'
@@ -60,7 +840,241 @@ SELECT * FROM students WHERE patronus IS NULL;
               cursorChar: '▋',
             });
           }
-        });</script></div><div><div style="background:rgba(252,238,10,.1);border-left:4px solid var(--cyber-yellow);padding:20px;margin-bottom:25px"><h3 style="color:var(--cyber-yellow);margin-top:0;font-size:1.1em"><svg width="24" height="24" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px"><rect x="4" y="4" width="6" height="6" fill="#fcee0a"/><rect x="12" y="4" width="6" height="6" fill="#00f0ff"/><rect x="4" y="12" width="6" height="6" fill="#ff00ff"/><rect x="12" y="12" width="6" height="6" fill="#fcee0a"/></svg> Що будемо робити:</h3><p style="font-size:1em;line-height:1.6;margin:0"></p></div><div style="margin-top:20px"><h3 style="color:var(--cyber-cyan);font-size:1em;margin-bottom:15px;display:flex;align-items:center;gap:10px"><svg width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="3" fill="#00f0ff"/><rect x="3" y="11" width="18" height="3" fill="#00f0ff"/><rect x="3" y="17" width="18" height="3" fill="#00f0ff"/></svg> Action Items:</h3><div style="display:grid;gap:12px"></div></div></div></div><p style="text-align:center;margin-top:30px;font-size:1.15em;color:var(--cyber-magenta)"><svg width="28" height="28" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px"><polygon points="8,5 8,19 18,12" fill="#ff00ff"/><rect x="6" y="3" width="14" height="2" fill="#ff00ff"/><rect x="6" y="19" width="14" height="2" fill="#ff00ff"/></svg> <strong>Готові? Почали кодити!</strong> <svg width="28" height="28" viewBox="0 0 24 24" style="vertical-align:middle;margin-left:8px"><rect x="4" y="8" width="4" height="8" fill="#fcee0a"/><rect x="10" y="6" width="4" height="10" fill="#00f0ff"/><rect x="16" y="4" width="4" height="12" fill="#ff00ff"/></svg></p></section><section><h2 class="glitch" data-text="📝 Висновок по IS NULL"><svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:12px"><rect x="3" y="3" width="8" height="8" fill="#fcee0a"/><rect x="13" y="3" width="8" height="8" fill="#00f0ff"/><rect x="3" y="13" width="8" height="8" fill="#ff00ff"/><rect x="13" y="13" width="8" height="8" fill="#fcee0a"/></svg> 📝 Висновок по IS NULL</h2><div style="margin-top:50px"><ul style="list-style:none;font-size:1.15em;line-height:2.2;padding-left:0"><li class="fragment highlight-cyber" style="display:flex;align-items:center;gap:15px;margin-bottom:15px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a"/></svg> <span>Головне правило: НІКОЛИ не використовуйте = або != для NULL</span></li><li class="fragment highlight-cyber" style="display:flex;align-items:center;gap:15px;margin-bottom:15px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a"/></svg> <span>ЗАВЖДИ використовуйте IS NULL або IS NOT NULL</span></li><li class="fragment highlight-cyber" style="display:flex;align-items:center;gap:15px;margin-bottom:15px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a"/></svg> <span>NULL = NULL завжди повертає FALSE (UNKNOWN)</span></li><li class="fragment highlight-cyber" style="display:flex;align-items:center;gap:15px;margin-bottom:15px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a"/></svg> <span>IS NULL — це єдиний правильний спосіб знайти відсутні значення</span></li></ul></div></section><section><h2><svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:12px"><rect x="3" y="3" width="18" height="18" fill="none" stroke="#fcee0a" stroke-width="2"/><rect x="7" y="7" width="4" height="4" fill="#00f0ff"/><rect x="13" y="7" width="4" height="4" fill="#ff00ff"/><rect x="7" y="13" width="10" height="2" fill="#fcee0a"/></svg> ✨ Закляття №2: COALESCE (Трансфігурація)</h2><div style="background:rgba(252,238,10,.1);border-left:4px solid var(--cyber-yellow);padding:20px;margin:30px 0"><h3 style="color:var(--cyber-yellow);margin-top:0;display:flex;align-items:center;gap:10px"><svg width="24" height="24" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="#fcee0a"/><rect x="8" y="8" width="8" height="8" fill="#0a0a0f"/></svg> COALESCE</h3><p style="font-size:1.1em;line-height:1.6">Це закляття-трансфігурація. Воно приймає список значень і повертає ПЕРШЕ НЕ-NULL значення зліва направо.</p></div><div style="margin-top:30px;padding:15px;background:rgba(0,240,255,.05);border:1px solid var(--cyber-cyan);display:flex;gap:12px;align-items:start"><svg width="28" height="28" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="9" fill="none" stroke="#00f0ff" stroke-width="2"/><rect x="11" y="6" width="2" height="2" fill="#fcee0a"/><path d="M10,10 L10,17 L14,17 L14,10 Z" fill="#00f0ff"/></svg><p style="color:var(--cyber-cyan);margin:0"><strong>Аналогія:</strong> Синтаксис: COALESCE(value1, value2, default_value) Приклади: • COALESCE(NULL, NULL, 'Hedwig') → поверне 'Hedwig' • COALESCE('Ron', 'Harry') → поверне 'Ron' • COALESCE(NULL, 0, 100) → поверне 0</p></div></section><section><h2><svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:12px"><rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2"/><path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2"/><rect x="13" y="15" width="6" height="2" fill="#fcee0a"/></svg> 🎯 COALESCE: Які задачі вирішує? (1&#x2F;3)</h2><p style="margin-bottom:20px;color:var(--cyber-cyan);display:flex;align-items:center;gap:10px"><svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink:0"><rect x="4" y="4" width="16" height="16" fill="#00f0ff"/><rect x="8" y="8" width="8" height="8" fill="#0a0a0f"/></svg> Задача 1: "Очищення" рядків для відображення</p><pre style="font-size:1.15em"><code class="language-sql">-- Проблема:
+        });
+      </script>
+    </div>
+
+    <!-- Action Items -->
+    <div>
+      <div
+        style="
+          background: rgba(252, 238, 10, 0.1);
+          border-left: 4px solid var(--cyber-yellow);
+          padding: 20px;
+          margin-bottom: 25px;
+        "
+      >
+        <h3 style="color: var(--cyber-yellow); margin-top: 0; font-size: 1.1em">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            style="vertical-align: middle; margin-right: 8px"
+          >
+            <rect x="4" y="4" width="6" height="6" fill="#fcee0a" />
+            <rect x="12" y="4" width="6" height="6" fill="#00f0ff" />
+            <rect x="4" y="12" width="6" height="6" fill="#ff00ff" />
+            <rect x="12" y="12" width="6" height="6" fill="#fcee0a" />
+          </svg>
+          Що будемо робити:
+        </h3>
+        <p style="font-size: 1em; line-height: 1.6; margin: 0"></p>
+      </div>
+
+      <div style="margin-top: 20px">
+        <h3
+          style="
+            color: var(--cyber-cyan);
+            font-size: 1em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+          "
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <rect x="3" y="5" width="18" height="3" fill="#00f0ff" />
+            <rect x="3" y="11" width="18" height="3" fill="#00f0ff" />
+            <rect x="3" y="17" width="18" height="3" fill="#00f0ff" />
+          </svg>
+          Action Items:
+        </h3>
+        <div style="display: grid; gap: 12px">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p style="text-align: center; margin-top: 30px; font-size: 1.15em; color: var(--cyber-magenta)">
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 8px"
+    >
+      <polygon points="8,5 8,19 18,12" fill="#ff00ff" />
+      <rect x="6" y="3" width="14" height="2" fill="#ff00ff" />
+      <rect x="6" y="19" width="14" height="2" fill="#ff00ff" />
+    </svg>
+    <strong>Готові? Почали кодити!</strong>
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-left: 8px"
+    >
+      <rect x="4" y="8" width="4" height="8" fill="#fcee0a" />
+      <rect x="10" y="6" width="4" height="10" fill="#00f0ff" />
+      <rect x="16" y="4" width="4" height="12" fill="#ff00ff" />
+    </svg>
+  </p>
+</section>
+<!-- 12. Підсумок / Ключові висновки -->
+<section>
+  <h2 class="glitch" data-text="📝 Висновок по IS NULL">
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="3" y="3" width="8" height="8" fill="#fcee0a" />
+      <rect x="13" y="3" width="8" height="8" fill="#00f0ff" />
+      <rect x="3" y="13" width="8" height="8" fill="#ff00ff" />
+      <rect x="13" y="13" width="8" height="8" fill="#fcee0a" />
+    </svg>
+    📝 Висновок по IS NULL
+  </h2>
+  <div style="margin-top: 50px">
+    <ul style="list-style: none; font-size: 1.15em; line-height: 2.2; padding-left: 0">
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>Головне правило: НІКОЛИ не використовуйте = або != для NULL</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>ЗАВЖДИ використовуйте IS NULL або IS NOT NULL</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>NULL = NULL завжди повертає FALSE (UNKNOWN)</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>IS NULL — це єдиний правильний спосіб знайти відсутні значення</span>
+      </li>
+    </ul>
+  </div>
+</section>
+<!-- 4. Ключове поняття / Визначення -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="3" y="3" width="18" height="18" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="7" y="7" width="4" height="4" fill="#00f0ff" />
+      <rect x="13" y="7" width="4" height="4" fill="#ff00ff" />
+      <rect x="7" y="13" width="10" height="2" fill="#fcee0a" />
+    </svg>
+    ✨ Закляття №2: COALESCE (Трансфігурація)
+  </h2>
+  <div
+    style="
+      background: rgba(252, 238, 10, 0.1);
+      border-left: 4px solid var(--cyber-yellow);
+      padding: 20px;
+      margin: 30px 0;
+    "
+  >
+    <h3
+      style="
+        color: var(--cyber-yellow);
+        margin-top: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      "
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <rect x="4" y="4" width="16" height="16" fill="#fcee0a" />
+        <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+      </svg>
+      COALESCE
+    </h3>
+    <p style="font-size: 1.1em; line-height: 1.6">Це закляття-трансфігурація. Воно приймає список значень і повертає ПЕРШЕ НЕ-NULL значення зліва направо.</p>
+  </div>
+  <div
+    style="
+      margin-top: 30px;
+      padding: 15px;
+      background: rgba(0, 240, 255, 0.05);
+      border: 1px solid var(--cyber-cyan);
+      display: flex;
+      gap: 12px;
+      align-items: start;
+    "
+  >
+    <svg width="28" height="28" viewBox="0 0 24 24" style="flex-shrink: 0; margin-top: 2px">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <rect x="11" y="6" width="2" height="2" fill="#fcee0a" />
+      <path d="M10,10 L10,17 L14,17 L14,10 Z" fill="#00f0ff" />
+    </svg>
+    <p style="color: var(--cyber-cyan); margin: 0">
+      <strong>Аналогія:</strong>
+      Синтаксис: COALESCE(value1, value2, default_value)
+
+Приклади:
+• COALESCE(NULL, NULL, 'Hedwig') → поверне 'Hedwig'
+• COALESCE('Ron', 'Harry') → поверне 'Ron'
+• COALESCE(NULL, 0, 100) → поверне 0
+    </p>
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    🎯 COALESCE: Які задачі вирішує? (1&#x2F;3)
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Задача 1: "Очищення" рядків для відображення
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">-- Проблема:
 SELECT 'Luna' || ' ' || NULL AS full_name;
 -- Результат: NULL
 
@@ -68,7 +1082,39 @@ SELECT 'Luna' || ' ' || NULL AS full_name;
 SELECT 'Luna' || ' ' || COALESCE(last_name, 'Unknown') AS full_name
 FROM students
 WHERE first_name = 'Luna';
--- Результат: 'Luna Unknown'</code></pre></section><section><h2><svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:12px"><rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2"/><path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2"/><rect x="13" y="15" width="6" height="2" fill="#fcee0a"/></svg> 🎯 COALESCE: Які задачі вирішує? (2&#x2F;3)</h2><p style="margin-bottom:20px;color:var(--cyber-cyan);display:flex;align-items:center;gap:10px"><svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink:0"><rect x="4" y="4" width="16" height="16" fill="#00f0ff"/><rect x="8" y="8" width="8" height="8" fill="#0a0a0f"/></svg> Задача 2: Безпечна арифметика</p><pre style="font-size:1.15em"><code class="language-sql">-- Проблема:
+-- Результат: 'Luna Unknown'</code></pre>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    🎯 COALESCE: Які задачі вирішує? (2&#x2F;3)
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Задача 2: Безпечна арифметика
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">-- Проблема:
 SELECT score + 10 FROM students WHERE first_name = 'Ginny';
 -- Результат: NULL (для Ginny)
 
@@ -76,7 +1122,201 @@ SELECT score + 10 FROM students WHERE first_name = 'Ginny';
 SELECT COALESCE(score, 0) + 10 AS new_score
 FROM students
 WHERE first_name = 'Ginny';
--- Результат: 10</code></pre></section><section style="font-size:.9em"><h2>🎯 COALESCE: Які задачі вирішує? (3&#x2F;3)</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:25px;margin-top:30px"><div style="border:2px solid var(--cyber-cyan);padding:20px;background:rgba(0,240,255,.05)"><h3 style="color:var(--cyber-cyan);margin-top:0;text-align:center;font-size:1.1em">AVG(score) — ігнорує NULL</h3><ul style="font-size:.95em;line-height:1.7"></ul></div><div style="border:2px solid var(--cyber-magenta);padding:20px;background:rgba(255,0,255,.05)"><h3 style="color:var(--cyber-magenta);margin-top:0;text-align:center;font-size:1.1em">AVG(COALESCE(score, 0)) — NULL &#x3D; 0</h3><ul style="font-size:.95em;line-height:1.7"></ul></div></div></section><section style="font-size:.9em" data-auto-animate><h2>🟢 Live Coding: COALESCE в дії</h2><div style="display:grid;grid-template-columns:280px 1fr;gap:40px;align-items:start;margin-top:30px"><div style="position:relative"><style>@keyframes screen-glow{0%,100%{box-shadow:0 0 15px rgba(0,240,255,.4),inset 0 0 10px rgba(0,240,255,.1)}50%{box-shadow:0 0 30px rgba(0,240,255,.7),inset 0 0 15px rgba(0,240,255,.2)}}@keyframes pixel-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}@keyframes key-press{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(.95);opacity:1}}.live-coding-terminal{width:280px;background:linear-gradient(135deg,#0a0a0f 0,#1a1a2e 100%);border:3px solid var(--cyber-cyan);border-radius:12px;position:relative;animation:screen-glow 3s ease-in-out infinite,pixel-float 4s ease-in-out infinite;box-shadow:0 10px 30px rgba(0,240,255,.3)}.terminal-header{background:linear-gradient(90deg,var(--cyber-cyan) 0,var(--cyber-magenta) 100%);padding:8px 12px;border-radius:9px 9px 0 0;display:flex;align-items:center;gap:6px}.terminal-dot{width:10px;height:10px;border-radius:50%;background:var(--cyber-yellow)}.terminal-dot:nth-child(2){background:var(--cyber-magenta)}.terminal-dot:nth-child(3){background:var(--cyber-red)}.terminal-screen{padding:15px;min-height:180px;background:#0a0a0f;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyber-cyan);line-height:1.6}.terminal-prompt{color:var(--cyber-yellow)}.terminal-output{color:var(--cyber-cyan);margin:3px 0}.terminal-success{color:#00ff41}.typed-cursor{color:var(--cyber-cyan);animation:blink 1s infinite}@keyframes blink{0%,49%{opacity:1}100%,50%{opacity:0}}.pixel-keys{display:flex;gap:4px;padding:10px;justify-content:center}.pixel-key{width:22px;height:18px;background:linear-gradient(180deg,var(--cyber-yellow) 0,#b8a408 100%);border-radius:3px;border:2px solid rgba(252,238,10,.3);animation:key-press 2s ease-in-out infinite}.pixel-key:nth-child(2){animation-delay:.2s}.pixel-key:nth-child(3){animation-delay:.4s}.pixel-key:nth-child(4){animation-delay:.6s}</style><div class="live-coding-terminal"><div class="terminal-header"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div><div class="terminal-screen" id="typed-terminal-"><div class="terminal-prompt">$ <span class="typed-text"></span></div></div><div class="pixel-keys"><div class="pixel-key"></div><div class="pixel-key"></div><div class="pixel-key"></div><div class="pixel-key"></div></div></div><script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"></script><script>// Initialize Typed.js for terminal animation
+-- Результат: 10</code></pre>
+</section>
+<!-- 9. Порівняння (у дві колонки) -->
+<section style="font-size: 0.9em">
+  <h2>🎯 COALESCE: Які задачі вирішує? (3&#x2F;3)</h2>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 30px">
+    <div
+      style="
+        border: 2px solid var(--cyber-cyan);
+        padding: 20px;
+        background: rgba(0, 240, 255, 0.05);
+      "
+    >
+      <h3 style="color: var(--cyber-cyan); margin-top: 0; text-align: center; font-size: 1.1em">
+        AVG(score) — ігнорує NULL
+      </h3>
+      <ul style="font-size: 0.95em; line-height: 1.7">
+      </ul>
+    </div>
+    <div
+      style="
+        border: 2px solid var(--cyber-magenta);
+        padding: 20px;
+        background: rgba(255, 0, 255, 0.05);
+      "
+    >
+      <h3 style="color: var(--cyber-magenta); margin-top: 0; text-align: center; font-size: 1.1em">
+        AVG(COALESCE(score, 0)) — NULL &#x3D; 0
+      </h3>
+      <ul style="font-size: 0.95em; line-height: 1.7">
+      </ul>
+    </div>
+  </div>
+</section>
+<!-- 14. Практика Live Coding -->
+<section style="font-size: 0.9em" data-auto-animate>
+  <h2>🟢 Live Coding: COALESCE в дії</h2>
+
+  <div
+    style="
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 40px;
+      align-items: start;
+      margin-top: 30px;
+    "
+  >
+    <!-- Animated Terminal with Typed.js -->
+    <div style="position: relative">
+      <style>
+        @keyframes screen-glow {
+          0%,
+          100% {
+            box-shadow:
+              0 0 15px rgba(0, 240, 255, 0.4),
+              inset 0 0 10px rgba(0, 240, 255, 0.1);
+          }
+          50% {
+            box-shadow:
+              0 0 30px rgba(0, 240, 255, 0.7),
+              inset 0 0 15px rgba(0, 240, 255, 0.2);
+          }
+        }
+        @keyframes pixel-float {
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-5px);
+          }
+        }
+        @keyframes key-press {
+          0%,
+          100% {
+            transform: scale(1);
+            opacity: 0.7;
+          }
+          50% {
+            transform: scale(0.95);
+            opacity: 1;
+          }
+        }
+        .live-coding-terminal {
+          width: 280px;
+          background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+          border: 3px solid var(--cyber-cyan);
+          border-radius: 12px;
+          position: relative;
+          animation:
+            screen-glow 3s ease-in-out infinite,
+            pixel-float 4s ease-in-out infinite;
+          box-shadow: 0 10px 30px rgba(0, 240, 255, 0.3);
+        }
+        .terminal-header {
+          background: linear-gradient(90deg, var(--cyber-cyan) 0%, var(--cyber-magenta) 100%);
+          padding: 8px 12px;
+          border-radius: 9px 9px 0 0;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .terminal-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: var(--cyber-yellow);
+        }
+        .terminal-dot:nth-child(2) {
+          background: var(--cyber-magenta);
+        }
+        .terminal-dot:nth-child(3) {
+          background: var(--cyber-red);
+        }
+        .terminal-screen {
+          padding: 15px;
+          min-height: 180px;
+          background: #0a0a0f;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 11px;
+          color: var(--cyber-cyan);
+          line-height: 1.6;
+        }
+        .terminal-prompt {
+          color: var(--cyber-yellow);
+        }
+        .terminal-output {
+          color: var(--cyber-cyan);
+          margin: 3px 0;
+        }
+        .terminal-success {
+          color: #00ff41;
+        }
+        .typed-cursor {
+          color: var(--cyber-cyan);
+          animation: blink 1s infinite;
+        }
+        @keyframes blink {
+          0%,
+          49% {
+            opacity: 1;
+          }
+          50%,
+          100% {
+            opacity: 0;
+          }
+        }
+        .pixel-keys {
+          display: flex;
+          gap: 4px;
+          padding: 10px;
+          justify-content: center;
+        }
+        .pixel-key {
+          width: 22px;
+          height: 18px;
+          background: linear-gradient(180deg, var(--cyber-yellow) 0%, #b8a408 100%);
+          border-radius: 3px;
+          border: 2px solid rgba(252, 238, 10, 0.3);
+          animation: key-press 2s ease-in-out infinite;
+        }
+        .pixel-key:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+        .pixel-key:nth-child(3) {
+          animation-delay: 0.4s;
+        }
+        .pixel-key:nth-child(4) {
+          animation-delay: 0.6s;
+        }
+      </style>
+
+      <div class="live-coding-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+        </div>
+        <div class="terminal-screen" id="typed-terminal-">
+          <div class="terminal-prompt">
+            $
+            <span class="typed-text"></span>
+          </div>
+        </div>
+        <div class="pixel-keys">
+          <div class="pixel-key"></div>
+          <div class="pixel-key"></div>
+          <div class="pixel-key"></div>
+          <div class="pixel-key"></div>
+        </div>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"></script>
+      <script>
+        // Initialize Typed.js for terminal animation
         document.addEventListener('DOMContentLoaded', function () {
           const terminalEl = document.querySelector(
             '#typed-terminal- .typed-text'
@@ -99,7 +1339,241 @@ WHERE first_name = 'Ginny';
               cursorChar: '▋',
             });
           }
-        });</script></div><div><div style="background:rgba(252,238,10,.1);border-left:4px solid var(--cyber-yellow);padding:20px;margin-bottom:25px"><h3 style="color:var(--cyber-yellow);margin-top:0;font-size:1.1em"><svg width="24" height="24" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px"><rect x="4" y="4" width="6" height="6" fill="#fcee0a"/><rect x="12" y="4" width="6" height="6" fill="#00f0ff"/><rect x="4" y="12" width="6" height="6" fill="#ff00ff"/><rect x="12" y="12" width="6" height="6" fill="#fcee0a"/></svg> Що будемо робити:</h3><p style="font-size:1em;line-height:1.6;margin:0"></p></div><div style="margin-top:20px"><h3 style="color:var(--cyber-cyan);font-size:1em;margin-bottom:15px;display:flex;align-items:center;gap:10px"><svg width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="3" fill="#00f0ff"/><rect x="3" y="11" width="18" height="3" fill="#00f0ff"/><rect x="3" y="17" width="18" height="3" fill="#00f0ff"/></svg> Action Items:</h3><div style="display:grid;gap:12px"></div></div></div></div><p style="text-align:center;margin-top:30px;font-size:1.15em;color:var(--cyber-magenta)"><svg width="28" height="28" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px"><polygon points="8,5 8,19 18,12" fill="#ff00ff"/><rect x="6" y="3" width="14" height="2" fill="#ff00ff"/><rect x="6" y="19" width="14" height="2" fill="#ff00ff"/></svg> <strong>Готові? Почали кодити!</strong> <svg width="28" height="28" viewBox="0 0 24 24" style="vertical-align:middle;margin-left:8px"><rect x="4" y="8" width="4" height="8" fill="#fcee0a"/><rect x="10" y="6" width="4" height="10" fill="#00f0ff"/><rect x="16" y="4" width="4" height="12" fill="#ff00ff"/></svg></p></section><section><h2 class="glitch" data-text="📝 Висновок по COALESCE"><svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:12px"><rect x="3" y="3" width="8" height="8" fill="#fcee0a"/><rect x="13" y="3" width="8" height="8" fill="#00f0ff"/><rect x="3" y="13" width="8" height="8" fill="#ff00ff"/><rect x="13" y="13" width="8" height="8" fill="#fcee0a"/></svg> 📝 Висновок по COALESCE</h2><div style="margin-top:50px"><ul style="list-style:none;font-size:1.15em;line-height:2.2;padding-left:0"><li class="fragment highlight-cyber" style="display:flex;align-items:center;gap:15px;margin-bottom:15px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a"/></svg> <span>Це ваше головне закляття для "очищення" даних</span></li><li class="fragment highlight-cyber" style="display:flex;align-items:center;gap:15px;margin-bottom:15px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a"/></svg> <span>Воно замінює NULL на конкретне, безпечне значення</span></li><li class="fragment highlight-cyber" style="display:flex;align-items:center;gap:15px;margin-bottom:15px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a"/></svg> <span>COALESCE приймає будь-яку кількість аргументів</span></li><li class="fragment highlight-cyber" style="display:flex;align-items:center;gap:15px;margin-bottom:15px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a"/></svg> <span>Повертає перше НЕ-NULL значення зліва направо</span></li></ul></div></section><section><h2><svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:12px"><rect x="3" y="3" width="18" height="18" fill="none" stroke="#fcee0a" stroke-width="2"/><rect x="7" y="7" width="4" height="4" fill="#00f0ff"/><rect x="13" y="7" width="4" height="4" fill="#ff00ff"/><rect x="7" y="13" width="10" height="2" fill="#fcee0a"/></svg> 🛡️ Закляття №3: NULLIF (Захисне)</h2><div style="background:rgba(252,238,10,.1);border-left:4px solid var(--cyber-yellow);padding:20px;margin:30px 0"><h3 style="color:var(--cyber-yellow);margin-top:0;display:flex;align-items:center;gap:10px"><svg width="24" height="24" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="#fcee0a"/><rect x="8" y="8" width="8" height="8" fill="#0a0a0f"/></svg> NULLIF</h3><p style="font-size:1.1em;line-height:1.6">Це зворотнє закляття. Якщо два значення рівні, воно повертає NULL. В іншому випадку, воно повертає перше значення.</p></div><div style="margin-top:30px;padding:15px;background:rgba(0,240,255,.05);border:1px solid var(--cyber-cyan);display:flex;gap:12px;align-items:start"><svg width="28" height="28" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="9" fill="none" stroke="#00f0ff" stroke-width="2"/><rect x="11" y="6" width="2" height="2" fill="#fcee0a"/><path d="M10,10 L10,17 L14,17 L14,10 Z" fill="#00f0ff"/></svg><p style="color:var(--cyber-cyan);margin:0"><strong>Аналогія:</strong> Синтаксис: NULLIF(value1, value_to_check) Приклади: • NULLIF(10, 10) → поверне NULL • NULLIF(10, 5) → поверне 10 • NULLIF(0, 0) → поверне NULL (захист від ділення на нуль!)</p></div></section><section><h2><svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:12px"><rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2"/><path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2"/><rect x="13" y="15" width="6" height="2" fill="#fcee0a"/></svg> 🎯 NULLIF: Які задачі вирішує?</h2><p style="margin-bottom:20px;color:var(--cyber-cyan);display:flex;align-items:center;gap:10px"><svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink:0"><rect x="4" y="4" width="16" height="16" fill="#00f0ff"/><rect x="8" y="8" width="8" height="8" fill="#0a0a0f"/></svg> Задача: Запобігання помилці "ділення на нуль" (Divide by zero) 🛡️</p><pre style="font-size:1.15em"><code class="language-sql">-- Проблема:
+        });
+      </script>
+    </div>
+
+    <!-- Action Items -->
+    <div>
+      <div
+        style="
+          background: rgba(252, 238, 10, 0.1);
+          border-left: 4px solid var(--cyber-yellow);
+          padding: 20px;
+          margin-bottom: 25px;
+        "
+      >
+        <h3 style="color: var(--cyber-yellow); margin-top: 0; font-size: 1.1em">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            style="vertical-align: middle; margin-right: 8px"
+          >
+            <rect x="4" y="4" width="6" height="6" fill="#fcee0a" />
+            <rect x="12" y="4" width="6" height="6" fill="#00f0ff" />
+            <rect x="4" y="12" width="6" height="6" fill="#ff00ff" />
+            <rect x="12" y="12" width="6" height="6" fill="#fcee0a" />
+          </svg>
+          Що будемо робити:
+        </h3>
+        <p style="font-size: 1em; line-height: 1.6; margin: 0"></p>
+      </div>
+
+      <div style="margin-top: 20px">
+        <h3
+          style="
+            color: var(--cyber-cyan);
+            font-size: 1em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+          "
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <rect x="3" y="5" width="18" height="3" fill="#00f0ff" />
+            <rect x="3" y="11" width="18" height="3" fill="#00f0ff" />
+            <rect x="3" y="17" width="18" height="3" fill="#00f0ff" />
+          </svg>
+          Action Items:
+        </h3>
+        <div style="display: grid; gap: 12px">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p style="text-align: center; margin-top: 30px; font-size: 1.15em; color: var(--cyber-magenta)">
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 8px"
+    >
+      <polygon points="8,5 8,19 18,12" fill="#ff00ff" />
+      <rect x="6" y="3" width="14" height="2" fill="#ff00ff" />
+      <rect x="6" y="19" width="14" height="2" fill="#ff00ff" />
+    </svg>
+    <strong>Готові? Почали кодити!</strong>
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-left: 8px"
+    >
+      <rect x="4" y="8" width="4" height="8" fill="#fcee0a" />
+      <rect x="10" y="6" width="4" height="10" fill="#00f0ff" />
+      <rect x="16" y="4" width="4" height="12" fill="#ff00ff" />
+    </svg>
+  </p>
+</section>
+<!-- 12. Підсумок / Ключові висновки -->
+<section>
+  <h2 class="glitch" data-text="📝 Висновок по COALESCE">
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="3" y="3" width="8" height="8" fill="#fcee0a" />
+      <rect x="13" y="3" width="8" height="8" fill="#00f0ff" />
+      <rect x="3" y="13" width="8" height="8" fill="#ff00ff" />
+      <rect x="13" y="13" width="8" height="8" fill="#fcee0a" />
+    </svg>
+    📝 Висновок по COALESCE
+  </h2>
+  <div style="margin-top: 50px">
+    <ul style="list-style: none; font-size: 1.15em; line-height: 2.2; padding-left: 0">
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>Це ваше головне закляття для "очищення" даних</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>Воно замінює NULL на конкретне, безпечне значення</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>COALESCE приймає будь-яку кількість аргументів</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>Повертає перше НЕ-NULL значення зліва направо</span>
+      </li>
+    </ul>
+  </div>
+</section>
+<!-- 4. Ключове поняття / Визначення -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="3" y="3" width="18" height="18" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="7" y="7" width="4" height="4" fill="#00f0ff" />
+      <rect x="13" y="7" width="4" height="4" fill="#ff00ff" />
+      <rect x="7" y="13" width="10" height="2" fill="#fcee0a" />
+    </svg>
+    🛡️ Закляття №3: NULLIF (Захисне)
+  </h2>
+  <div
+    style="
+      background: rgba(252, 238, 10, 0.1);
+      border-left: 4px solid var(--cyber-yellow);
+      padding: 20px;
+      margin: 30px 0;
+    "
+  >
+    <h3
+      style="
+        color: var(--cyber-yellow);
+        margin-top: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      "
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <rect x="4" y="4" width="16" height="16" fill="#fcee0a" />
+        <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+      </svg>
+      NULLIF
+    </h3>
+    <p style="font-size: 1.1em; line-height: 1.6">Це зворотнє закляття. Якщо два значення рівні, воно повертає NULL. В іншому випадку, воно повертає перше значення.</p>
+  </div>
+  <div
+    style="
+      margin-top: 30px;
+      padding: 15px;
+      background: rgba(0, 240, 255, 0.05);
+      border: 1px solid var(--cyber-cyan);
+      display: flex;
+      gap: 12px;
+      align-items: start;
+    "
+  >
+    <svg width="28" height="28" viewBox="0 0 24 24" style="flex-shrink: 0; margin-top: 2px">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <rect x="11" y="6" width="2" height="2" fill="#fcee0a" />
+      <path d="M10,10 L10,17 L14,17 L14,10 Z" fill="#00f0ff" />
+    </svg>
+    <p style="color: var(--cyber-cyan); margin: 0">
+      <strong>Аналогія:</strong>
+      Синтаксис: NULLIF(value1, value_to_check)
+
+Приклади:
+• NULLIF(10, 10) → поверне NULL
+• NULLIF(10, 5) → поверне 10
+• NULLIF(0, 0) → поверне NULL (захист від ділення на нуль!)
+    </p>
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    🎯 NULLIF: Які задачі вирішує?
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Задача: Запобігання помилці "ділення на нуль" (Divide by zero) 🛡️
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">-- Проблема:
 -- SELECT 100 / 0;  --> ПОМИЛКА! 😱 (у більшості СУБД)
 
 -- Рішення:
@@ -111,7 +1585,169 @@ SELECT
   course_name,
   SUM(sales) / NULLIF(SUM(clicks), 0) AS conversion_rate
 FROM course_stats
-GROUP BY course_name;</code></pre></section><section style="font-size:.9em" data-auto-animate><h2>🟢 Live Coding: NULLIF в дії</h2><div style="display:grid;grid-template-columns:280px 1fr;gap:40px;align-items:start;margin-top:30px"><div style="position:relative"><style>@keyframes screen-glow{0%,100%{box-shadow:0 0 15px rgba(0,240,255,.4),inset 0 0 10px rgba(0,240,255,.1)}50%{box-shadow:0 0 30px rgba(0,240,255,.7),inset 0 0 15px rgba(0,240,255,.2)}}@keyframes pixel-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}@keyframes key-press{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(.95);opacity:1}}.live-coding-terminal{width:280px;background:linear-gradient(135deg,#0a0a0f 0,#1a1a2e 100%);border:3px solid var(--cyber-cyan);border-radius:12px;position:relative;animation:screen-glow 3s ease-in-out infinite,pixel-float 4s ease-in-out infinite;box-shadow:0 10px 30px rgba(0,240,255,.3)}.terminal-header{background:linear-gradient(90deg,var(--cyber-cyan) 0,var(--cyber-magenta) 100%);padding:8px 12px;border-radius:9px 9px 0 0;display:flex;align-items:center;gap:6px}.terminal-dot{width:10px;height:10px;border-radius:50%;background:var(--cyber-yellow)}.terminal-dot:nth-child(2){background:var(--cyber-magenta)}.terminal-dot:nth-child(3){background:var(--cyber-red)}.terminal-screen{padding:15px;min-height:180px;background:#0a0a0f;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyber-cyan);line-height:1.6}.terminal-prompt{color:var(--cyber-yellow)}.terminal-output{color:var(--cyber-cyan);margin:3px 0}.terminal-success{color:#00ff41}.typed-cursor{color:var(--cyber-cyan);animation:blink 1s infinite}@keyframes blink{0%,49%{opacity:1}100%,50%{opacity:0}}.pixel-keys{display:flex;gap:4px;padding:10px;justify-content:center}.pixel-key{width:22px;height:18px;background:linear-gradient(180deg,var(--cyber-yellow) 0,#b8a408 100%);border-radius:3px;border:2px solid rgba(252,238,10,.3);animation:key-press 2s ease-in-out infinite}.pixel-key:nth-child(2){animation-delay:.2s}.pixel-key:nth-child(3){animation-delay:.4s}.pixel-key:nth-child(4){animation-delay:.6s}</style><div class="live-coding-terminal"><div class="terminal-header"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div><div class="terminal-screen" id="typed-terminal-"><div class="terminal-prompt">$ <span class="typed-text"></span></div></div><div class="pixel-keys"><div class="pixel-key"></div><div class="pixel-key"></div><div class="pixel-key"></div><div class="pixel-key"></div></div></div><script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"></script><script>// Initialize Typed.js for terminal animation
+GROUP BY course_name;</code></pre>
+</section>
+<!-- 14. Практика Live Coding -->
+<section style="font-size: 0.9em" data-auto-animate>
+  <h2>🟢 Live Coding: NULLIF в дії</h2>
+
+  <div
+    style="
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 40px;
+      align-items: start;
+      margin-top: 30px;
+    "
+  >
+    <!-- Animated Terminal with Typed.js -->
+    <div style="position: relative">
+      <style>
+        @keyframes screen-glow {
+          0%,
+          100% {
+            box-shadow:
+              0 0 15px rgba(0, 240, 255, 0.4),
+              inset 0 0 10px rgba(0, 240, 255, 0.1);
+          }
+          50% {
+            box-shadow:
+              0 0 30px rgba(0, 240, 255, 0.7),
+              inset 0 0 15px rgba(0, 240, 255, 0.2);
+          }
+        }
+        @keyframes pixel-float {
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-5px);
+          }
+        }
+        @keyframes key-press {
+          0%,
+          100% {
+            transform: scale(1);
+            opacity: 0.7;
+          }
+          50% {
+            transform: scale(0.95);
+            opacity: 1;
+          }
+        }
+        .live-coding-terminal {
+          width: 280px;
+          background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+          border: 3px solid var(--cyber-cyan);
+          border-radius: 12px;
+          position: relative;
+          animation:
+            screen-glow 3s ease-in-out infinite,
+            pixel-float 4s ease-in-out infinite;
+          box-shadow: 0 10px 30px rgba(0, 240, 255, 0.3);
+        }
+        .terminal-header {
+          background: linear-gradient(90deg, var(--cyber-cyan) 0%, var(--cyber-magenta) 100%);
+          padding: 8px 12px;
+          border-radius: 9px 9px 0 0;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .terminal-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: var(--cyber-yellow);
+        }
+        .terminal-dot:nth-child(2) {
+          background: var(--cyber-magenta);
+        }
+        .terminal-dot:nth-child(3) {
+          background: var(--cyber-red);
+        }
+        .terminal-screen {
+          padding: 15px;
+          min-height: 180px;
+          background: #0a0a0f;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 11px;
+          color: var(--cyber-cyan);
+          line-height: 1.6;
+        }
+        .terminal-prompt {
+          color: var(--cyber-yellow);
+        }
+        .terminal-output {
+          color: var(--cyber-cyan);
+          margin: 3px 0;
+        }
+        .terminal-success {
+          color: #00ff41;
+        }
+        .typed-cursor {
+          color: var(--cyber-cyan);
+          animation: blink 1s infinite;
+        }
+        @keyframes blink {
+          0%,
+          49% {
+            opacity: 1;
+          }
+          50%,
+          100% {
+            opacity: 0;
+          }
+        }
+        .pixel-keys {
+          display: flex;
+          gap: 4px;
+          padding: 10px;
+          justify-content: center;
+        }
+        .pixel-key {
+          width: 22px;
+          height: 18px;
+          background: linear-gradient(180deg, var(--cyber-yellow) 0%, #b8a408 100%);
+          border-radius: 3px;
+          border: 2px solid rgba(252, 238, 10, 0.3);
+          animation: key-press 2s ease-in-out infinite;
+        }
+        .pixel-key:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+        .pixel-key:nth-child(3) {
+          animation-delay: 0.4s;
+        }
+        .pixel-key:nth-child(4) {
+          animation-delay: 0.6s;
+        }
+      </style>
+
+      <div class="live-coding-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+        </div>
+        <div class="terminal-screen" id="typed-terminal-">
+          <div class="terminal-prompt">
+            $
+            <span class="typed-text"></span>
+          </div>
+        </div>
+        <div class="pixel-keys">
+          <div class="pixel-key"></div>
+          <div class="pixel-key"></div>
+          <div class="pixel-key"></div>
+          <div class="pixel-key"></div>
+        </div>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"></script>
+      <script>
+        // Initialize Typed.js for terminal animation
         document.addEventListener('DOMContentLoaded', function () {
           const terminalEl = document.querySelector(
             '#typed-terminal- .typed-text'
@@ -134,14 +1770,337 @@ GROUP BY course_name;</code></pre></section><section style="font-size:.9em" data
               cursorChar: '▋',
             });
           }
-        });</script></div><div><div style="background:rgba(252,238,10,.1);border-left:4px solid var(--cyber-yellow);padding:20px;margin-bottom:25px"><h3 style="color:var(--cyber-yellow);margin-top:0;font-size:1.1em"><svg width="24" height="24" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px"><rect x="4" y="4" width="6" height="6" fill="#fcee0a"/><rect x="12" y="4" width="6" height="6" fill="#00f0ff"/><rect x="4" y="12" width="6" height="6" fill="#ff00ff"/><rect x="12" y="12" width="6" height="6" fill="#fcee0a"/></svg> Що будемо робити:</h3><p style="font-size:1em;line-height:1.6;margin:0"></p></div><div style="margin-top:20px"><h3 style="color:var(--cyber-cyan);font-size:1em;margin-bottom:15px;display:flex;align-items:center;gap:10px"><svg width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="3" fill="#00f0ff"/><rect x="3" y="11" width="18" height="3" fill="#00f0ff"/><rect x="3" y="17" width="18" height="3" fill="#00f0ff"/></svg> Action Items:</h3><div style="display:grid;gap:12px"></div></div></div></div><p style="text-align:center;margin-top:30px;font-size:1.15em;color:var(--cyber-magenta)"><svg width="28" height="28" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px"><polygon points="8,5 8,19 18,12" fill="#ff00ff"/><rect x="6" y="3" width="14" height="2" fill="#ff00ff"/><rect x="6" y="19" width="14" height="2" fill="#ff00ff"/></svg> <strong>Готові? Почали кодити!</strong> <svg width="28" height="28" viewBox="0 0 24 24" style="vertical-align:middle;margin-left:8px"><rect x="4" y="8" width="4" height="8" fill="#fcee0a"/><rect x="10" y="6" width="4" height="10" fill="#00f0ff"/><rect x="16" y="4" width="4" height="12" fill="#ff00ff"/></svg></p></section><section><h2 class="glitch" data-text="📝 Висновок по NULLIF"><svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:12px"><rect x="3" y="3" width="8" height="8" fill="#fcee0a"/><rect x="13" y="3" width="8" height="8" fill="#00f0ff"/><rect x="3" y="13" width="8" height="8" fill="#ff00ff"/><rect x="13" y="13" width="8" height="8" fill="#fcee0a"/></svg> 📝 Висновок по NULLIF</h2><div style="margin-top:50px"><ul style="list-style:none;font-size:1.15em;line-height:2.2;padding-left:0"><li class="fragment highlight-cyber" style="display:flex;align-items:center;gap:15px;margin-bottom:15px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a"/></svg> <span>Використовуйте NULLIF, щоб перетворити "погане" конкретне значення на NULL</span></li><li class="fragment highlight-cyber" style="display:flex;align-items:center;gap:15px;margin-bottom:15px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a"/></svg> <span>Найчастіший випадок: NULLIF(знаменник, 0) для захисту від ділення на нуль</span></li><li class="fragment highlight-cyber" style="display:flex;align-items:center;gap:15px;margin-bottom:15px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a"/></svg> <span>Це закляття для запобігання помилкам</span></li><li class="fragment highlight-cyber" style="display:flex;align-items:center;gap:15px;margin-bottom:15px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a"/></svg> <span>NULLIF — це зворотня операція до COALESCE</span></li></ul></div></section><section><h2 class="glitch" data-text="📜 Загальні Підсумки"><svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:12px"><rect x="3" y="3" width="8" height="8" fill="#fcee0a"/><rect x="13" y="3" width="8" height="8" fill="#00f0ff"/><rect x="3" y="13" width="8" height="8" fill="#ff00ff"/><rect x="13" y="13" width="8" height="8" fill="#fcee0a"/></svg> 📜 Загальні Підсумки</h2><div style="margin-top:50px"><ul style="list-style:none;font-size:1.15em;line-height:2.2;padding-left:0"><li class="fragment highlight-cyber" style="display:flex;align-items:center;gap:15px;margin-bottom:15px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a"/></svg> <span>NULL — це "невідомо", це не 0 і не порожній рядок</span></li><li class="fragment highlight-cyber" style="display:flex;align-items:center;gap:15px;margin-bottom:15px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a"/></svg> <span>NULL "отруює" всі операції (+, ||, =)</span></li><li class="fragment highlight-cyber" style="display:flex;align-items:center;gap:15px;margin-bottom:15px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a"/></svg> <span>IS NULL / IS NOT NULL — для ПОШУКУ</span></li><li class="fragment highlight-cyber" style="display:flex;align-items:center;gap:15px;margin-bottom:15px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a"/></svg> <span>COALESCE — для ЗАМІНИ NULL на значення</span></li><li class="fragment highlight-cyber" style="display:flex;align-items:center;gap:15px;margin-bottom:15px"><svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink:0"><polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a"/></svg> <span>NULLIF — для ПЕРЕТВОРЕННЯ значення на NULL (щоб уникнути помилок)</span></li></ul></div></section><section><h2><svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:12px"><rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2"/><path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2"/><rect x="13" y="15" width="6" height="2" fill="#fcee0a"/></svg> 🦉 Перевірка знань!</h2><p style="margin-bottom:20px;color:var(--cyber-cyan);display:flex;align-items:center;gap:10px"><svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink:0"><rect x="4" y="4" width="16" height="16" fill="#00f0ff"/><rect x="8" y="8" width="8" height="8" fill="#0a0a0f"/></svg> Питання 1: Який запит знайде студентів БЕЗ прізвища (last_name = NULL)?</p><pre style="font-size:1.15em"><code class="language-sql">-- Варіант A:
+        });
+      </script>
+    </div>
+
+    <!-- Action Items -->
+    <div>
+      <div
+        style="
+          background: rgba(252, 238, 10, 0.1);
+          border-left: 4px solid var(--cyber-yellow);
+          padding: 20px;
+          margin-bottom: 25px;
+        "
+      >
+        <h3 style="color: var(--cyber-yellow); margin-top: 0; font-size: 1.1em">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            style="vertical-align: middle; margin-right: 8px"
+          >
+            <rect x="4" y="4" width="6" height="6" fill="#fcee0a" />
+            <rect x="12" y="4" width="6" height="6" fill="#00f0ff" />
+            <rect x="4" y="12" width="6" height="6" fill="#ff00ff" />
+            <rect x="12" y="12" width="6" height="6" fill="#fcee0a" />
+          </svg>
+          Що будемо робити:
+        </h3>
+        <p style="font-size: 1em; line-height: 1.6; margin: 0"></p>
+      </div>
+
+      <div style="margin-top: 20px">
+        <h3
+          style="
+            color: var(--cyber-cyan);
+            font-size: 1em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+          "
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <rect x="3" y="5" width="18" height="3" fill="#00f0ff" />
+            <rect x="3" y="11" width="18" height="3" fill="#00f0ff" />
+            <rect x="3" y="17" width="18" height="3" fill="#00f0ff" />
+          </svg>
+          Action Items:
+        </h3>
+        <div style="display: grid; gap: 12px">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p style="text-align: center; margin-top: 30px; font-size: 1.15em; color: var(--cyber-magenta)">
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 8px"
+    >
+      <polygon points="8,5 8,19 18,12" fill="#ff00ff" />
+      <rect x="6" y="3" width="14" height="2" fill="#ff00ff" />
+      <rect x="6" y="19" width="14" height="2" fill="#ff00ff" />
+    </svg>
+    <strong>Готові? Почали кодити!</strong>
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-left: 8px"
+    >
+      <rect x="4" y="8" width="4" height="8" fill="#fcee0a" />
+      <rect x="10" y="6" width="4" height="10" fill="#00f0ff" />
+      <rect x="16" y="4" width="4" height="12" fill="#ff00ff" />
+    </svg>
+  </p>
+</section>
+<!-- 12. Підсумок / Ключові висновки -->
+<section>
+  <h2 class="glitch" data-text="📝 Висновок по NULLIF">
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="3" y="3" width="8" height="8" fill="#fcee0a" />
+      <rect x="13" y="3" width="8" height="8" fill="#00f0ff" />
+      <rect x="3" y="13" width="8" height="8" fill="#ff00ff" />
+      <rect x="13" y="13" width="8" height="8" fill="#fcee0a" />
+    </svg>
+    📝 Висновок по NULLIF
+  </h2>
+  <div style="margin-top: 50px">
+    <ul style="list-style: none; font-size: 1.15em; line-height: 2.2; padding-left: 0">
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>Використовуйте NULLIF, щоб перетворити "погане" конкретне значення на NULL</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>Найчастіший випадок: NULLIF(знаменник, 0) для захисту від ділення на нуль</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>Це закляття для запобігання помилкам</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>NULLIF — це зворотня операція до COALESCE</span>
+      </li>
+    </ul>
+  </div>
+</section>
+<!-- 12. Підсумок / Ключові висновки -->
+<section>
+  <h2 class="glitch" data-text="📜 Загальні Підсумки">
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="3" y="3" width="8" height="8" fill="#fcee0a" />
+      <rect x="13" y="3" width="8" height="8" fill="#00f0ff" />
+      <rect x="3" y="13" width="8" height="8" fill="#ff00ff" />
+      <rect x="13" y="13" width="8" height="8" fill="#fcee0a" />
+    </svg>
+    📜 Загальні Підсумки
+  </h2>
+  <div style="margin-top: 50px">
+    <ul style="list-style: none; font-size: 1.15em; line-height: 2.2; padding-left: 0">
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>NULL — це "невідомо", це не 0 і не порожній рядок</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>NULL "отруює" всі операції (+, ||, =)</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>IS NULL / IS NOT NULL — для ПОШУКУ</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>COALESCE — для ЗАМІНИ NULL на значення</span>
+      </li>
+      <li
+        class="fragment highlight-cyber"
+        style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" style="flex-shrink: 0">
+          <polygon points="12,2 15,9 22,10 17,15 18,22 12,18 6,22 7,15 2,10 9,9" fill="#fcee0a" />
+        </svg>
+        <span>NULLIF — для ПЕРЕТВОРЕННЯ значення на NULL (щоб уникнути помилок)</span>
+      </li>
+    </ul>
+  </div>
+</section>
+<!-- 6. Приклад коду -->
+<section>
+  <h2>
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      style="vertical-align: middle; margin-right: 12px"
+    >
+      <rect x="2" y="2" width="20" height="20" fill="none" stroke="#00f0ff" stroke-width="2" />
+      <path d="M7,8 L10,12 L7,16" fill="none" stroke="#fcee0a" stroke-width="2" />
+      <rect x="13" y="15" width="6" height="2" fill="#fcee0a" />
+    </svg>
+    🦉 Перевірка знань!
+  </h2>
+  <p
+    style="
+      margin-bottom: 20px;
+      color: var(--cyber-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    "
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink: 0">
+      <rect x="4" y="4" width="16" height="16" fill="#00f0ff" />
+      <rect x="8" y="8" width="8" height="8" fill="#0a0a0f" />
+    </svg>
+    Питання 1: Який запит знайде студентів БЕЗ прізвища (last_name = NULL)?
+  </p>
+  <pre style="font-size: 1.15em"><code class="language-sql">-- Варіант A:
 SELECT * FROM students WHERE last_name = NULL;
 
 -- Варіант B:
 SELECT * FROM students WHERE last_name IS NULL;
 
 -- Варіант C:
-SELECT * FROM students WHERE COALESCE(last_name, '') = '';</code></pre></section><section style="font-size:.9em"><h2>🧹 Домашнє завдання</h2><div style="background:rgba(252,238,10,.1);border-left:4px solid var(--cyber-yellow);padding:18px;margin:25px 0"><h3 style="color:var(--cyber-yellow);margin-top:0;font-size:1em">Наступна лекція:</h3><p style="font-size:1em">Лекція 11: Агрегатні функції та GROUP BY</p></div><div style="margin-top:30px"><h3 style="color:var(--cyber-cyan);font-size:1em">📚 Корисні ресурси:</h3><ul style="font-size:.9em;line-height:1.7"><li><a href="https:&#x2F;&#x2F;www.sqlite.org&#x2F;nulls.html" style="color:var(--cyber-cyan)">SQLite NULL Handling</a></li><li><a href="https:&#x2F;&#x2F;www.w3schools.com&#x2F;sql&#x2F;func_sqlserver_coalesce.asp" style="color:var(--cyber-cyan)">SQL COALESCE Function</a></li><li><a href="https:&#x2F;&#x2F;www.postgresql.org&#x2F;docs&#x2F;current&#x2F;functions-conditional.html" style="color:var(--cyber-cyan)">Working with NULL in SQL</a></li></ul></div><div style="margin-top:30px"><h3 style="color:var(--cyber-cyan);font-size:1em">📚 Корисні ресурси:</h3><ul style="font-size:.9em;line-height:1.7"><li><a href="https:&#x2F;&#x2F;www.sqlite.org&#x2F;nulls.html" style="color:var(--cyber-cyan)">SQLite NULL Handling</a></li><li><a href="https:&#x2F;&#x2F;www.w3schools.com&#x2F;sql&#x2F;func_sqlserver_coalesce.asp" style="color:var(--cyber-cyan)">SQL COALESCE Function</a></li><li><a href="https:&#x2F;&#x2F;www.postgresql.org&#x2F;docs&#x2F;current&#x2F;functions-conditional.html" style="color:var(--cyber-cyan)">Working with NULL in SQL</a></li></ul></div><div style="margin-top:30px"><h3 style="color:var(--cyber-cyan);font-size:1em">📚 Корисні ресурси:</h3><ul style="font-size:.9em;line-height:1.7"><li><a href="https:&#x2F;&#x2F;www.sqlite.org&#x2F;nulls.html" style="color:var(--cyber-cyan)">SQLite NULL Handling</a></li><li><a href="https:&#x2F;&#x2F;www.w3schools.com&#x2F;sql&#x2F;func_sqlserver_coalesce.asp" style="color:var(--cyber-cyan)">SQL COALESCE Function</a></li><li><a href="https:&#x2F;&#x2F;www.postgresql.org&#x2F;docs&#x2F;current&#x2F;functions-conditional.html" style="color:var(--cyber-cyan)">Working with NULL in SQL</a></li></ul></div><p style="margin-top:40px;text-align:center;color:var(--cyber-yellow);font-size:1.2em"><strong>Дякую за увагу! 💾</strong></p><p style="text-align:center;color:var(--cyber-cyan);margin-top:18px;font-size:.95em"><a href="../index.html">← Повернутися до списку лекцій</a></p></section></div></div><script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.js"></script><script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/notes/notes.js"></script><script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/markdown/markdown.js"></script><script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/highlight/highlight.js"></script><script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script><script>const getMermaidConfig = () => {
+SELECT * FROM students WHERE COALESCE(last_name, '') = '';</code></pre>
+</section>
+        <!-- 13. Наступні кроки та ресурси -->
+        <section style="font-size: 0.9em">
+          <h2>🧹 Домашнє завдання</h2>
+
+          <div
+            style="
+              background: rgba(252, 238, 10, 0.1);
+              border-left: 4px solid var(--cyber-yellow);
+              padding: 18px;
+              margin: 25px 0;
+            "
+          >
+            <h3 style="color: var(--cyber-yellow); margin-top: 0; font-size: 1em">Наступна лекція:</h3>
+            <p style="font-size: 1em">Лекція 11: Агрегатні функції та GROUP BY</p>
+          </div>
+          <div style="margin-top: 30px">
+            <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
+            <ul style="font-size: 0.9em; line-height: 1.7">
+              <li>
+                <a href="https:&#x2F;&#x2F;www.sqlite.org&#x2F;nulls.html" style="color: var(--cyber-cyan)">SQLite NULL Handling</a>
+                 
+              </li>
+              <li>
+                <a href="https:&#x2F;&#x2F;www.w3schools.com&#x2F;sql&#x2F;func_sqlserver_coalesce.asp" style="color: var(--cyber-cyan)">SQL COALESCE Function</a>
+                 
+              </li>
+              <li>
+                <a href="https:&#x2F;&#x2F;www.postgresql.org&#x2F;docs&#x2F;current&#x2F;functions-conditional.html" style="color: var(--cyber-cyan)">Working with NULL in SQL</a>
+                 
+              </li>
+            </ul>
+          </div>
+          <div style="margin-top: 30px">
+            <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
+            <ul style="font-size: 0.9em; line-height: 1.7">
+              <li>
+                <a href="https:&#x2F;&#x2F;www.sqlite.org&#x2F;nulls.html" style="color: var(--cyber-cyan)">SQLite NULL Handling</a>
+                 
+              </li>
+              <li>
+                <a href="https:&#x2F;&#x2F;www.w3schools.com&#x2F;sql&#x2F;func_sqlserver_coalesce.asp" style="color: var(--cyber-cyan)">SQL COALESCE Function</a>
+                 
+              </li>
+              <li>
+                <a href="https:&#x2F;&#x2F;www.postgresql.org&#x2F;docs&#x2F;current&#x2F;functions-conditional.html" style="color: var(--cyber-cyan)">Working with NULL in SQL</a>
+                 
+              </li>
+            </ul>
+          </div>
+          <div style="margin-top: 30px">
+            <h3 style="color: var(--cyber-cyan); font-size: 1em">📚 Корисні ресурси:</h3>
+            <ul style="font-size: 0.9em; line-height: 1.7">
+              <li>
+                <a href="https:&#x2F;&#x2F;www.sqlite.org&#x2F;nulls.html" style="color: var(--cyber-cyan)">SQLite NULL Handling</a>
+                 
+              </li>
+              <li>
+                <a href="https:&#x2F;&#x2F;www.w3schools.com&#x2F;sql&#x2F;func_sqlserver_coalesce.asp" style="color: var(--cyber-cyan)">SQL COALESCE Function</a>
+                 
+              </li>
+              <li>
+                <a href="https:&#x2F;&#x2F;www.postgresql.org&#x2F;docs&#x2F;current&#x2F;functions-conditional.html" style="color: var(--cyber-cyan)">Working with NULL in SQL</a>
+                 
+              </li>
+            </ul>
+          </div>
+
+          <p style="margin-top: 40px; text-align: center; color: var(--cyber-yellow); font-size: 1.2em">
+            <strong>Дякую за увагу! 💾</strong>
+          </p>
+
+          <p style="text-align: center; color: var(--cyber-cyan); margin-top: 18px; font-size: 0.95em">
+            <a href="../index.html">← Повернутися до списку лекцій</a>
+          </p>
+        </section>
+      </div>
+    </div>
+
+    <!-- Reveal.js -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.js"></script>
+
+    <!-- Reveal.js Plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/highlight/highlight.js"></script>
+
+    <!-- Mermaid.js (non-module for compatibility) -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <script>
+      const getMermaidConfig = () => {
         const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
         const mono = prefersDark ? '#ffffff' : '#000000';
 
@@ -172,7 +2131,12 @@ SELECT * FROM students WHERE COALESCE(last_name, '') = '';</code></pre></section
 
       if (window.mermaid) {
         window.mermaid.initialize(getMermaidConfig());
-      }</script><script>Reveal.initialize({
+      }
+    </script>
+
+    <!-- Initialize Reveal.js -->
+    <script>
+      Reveal.initialize({
         hash: true,
         slideNumber: true,
         controls: true,
@@ -190,4 +2154,7 @@ SELECT * FROM students WHERE COALESCE(last_name, '') = '';</code></pre></section
             querySelector: '.mermaid',
           });
         }
-      });</script></body></html>
+      });
+    </script>
+  </body>
+</html>
