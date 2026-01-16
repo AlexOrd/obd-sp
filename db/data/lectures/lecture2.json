@@ -31,7 +31,7 @@
       "type": "diagram",
       "title": "Рівні абстракції",
       "description": "Три рівні сприйняття магії",
-      "mermaidCode": "graph TD\nExt[Зовнішній рівень - Заклинання користувача] --> Conc[Концептуальний рівень - Теорія магії/Структура]\nConc --> Phys[Фізичний рівень - Магічне ядро/Біти на диску]\nstyle Ext fill:#f9f,stroke:#333\nstyle Conc fill:#bbf,stroke:#333\nstyle Phys fill:#dfd,stroke:#333"
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ngraph TD\nExt[Зовнішній рівень - Заклинання користувача] --> Conc[Концептуальний рівень - Теорія магії/Структура]\nConc --> Phys[Фізичний рівень - Магічне ядро/Біти на диску]\nstyle Ext fill:#f9f,stroke:#333\nstyle Conc fill:#bbf,stroke:#333\nstyle Phys fill:#dfd,stroke:#333"
     },
     {
       "type": "timeline",
@@ -88,7 +88,7 @@
       "type": "diagram",
       "title": "Графова модель даних",
       "description": "Соціальні зв'язки Гоґвортсу. Використовується, коли зв'язки важливіші за самі дані (Neo4j).",
-      "mermaidCode": "graph LR\nHarry((Harry)) -- friend_of --> Ron((Ron))\nHarry -- enemy_of --> Draco((Draco))\nSnape((Snape)) -- loves --> Lily((Lily))\nLily -- mother_of --> Harry"
+      "mermaidCode": "%%{init: {\"theme\": \"neutral\", \"mermaid\": {\"version\": \"11.12.2\"}}}%%\ngraph LR\nHarry((Harry)) -- friend_of --> Ron((Ron))\nHarry -- enemy_of --> Draco((Draco))\nSnape((Snape)) -- loves --> Lily((Lily))\nLily -- mother_of --> Harry"
     },
     {
       "type": "content",
