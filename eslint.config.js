@@ -22,10 +22,15 @@ export default [
         __dirname: 'readonly',
         __filename: 'readonly',
         Buffer: 'readonly',
+        // Browser navigation/animation globals
+        history: 'readonly',
+        requestAnimationFrame: 'readonly',
         // Reveal.js globals
         Reveal: 'readonly',
         // Typed.js globals
         Typed: 'readonly',
+        // Three.js globals
+        THREE: 'readonly',
       },
     },
     rules: {
