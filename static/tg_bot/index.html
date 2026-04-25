@@ -605,6 +605,17 @@
         color: var(--fg-muted);
         margin-top: 2px;
       }
+
+      a.repo-link {
+        color: var(--accent-fg);
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.15s ease;
+      }
+
+      a.repo-link:hover {
+        border-bottom-color: var(--accent-fg);
+      }
     </style>
   </head>
   <body>
@@ -711,7 +722,7 @@
             <div class="step-num">1</div>
             <div>
               Відкрийте репозиторій шаблону на GitHub:
-              <code>github.com/AlexOrd/vtfk_tg_bot</code>
+              <a href="https://github.com/AlexOrd/vtfk_tg_bot" target="_blank" rel="noopener noreferrer" class="repo-link"><code>github.com/AlexOrd/vtfk_tg_bot</code></a>
             </div>
           </div>
           <div class="step">
@@ -1351,7 +1362,8 @@
         </div>
         <div class="author-footer">
           Олександр Ординський &nbsp;·&nbsp; github.com/AlexOrd<br />
-          Майстер-клас ВТФК
+          Майстер-клас ВТФК &nbsp;·&nbsp;
+          <a href="https://github.com/AlexOrd/vtfk_tg_bot" target="_blank" rel="noopener noreferrer" class="repo-link">github.com/AlexOrd/vtfk_tg_bot</a>
         </div>
       </div>
     </div>
