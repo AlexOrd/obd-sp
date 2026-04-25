@@ -544,6 +544,12 @@
         border-radius: 0 2px 2px 0;
       }
 
+      .check-icon.optional {
+        border-color: var(--done-fg);
+        color: var(--done-fg);
+        background-color: rgba(163, 113, 247, 0.15);
+      }
+
       /* ─── Cover image slide ──────────────────────────────────── */
       .slide-cover {
         padding: 0;
@@ -674,7 +680,7 @@
             <div class="card">
               <div class="card-title">✅ Чому це зручно?</div>
               <div class="card-body">
-                Не потрібно нічого встановлювати. Працює з будь-якого пристрою. Secretsзберігаються
+                Не потрібно нічого встановлювати. Працює з будь-якого пристрою. Secrets зберігаються
                 в GitHub — безпечно!
               </div>
             </div>
@@ -792,14 +798,14 @@
               </div>
             </div>
             <div class="checklist-item">
-              <div class="check-icon" style="border-color: var(--done-fg); color: var(--done-fg); background-color: rgba(163,113,247,0.15);">○</div>
+              <div class="check-icon optional">○</div>
               <div>
                 <code>OPENAI_API_KEY</code> — API-ключ від OpenAI
                 (<code>platform.openai.com/api-keys</code>). Для режиму ШІ.
               </div>
             </div>
             <div class="checklist-item">
-              <div class="check-icon" style="border-color: var(--done-fg); color: var(--done-fg); background-color: rgba(163,113,247,0.15);">○</div>
+              <div class="check-icon optional">○</div>
               <div>
                 <code>ASSISTANT_ID</code> — ID вашого OpenAI-асистента
                 (починається з <code>asst_...</code>). Для режиму ШІ.
@@ -1385,9 +1391,9 @@
 
       document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-          showSlide(currentSlide - 1);
+          if (currentSlide > 0) showSlide(currentSlide - 1);
         } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
-          showSlide(currentSlide + 1);
+          if (currentSlide < totalSlides - 1) showSlide(currentSlide + 1);
         } else if (e.key === 'Home') {
           showSlide(0);
         } else if (e.key === 'End') {
