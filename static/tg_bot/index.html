@@ -3,28 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Твій перший Telegram-бот на Python | Майстер-клас ВТФК</title>
+    <title>Telegram-бот з ШІ за 60 хвилин | Майстер-клас ВТФК</title>
     <style>
-      :root {
-        --bg-default: #0d1117;
-        --bg-canvas: #161b22;
-        --bg-overlay: #1c2128;
-        --border-default: #30363d;
-        --border-muted: #21262d;
-        --fg-default: #e6edf3;
-        --fg-muted: #8b949e;
-        --fg-subtle: #6e7681;
-        --accent-fg: #58a6ff;
-        --accent-emphasis: #1f6feb;
-        --success-fg: #3fb950;
-        --attention-fg: #d29922;
-        --danger-fg: #f85149;
-        --done-fg: #a371f7;
-        --sponsors-fg: #db61a2;
-        --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono',
-          monospace;
-      }
-
       * {
         margin: 0;
         padding: 0;
@@ -33,18 +13,66 @@
 
       body {
         font-family:
-          -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-        background-color: var(--bg-default);
-        color: var(--fg-default);
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background: linear-gradient(135deg, #0a0a0f 0%, #1a0a1f 50%, #0f0a1a 100%);
+        color: #e0e0e0;
         overflow: hidden;
-        height: 100vh;
+        position: relative;
       }
 
-      /* ─── Layout ─────────────────────────────────────────────── */
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background:
+          repeating-linear-gradient(
+            0deg,
+            rgba(0, 212, 255, 0.03) 0px,
+            transparent 1px,
+            transparent 2px,
+            rgba(0, 212, 255, 0.03) 3px
+          ),
+          repeating-linear-gradient(
+            90deg,
+            rgba(255, 0, 255, 0.03) 0px,
+            transparent 1px,
+            transparent 2px,
+            rgba(255, 0, 255, 0.03) 3px
+          );
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      body::after {
+        content: '';
+        position: fixed;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+        animation: rotate 30s linear infinite;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
       .slides-container {
         width: 100vw;
         height: 100vh;
         position: relative;
+        z-index: 2;
       }
 
       .slide {
@@ -54,23 +82,30 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        padding: 60px 80px;
+        padding: 60px;
         text-align: center;
         position: absolute;
         top: 0;
         left: 0;
-        background-color: var(--bg-default);
+        background: radial-gradient(
+          ellipse at center,
+          rgba(26, 10, 31, 0.8) 0%,
+          rgba(10, 10, 15, 0.95) 100%
+        );
+        border: 1px solid rgba(0, 212, 255, 0.1);
       }
 
       .slide.active {
         display: flex;
-        animation: fadeSlide 0.3s ease-out;
+        animation:
+          fadeIn 0.5s ease-in,
+          glitchEffect 0.8s ease-out;
       }
 
-      @keyframes fadeSlide {
+      @keyframes fadeIn {
         from {
           opacity: 0;
-          transform: translateY(12px);
+          transform: translateY(20px);
         }
         to {
           opacity: 1;
@@ -78,1281 +113,644 @@
         }
       }
 
-      /* ─── Typography ─────────────────────────────────────────── */
-      h1 {
-        font-size: 3rem;
-        font-weight: 700;
-        line-height: 1.25;
-        color: var(--fg-default);
-        margin-bottom: 16px;
-        letter-spacing: -0.5px;
+      @keyframes glitchEffect {
+        0%,
+        100% {
+          text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+        25% {
+          text-shadow:
+            -2px 0 0 rgba(255, 0, 255, 0.7),
+            2px 0 0 rgba(0, 212, 255, 0.7);
+        }
+        50% {
+          text-shadow:
+            2px 0 0 rgba(255, 0, 255, 0.7),
+            -2px 0 0 rgba(0, 212, 255, 0.7);
+        }
+        75% {
+          text-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
+        }
       }
 
-      h1 .accent {
-        color: var(--accent-fg);
+      h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #00d4ff;
+        text-shadow:
+          0 0 10px rgba(0, 212, 255, 0.8),
+          0 0 20px rgba(0, 212, 255, 0.5),
+          0 0 30px rgba(0, 212, 255, 0.3),
+          2px 2px 0 rgba(255, 0, 255, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 2px;
       }
 
       h2 {
-        font-size: 2rem;
+        font-size: 2.5rem;
         font-weight: 600;
-        line-height: 1.3;
-        color: var(--fg-default);
-        margin-bottom: 32px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid var(--border-default);
-        width: 100%;
-        max-width: 900px;
-        text-align: left;
+        margin-bottom: 40px;
+        color: #00d4ff;
+        text-shadow:
+          0 0 10px rgba(0, 212, 255, 0.6),
+          0 0 20px rgba(0, 212, 255, 0.4);
+        border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+        padding-bottom: 15px;
       }
 
       h3 {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: var(--fg-muted);
-        margin-bottom: 8px;
+        font-size: 1.8rem;
+        font-weight: 500;
+        margin-bottom: 15px;
+        color: #ff00ff;
+        text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
       }
 
       .subtitle {
-        font-size: 1.25rem;
-        color: var(--fg-muted);
-        margin-bottom: 32px;
-        line-height: 1.6;
+        font-size: 1.5rem;
+        color: #ff00ff;
+        margin-bottom: 40px;
+        text-shadow: 0 0 8px rgba(255, 0, 255, 0.4);
       }
 
-      code {
-        font-family: var(--font-mono);
-        font-size: 0.9em;
-        background-color: var(--bg-overlay);
-        border: 1px solid var(--border-default);
-        border-radius: 6px;
-        padding: 2px 6px;
-        color: var(--sponsors-fg);
+      .author {
+        position: absolute;
+        bottom: 40px;
+        font-size: 1.2rem;
+        color: #00d4ff;
+        text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
       }
 
-      /* ─── Content wrapper ────────────────────────────────────── */
       .content {
-        max-width: 900px;
+        max-width: 1000px;
         width: 100%;
-        text-align: left;
       }
 
-      /* ─── List items ─────────────────────────────────────────── */
       .list-item {
-        font-size: 1.1rem;
-        line-height: 1.7;
-        padding: 10px 0 10px 28px;
+        font-size: 1.4rem;
+        line-height: 2.2;
+        margin: 20px 0;
+        text-align: left;
+        padding-left: 40px;
         position: relative;
-        color: var(--fg-default);
-        border-bottom: 1px solid var(--border-muted);
-      }
-
-      .list-item:last-child {
-        border-bottom: none;
       }
 
       .list-item::before {
         content: '▸';
         position: absolute;
         left: 0;
-        color: var(--accent-fg);
-        font-size: 0.85em;
-        top: 12px;
+        color: #00d4ff;
+        font-weight: bold;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          text-shadow: 0 0 5px rgba(0, 212, 255, 0.8);
+        }
+        50% {
+          opacity: 0.6;
+          text-shadow: 0 0 10px rgba(0, 212, 255, 1);
+        }
       }
 
       .list-item strong {
-        color: var(--fg-default);
-        font-weight: 600;
+        color: #ff00ff;
+        text-shadow: 0 0 5px rgba(255, 0, 255, 0.4);
       }
 
-      .list-item .tag {
-        display: inline-block;
-        background-color: var(--accent-emphasis);
-        color: #fff;
-        font-size: 0.75rem;
-        font-weight: 600;
-        padding: 2px 8px;
-        border-radius: 12px;
-        margin-left: 6px;
-        vertical-align: middle;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      /* ─── Step cards (action items) ──────────────────────────── */
-      .step-list {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        width: 100%;
-        max-width: 900px;
-      }
-
-      .step {
-        display: flex;
-        align-items: flex-start;
-        gap: 16px;
-        padding: 16px 20px;
-        background-color: var(--bg-canvas);
-        border: 1px solid var(--border-default);
-        border-radius: 8px;
-        text-align: left;
-        font-size: 1.05rem;
-        line-height: 1.55;
-        transition: border-color 0.15s;
-      }
-
-      .step:hover {
-        border-color: var(--accent-fg);
-      }
-
-      .step-num {
-        flex-shrink: 0;
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        background-color: var(--accent-emphasis);
-        color: #fff;
-        font-size: 0.85rem;
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: 1px;
-      }
-
-      .step strong {
-        color: var(--fg-default);
-      }
-
-      /* ─── Code blocks ────────────────────────────────────────── */
-      .code-block {
-        background-color: var(--bg-canvas);
-        border: 1px solid var(--border-default);
-        border-radius: 8px;
-        margin: 20px 0;
-        font-family: var(--font-mono);
-        font-size: 0.92rem;
-        text-align: left;
-        line-height: 1.65;
-        color: var(--fg-default);
-        overflow: hidden;
-      }
-
-      .code-block .code-header {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 16px;
-        background-color: var(--bg-overlay);
-        border-bottom: 1px solid var(--border-default);
-        font-size: 0.78rem;
-        color: var(--fg-muted);
-        font-family:
-          -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      }
-
-      .code-block .code-header .dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background-color: var(--border-default);
-      }
-
-      .code-block .code-header .dot.red {
-        background-color: #f85149;
-      }
-
-      .code-block .code-header .dot.yellow {
-        background-color: #d29922;
-      }
-
-      .code-block .code-header .dot.green {
-        background-color: #3fb950;
-      }
-
-      .code-block pre {
-        padding: 16px 20px;
-        overflow-x: auto;
-      }
-
-      .code-block .cm {
-        color: var(--fg-subtle);
-      }
-
-      .code-block .kw {
-        color: #ff7b72;
-      }
-
-      .code-block .fn {
-        color: #d2a8ff;
-      }
-
-      .code-block .st {
-        color: #a5d6ff;
-      }
-
-      .code-block .nu {
-        color: #79c0ff;
-      }
-
-      .code-block .var {
-        color: var(--fg-default);
-      }
-
-      /* ─── Info boxes ─────────────────────────────────────────── */
-      .callout {
-        display: flex;
-        gap: 12px;
-        padding: 14px 18px;
-        border-radius: 8px;
-        font-size: 1rem;
-        line-height: 1.6;
-        margin: 16px 0;
-        text-align: left;
-        border-left: 3px solid;
-      }
-
-      .callout.info {
-        background-color: rgba(31, 111, 235, 0.1);
-        border-color: var(--accent-fg);
-        color: #cae8ff;
-      }
-
-      .callout.tip {
-        background-color: rgba(63, 185, 80, 0.1);
-        border-color: var(--success-fg);
-        color: #aff5b4;
-      }
-
-      .callout.warning {
-        background-color: rgba(210, 153, 34, 0.1);
-        border-color: var(--attention-fg);
-        color: #e3b341;
-      }
-
-      .callout.note {
-        background-color: rgba(163, 113, 247, 0.1);
-        border-color: var(--done-fg);
-        color: #d2a8ff;
-      }
-
-      /* ─── Two-column grid ────────────────────────────────────── */
-      .grid-2 {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-        width: 100%;
-        max-width: 900px;
-      }
-
-      .card {
-        background-color: var(--bg-canvas);
-        border: 1px solid var(--border-default);
-        border-radius: 8px;
-        padding: 20px;
-        text-align: left;
-      }
-
-      .card .card-title {
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: var(--fg-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.6px;
-        margin-bottom: 10px;
-      }
-
-      .card .card-body {
-        font-size: 1rem;
-        line-height: 1.6;
-        color: var(--fg-default);
-      }
-
-      /* ─── Emoji ───────────────────────────────────────────────── */
-      .big-emoji {
+      .emoji {
         font-size: 4rem;
-        line-height: 1;
-        margin-bottom: 20px;
+        margin: 20px 0;
+        filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+        animation: float 3s ease-in-out infinite;
       }
 
-      /* ─── Diagram ────────────────────────────────────────────── */
-      .diagram {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0;
-        flex-wrap: wrap;
-        margin: 24px 0;
-        font-family: var(--font-mono);
-        font-size: 0.92rem;
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
       }
 
-      .diagram-box {
-        background-color: var(--bg-canvas);
-        border: 1px solid var(--border-default);
-        border-radius: 6px;
-        padding: 10px 16px;
-        color: var(--fg-default);
-        white-space: nowrap;
+      .checklist {
+        font-size: 1.6rem;
+        margin: 15px 0;
+        text-align: left;
       }
 
-      .diagram-arrow {
-        color: var(--fg-subtle);
-        padding: 0 10px;
+      .note {
         font-size: 1.2rem;
+        color: #ffaa00;
+        font-style: italic;
+        margin-top: 30px;
+        padding: 20px;
+        border-left: 4px solid #ffaa00;
+        background: rgba(255, 170, 0, 0.1);
+        box-shadow:
+          0 0 10px rgba(255, 170, 0, 0.2),
+          inset 0 0 20px rgba(255, 170, 0, 0.05);
+        border-radius: 0 8px 8px 0;
       }
 
-      /* ─── Checklist ──────────────────────────────────────────── */
-      .checklist-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
+      .action {
+        font-size: 1.3rem;
+        margin: 15px 0;
+        padding: 15px 20px;
+        background: rgba(0, 212, 255, 0.08);
+        border-left: 4px solid #00d4ff;
+        text-align: left;
+        box-shadow:
+          0 0 15px rgba(0, 212, 255, 0.2),
+          inset 0 0 20px rgba(0, 212, 255, 0.05);
+        border-radius: 0 8px 8px 0;
+        transition: all 0.3s ease;
+      }
+
+      .action:hover {
+        background: rgba(0, 212, 255, 0.15);
+        box-shadow:
+          0 0 20px rgba(0, 212, 255, 0.4),
+          inset 0 0 30px rgba(0, 212, 255, 0.1);
+        transform: translateX(5px);
+      }
+
+      .action strong {
+        color: #ff00ff;
+        text-shadow: 0 0 5px rgba(255, 0, 255, 0.5);
+      }
+
+      .code-block {
+        background: #0a0a0a;
+        border: 1px solid #00d4ff;
+        border-radius: 8px;
+        padding: 25px;
+        margin: 20px 0;
+        font-family: 'Courier New', monospace;
         font-size: 1.1rem;
-        padding: 10px 0;
-        border-bottom: 1px solid var(--border-muted);
-        color: var(--fg-default);
-      }
-
-      .checklist-item:last-child {
-        border-bottom: none;
-      }
-
-      .check-icon {
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        background-color: rgba(63, 185, 80, 0.15);
-        border: 1.5px solid var(--success-fg);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--success-fg);
-        font-size: 0.7rem;
-        flex-shrink: 0;
-      }
-
-      /* ─── Author footer ──────────────────────────────────────── */
-      .author-footer {
-        margin-top: 40px;
-        font-size: 0.95rem;
-        color: var(--fg-muted);
+        text-align: left;
         line-height: 1.8;
+        color: #00ff88;
+        box-shadow:
+          0 0 20px rgba(0, 212, 255, 0.3),
+          inset 0 0 30px rgba(0, 212, 255, 0.05);
+        position: relative;
       }
 
-      .author-footer a {
-        color: var(--accent-fg);
-        text-decoration: none;
+      .code-block::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #00d4ff, #ff00ff, #00d4ff);
+        animation: scanline 2s linear infinite;
       }
 
-      /* ─── Topic badge ────────────────────────────────────────── */
-      .badge {
-        display: inline-block;
-        padding: 3px 10px;
-        border-radius: 12px;
-        font-size: 0.8rem;
-        font-weight: 500;
-        border: 1px solid;
+      @keyframes scanline {
+        0% {
+          background-position: 0% 0%;
+        }
+        100% {
+          background-position: 100% 0%;
+        }
       }
 
-      .badge.blue {
-        color: var(--accent-fg);
-        border-color: var(--accent-emphasis);
-        background-color: rgba(31, 111, 235, 0.1);
+      .code-block .comment {
+        color: #808080;
       }
 
-      .badge.green {
-        color: var(--success-fg);
-        border-color: rgba(63, 185, 80, 0.4);
-        background-color: rgba(63, 185, 80, 0.1);
-      }
-
-      .badge.purple {
-        color: var(--done-fg);
-        border-color: rgba(163, 113, 247, 0.4);
-        background-color: rgba(163, 113, 247, 0.1);
-      }
-
-      /* ─── Nav controls ───────────────────────────────────────── */
-      .slide-number {
-        position: fixed;
-        top: 20px;
-        right: 24px;
-        font-size: 0.85rem;
-        color: var(--fg-muted);
-        z-index: 1000;
-        background-color: var(--bg-canvas);
-        padding: 6px 14px;
-        border-radius: 20px;
-        border: 1px solid var(--border-default);
-        font-family: var(--font-mono);
+      .diagram {
+        font-size: 1.3rem;
+        margin: 30px 0;
+        padding: 30px;
+        background: rgba(0, 212, 255, 0.05);
+        border: 2px solid #00d4ff;
+        border-radius: 10px;
+        line-height: 2;
+        box-shadow:
+          0 0 20px rgba(0, 212, 255, 0.2),
+          inset 0 0 30px rgba(0, 212, 255, 0.05);
       }
 
       .controls {
         position: fixed;
-        bottom: 24px;
-        right: 24px;
+        bottom: 30px;
+        right: 30px;
         display: flex;
-        gap: 10px;
+        gap: 15px;
         z-index: 1000;
       }
 
       .controls button {
-        background-color: var(--bg-canvas);
-        border: 1px solid var(--border-default);
-        color: var(--fg-default);
-        padding: 8px 18px;
-        font-size: 0.9rem;
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(255, 0, 255, 0.2));
+        border: 2px solid #00d4ff;
+        color: #00d4ff;
+        padding: 15px 25px;
+        font-size: 1.1rem;
         cursor: pointer;
-        border-radius: 6px;
-        transition:
-          background-color 0.15s,
-          border-color 0.15s;
-        font-weight: 500;
-        font-family: inherit;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow:
+          0 0 15px rgba(0, 212, 255, 0.3),
+          inset 0 0 15px rgba(0, 212, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .controls button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+      }
+
+      .controls button:hover::before {
+        left: 100%;
       }
 
       .controls button:hover {
-        background-color: var(--bg-overlay);
-        border-color: var(--accent-fg);
-        color: var(--accent-fg);
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.4), rgba(255, 0, 255, 0.4));
+        transform: scale(1.05) translateY(-2px);
+        box-shadow:
+          0 0 25px rgba(0, 212, 255, 0.6),
+          0 5px 15px rgba(0, 0, 0, 0.3),
+          inset 0 0 20px rgba(0, 212, 255, 0.2);
+        border-color: #ff00ff;
+        color: #ff00ff;
+        text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
       }
 
       .controls button:active {
-        transform: scale(0.97);
+        transform: scale(0.98) translateY(0);
       }
 
       .controls button:disabled {
-        opacity: 0.35;
+        opacity: 0.3;
         cursor: not-allowed;
+        transform: scale(1);
+        border-color: #444;
+        color: #666;
+        background: rgba(50, 50, 50, 0.3);
+        box-shadow: none;
       }
 
       .controls button:disabled:hover {
-        background-color: var(--bg-canvas);
-        border-color: var(--border-default);
-        color: var(--fg-default);
+        transform: scale(1);
+        box-shadow: none;
       }
 
-      /* ─── Progress bar ───────────────────────────────────────── */
-      .progress-bar {
+      .slide-number {
         position: fixed;
-        bottom: 0;
-        left: 0;
-        height: 3px;
-        background-color: var(--accent-fg);
-        transition: width 0.3s ease;
+        top: 30px;
+        right: 30px;
+        font-size: 1.2rem;
+        color: #00d4ff;
         z-index: 1000;
-        border-radius: 0 2px 2px 0;
+        background: rgba(10, 10, 15, 0.8);
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: 2px solid rgba(0, 212, 255, 0.3);
+        box-shadow:
+          0 0 15px rgba(0, 212, 255, 0.3),
+          inset 0 0 15px rgba(0, 212, 255, 0.05);
+        text-shadow: 0 0 5px rgba(0, 212, 255, 0.8);
       }
 
-      .check-icon.optional {
-        border-color: var(--done-fg);
-        color: var(--done-fg);
-        background-color: rgba(163, 113, 247, 0.15);
-      }
-
-      /* ─── Cover image slide ──────────────────────────────────── */
-      .slide-cover {
-        padding: 0;
-        background-color: #0a0d0f;
-      }
-
-      .cover-img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        object-position: center;
-        display: block;
-      }
-
-      /* ─── Title slide specific ──────────────────────────────── */
-      .title-slide {
-        gap: 8px;
-      }
-
-      .title-slide .badges {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin-bottom: 16px;
-      }
-
-      /* ─── Section header ─────────────────────────────────────── */
-      .section-header {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 32px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid var(--border-default);
-        width: 100%;
-        max-width: 900px;
-      }
-
-      .section-icon {
-        font-size: 1.8rem;
-        line-height: 1;
-      }
-
-      .section-title {
-        font-size: 1.9rem;
+      .highlight {
+        color: #00ff88;
         font-weight: 600;
-        color: var(--fg-default);
+        text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
       }
 
-      .section-subtitle {
-        font-size: 0.95rem;
-        color: var(--fg-muted);
-        margin-top: 2px;
+      .url {
+        color: #ff00ff;
+        text-decoration: underline;
+        cursor: pointer;
+        text-shadow: 0 0 5px rgba(255, 0, 255, 0.5);
+        transition: all 0.3s ease;
+      }
+
+      .url:hover {
+        color: #00d4ff;
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
       }
     </style>
   </head>
   <body>
     <div class="slide-number">
-      <span id="current-slide">1</span>&nbsp;/&nbsp;<span id="total-slides">22</span>
+      <span id="current-slide">1</span> / <span id="total-slides">20</span>
     </div>
-    <div class="progress-bar" id="progress-bar"></div>
 
     <div class="slides-container">
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 1: Титульний (cover image)
-      ════════════════════════════════════════════════════ -->
-      <div class="slide slide-cover active">
-        <img
-          src="https://github.com/user-attachments/assets/5eb091d2-4396-4a4f-be20-565d48d3c513"
-          alt="ЧАТ-БОТ З ХАРАКТЕРОМ — Майстер-клас ВТФК"
-          class="cover-img"
-        />
+      <!-- Слайд 1: Титульний -->
+      <div class="slide active">
+        <div class="emoji">🤖</div>
+        <h1>Telegram-бот з ШІ за 60 хвилин</h1>
+        <p class="subtitle">Майстер-клас ВТФК</p>
+        <div class="emoji">⚡</div>
+        <p class="author">Олександр Ординський<br />Викладач ВТФК</p>
       </div>
 
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 2: Що ми будуємо?
-      ════════════════════════════════════════════════════ -->
+      <!-- Слайд 2: Наш План -->
       <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">✨</span>
-          <div>
-            <div class="section-title">Що ми будуємо?</div>
-            <div class="section-subtitle">Простий шаблон для швидкого старту</div>
-          </div>
-        </div>
+        <h2>Наш план на 60 хвилин</h2>
         <div class="content">
           <div class="list-item">
-            Супер простий <strong>шаблон</strong> для Telegram-бота на Python з бібліотекою
-            <code>aiogram</code>.
+            <strong>Рівень 1 (Ви робите):</strong> Запускаємо <em>вашого</em> першого бота в хмарі.
           </div>
           <div class="list-item">
-            <strong>Базовий режим</strong> — кнопки, текстові відповіді, привітання.
-          </div>
-          <div class="list-item">
-            <strong>Режим ШІ</strong> — повноцінний діалог з OpenAI Assistants API.
-            <span class="tag">Новинка 🎉</span>
-          </div>
-          <div class="list-item">
-            Всі налаштування через <strong>GitHub Secrets</strong> — ніяких ключів у коді!
-          </div>
-          <div class="list-item">
-            Запускаємо все у <strong>GitHub Codespaces</strong> — нічого встановлювати на ПК.
+            <strong>Рівень 2 (Я показую):</strong> Додаємо "мозок" — інтеграцію з ШІ (ChatGPT).
           </div>
         </div>
+        <div class="emoji">🎯</div>
       </div>
 
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 3: GitHub Codespaces — огляд
-      ════════════════════════════════════════════════════ -->
+      <!-- Слайд 3: Що таке GitHub? -->
       <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">🚀</span>
-          <div>
-            <div class="section-title">Поїхали! GitHub Codespaces</div>
-            <div class="section-subtitle">Найпростіший спосіб запустити проект</div>
-          </div>
-        </div>
-        <div class="content">
-          <div class="grid-2">
-            <div class="card">
-              <div class="card-title">☁️ Що таке Codespaces?</div>
-              <div class="card-body">
-                Повноцінне середовище розробки прямо у браузері. Сервер у хмарі, VS Code онлайн,
-                термінал — все готово за хвилину.
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-title">✅ Чому це зручно?</div>
-              <div class="card-body">
-                Не потрібно нічого встановлювати. Працює з будь-якого пристрою. Secrets зберігаються
-                в GitHub — безпечно!
-              </div>
-            </div>
-          </div>
-          <div class="callout info" style="margin-top: 20px;">
-            <span>ℹ️</span>
-            <span>
-              GitHub дає <strong>60 годин безкоштовно</strong> на місяць для Codespaces — цього
-              більш ніж достатньо для навчання!
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 4: Крок 1 — Fork
-      ════════════════════════════════════════════════════ -->
-      <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">🍴</span>
-          <div>
-            <div class="section-title">Крок 1 — Fork репозиторію</div>
-            <div class="section-subtitle">Робимо власну копію шаблону</div>
-          </div>
-        </div>
-        <div class="step-list">
-          <div class="step">
-            <div class="step-num">1</div>
-            <div>
-              Відкрийте репозиторій шаблону на GitHub:
-              <code>github.com/AlexOrd/vtfk_tg_bot</code>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-num">2</div>
-            <div>
-              Натисніть кнопку <strong>"Fork"</strong> у правому верхньому куті сторінки.
-              <br />Або скористайтесь кнопкою <strong>"Use this template"</strong> — обидва варіанти
-              дають однаковий результат.
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-num">3</div>
-            <div>
-              У вашому GitHub-акаунті з'явиться власна копія репозиторію — саме з нею ми будемо
-              працювати далі.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 5: Крок 2 — Codespace
-      ════════════════════════════════════════════════════ -->
-      <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">☁️</span>
-          <div>
-            <div class="section-title">Крок 2 — Запускаємо Codespace</div>
-            <div class="section-subtitle">Хмарний ПК готовий за ~1 хвилину</div>
-          </div>
-        </div>
-        <div class="step-list">
-          <div class="step">
-            <div class="step-num">1</div>
-            <div>
-              На сторінці <em>вашого</em> форку натисніть зелену кнопку
-              <strong>"&lt;&nbsp;&gt;&nbsp;Code"</strong>.
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-num">2</div>
-            <div>Перейдіть на вкладку <strong>"Codespaces"</strong>.</div>
-          </div>
-          <div class="step">
-            <div class="step-num">3</div>
-            <div>
-              Натисніть <strong>"Create codespace on main"</strong>.<br />
-              GitHub запустить хмарний сервер і відкриє VS Code прямо в браузері.
-            </div>
-          </div>
-        </div>
-        <div class="callout tip" style="margin-top: 16px; max-width: 900px; width: 100%;">
-          <span>✅</span>
-          <span>Зачекайте ~30–60 секунд поки середовище повністю завантажиться.</span>
-        </div>
-      </div>
-
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 6: Крок 3 — Secrets (обов'язкові)
-      ════════════════════════════════════════════════════ -->
-      <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">🔐</span>
-          <div>
-            <div class="section-title">Крок 3 — Налаштовуємо Secrets</div>
-            <div class="section-subtitle">Ключі ніколи не повинні потрапляти в код!</div>
-          </div>
-        </div>
-        <div class="content">
-          <div class="callout warning">
-            <span>⚠️</span>
-            <span>
-              <strong>Важливо:</strong> Токени та API-ключі зберігаємо виключно в GitHub Secrets, а
-              не прямо у файлах проекту.
-            </span>
-          </div>
-          <div style="margin-top: 20px;">
-            <div class="checklist-item">
-              <div class="check-icon">✓</div>
-              <div>
-                <code>BOT_TOKEN</code> — токен вашого бота від
-                <strong>@BotFather</strong> в Telegram.
-                <span class="tag">Обов'язково</span>
-              </div>
-            </div>
-            <div class="checklist-item">
-              <div class="check-icon optional">○</div>
-              <div>
-                <code>OPENAI_API_KEY</code> — API-ключ від OpenAI
-                (<code>platform.openai.com/api-keys</code>). Для режиму ШІ.
-              </div>
-            </div>
-            <div class="checklist-item">
-              <div class="check-icon optional">○</div>
-              <div>
-                <code>ASSISTANT_ID</code> — ID вашого OpenAI-асистента
-                (починається з <code>asst_...</code>). Для режиму ШІ.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 7: Як додати Secrets
-      ════════════════════════════════════════════════════ -->
-      <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">⚙️</span>
-          <div>
-            <div class="section-title">Як додати Secret у GitHub</div>
-            <div class="section-subtitle">Settings → Secrets and variables → Codespaces</div>
-          </div>
-        </div>
-        <div class="step-list">
-          <div class="step">
-            <div class="step-num">1</div>
-            <div>
-              Перейдіть до <strong>Settings</strong> вашого репозиторію (вкладка вгорі).
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-num">2</div>
-            <div>
-              У бічному меню знайдіть <strong>"Secrets and variables"</strong> →
-              <strong>"Codespaces"</strong>.
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-num">3</div>
-            <div>Натисніть <strong>"New repository secret"</strong>.</div>
-          </div>
-          <div class="step">
-            <div class="step-num">4</div>
-            <div>
-              Введіть <strong>Name</strong> (наприклад, <code>BOT_TOKEN</code>) та
-              <strong>Value</strong> (ваш токен). Повторіть для кожного ключа.
-            </div>
-          </div>
-        </div>
-        <div class="callout tip" style="margin-top: 16px; max-width: 900px; width: 100%;">
-          <span>💡</span>
-          <span>
-            Після збереження Secret перезапустіть Codespace, щоб нові змінні середовища підтягнулись.
-          </span>
-        </div>
-      </div>
-
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 8: Локальний запуск (env vars)
-      ════════════════════════════════════════════════════ -->
-      <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">🖥️</span>
-          <div>
-            <div class="section-title">Для локального запуску</div>
-            <div class="section-subtitle">Замість Secrets використовуємо змінні середовища</div>
-          </div>
-        </div>
-        <div class="content" style="max-width: 900px;">
-          <p style="font-size: 1rem; color: var(--fg-muted); margin-bottom: 16px;">
-            Якщо запускаєте бота не через Codespaces, а локально на своєму ПК, встановіть змінні
-            середовища перед запуском:
-          </p>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="dot red"></div>
-              <div class="dot yellow"></div>
-              <div class="dot green"></div>
-              <span>bash / zsh</span>
-            </div>
-            <pre><span class="kw">export</span> <span class="var">BOT_TOKEN</span>=<span class="st">"ваш-токен-бота"</span>
-<span class="kw">export</span> <span class="var">OPENAI_API_KEY</span>=<span class="st">"ваш-openai-ключ"</span>   <span class="cm"># опціонально</span>
-<span class="kw">export</span> <span class="var">ASSISTANT_ID</span>=<span class="st">"ваш-assistant-id"</span>    <span class="cm"># опціонально</span></pre>
-          </div>
-          <div class="callout info">
-            <span>ℹ️</span>
-            <span>
-              Ці команди діють лише до закриття поточного термінального сеансу. Для постійного
-              зберігання додайте їх у <code>~/.bashrc</code> або <code>~/.zshrc</code>.
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 9: Крок 4 — pip install
-      ════════════════════════════════════════════════════ -->
-      <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">📦</span>
-          <div>
-            <div class="section-title">Крок 4 — Встановлення залежностей</div>
-            <div class="section-subtitle">Одна команда — і всі бібліотеки на місці</div>
-          </div>
-        </div>
-        <div class="content" style="max-width: 900px;">
-          <p style="font-size: 1rem; color: var(--fg-muted); margin-bottom: 16px;">
-            Перед першим запуском переконайтеся, що всі потрібні бібліотеки встановлено. Введіть у
-            термінал:
-          </p>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="dot red"></div>
-              <div class="dot yellow"></div>
-              <div class="dot green"></div>
-              <span>terminal</span>
-            </div>
-            <pre><span class="var">pip install</span> <span class="st">-r requirements.txt</span></pre>
-          </div>
-          <div class="callout tip">
-            <span>✅</span>
-            <span>
-              Зазвичай Codespaces робить це автоматично при запуску. Але краще перевірити вручну —
-              це займає лише кілька секунд!
-            </span>
-          </div>
-          <div class="callout info" style="margin-top: 12px;">
-            <span>📄</span>
-            <span>
-              Список залежностей знаходиться у файлі <code>requirements.txt</code> у корені
-              репозиторію.
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 10: Крок 5 — Запускаємо!
-      ════════════════════════════════════════════════════ -->
-      <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">▶️</span>
-          <div>
-            <div class="section-title">Крок 5 — Запускаємо бота!</div>
-            <div class="section-subtitle">Момент істини 🎉</div>
-          </div>
-        </div>
-        <div class="content" style="max-width: 900px;">
-          <p style="font-size: 1rem; color: var(--fg-muted); margin-bottom: 16px;">
-            Тепер все готово! У терміналі внизу введіть команду:
-          </p>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="dot red"></div>
-              <div class="dot yellow"></div>
-              <div class="dot green"></div>
-              <span>terminal</span>
-            </div>
-            <pre><span class="var">python bot.py</span></pre>
-          </div>
-          <div class="callout tip">
-            <span>🎉</span>
-            <span>
-              Якщо побачите рядок
-              <code>INFO:aiogram.dispatcher:Bot is starting...</code> — ваш бот живий і працює!
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 11: Результат запуску
-      ════════════════════════════════════════════════════ -->
-      <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">🤖</span>
-          <div>
-            <div class="section-title">Що побачите в терміналі</div>
-            <div class="section-subtitle">Два режими роботи</div>
-          </div>
-        </div>
-        <div class="content" style="max-width: 900px;">
-          <p style="font-size: 0.95rem; color: var(--fg-muted); margin-bottom: 12px; font-weight:600; text-transform:uppercase; letter-spacing:.5px;">Режим ШІ-асистента (якщо додали OpenAI Secrets):</p>
-          <div class="code-block" style="margin-bottom: 20px;">
-            <div class="code-header">
-              <div class="dot red"></div>
-              <div class="dot yellow"></div>
-              <div class="dot green"></div>
-              <span>output</span>
-            </div>
-            <pre><span class="nu">INFO</span>: Ключ OpenAI та Assistant ID (asst...) знайдено.
-<span class="nu">INFO</span>: Активую режим ШІ-асистента.</pre>
-          </div>
-          <p style="font-size: 0.95rem; color: var(--fg-muted); margin-bottom: 12px; font-weight:600; text-transform:uppercase; letter-spacing:.5px;">Базовий режим (тільки кнопки):</p>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="dot red"></div>
-              <div class="dot yellow"></div>
-              <div class="dot green"></div>
-              <span>output</span>
-            </div>
-            <pre><span class="cm">WARNING</span>: Один або декілька ключів OpenAI відсутні.
-<span class="cm">WARNING</span>: Бот працюватиме в базовому режимі (лише кнопки).</pre>
-          </div>
-          <div class="callout info" style="margin-top: 14px;">
-            <span>ℹ️</span>
-            <span>Базовий режим — це нормально! Переходьте до нього вільно.</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 12: Перезапуск бота
-      ════════════════════════════════════════════════════ -->
-      <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">🔄</span>
-          <div>
-            <div class="section-title">Як перезапускати бота</div>
-            <div class="section-subtitle">Після кожної зміни в коді</div>
-          </div>
-        </div>
-        <div class="step-list">
-          <div class="step">
-            <div class="step-num">1</div>
-            <div>
-              <strong>Зупиніть бота:</strong> У терміналі, де працює бот, натисніть
-              <code>Ctrl&nbsp;+&nbsp;C</code>.
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-num">2</div>
-            <div>
-              <strong>Запустіть знову:</strong> Введіть ту саму команду:
-              <code>python bot.py</code>
-            </div>
-          </div>
-        </div>
-        <div class="callout tip" style="margin-top: 20px; max-width: 900px; width: 100%;">
-          <span>💡</span>
-          <span>
-            Пам'ятайте: після кожної зміни коду бота треба перезапустити — він автоматично не
-            перезавантажується.
-          </span>
-        </div>
-      </div>
-
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 13: Структура проєкту
-      ════════════════════════════════════════════════════ -->
-      <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">📁</span>
-          <div>
-            <div class="section-title">Структура проєкту</div>
-            <div class="section-subtitle">Що де лежить</div>
-          </div>
-        </div>
-        <div class="content" style="max-width: 900px;">
-          <div class="code-block">
-            <div class="code-header">
-              <div class="dot red"></div>
-              <div class="dot yellow"></div>
-              <div class="dot green"></div>
-              <span>project structure</span>
-            </div>
-            <pre><span class="var">.</span>
-├── <span class="fn">bot.py</span>              <span class="cm"># Головний мозок бота, вся логіка тут</span>
-├── <span class="fn">file_reader.py</span>      <span class="cm"># Помічник, що читає тексти з файлів</span>
-├── <span class="fn">requirements.txt</span>    <span class="cm"># Список потрібних бібліотек</span>
-└── <span class="fn">text_messages/</span>      <span class="cm"># Скринька з усіма текстами для бота</span>
-    ├── <span class="st">msg_start.txt</span>   <span class="cm"># Привітальне повідомлення</span>
-    └── <span class="st">...</span>             <span class="cm"># І всі інші тексти</span></pre>
-          </div>
-          <div class="callout info" style="margin-top: 12px;">
-            <span>📝</span>
-            <span>
-              Всі тексти, які бот надсилає користувачам, живуть в окремих <code>.txt</code>-файлах
-              у папці <code>text_messages/</code>. Редагуйте їх без зміни коду!
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 14: OpenAI Assistants API — що це?
-      ════════════════════════════════════════════════════ -->
-      <div class="slide">
-        <div class="big-emoji">🧠</div>
-        <h1>OpenAI <span class="accent">Assistants</span> API</h1>
-        <p class="subtitle">Потужний інструмент для ШІ-асистентів із пам'яттю</p>
-        <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:8px;">
-          <span class="badge blue">Контекст розмови</span>
-          <span class="badge purple">Threads API</span>
-          <span class="badge green">gpt-4o-mini</span>
-        </div>
-      </div>
-
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 15: Що вміє Assistants API?
-      ════════════════════════════════════════════════════ -->
-      <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">⚡</span>
-          <div>
-            <div class="section-title">Що вміє Assistants API?</div>
-            <div class="section-subtitle">Чим відрізняється від звичайного ChatGPT</div>
-          </div>
-        </div>
+        <h2>Що таке GitHub?</h2>
         <div class="content">
           <div class="list-item">
-            <strong>Запам'ятовує контекст</strong> розмови — на відміну від простих запитів до
-            ChatGPT.
+            <strong>GitHub</strong> — це платформа для зберігання коду в "хмарі".
           </div>
           <div class="list-item">
-            Використовує <strong>треди (Threads)</strong> для збереження всієї історії діалогу.
+            Ваш код зберігається онлайн і доступний з будь-якого комп'ютера.
           </div>
           <div class="list-item">
-            Має попередньо налаштовані <strong>інструкції та поведінку</strong> — ви "навчаєте"
-            асистента заздалегідь.
+            <strong>GitHub Codespaces</strong> — це повноцінний комп'ютер для розробки у браузері!
+          </div>
+          <div class="list-item">Не потрібно нічого встановлювати на свій ПК.</div>
+        </div>
+        <div class="emoji">☁️</div>
+      </div>
+
+      <!-- Слайд 4: Навіщо нам GitHub? -->
+      <div class="slide">
+        <h2>Навіщо нам GitHub?</h2>
+        <div class="content">
+          <div class="list-item">
+            ✅ <strong>Зберігання:</strong> Код не зникне, якщо щось станеться з вашим комп'ютером.
           </div>
           <div class="list-item">
-            Кожен користувач бота отримує свій <strong>окремий thread</strong> — ніяких змішань
-            розмов.
+            ✅ <strong>Співпраця:</strong> Легко працювати в команді над одним проектом.
+          </div>
+          <div class="list-item">
+            ✅ <strong>Codespaces:</strong> Розробка у браузері — працюйте з iPad, телефону або
+            будь-якого ПК!
+          </div>
+          <div class="list-item">
+            ✅ <strong>Портфоліо:</strong> Покажіть свої проекти роботодавцям.
+          </div>
+        </div>
+        <div class="emoji">💎</div>
+      </div>
+
+      <!-- Слайд 5: Реєстрація в GitHub -->
+      <div class="slide">
+        <h2>Як зареєструватись у GitHub?</h2>
+        <div class="content">
+          <div class="action">
+            <strong>Крок 1:</strong> Відкрийте <span class="url">github.com</span>
+          </div>
+          <div class="action">
+            <strong>Крок 2:</strong> Натисніть <strong>"Sign up"</strong> (Зареєструватись)
+          </div>
+          <div class="action">
+            <strong>Крок 3:</strong> Введіть email, придумайте username та пароль
+          </div>
+          <div class="action"><strong>Крок 4:</strong> Підтвердіть email</div>
+          <div class="note" style="margin-top: 20px">
+            💡 <strong>Порада:</strong> Виберіть username, який можна показати роботодавцю!<br />
+            (Наприклад: alex_dev, maria_codes, ivan_programmer)
           </div>
         </div>
       </div>
 
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 16: Як створити Assistant
-      ════════════════════════════════════════════════════ -->
+      <!-- Слайд 6: Наші Інструменти -->
       <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">🛠️</span>
-          <div>
-            <div class="section-title">Як створити OpenAI Assistant</div>
-            <div class="section-subtitle">platform.openai.com/assistants</div>
+        <h2>Що ми використовуємо?</h2>
+        <div class="content">
+          <div class="list-item">
+            <strong>Telegram + @BotFather:</strong> Для створення бота та отримання токена.
+          </div>
+          <div class="list-item"><strong>GitHub:</strong> Для зберігання коду.</div>
+          <div class="list-item">
+            <strong>GitHub Codespaces:</strong> Наша "хмарна" IDE. (Нічого не треба встановлювати!)
           </div>
         </div>
-        <div class="step-list">
-          <div class="step">
-            <div class="step-num">1</div>
-            <div>
-              Перейдіть на <code>platform.openai.com/assistants</code> та натисніть
-              <strong>"Create"</strong>.
-            </div>
+        <div class="emoji">🛠️</div>
+      </div>
+
+      <!-- Слайд 7: Перевірка готовності -->
+      <div class="slide">
+        <h2>Чи всі готові?</h2>
+        <div class="content">
+          <div class="checklist">✅ Є акаунт GitHub?</div>
+          <div class="checklist">✅ Є акаунт Telegram?</div>
+          <div class="checklist">
+            ✅ <strong>Найважливіше:</strong> Є <span class="highlight">ТОКЕН</span> від @BotFather?
           </div>
-          <div class="step">
-            <div class="step-num">2</div>
-            <div>
-              Налаштуйте асистента: <strong>Name</strong> (наприклад, "Знавець ВТФК"),
-              <strong>Instructions</strong> — опишіть як він має поводитися.
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-num">3</div>
-            <div>
-              Оберіть модель. Рекомендуємо <code>gpt-4o-mini</code> — швидка й економна.
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-num">4</div>
-            <div>
-              Збережіть та скопіюйте <strong>Assistant ID</strong> (починається з
-              <code>asst_...</code>). Додайте його в GitHub Secrets як <code>ASSISTANT_ID</code>.
-            </div>
+          <div class="note">
+            Немає токена? Робіть це ПРЯМО ЗАРАЗ:<br />
+            <code>@BotFather</code> → <code>/newbot</code>
           </div>
         </div>
       </div>
 
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 17: Збереження контексту (Threads)
-      ════════════════════════════════════════════════════ -->
+      <!-- Слайд 8: Рівень 1 -->
       <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">🧵</span>
-          <div>
-            <div class="section-title">Як зберігається контекст</div>
-            <div class="section-subtitle">Threads — нитки розмов</div>
+        <div class="emoji">🚀</div>
+        <h2>Рівень 1: Запуск (Працюємо разом!)</h2>
+        <h3>Мета: Ваш особистий бот працює у вашому Telegram.</h3>
+      </div>
+
+      <!-- Слайд 9: Крок 1 — Fork -->
+      <div class="slide">
+        <h2>Крок 1: Копіюємо проект</h2>
+        <div class="content">
+          <div class="action">
+            <strong>Дія 1:</strong> Заходьте на
+            <span class="url">github.com/AlexOrd/telegram-bot-workshop</span>
+          </div>
+          <div class="action">
+            <strong>Дія 2:</strong> Натисніть кнопку <strong>"Fork"</strong> у правому верхньому
+            куті.
           </div>
         </div>
-        <div class="content" style="max-width: 900px;">
-          <div class="diagram" style="flex-direction: column; align-items: flex-start; gap: 10px;">
-            <div style="display:flex; align-items:center; gap:12px;">
-              <div class="diagram-box">Перше повідомлення</div>
-              <span class="diagram-arrow">→</span>
-              <div class="diagram-box" style="border-color: var(--accent-fg); color: var(--accent-fg);">Новий Thread</div>
-            </div>
-            <div style="display:flex; align-items:center; gap:12px;">
-              <div class="diagram-box">Наступне повідомлення</div>
-              <span class="diagram-arrow">→</span>
-              <div class="diagram-box" style="border-color: var(--success-fg); color: var(--success-fg);">Той самий Thread</div>
-            </div>
+        <div class="emoji">🍴</div>
+      </div>
+
+      <!-- Слайд 10: Крок 2 — Codespace -->
+      <div class="slide">
+        <h2>Крок 2: Запускаємо хмарний ПК</h2>
+        <div class="content">
+          <div class="action">
+            <strong>Дія 1:</strong> На сторінці <em>вашого</em> форку натисніть
+            <code>&lt; &gt; Code</code>.
           </div>
-          <div class="callout note" style="margin-top: 16px;">
-            <span>🧵</span>
-            <span>
-              Кожен користувач отримує свій thread. Асистент бачить <strong>всю</strong> попередню
-              історію розмови. Thread зберігається в пам'яті бота поки він працює.
-            </span>
+          <div class="action">
+            <strong>Дія 2:</strong> Перейдіть на вкладку <strong>"Codespaces"</strong>.
           </div>
+          <div class="action">
+            <strong>Дія 3:</strong> Натисніть <strong>"Create codespace on main"</strong>.
+          </div>
+        </div>
+        <div class="emoji">☁️</div>
+      </div>
+
+      <!-- Слайд 11: Крок 3 — Secrets -->
+      <div class="slide">
+        <h2>Крок 3: Додаємо токен (Безпечно!)</h2>
+        <div class="content">
+          <div class="action">
+            <strong>Дія 1:</strong> У VS Code, що відкрився, натисніть <code>Ctrl+Shift+P</code>.
+          </div>
+          <div class="action">
+            <strong>Дія 2:</strong> Введіть <code>Codespaces: Manage Secrets</code>.
+          </div>
+          <div class="action">
+            <strong>Дія 3:</strong> Створіть <strong>New secret</strong>:<br />
+            <span class="highlight">Name:</span> <code>BOT_TOKEN</code><br />
+            <span class="highlight">Value:</span> [вставте_ваш_токен]
+          </div>
+          <div class="action">
+            <strong>Дія 4:</strong> <span class="highlight">ОБОВ'ЯЗКОВО:</span> Натисніть
+            <strong>"Rebuild now"</strong>, коли з'явиться запит.
+          </div>
+        </div>
+        <div class="emoji">🔐</div>
+      </div>
+
+      <!-- Слайд 12: Крок 4 — Запуск -->
+      <div class="slide">
+        <h2>Крок 4: Момент істини</h2>
+        <div class="content">
+          <div class="action">
+            <strong>Дія 1:</strong> Внизу відкрийте вкладку <strong>"TERMINAL"</strong>.
+          </div>
+          <div class="action">
+            <strong>Дія 2:</strong> Введіть команду: <code>python bot.py</code>
+          </div>
+          <div class="action"><strong>Дія 3:</strong> Натисніть Enter.</div>
+        </div>
+        <div class="emoji">⌨️</div>
+      </div>
+
+      <!-- Слайд 13: Результат Рівень 1 -->
+      <div class="slide">
+        <div class="emoji">🎉</div>
+        <h2>Він живий! 🤖</h2>
+        <div class="content">
+          <div class="action">
+            <strong>Дія:</strong> Зайдіть у Telegram → Знайдіть свого бота → Напишіть
+            <code>/start</code>.
+          </div>
+          <h3>Результат: Бот відповідає і реагує на кнопки.</h3>
         </div>
       </div>
 
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 18: Приклад діалогу
-      ════════════════════════════════════════════════════ -->
+      <!-- Слайд 14: Рівень 2 -->
       <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">💬</span>
-          <div>
-            <div class="section-title">Приклад роботи з контекстом</div>
-            <div class="section-subtitle">Асистент пам'ятає попередні повідомлення ✨</div>
-          </div>
-        </div>
-        <div class="content" style="max-width: 900px;">
-          <div class="code-block">
-            <div class="code-header">
-              <div class="dot red"></div>
-              <div class="dot yellow"></div>
-              <div class="dot green"></div>
-              <span>telegram chat</span>
-            </div>
-            <pre><span class="st">Користувач:</span> Привіт! Як справи?
-<span class="fn">Асистент  :</span> Привіт! У мене все чудово. Чим можу допомогти?
-
-<span class="st">Користувач:</span> Що ти сказав у попередньому повідомленні?
-<span class="fn">Асистент  :</span> Я сказав, що у мене все чудово
-             і запитав, чим можу допомогти.  <span class="cm"># ← пам'ятає!</span></pre>
-          </div>
-          <div class="callout tip" style="margin-top: 14px;">
-            <span>✨</span>
-            <span>Це справжній контекстний діалог — не просто відповідь на одне повідомлення!</span>
-          </div>
-        </div>
+        <div class="emoji">🧠</div>
+        <h2>Рівень 2: Додаємо "мозок" (Я показую)</h2>
+        <h3>Мета: Перетворити нашого бота на "Знавця ВТФК" (ChatGPT).</h3>
       </div>
 
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 19: Додаємо нову кнопку — огляд
-      ════════════════════════════════════════════════════ -->
+      <!-- Слайд 15: Як це працює -->
       <div class="slide">
-        <div class="big-emoji">🔧</div>
-        <h1>Додаємо <span class="accent">нову кнопку</span></h1>
-        <p class="subtitle">Наприклад, кнопку "Допомога" — і ви побачите, наскільки це просто!</p>
-        <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:12px;">
-          <span class="badge green">3 простих кроки</span>
-          <span class="badge blue">Тільки txt + py</span>
-        </div>
-      </div>
-
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 20: Крок 1 — Файли з текстом
-      ════════════════════════════════════════════════════ -->
-      <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">📝</span>
-          <div>
-            <div class="section-title">Крок 1 — Створюємо текстові файли</div>
-            <div class="section-subtitle">Папка text_messages/</div>
+        <h2>Архітектура "Розумного" бота</h2>
+        <div class="content">
+          <div class="diagram">
+            [User] → [Telegram Bot] → [Python Code] → [OpenAI Assistant API] →<br />
+            → [Python Code] → [Telegram Bot] → [User]
           </div>
-        </div>
-        <div class="content" style="max-width: 900px;">
-          <p style="font-size: 0.95rem; color: var(--fg-muted); margin-bottom: 14px;">
-            Заходимо в папку <code>text_messages/</code> і створюємо два нові файли:
+          <p style="font-size: 1.3rem; margin-top: 30px">
+            Наш код викликає спеціального "асистента" (якого я навчив),<br />коли не знає відповіді.
           </p>
-          <div class="grid-2">
-            <div class="card">
-              <div class="card-title">📄 text_messages/btn_help.txt</div>
-              <div class="card-body">
-                <div class="code-block" style="margin: 0;">
-                  <pre>❓ Допомога</pre>
-                </div>
-                <p style="font-size: 0.85rem; color: var(--fg-muted); margin-top: 8px;">Назва кнопки, що відображатиметься в меню.</p>
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-title">📄 text_messages/msg_help.txt</div>
-              <div class="card-body">
-                <div class="code-block" style="margin: 0;">
-                  <pre>Це повідомлення-довідка.
-Якщо щось не так,
-пиши адміну!</pre>
-                </div>
-                <p style="font-size: 0.85rem; color: var(--fg-muted); margin-top: 8px;">Текст відповіді бота на натискання кнопки.</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 21: Крок 2 — Оновлюємо bot.py
-      ════════════════════════════════════════════════════ -->
+      <!-- Слайд 16: Секретні ключі -->
       <div class="slide">
-        <div class="section-header">
-          <span class="section-icon">⌨️</span>
-          <div>
-            <div class="section-title">Крок 2 — Оновлюємо bot.py</div>
-            <div class="section-subtitle">Три маленьких додавання</div>
+        <h2>У чому різниця?</h2>
+        <div class="content">
+          <p style="font-size: 1.4rem; margin-bottom: 30px">У мої "Secrets" додано ще 2 ключі:</p>
+          <div class="list-item">
+            <code class="highlight">OPENAI_API_KEY</code> (Доступ до OpenAI)
+          </div>
+          <div class="list-item">
+            <code class="highlight">ASSISTANT_ID</code> (ID мого "Знавця ВТФК")
           </div>
         </div>
-        <div class="content" style="max-width: 900px;">
+        <div class="emoji">🔑</div>
+      </div>
+
+      <!-- Слайд 17: Пояснення коду -->
+      <div class="slide">
+        <h2>Магія в bot.py</h2>
+        <div class="content">
           <div class="code-block">
-            <div class="code-header">
-              <div class="dot red"></div>
-              <div class="dot yellow"></div>
-              <div class="dot green"></div>
-              <span>bot.py</span>
-            </div>
-            <pre><span class="cm"># 1. Читаємо тексти в змінні</span>
-<span class="var">MSG_HELP</span> = <span class="fn">read_message</span>(<span class="st">'msg_help'</span>)
-<span class="var">BTN_HELP</span> = <span class="fn">read_message</span>(<span class="st">'btn_help'</span>)
-
-<span class="cm"># 2. Додаємо кнопку в клавіатуру</span>
-<span class="var">main_keyboard</span> = <span class="fn">ReplyKeyboardMarkup</span>(
-    keyboard=[
-        <span class="cm"># ... існуючі кнопки ...</span>
-        [<span class="fn">KeyboardButton</span>(text=<span class="var">BTN_HELP</span>)]  <span class="cm"># ← нова кнопка!</span>
-    ],
-    resize_keyboard=<span class="kw">True</span>
-)
-
-<span class="cm"># 3. Обробник натискання кнопки</span>
-<span class="kw">@</span><span class="fn">dp.message</span>(<span class="kw">lambda</span> m: m.text == <span class="var">BTN_HELP</span>)
-<span class="kw">async def</span> <span class="fn">handle_help_button</span>(message: types.Message):
-    <span class="kw">await</span> message.<span class="fn">answer</span>(<span class="var">MSG_HELP</span>)</pre>
+            <span class="comment"># Перевіряємо, чи є ключі</span>
+            <span class="highlight">if</span> OPENAI_API_KEY
+            <span class="highlight">and</span> ASSISTANT_ID:
+            <span class="comment"># Якщо є - вмикаємо ШІ</span>
+            logging.info(<span style="color: #ffaa00">"Активую режим ШІ-асистента."</span>)
+            openai_client = AsyncOpenAI(...)
+            <span class="comment"># ... і реєструємо обробник для ЧАТУ</span>
+            dp.message.register(handle_chat)
+            <span class="highlight">else</span>:
+            <span class="comment"># Якщо немає - працюють ТІЛЬКИ кнопки</span>
+            logging.warning(<span style="color: #ffaa00">"Бот працює в базовому режимі."</span>)
           </div>
         </div>
       </div>
 
-      <!-- ═══════════════════════════════════════════════════
-           Слайд 22: Фінальний — Підсумок / Дякую
-      ════════════════════════════════════════════════════ -->
-      <div class="slide title-slide">
-        <div class="big-emoji">🎉</div>
-        <h1>Готово!</h1>
-        <p class="subtitle">
-          Збережи зміни → <code>Ctrl&nbsp;+&nbsp;C</code> → <code>python bot.py</code><br />
-          Нова кнопка вже з'явилась у меню 🚀
+      <!-- Слайд 18: Live Demo -->
+      <div class="slide">
+        <div class="emoji">🎬</div>
+        <h2>Live Demo: "Знавець ВТФК" в дії</h2>
+        <h3 style="margin-top: 40px">Приклад запиту: "поясни рекурсію"</h3>
+      </div>
+
+      <!-- Слайд 19: Висновки -->
+      <div class="slide">
+        <h2>Що ми встигли?</h2>
+        <div class="content">
+          <div class="list-item">✅ Навчились працювати в <strong>GitHub Codespaces</strong>.</div>
+          <div class="list-item">✅ Запустили <strong>особистого</strong> Telegram-бота.</div>
+          <div class="list-item">
+            ✅ Навчились <strong>безпечно</strong> ховати ключі (Secrets).
+          </div>
+          <div class="list-item">
+            ✅ Побачили, як інтегрувати <strong>справжній ШІ</strong> (OpenAI).
+          </div>
+        </div>
+      </div>
+
+      <!-- Слайд 20: Дякую -->
+      <div class="slide">
+        <div class="emoji">🙏</div>
+        <h1>Дякую за увагу!</h1>
+        <h3 style="margin-top: 30px">Питання?</h3>
+        <p class="author">
+          GitHub: github.com/AlexOrd<br />
+          LinkedIn: linkedin.com/in/alexord<br />
+          Facebook: facebook.com/alexordinskyi
         </p>
-        <div style="max-width: 700px; width: 100%; margin: 24px 0;">
-          <div class="checklist-item"><div class="check-icon">✓</div><div>Запустили бота в GitHub Codespaces</div></div>
-          <div class="checklist-item"><div class="check-icon">✓</div><div>Безпечно налаштували Secrets</div></div>
-          <div class="checklist-item"><div class="check-icon">✓</div><div>Підключили OpenAI Assistants API</div></div>
-          <div class="checklist-item"><div class="check-icon">✓</div><div>Додали власну кнопку</div></div>
-        </div>
-        <div class="author-footer">
-          Олександр Ординський &nbsp;·&nbsp; github.com/AlexOrd<br />
-          Майстер-клас ВТФК
-        </div>
       </div>
     </div>
 
@@ -1369,31 +767,32 @@
       const nextBtn = document.getElementById('next');
       const currentSlideSpan = document.getElementById('current-slide');
       const totalSlidesSpan = document.getElementById('total-slides');
-      const progressBar = document.getElementById('progress-bar');
 
       totalSlidesSpan.textContent = totalSlides;
 
       function showSlide(n) {
         slides[currentSlide].classList.remove('active');
-        currentSlide = Math.max(0, Math.min(n, totalSlides - 1));
+        currentSlide = (n + totalSlides) % totalSlides;
         slides[currentSlide].classList.add('active');
         currentSlideSpan.textContent = currentSlide + 1;
 
         prevBtn.disabled = currentSlide === 0;
         nextBtn.disabled = currentSlide === totalSlides - 1;
-
-        const pct = totalSlides > 1 ? (currentSlide / (totalSlides - 1)) * 100 : 100;
-        progressBar.style.width = pct + '%';
       }
 
       prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
       nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
 
+      // Keyboard navigation
       document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-          if (currentSlide > 0) showSlide(currentSlide - 1);
+          if (currentSlide > 0) {
+            showSlide(currentSlide - 1);
+          }
         } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
-          if (currentSlide < totalSlides - 1) showSlide(currentSlide + 1);
+          if (currentSlide < totalSlides - 1) {
+            showSlide(currentSlide + 1);
+          }
         } else if (e.key === 'Home') {
           showSlide(0);
         } else if (e.key === 'End') {
@@ -1401,6 +800,7 @@
         }
       });
 
+      // Initialize
       showSlide(0);
     </script>
   </body>
