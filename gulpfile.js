@@ -729,6 +729,76 @@ export const check = () => {
 export const validate = gulp.series(lint, check);
 
 // ==============================================
+// LINK CHECKING
+// ==============================================
+
+/**
+ * Fail the build if any local href/src in dist/ points at a file that does not exist.
+ * Guards against the hand-maintained lecture list on the landing page drifting from
+ * the files the build actually produces.
+ * @param {(err?: any) => void} done
+ */
+export const checkLinks = (done) => {
+  log('\u{1F517} Checking internal links...', 'cyan');
+  const start = Date.now();
+  const root = paths.dist.base;
+
+  if (!fs.existsSync(root)) {
+    done(new Error('dist/ does not exist - run a build first'));
+    return;
+  }
+
+  /** @param {string} dir @returns {string[]} */
+  const walk = (dir) =>
+    fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        return walk(full);
+      }
+      return full.endsWith('.html') ? [full] : [];
+    });
+
+  /** @type {string[]} */
+  const broken = [];
+  let checked = 0;
+
+  walk(root).forEach((file) => {
+    const html = fs.readFileSync(file, 'utf8');
+    for (const match of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
+      const raw = match[1];
+      // Skip anything that is not a local file reference.
+      if (/^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i.test(raw)) {
+        continue;
+      }
+
+      const clean = decodeURIComponent(raw.split('#')[0].split('?')[0]);
+      if (!clean) {
+        continue;
+      }
+      checked++;
+
+      const base = clean.startsWith('/') ? root : path.dirname(file);
+      let target = path.resolve(base, clean.replace(/^\//, ''));
+      if (fs.existsSync(target) && fs.statSync(target).isDirectory()) {
+        target = path.join(target, 'index.html');
+      }
+      if (!fs.existsSync(target)) {
+        broken.push(`${path.relative(root, file)} -> ${raw}`);
+      }
+    }
+  });
+
+  if (broken.length) {
+    broken.forEach((entry) => log(`   \u2717 ${entry}`, 'red'));
+    done(new Error(`${broken.length} broken internal link(s) out of ${checked} checked`));
+    return;
+  }
+
+  log(`\u2705 ${checked} internal links OK (${formatDuration(Date.now() - start)})`, 'green');
+  done();
+};
+
+// ==============================================
 // COMPOSITE TASKS
 // ==============================================
 
@@ -765,6 +835,7 @@ export const build = gulp.series(
   validate,
   gulp.parallel(buildLanding, buildSP, buildDB, buildShared),
   htmlMinify,
+  checkLinks,
   (done) => {
     log('✅ Production build complete!', 'green');
     log('📦 Files are ready in the dist/ folder', 'cyan');
