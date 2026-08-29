@@ -1,5 +1,2 @@
 # Run lint-staged (ESLint + Prettier on staged files)
 npx lint-staged
-
-# Run production build
-npm run build:prod

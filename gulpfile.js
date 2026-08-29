@@ -837,7 +837,8 @@ export const build = gulp.series(
     done();
   },
   clean,
-  format,
+  // Deliberately no `format` here: a build verifies formatting via `validate`, it does
+  // not rewrite your source. Run `npm run format` to format.
   validate,
   gulp.parallel(buildLanding, buildSP, buildDB, buildShared),
   htmlMinify,
