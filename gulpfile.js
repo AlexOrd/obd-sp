@@ -204,7 +204,6 @@ export const buildSPLectures = (done) => {
             isPreviousLecture: slide.type === 'previous-lecture',
             isDefinition: slide.type === 'definition',
             isSyntax: slide.type === 'syntax',
-            isCodeExample: slide.type === 'code-example',
             isCodeBreakdown: slide.type === 'code-breakdown',
             isDiagram: slide.type === 'diagram',
             isComparison: slide.type === 'comparison',
@@ -348,7 +347,6 @@ export const buildDBLectures = (done) => {
             isPreviousLecture: slide.type === 'previous-lecture',
             isDefinition: slide.type === 'definition',
             isSyntax: slide.type === 'syntax',
-            isCodeExample: slide.type === 'code-example',
             isCodeBreakdown: slide.type === 'code-breakdown',
             isDiagram: slide.type === 'diagram',
             isComparison: slide.type === 'comparison',
@@ -557,7 +555,7 @@ export const htmlMinify = () => {
         ignoreCustomFragments: [
           /<pre[\s\S]*?<\/pre>/,
           /<code[\s\S]*?<\/code>/,
-          /<div class=\"mermaid\">[\s\S]*?<\/div>/,
+          /<div class="mermaid">[\s\S]*?<\/div>/,
         ],
       })
     )

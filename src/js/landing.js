@@ -4,8 +4,6 @@
  * Right: Harry Potter liquid background
  */
 
-/* global THREE, requestAnimationFrame */
-
 // Wait for DOM and Three.js to load
 document.addEventListener('DOMContentLoaded', () => {
   initCyberpunkAnimation();
