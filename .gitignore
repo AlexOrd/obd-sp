@@ -8,7 +8,6 @@ dist/
 # OS files
 .DS_Store
 Thumbs.db
-*.db
 
 # IDE
 # Keep .vscode/settings.json for team consistency, ignore user-specific files
