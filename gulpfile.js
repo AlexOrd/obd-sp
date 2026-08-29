@@ -187,11 +187,11 @@ export const buildSPLectures = (done) => {
     partials[partialName] = fs.readFileSync(`${partialsDir}${file}`, 'utf8');
   });
 
-  let processedCount = 0;
+  // Hoisted: this was previously re-read once per lecture.
+  const layoutData = JSON.parse(fs.readFileSync('sp/data/lectures.json', 'utf8'));
 
-  files.forEach((file) => {
+  const tasks = files.map((file) => {
     const lectureData = JSON.parse(fs.readFileSync(lecturesDir + file, 'utf8'));
-    const layoutData = JSON.parse(fs.readFileSync('sp/data/lectures.json', 'utf8'));
 
     // Add boolean flags for each slide type
     if (lectureData.slides) {
@@ -223,22 +223,33 @@ export const buildSPLectures = (done) => {
       );
     }
 
-    gulp
-      .src('sp/templates/lecture-slide.html')
-      .pipe(errorHandler('SP Lectures'))
-      .pipe(mustache({ ...layoutData, lecture: lectureData }, {}, partials))
-      .pipe(rename(file.replace('.json', '.html')))
-      .pipe(gulp.dest(paths.dist.sp.lectures))
-      .pipe(size({ title: `SP Lecture ${lectureData.lectureNumber}`, showFiles: false }));
+    // The stream is returned and awaited below. Previously these were started inside a
+    // forEach and done() was called synchronously, so the task reported completion
+    // before a single file had been written.
+    return new Promise((resolve, reject) => {
+      const stream = gulp
+        .src('sp/templates/lecture-slide.html')
+        .pipe(errorHandler('SP Lectures'))
+        .pipe(mustache({ ...layoutData, lecture: lectureData }, {}, partials))
+        .pipe(rename(file.replace('.json', '.html')))
+        .pipe(gulp.dest(paths.dist.sp.lectures))
+        .pipe(size({ title: `SP Lecture ${lectureData.lectureNumber}`, showFiles: false }));
 
-    processedCount++;
+      // resume() puts the trailing transform into flowing mode. Without it nothing
+      // consumes its readable side, so 'end' never fires and the build hangs.
+      stream.on('end', resolve).on('error', reject).resume();
+    });
   });
 
-  log(
-    `✅ Generated ${processedCount} SP lecture(s) (${formatDuration(Date.now() - start)})`,
-    'green'
-  );
-  done();
+  Promise.all(tasks)
+    .then(() => {
+      log(
+        `✅ Generated ${tasks.length} SP lecture(s) (${formatDuration(Date.now() - start)})`,
+        'green'
+      );
+      done();
+    })
+    .catch(done);
 };
 
 // Build SP CSS
@@ -322,11 +333,11 @@ export const buildDBLectures = (done) => {
     partials[partialName] = fs.readFileSync(`${partialsDir}${file}`, 'utf8');
   });
 
-  let processedCount = 0;
+  // Hoisted: this was previously re-read once per lecture.
+  const layoutData = JSON.parse(fs.readFileSync('db/data/lectures.json', 'utf8'));
 
-  files.forEach((file) => {
+  const tasks = files.map((file) => {
     const lectureData = JSON.parse(fs.readFileSync(lecturesDir + file, 'utf8'));
-    const layoutData = JSON.parse(fs.readFileSync('db/data/lectures.json', 'utf8'));
 
     // Add boolean flags for each slide type
     if (lectureData.slides) {
@@ -358,22 +369,33 @@ export const buildDBLectures = (done) => {
       );
     }
 
-    gulp
-      .src('db/templates/lecture-slide.html')
-      .pipe(errorHandler('DB Lectures'))
-      .pipe(mustache({ ...layoutData, lecture: lectureData }, {}, partials))
-      .pipe(rename(file.replace('.json', '.html')))
-      .pipe(gulp.dest(paths.dist.db.lectures))
-      .pipe(size({ title: `DB Lecture ${lectureData.lectureNumber}`, showFiles: false }));
+    // The stream is returned and awaited below. Previously these were started inside a
+    // forEach and done() was called synchronously, so the task reported completion
+    // before a single file had been written.
+    return new Promise((resolve, reject) => {
+      const stream = gulp
+        .src('db/templates/lecture-slide.html')
+        .pipe(errorHandler('DB Lectures'))
+        .pipe(mustache({ ...layoutData, lecture: lectureData }, {}, partials))
+        .pipe(rename(file.replace('.json', '.html')))
+        .pipe(gulp.dest(paths.dist.db.lectures))
+        .pipe(size({ title: `DB Lecture ${lectureData.lectureNumber}`, showFiles: false }));
 
-    processedCount++;
+      // resume() puts the trailing transform into flowing mode. Without it nothing
+      // consumes its readable side, so 'end' never fires and the build hangs.
+      stream.on('end', resolve).on('error', reject).resume();
+    });
   });
 
-  log(
-    `✅ Generated ${processedCount} DB lecture(s) (${formatDuration(Date.now() - start)})`,
-    'green'
-  );
-  done();
+  Promise.all(tasks)
+    .then(() => {
+      log(
+        `✅ Generated ${tasks.length} DB lecture(s) (${formatDuration(Date.now() - start)})`,
+        'green'
+      );
+      done();
+    })
+    .catch(done);
 };
 
 // Build DB CSS
