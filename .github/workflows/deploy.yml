@@ -5,10 +5,22 @@ on:
     branches: [master]
   workflow_dispatch:
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
+# Required by actions/deploy-pages: id-token is used to prove the artifact
+# came from this workflow run.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
+# Let a running deploy finish rather than cancelling it — a half-published
+# site is worse than a slightly stale one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -19,17 +31,39 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'npm'
 
+      # enablement: true switches the Pages source to "GitHub Actions" (build_type
+      # workflow) on the first run, so the branch-based source this replaces does
+      # not have to be changed by hand in repo settings.
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
       - name: Install dependencies
         run: npm ci
 
+      # Runs validate (ESLint + Prettier) and checkLinks, so a lint failure or a
+      # dead internal link fails the deploy instead of publishing a broken site.
       - name: Build production site
         run: npm run build:prod
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      # The custom domain is configured in repo settings, but keeping the CNAME
+      # in the artifact means the domain survives even if that setting is lost.
+      - name: Preserve custom domain
+        run: cp CNAME dist/CNAME
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          cname: vtfk.ordynski.com
+          path: ./dist
 
-
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
