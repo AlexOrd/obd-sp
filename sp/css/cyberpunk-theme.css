@@ -565,3 +565,17 @@
     transform: translateY(0);
   }
 }
+
+/* Mermaid diagrams: rendered lazily per slide, sized intrinsically.
+   The container must be block-level — an inline-block shrink-to-fit
+   parent gives the SVG a 0px basis. */
+.mermaid {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
