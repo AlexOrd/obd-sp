@@ -3,7 +3,7 @@
 > **Основи Баз Даних та Спеціалізовані мови програмування**
 > Modern educational presentation system with dual themes: Cyberpunk 2077 & Harry Potter
 
-[![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D22.0.0-brightgreen.svg)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Code Style: Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://prettier.io/)
 
@@ -95,8 +95,8 @@ The platform supports two independent lecture tracks with distinct themes:
 
 ### Prerequisites
 
-- **Node.js** >= 18.0.0
-- **npm** >= 9.0.0
+- **Node.js** >= 22.0.0 (see `.nvmrc`)
+- **npm** >= 10.0.0
 
 ### Installation
 
@@ -328,7 +328,7 @@ npm run watch          # Watch files only (no server)
 npm run serve          # Serve dist/ folder only
 
 # Building
-npm run build          # Build with validation
+npm run build          # Build with validation + link check
 npm run build:prod     # Production build (minified)
 npm run clean          # Clean dist/ folder
 

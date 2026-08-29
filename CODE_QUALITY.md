@@ -49,6 +49,10 @@ The production build (`npm run build` or `npm run build:prod`) automatically:
 1. ✅ Runs ESLint to check for code errors
 2. ✅ Checks code formatting with Prettier
 3. ✅ Fails the build if there are linting or formatting issues
+4. ✅ Fails the build on any dead internal link in `dist/` (`checkLinks`)
+
+The build **does not format for you** — it verifies and fails. Run `npm run format` yourself. A
+build leaves the working tree unchanged.
 
 ## IDE Integration
 
@@ -88,22 +92,17 @@ Configuration is already set up in `.vscode/settings.json`:
 - ✅ No duplicate imports
 - ✅ Template string spacing
 
-## Pre-commit Hook (Optional)
+## Pre-commit Hook
 
-To automatically format and lint before each commit, you can add a pre-commit hook:
+Husky and lint-staged are already installed and wired up. On every commit, `.husky/pre-commit` runs:
 
-```bash
-# Install husky (optional)
-npm install --save-dev husky lint-staged
-
-# Add to package.json:
-{
-  "lint-staged": {
-    "*.{js,css,html,json,mustache}": "prettier --write",
-    "*.js": "eslint --fix"
-  }
-}
+```sh
+npx lint-staged
 ```
+
+which applies `eslint --fix` and `prettier --write` to staged files only (see the `lint-staged`
+block in `package.json`). It deliberately does **not** run a full build — that belongs in CI, and
+running it here rewrote files after they had been staged.
 
 ## Gulp Tasks
 

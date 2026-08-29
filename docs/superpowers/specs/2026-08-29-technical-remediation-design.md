@@ -115,10 +115,23 @@ per track — SP is always dark, DB is always light — so deriving diagram colo
 OS preference is incorrect regardless of the override problem. Each track's template hardcodes its
 own value.
 
-**Implementation note.** 1c's stripping approach is the one part of this section not yet empirically
-verified. Verify it in the browser on a diagram from each track before applying it to both templates.
-If stripping proves insufficient for the 17 hardcoded-fill diagrams, fall back to pinning
-`nodeTextColor` to a dark value that reads against those light fills, and record the decision here.
+**Implementation outcome (recorded 2026-08-29).** Stripping worked; the `nodeTextColor` fallback was
+not needed. Fixing the collapse, however, exposed two further defects the 16x16px box had been
+hiding, both fixed in the same commit:
+
+- **Label lines were concatenated.** The `<br/>` separators in `mermaidCode` parse into real DOM
+  `<br>` elements, so reading `.textContent` joined label lines into `section .textКод програми`.
+  The handler now walks child nodes, emitting `<br/>` for a `BR` element and using `textContent`
+  for text nodes — which also keeps entities decoded, so `A--&gt;B` stays `A-->B`.
+- **Long labels clipped by ~5%.** Reveal scales `.slides` with a CSS transform (measured at 0.954).
+  Mermaid measures label widths with `getBoundingClientRect()`, which includes that transform, but
+  sizes node boxes in untransformed SVG user units, so every box came out proportionally too
+  narrow. The handler now sets `transform: none` for the duration of the render and restores it
+  afterwards. Attempts that did **not** work, recorded so they are not retried: `useMaxWidth:false`
+  alone, setting `fontFamily` at the top level, and `htmlLabels:false`.
+
+Verified on `sp/lecture5` and `db/lecture3`: real geometry, complete multi-line labels, correct
+contrast on both themes, idempotent across slide revisits, transform restored.
 
 ### Files touched
 
