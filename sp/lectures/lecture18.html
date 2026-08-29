@@ -580,34 +580,59 @@ pub fn add(a: i32, b: i32) -> i32 {
     <!-- Mermaid.js (non-module for compatibility) -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
     <script>
-      const getMermaidConfig = () => {
-        const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
-        const mono = prefersDark ? '#ffffff' : '#000000';
+      // SP decks are always dark.
+      // Diagram colours are fixed per track and must NOT depend on the viewer's OS.
+      const MONO = '#ffffff';
 
-        return {
-          startOnLoad: false,
-          theme: 'neutral',
-          themeVariables: {
-            fontSize: '18px',
-            fontFamily: 'Share Tech Mono, monospace',
-            background: 'transparent',
-            mainBkg: 'transparent',
-            secondBkg: 'transparent',
-            primaryColor: 'transparent',
-            secondaryColor: 'transparent',
-            tertiaryColor: 'transparent',
-            primaryBorderColor: mono,
-            clusterBorder: mono,
-            clusterBkg: 'transparent',
-            lineColor: mono,
-            edgeLabelBackground: 'transparent',
-            primaryTextColor: mono,
-            labelTextColor: mono,
-            nodeTextColor: mono,
-            titleColor: mono,
-          },
-        };
-      };
+      const getMermaidConfig = () => ({
+        startOnLoad: false,
+        theme: 'neutral',
+        // Must be set at top level too — themeVariables.fontFamily alone leaves
+        // mermaid's default trebuchet metric in the generated SVG stylesheet, so
+        // boxes get measured in one font and rendered in another, clipping labels.
+        fontFamily: 'Share Tech Mono, monospace',
+        // htmlLabels:false makes mermaid lay out real SVG <text> and measure it with
+        // getBBox in the actual font, instead of estimating HTML label widths in a
+        // detached container where the webfont has not applied — which clipped labels.
+        flowchart: { useMaxWidth: false, htmlLabels: false },
+        themeVariables: {
+          fontSize: '18px',
+          fontFamily: 'Share Tech Mono, monospace',
+          background: 'transparent',
+          mainBkg: 'transparent',
+          secondBkg: 'transparent',
+          primaryColor: 'transparent',
+          secondaryColor: 'transparent',
+          tertiaryColor: 'transparent',
+          primaryBorderColor: MONO,
+          clusterBorder: MONO,
+          clusterBkg: 'transparent',
+          lineColor: MONO,
+          edgeLabelBackground: 'transparent',
+          primaryTextColor: MONO,
+          labelTextColor: MONO,
+          nodeTextColor: MONO,
+          titleColor: MONO,
+        },
+      });
+
+      // The <br/> separators in mermaidCode are parsed into real DOM <br> elements, so
+      // reading .textContent silently concatenates label lines into "section .textКод...".
+      // Walk the child nodes instead: a <br> element becomes the literal string mermaid
+      // expects, while text nodes are already entity-decoded, so A--&gt;B stays A-->B.
+      const readMermaidSource = (node) =>
+        [...node.childNodes]
+          .map((c) => (c.nodeType === 1 && c.tagName === 'BR' ? '<br/>' : c.textContent))
+          .join('');
+
+      // Lecture JSON carries a %%{init}%% theme directive and hardcoded light node
+      // fills that override the config above, producing unreadable text. Strip both so
+      // every diagram inherits this track's theme. Lecture content is never edited.
+      const normaliseMermaidSource = (src) =>
+        src
+          .replace(/%%\{\s*init\s*:[\s\S]*?\}%%/g, '')
+          .replace(/^\s*style\s+\S+\s+fill:#[0-9A-Fa-f]{3,8}.*$/gm, '')
+          .trim();
 
       if (window.mermaid) {
         window.mermaid.initialize(getMermaidConfig());
@@ -622,7 +647,6 @@ pub fn add(a: i32, b: i32) -> i32 {
         controls: true,
         progress: true,
         center: true,
-        center: true,
         transition: 'slide',
         width: 1200,
         height: 700,
@@ -633,14 +657,35 @@ pub fn add(a: i32, b: i32) -> i32 {
         plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
       });
 
-      // Initialize Mermaid diagrams when Reveal is ready
-      Reveal.on('ready', () => {
-        if (window.mermaid) {
-          window.mermaid.run({
-            querySelector: '.mermaid',
-          });
+      // Mermaid cannot measure text inside a display:none slide, so diagrams must be
+      // rendered only once their slide is visible. Idempotent via dataset.rendered.
+      async function renderVisibleDiagrams() {
+        if (!window.mermaid) return;
+        const slide = Reveal.getCurrentSlide();
+        if (!slide) return;
+        const nodes = [...slide.querySelectorAll('.mermaid')].filter((n) => !n.dataset.rendered);
+        if (!nodes.length) return;
+        nodes.forEach((n) => {
+          n.dataset.rendered = '1';
+          n.textContent = normaliseMermaidSource(readMermaidSource(n));
+        });
+
+        // Reveal scales .slides with a CSS transform. Mermaid measures label widths with
+        // getBoundingClientRect (which includes that transform) but sizes node boxes in
+        // untransformed SVG user units, so every box came out ~5% too narrow and long
+        // labels clipped. Neutralise the transform for the duration of the render only.
+        const slidesEl = document.querySelector('.reveal .slides');
+        const savedTransform = slidesEl ? slidesEl.style.transform : null;
+        if (slidesEl) slidesEl.style.transform = 'none';
+        try {
+          await window.mermaid.run({ nodes });
+        } finally {
+          if (slidesEl) slidesEl.style.transform = savedTransform;
         }
-      });
+      }
+
+      Reveal.on('ready', renderVisibleDiagrams);
+      Reveal.on('slidechanged', renderVisibleDiagrams);
     </script>
   </body>
 </html>
