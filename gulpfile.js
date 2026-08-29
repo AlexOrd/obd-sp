@@ -231,14 +231,6 @@ export const buildSPLectures = (done) => {
       .pipe(gulp.dest(paths.dist.sp.lectures))
       .pipe(size({ title: `SP Lecture ${lectureData.lectureNumber}`, showFiles: false }));
 
-    // Generate print-friendly version for PDF
-    gulp
-      .src('sp/templates/lecture-slide.html')
-      .pipe(errorHandler('SP Lectures Print'))
-      .pipe(mustache({ ...layoutData, lecture: lectureData, isPrintVersion: true }, {}, partials))
-      .pipe(rename(file.replace('.json', '-print.html')))
-      .pipe(gulp.dest(paths.dist.sp.lectures));
-
     processedCount++;
   });
 
@@ -373,14 +365,6 @@ export const buildDBLectures = (done) => {
       .pipe(rename(file.replace('.json', '.html')))
       .pipe(gulp.dest(paths.dist.db.lectures))
       .pipe(size({ title: `DB Lecture ${lectureData.lectureNumber}`, showFiles: false }));
-
-    // Generate print-friendly version for PDF
-    gulp
-      .src('db/templates/lecture-slide.html')
-      .pipe(errorHandler('DB Lectures Print'))
-      .pipe(mustache({ ...layoutData, lecture: lectureData, isPrintVersion: true }, {}, partials))
-      .pipe(rename(file.replace('.json', '-print.html')))
-      .pipe(gulp.dest(paths.dist.db.lectures));
 
     processedCount++;
   });

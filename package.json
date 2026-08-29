@@ -8,8 +8,6 @@
     "dev": "gulp dev",
     "build": "gulp build",
     "build:prod": "NODE_ENV=production gulp build",
-    "pdf": "gulp pdf",
-    "build:pdf": "npm run build && npm run pdf",
     "clean": "gulp clean",
     "serve": "gulp serve",
     "watch": "gulp watch",
@@ -56,8 +54,7 @@
     "gulp-terser": "^2.1.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.5",
-    "prettier": "^3.6.2",
-    "puppeteer": "^24.26.0"
+    "prettier": "^3.6.2"
   },
   "engines": {
     "node": ">=18.0.0",
